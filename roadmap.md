@@ -11,6 +11,9 @@
 ### **Q3 2024**
 
 1. Introduce BNB restaking and respective Liquid restaking tokens (LRTs) into the Lista DAO ecosystem.&#x20;
+2. Launch of veLISTA & the veTOKEN model for Lista DAO
+3. To turn on LISTA Token emissions
+4. Further user interface & user experience (UIUX) optimization
 
 ### Q4 2024
 
