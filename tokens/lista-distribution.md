@@ -1,6 +1,8 @@
 # LISTA distribution
 
-The table below is a breakdown of LISTA's token distribution.
+Total supply of LISTA is 1 billion.
+
+The table below is a breakdown of LISTA's token distribution.&#x20;
 
 | Token Name           | Lista                            |
 | -------------------- | -------------------------------- |
