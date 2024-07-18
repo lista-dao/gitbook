@@ -11,3 +11,8 @@
 ### **Q3 2024**
 
 1. Introduce BNB restaking and respective Liquid restaking tokens (LRTs) into the Lista DAO ecosystem.&#x20;
+
+### Q4 2024
+
+1. Multichain expansion to Ethereum
+2. Further improvements in slisBNB utility & application scenarios
