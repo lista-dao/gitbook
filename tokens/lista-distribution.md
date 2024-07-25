@@ -70,7 +70,7 @@ This rate is divided as follows:
 * veLISTA Holders: 250,000 LISTA/week
 * Lista DAO related LPs: 62,500 LISTA/week
 
-#### Lista DAO Transition Phase
+### Lista DAO Transition Phase
 
 During Lista DAO’s transition towards a fully decentralized Autonomous Organisation (DAO), the originally planned emissions for Lista DAO, which is 9,772,651 LISTA tokens/month in the first year, will be split into 2 equal portions of 4,886,325.5 LISTA tokens each.
 
