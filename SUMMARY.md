@@ -32,6 +32,7 @@
   * [Protocol](get-started/about-slisbnb/protocol/README.md)
     * [Security](get-started/about-slisbnb/protocol/security.md)
     * [Mainnet deployment](get-started/about-slisbnb/protocol/mainnet-deployment.md)
+* [LISTA](get-started/lista.md)
 
 ***
 
