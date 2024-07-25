@@ -38,12 +38,13 @@ The maximum total borrow limit for lisUSD is currently set at 69,000,000 lisUSD 
 
 <figure><img src="../.gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
 
-1. On the next page, enter the desired amount of the selected asset and click **Proceed**.
+2. On the next page, enter the desired amount of the selected asset and click **Proceed**.
 
 <figure><img src="../.gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
 
-1.  Confirm the transaction in MetaMask.
+3. Confirm the transaction in MetaMask.
 
-    <figure><img src="../.gitbook/assets/MetaMask1.png" alt=""><figcaption></figcaption></figure>
-2. Once the transaction completes, you are done.
+<figure><img src="../.gitbook/assets/MetaMask1.png" alt=""><figcaption></figcaption></figure>
+
+4. Once the transaction completes, you are done.
 

@@ -16,18 +16,14 @@ layout:
 
 There are many ways to complete this task, but we recommend experiencing our borrowing process, where you can quickly obtain lisUSD at a lower interest rate by collateralizing BNB.
 
-1.Select "Add BNB" as collateral.\
-![](<../../.gitbook/assets/image (43).png>)
-
-2.Enter at least 0.1 BNB and confirm.\
-![](<../../.gitbook/assets/image (44).png>)
-
-3.Choose to borrow.\
-![](<../../.gitbook/assets/image (45).png>)
-
-4.Enter a minimum of 15 lisUSD and confirm.\
-![](<../../.gitbook/assets/image (46).png>)
-
+1. Select "Add BNB" as collateral.\
+   ![](<../../.gitbook/assets/image (43).png>)
+2. Enter at least 0.1 BNB and confirm.\
+   ![](<../../.gitbook/assets/image (44).png>)
+3. Choose to borrow.\
+   ![](<../../.gitbook/assets/image (45).png>)
+4. Enter a minimum of 15 lisUSD and confirm.\
+   ![](<../../.gitbook/assets/image (46).png>)
 5. Once borrowing has been successful, the task is completed.
 
 ### Using Binance Web3 Wallet

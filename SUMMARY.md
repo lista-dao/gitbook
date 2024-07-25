@@ -48,6 +48,7 @@
 ## protocol
 
 * [Loan liquidation](protocol/loan-liquidation.md)
+* [Algorithmic Market Operations (AMO)](protocol/algorithmic-market-operations-amo.md)
 
 ***
 
