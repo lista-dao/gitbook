@@ -40,6 +40,7 @@
 ## TOKENS
 
 * [Tokenomics](tokens/tokenomics.md)
+* [veLISTA](tokens/velista.md)
 * [LISTA distribution](tokens/lista-distribution.md)
 * [Price stability](tokens/price-stability.md)
 
