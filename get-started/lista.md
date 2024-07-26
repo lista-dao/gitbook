@@ -128,9 +128,13 @@ Here is how you can do it:
 
 3. Users can choose to auto lock their LISTA tokens for any amount of time in perpetuity, between 1 to 52 weeks. In this example, we are choosing to auto lock LISTA tokens perpetually at 20 weeks. Once you have confirmed the autolock period, turn on the Auto lock function in step 2, and a pop-up will appear. Click on “confirm”, and sign the transaction.&#x20;
 
+<div align="left">
+
 <figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXe0DnOcJBC2YeENGDIw2l3XraMTmXtuWnrPYpk7Z9vIb5nxdLAHCchD5YPxtItR_2E1V_YIJQnAWda9n4tWxBpIiNrDRVpSASRzq8b7OcU8ItH1Se6fc-iBdkIYMZpOLlfXncG97Pkv5O0VzLJmhGpqUqCq?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
 
-5. Once the “Enable Auto lock” transaction is completed, you are done!
+</div>
+
+4. Once the “Enable Auto lock” transaction is completed, you are done!
 
 ## How to claim your LISTA from veLISTA
 
@@ -168,4 +172,19 @@ Here’s how you can do it:
 
 </div>
 
+## How to claim your veLISTA rewards
+
+Users will also be eligible to receive share protocol incentive rewards when they lock their veLISTA.&#x20;
+
+Here is how they can do it:
+
+1. Head over to the rewards section on Lista DAO [here](https://lista.org/rewards):
+
+<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXemxcZYmcUv3aIQ0acJw3-W86J1VW3kBd4_qIPJ6GB-gCDXoekf7A_boOjCiKlaR7ZfR7RYg5EoAcfjpybO6HNABkkmUhukaCvObBSflu43VA02iVU8vEyXQdIOiCR17ubZLFf-6S4RyCjJfExfUyU8-Z2E?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
+
+2. Under the “veLISTA Incentive”, click on “Claim”, sign the transaction, and you are done!
+
+<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXe4jspCv6OlNru2JUB9-TJ5RWLVL4OfuEBTJGMbgEBrMbX6KSQGN0QvsSN7L4ZQpcxXOJRrCqKnuEzI8UcBQMo2LWYjBwUL1qK8jBiGbGNUgLpl3wze58H0fdes7T7j0ndfB6a1hH1uA2BhGKkFnqU1B_82?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
+
+\
 \

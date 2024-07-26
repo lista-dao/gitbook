@@ -136,6 +136,17 @@ Requirements:
 * Withdrawal Fee: 0%
 * Withdrawal Options: SolvBTC
 
+9\) BBTC (BounceBit)
+
+Requirements:
+
+* Minimum Borrow: 15 lisUSD
+* Minimum Collateral Ratio: 200%
+* Minimum Collateral Deposit: 0.001 BBTC
+* Borrowing Fee: 12.5%
+* Withdrawal Fee: 0%
+* Withdrawal Options: BBTC
+
 ## How can users earn on lisUSD?
 
 Users can earn with lisUSD in a variety of ways. They can stake their lisUSD on ListaDAO, which accrues lisUSD rewards. They can provide liquidity for slisBNB and lisUSD in various liquidity pools such as PancakeSwap, Wombat Exchange, ThenaFi, Curve and Uniswap to further earn trading and LP fees.&#x20;
