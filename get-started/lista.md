@@ -174,7 +174,13 @@ Here’s how you can do it:
 
 ## How to claim your veLISTA rewards
 
-Users will also be eligible to receive share protocol incentive rewards when they lock their veLISTA.&#x20;
+Users will also be eligible to receive share protocol incentive rewards when they lock their veLISTA. \
+\
+Users will earn rewards in the following tokens:\
+1\. slisBNB\
+2\. wBETH \
+3\. lisUSD \
+4\. LISTA&#x20;
 
 Here is how they can do it:
 
