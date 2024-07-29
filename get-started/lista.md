@@ -138,9 +138,9 @@ Here is how you can do it:
 
 ## How to claim your LISTA from veLISTA
 
-Users can claim their LISTA token anytime they want by paying an Early Claim Fee. If they want to avoid paying the Early Claim Fee, they will have to wait until the lock period ends.&#x20;
+Users can claim their LISTA token anytime they want by paying an Early Unlock Fee. If they want to avoid paying the Early Unlock Fee, they will have to wait until the lock period ends.&#x20;
 
-Do note that if users want to avoid paying any early claim fees, they will have to turn off the auto lock function, and wait for their LISTA tokens to be fully unlocked.&#x20;
+Do note that if users want to avoid paying any early Unlock fees, they will have to turn off the auto lock function, and wait for their LISTA tokens to be fully unlocked.&#x20;
 
 Here’s how you can do it:
 
@@ -156,7 +156,7 @@ Here’s how you can do it:
 
 </div>
 
-3. A pop-up will appear, showing you the exact amount of Early Claim Fees that you need to pay in order to claim your locked LISTA tokens. If you have completed the locking period before claiming your tokens, the early claim fee will be 0, and you do not have to pay any additional fees. Once you have confirmed the Early Claim Fee amount, click on “claim”, and sign the transaction.
+3. A pop-up will appear, showing you the exact amount of Early Unlock Fees that you need to pay in order to claim your locked LISTA tokens. If you have completed the locking period before claiming your tokens, the early Unlock fee will be 0, and you do not have to pay any additional fees. Once you have confirmed the Early Unlock Fee amount, click on “claim”, and sign the transaction.
 
 <div align="left">
 
@@ -164,7 +164,7 @@ Here’s how you can do it:
 
 </div>
 
-4. Once the transaction is completed, you will receive your LISTA tokens (minus the Early Claim Fee if any), and you are done!
+4. Once the transaction is completed, you will receive your LISTA tokens (minus the Early Unlock Fee if any), and you are done!
 
 <div align="left">
 
