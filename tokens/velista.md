@@ -71,15 +71,14 @@ Possible actions include, but are not limited to:
 * Pausing relevant smart contracts to fix a critical bug in the protocol
 * Rejecting a successfully added gauge if the token(s) in question are deemed unsafe, malicious, and/or detrimental to the Lista’s ecosystem
 
-## Revenue Sharing
+## Weekly Rewards
 
-### veLISTA Revenue Share
+veLISTA holders will also be eligible for weekly rewards given out in the form of the following tokens:
 
-veLISTA’s revenue share will be calculated by following the simple formula of:
-
-veLISTA revenue share = LISTA platform revenue - Lista general operational costs
-
-Over 50% of the revenue will be distributed to $veLISTA holders.
+1. lisUSD rewards
+2. WBETH liquid staking rewards
+3. slisBNB liquid staking rewards
+4. LISTA emission rewards
 
 ### Lista DAO’s Primary Revenue Sources
 
