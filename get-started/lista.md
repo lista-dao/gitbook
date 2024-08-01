@@ -25,11 +25,7 @@
     1 LISTA (Lock 20 weeks) = 20 veLISTA\
     1 LISTA (Lock 1 Week) = 1 veLISTA
 
-<div align="left">
-
-<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXfgCO2XieVqSdOZUM0SbV8LT_uVUG2Srk443p6HKV5OEeBO76MbN_efvjDlLmPF64sozkxCFiu0RDTyiBNipuyuVjjKn18XFWguus73gJkxgeKDJpswnvBpH6QujYn6hAULa_UcMbTWhBD_G1UyH0oeeWVr?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
-
-</div>
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
 4. The Auto Lock function is turned on by default. This means that if users do not turn this function off, LISTA will perpetually and automatically be relocked every week.\
    \
@@ -58,11 +54,11 @@
 </div>
 
 7. Once the “lock” transaction is completed, you are done!\
-   You can check your veLISTA holdings under “Your veLISTA” in the same page.
+   You can check your veLISTA holdings under “Your Lock” in the same page.
 
 <div align="left">
 
-<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXe-U3hH-KAgCtvAnt16TbaGfR9rB_6AZ4cF-HgNJjJZ_snsQlP4hpyV_JdebUKbz6FalapnevpeTvcNd-4ldyv9jfjjY-eI5oMChPhn2Sq1MOq0h7mwUxmiz-hJNTvzPihdt05tWhlI3IupPpX-soJQEaWX?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 
@@ -74,11 +70,7 @@ Here is how you can do it:
 
 1. To extend your lock on your LISTA tokens, head over to the Lista DAO’s locking page [here](https://lista.org/lock), and connect your wallet to Lista DAO’s DApp.
 
-<div align="left">
-
-<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXfgN4U22mSps8M4OMhoGPVI0kms3HGTaUKU_i8C4NVKgejCuWW1xQrpUv8Z1e_0RSZTVR-hBftmOTG8zNi4Hx32fsR_Ez2jZul055qOUjFetBlPzTV-s_dvEvu2rl7GDz631IXSX_tCA08YGuOGZWR6UVek?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
-
-</div>
+<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
 2. On the right hand side, click on “extend” , and drag the extension button to the number of weeks that user would like to extend their lock for.
 
@@ -100,7 +92,7 @@ Here is how you can do it:
 
 <div align="left">
 
-<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXctUNAL64sW9idSrxACaifutlIu1b41VLyG7KEgeui21tpR1rancGMHrA5ox460UYB570DoT_mZC-WEHzkS18PXoc2cp0CmCZIZ9BK_EDYJ05wJ4h0zQHGTLyF2YhOWnVK-44gsaRuGEuadITfmyBIepakn?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 
@@ -112,17 +104,13 @@ Here is how you can do it:
 
 1. Head over to Lista DAO’s locking page [here](https://lista.org/lock), and connect your wallet to Lista DAO’s DApp.
 
-<div align="left">
-
-<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXfgN4U22mSps8M4OMhoGPVI0kms3HGTaUKU_i8C4NVKgejCuWW1xQrpUv8Z1e_0RSZTVR-hBftmOTG8zNi4Hx32fsR_Ez2jZul055qOUjFetBlPzTV-s_dvEvu2rl7GDz631IXSX_tCA08YGuOGZWR6UVek?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
-
-</div>
+<figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
 2. Simply turn on the “Auto lock” function on the top right hand corner by clicking on it.&#x20;
 
 <div align="left">
 
-<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXex3ly0fq-TtAyvdc3Rfj8BDhFKQUtLQ3a-dqr955lurKzBYx8rqICXPF8aot3w0EeFK_D4VQpvXVAAsEOvkgi8ohAxyuL3rQkh_OhgjfcX5yFzAT_LUbSs7j3UUJouVovFSsQ8OE6pEq7pB-3TBfAvRQcH?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 
@@ -136,9 +124,9 @@ Here is how you can do it:
 
 4. Once the “Enable Auto lock” transaction is completed, you are done!
 
-## How to claim your LISTA from veLISTA
+## How to unlock your LISTA from veLISTA
 
-Users can claim their LISTA token anytime they want by paying an Early Unlock Fee. If they want to avoid paying the Early Unlock Fee, they will have to wait until the lock period ends.&#x20;
+Users can unlock their LISTA token anytime they want by paying an Early Unlock Fee. If they want to avoid paying the Early Unlock Fee, they will have to wait until the lock period ends.&#x20;
 
 Do note that if users want to avoid paying any early Unlock fees, they will have to turn off the auto lock function, and wait for their LISTA tokens to be fully unlocked.&#x20;
 
@@ -146,21 +134,21 @@ Here’s how you can do it:
 
 1. Head over to Lista DAO’s locking page [here](https://lista.org/lock), and connect your wallet to Lista DAO’s DApp.
 
-<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXfgN4U22mSps8M4OMhoGPVI0kms3HGTaUKU_i8C4NVKgejCuWW1xQrpUv8Z1e_0RSZTVR-hBftmOTG8zNi4Hx32fsR_Ez2jZul055qOUjFetBlPzTV-s_dvEvu2rl7GDz631IXSX_tCA08YGuOGZWR6UVek?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 2. On the top right hand corner under the “Your Lock” section, click on “Claim”.
 
 <div align="left">
 
-<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXco9aRUHdEOD_MfJ70hP48sGOsfxvU3ic9GtyCkV5Cy60DQXzfFqmI2sg47XV0wZnvlJAWT6E6itwWwSZ4hCId0i5MkouQ2WKGTx93kqvI4w9-2u_9IVb_stWAD5bMnCQ_fk-BVbnnrnqz11Prpk6kTbhIf?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 
-3. A pop-up will appear, showing you the exact amount of Early Unlock Fees that you need to pay in order to claim your locked LISTA tokens. If you have completed the locking period before claiming your tokens, the early Unlock fee will be 0, and you do not have to pay any additional fees. Once you have confirmed the Early Unlock Fee amount, click on “claim”, and sign the transaction.
+3. A pop-up will appear, showing you the exact amount of Early Unlock Fees that you need to pay in order to unlock your locked LISTA tokens. If you have completed the locking period before claiming your tokens, the early Unlock fee will be 0, and you do not have to pay any additional fees. Once you have confirmed the Early Unlock Fee amount, click on “unlock”, and sign the transaction.
 
 <div align="left">
 
-<figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXfypyEHakQVApTnGYxA8L9EJ2IbfYCNQFvqQzRqRSZSqqlG-pWEy-LUjbkTr0F_vHELNpwlggt4EF8qz2OejuBTZUKahP4lxyybSsT-8vs4ALzRxmdov8k-HZIb0B7FXSh8vVHf3_jWIqslpW9v0UQaAtBv?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 

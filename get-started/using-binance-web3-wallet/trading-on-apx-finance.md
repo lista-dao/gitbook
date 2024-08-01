@@ -18,11 +18,11 @@ layout:
 
 1. Log in to your Binance app and click on the “Wallets” section. Go to “Web3”. ![](https://lh7-us.googleusercontent.com/mHFaY3A4GeDdLvgySoS2mBU64RN2IN9PkodHoe3siPkvrY7cgw1EpOX-bkipJSNkzGB6pfT6TemVLkIBFLpxk3YBxF1Z7hEo6cHzPCAUkHg4\_7FGrZ1MXy3YvbzIQfgeSn6wVGd4Dy\_8D3k1wv7Y7fs)
 2. Head over to the “Discover” section.\
-   ![](<../../.gitbook/assets/image (2).png>)
+   ![](<../../.gitbook/assets/image (2) (1).png>)
 3. Search for “APX Finance” and click on it.\
-   ![](<../../.gitbook/assets/image (3).png>)
+   ![](<../../.gitbook/assets/image (3) (1).png>)
 4. Click on “trade now”.\
-   ![](<../../.gitbook/assets/image (4).png>)
+   ![](<../../.gitbook/assets/image (4) (1).png>)
 5. Connect your wallet, and open your short or long positions using lisUSD as collateral.
 
 <figure><img src="https://lh7-us.googleusercontent.com/geno2d42j52Jzd3m5jdHmLF7xQXdHKhzRQk582A2XByWsxp-iroj_FLNY2L0H4opMeI42X4RyiwR4a3RUSRpHbPijGLtOqROK5fEKBLHxvAd_QZ9KzzL2V5dCMEVlWT8bGtwbVX9seZzJSuoVqqWQhI" alt=""><figcaption></figcaption></figure>

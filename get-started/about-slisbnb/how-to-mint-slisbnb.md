@@ -20,7 +20,7 @@ To see your slisBNB balance on your metamask wallet, click on your metamask wall
 
 Scroll to the end of your tokens page & click “import tokens”.
 
-<figure><img src="../../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### **Step 4:** <a href="#a89d" id="a89d"></a>
 
@@ -28,6 +28,6 @@ Copy and paste slisBNB’s into “token contract address” and click “add cu
 
 slisBNB’s contract address: _**0xB0b84D294e0C75A6abe60171b70edEb2EFd14A1B**_
 
-<figure><img src="../../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
 You should be able to see your slisBNB balance now.
