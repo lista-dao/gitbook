@@ -2,7 +2,7 @@
 
 To maintain lisUSD’s price stability & peg at $1, it is crucial to balance lisUSD’s supply and demand in the circulating market and LPs. Previously, the borrow rate of lisUSD was regularly adjusted to indirectly affect the supply and demand of lisUSD. With the launch of our AMO, Lista DAO will implement a dynamic borrow rate, similar to Curve Finance’s [MonetaryPolicy contracts](https://docs.curve.fi/crvUSD/monetarypolicy/) for crvUSD, to further strengthen price stability of lisUSD.
 
-At the start, the Lista core team will decide the parameter based on market conditions and. In the futures, parameter changes will require a proposal and community vote.&#x20;
+At the start, the Lista core team will decide the parameter based on market conditions. In the futures, parameter changes will require a proposal and community vote.&#x20;
 
 ## Interest Rate Mechanics
 
