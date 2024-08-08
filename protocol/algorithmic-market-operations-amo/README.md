@@ -1,8 +1,8 @@
 # Algorithmic Market Operations (AMO)
 
-To maintain lisUSD’s price stability & peg at $1, it is crucial to balance lisUSD’s supply and demand in the circulating market and LPs. Previously, the borrow rate of lisUSD was regularly adjusted to indirectly affect the supply and demand of lisUSD.&#x20;
+To maintain lisUSD’s price stability & peg at $1, it is crucial to balance lisUSD’s supply and demand in the circulating market and LPs. Previously, the borrow rate of lisUSD was regularly adjusted to indirectly affect the supply and demand of lisUSD. With the launch of our AMO, Lista DAO will implement a dynamic borrow rate, similar to Curve Finance’s [MonetaryPolicy contracts](https://docs.curve.fi/crvUSD/monetarypolicy/) for crvUSD, to further strengthen price stability of lisUSD.
 
-However, since our transition into Lista DAO, any parameter changes require a proposal and community vote, making the previous method of adjusting the borrow rate impractical. Instead, we will implement a dynamic borrow rate, similar to Curve Finance’s [MonetaryPolicy contracts](https://docs.curve.fi/crvUSD/monetarypolicy/) for crvUSD, to ensure price stability of lisUSD.
+At the start, the Lista core team will decide the parameter based on market conditions and. In the futures, parameter changes will require a proposal and community vote.&#x20;
 
 ## Interest Rate Mechanics
 
@@ -66,7 +66,7 @@ The exact formula for calculating the interest rate (r) is as follows:
 
 **APY(Default)**: Confirms r0&#x20;
 
-All smart contract details can be found [here](algorithmic-market-operations-amo.md#source-code-parameters).
+All smart contract details can be found [here](./#source-code-parameters).
 
 ## Source code parameters:
 

@@ -41,14 +41,16 @@
 ## TOKENS
 
 * [Tokenomics](tokens/tokenomics.md)
-* [veLISTA](tokens/velista.md)
+* [veLISTA](tokens/velista/README.md)
+  * [Weekly LISTA rewards](tokens/velista/weekly-lista-rewards.md)
 * [LISTA distribution](tokens/lista-distribution.md)
 * [Price stability](tokens/price-stability.md)
 
 ## protocol
 
 * [Loan liquidation](protocol/loan-liquidation.md)
-* [Algorithmic Market Operations (AMO)](protocol/algorithmic-market-operations-amo.md)
+* [Algorithmic Market Operations (AMO)](protocol/algorithmic-market-operations-amo/README.md)
+  * [Current vs Expected Borrow Rates](protocol/algorithmic-market-operations-amo/current-vs-expected-borrow-rates.md)
 
 ***
 

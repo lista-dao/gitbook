@@ -25,7 +25,7 @@
     1 LISTA (Lock 20 weeks) = 20 veLISTA\
     1 LISTA (Lock 1 Week) = 1 veLISTA
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 4. The Auto Lock function is turned on by default. This means that if users do not turn this function off, LISTA will perpetually and automatically be relocked every week.\
    \
@@ -58,7 +58,7 @@
 
 <div align="left">
 
-<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 
