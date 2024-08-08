@@ -43,6 +43,7 @@
 * [Tokenomics](tokens/tokenomics.md)
 * [veLISTA](tokens/velista/README.md)
   * [Weekly LISTA rewards](tokens/velista/weekly-lista-rewards.md)
+  * [Governance Proposals](tokens/velista/governance-proposals.md)
 * [LISTA distribution](tokens/lista-distribution.md)
 * [Price stability](tokens/price-stability.md)
 
