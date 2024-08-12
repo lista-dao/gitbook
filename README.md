@@ -19,7 +19,8 @@ layout:
 
 # Overview
 
-Lista DAO, a decentralized autonomous organization, functions as the leading liquid staking solution for BNB and a Collateralized Debt Position (CDP) protocol where users can borrow our stablecoin, lisUSD, against a variety of collateral options.  Lista DAO is also backed up by Binance Lab, with a strategic investment of 10 Miliion USD.
+test update
+Lista DAO, a decentralized autonomous organization, functions as the leading liquid staking solution for BNB and a Collateralized Debt Position (CDP) protocol where users can borrow our stablecoin, lisUSD, against a variety of collateral options. Lista DAO is also backed up by Binance Lab, with a strategic investment of 10 Miliion USD.
 
 Since our launch, Lista DAO has achieved several milestones, including our official TGE on Binance(June 20th, 2024) of our governance token, LISTA, key updates such as our AMO, the launch of ListaPie, and our Lista innovation zone. Our strategic partnerships with Etherfi, Renzo Protocol, Stakestone, Bouncebit, Solv Protocol and many others have expanded our ecosystem and brought additional value to our users. By adhering to our core values and continuously innovating, Lista DAO strives to be a leader in the DeFi space, providing users with secure, efficient, and empowering financial solutions.
 
