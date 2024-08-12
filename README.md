@@ -1,5 +1,5 @@
 ---
-cover: .gitbook/assets/Screenshot 2024-04-26 at 9.28.34 PM.png
+cover: .gitbook/assets/image (16).png
 coverY: 0
 layout:
   cover:
@@ -19,57 +19,30 @@ layout:
 
 # Overview
 
-### What is Lista DAO?​&#x20;
+Lista DAO, a decentralized autonomous organization, functions as the leading liquid staking solution for BNB and a Collateralized Debt Position (CDP) protocol where users can borrow our stablecoin, lisUSD, against a variety of collateral options.  Lista DAO is also backed up by Binance Lab, with a strategic investment of 10 Miliion USD.
 
-Lista DAO functions as a open-source liquidity protocol for earning yields on collateralized Crypto assets (BNB, ETH, Stablecoins, and other cryptocurrencies) and borrowing of our decentralized stablecoin, lisUSD, also known as a "Destablecoin".
+Since our launch, Lista DAO has achieved several milestones, including our official TGE on Binance(June 20th, 2024) of our governance token, LISTA, key updates such as our AMO, the launch of ListaPie, and our Lista innovation zone. Our strategic partnerships with Etherfi, Renzo Protocol, Stakestone, Bouncebit, Solv Protocol and many others have expanded our ecosystem and brought additional value to our users. By adhering to our core values and continuously innovating, Lista DAO strives to be a leader in the DeFi space, providing users with secure, efficient, and empowering financial solutions.
 
-It uses and expands the proven MakerDAO model for a decentralized, unbiased, collateral-backed destablecoin.
+## Mission
 
-The protocol consists of a dual token model (lisUSD and LISTA) and a set of mechanisms that support instant conversions, asset collateralization, borrowing, yield farming, etc. We are native to the BNB Chain ecosystem and have plans to expand to multiple chains in the near future.
+Our mission is to drive the evolution of DeFi by tackling key challenges in liquidity provision and delivering premier liquid staking solutions for BNB. Through robust offerings such as liquidity staking and CDP mechanisms, Lista DAO aims to empower users with efficient and secure financial tools.&#x20;
 
-The protocol is built by DeFi and smart contract experts with the aim to position the world-class revolutionary lisUSD Destablecoin as the most widely used one, by leveraging Proof-of-Stake (PoS) rewards and yield-bearing assets.
+## Vision
 
-### What is destablecoin?[​](https://helio.money/docs/#what-is-destablecoin) <a href="#what-is-destablecoin" id="what-is-destablecoin"></a>
+Our long-term vision for Lista DAO is to establish it as a cornerstone of the DeFi ecosystem, fostering widespread adoption of our products. We prioritize continuous development, consistently innovating and introducing new features and services to meet the evolving needs of our users. Transparency is foundational to our operations, ensuring that all processes and decisions are transparent and accessible to the community. Lista DAO upholds the highest security standards, implementing comprehensive measures and conducting regular audits to uphold the integrity and safety of our platform and user funds. For more detailed information, you can view our audits here \[insert hyperlink].
 
-Destablecoin is a new type of asset class within the crypto space that seeks to label a more accurate term in the current stablecoin landscape. The prefix “de-” stands for decentralized - it does not signify price volatility the way assets such as BTC experience. Destablecoins utilize decentralized, liquid-staked, crypto assets only as collateral and do not aim to achieve absolute price stability with fiat-based currencies such as USD. While destablecoins are not fully volatile assets, they will allow for some price fluctuations as regular fiat currencies would experience with varying reference rates and interest rate parities defined by the open market.
+## Core features
 
-### What’s the difference between destablecoin and stablecoin?[​](https://helio.money/docs/#whats-the-difference-between-destablecoin-and-stablecoin)
+### Collateral Debt Position (CDP)
 
-Destablecoins differ from the conventional 4 stablecoin types currently in the market. There are four main types of stablecoins:
+Modeled after MakerDAO, our CDP system allows users to lock a variety of collateral and mint stablecoins (lisUSD) against it, providing a secure way to leverage assets.&#x20;
 
-* Fiat-backed (BUSD)
-* Crypto-backed (DAI)
-* Algorithmic (USDD)
-* Commodity-backed (PAXG).
+### Liquid staking solution
 
-Like other crypto-backed stablecoins, destablecoins will utilise the overcollateralized model backed by crypto assets such as DAI. However, the key differences are:
+Inspired by Lido DAO, our liquidity staking mechanism allows users to stake their BNB, earn rewards, and maintain their liquidity at the same time. This enhances overall liquidity within the DeFi ecosystem while ensuring flexibility and accessibility for users.
 
-* Destablecoins are fully decentralized. Crypto-backed stablecoins such as DAI leverage on centralized crypto assets such as USDC, while destablecoins such as lisUSD will use decentralized assets as collateral. Additionally, destablecoins will also leverage liquid-staked assets.
-* Secondly, destablecoins aims to achieve stability broadly without an absolute peg fiat currencies. All currencies are different and have varying reference rates, so price fluctuations should be considered a norm defined by the market instead of aiming for a sense of absolute price stability at all cost. Similarly with destablecoins, it does not aim to achieve absolute price parity with US $1 as a primary objective nor rely on fiat assets as the backed collateral.
+## Our tokens
 
-### Why Lista?[​](https://helio.money/docs/#why-helio)
+<table data-view="cards"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td><h3>LISTA</h3></td><td>LISTA is our governance token, empowering holders with voting rights and a say in the future direction of the platform. </td><td></td></tr><tr><td><h3>lisUSD</h3></td><td>lisUSD is a stablecoin minted through our CDP mechanism, maintaining a stable value pegged to the US dollar.</td><td></td></tr><tr><td><h3>slisBNB</h3></td><td>slisBNB is Lista DAO’s liquid staking token, representing staked BNB and allowing users to earn rewards while maintaining liquidity. </td><td></td></tr></tbody></table>
 
-Many stablecoin protocols have become too dependent on one model (entirely collateralized) or gone to another extreme (entirely algorithmic with no backing).
-
-Collateralized stablecoins either carry custodial risk or require on-chain overcollateralization. These models provide a fairly tight peg with higher confidence than purely algorithmic designs.
-
-Purely algorithmic designs such as Basis, Empty Set Dollar, and Seigniorage Shares provide a highly trustless and scalable model that captures the early Bitcoin vision of decentralized money but is lacking in terms of stability.
-
-Unfortunately, the decentralized crypto-lending model we saw in the past decade did little to democratize financial services. Most blockchain-based lending protocols promise low fees, fast execution, and high returns, but they continue to suffer inefficiencies in design stemming from the “Stablecoin Trilemma”. This trilemma forces stablecoin developers to focus on mechanisms that can sacrifice either decentralization, price stability, or capital efficiency.
-
-The intent behind Lista DAO is to propose a solution to the capital efficiency problem of overcollateralized stablecoins experience by allowing users to leverage their funds with a collateral debt position (CDP). Through a combination of Liquid Staking, the functionality of the MakerDAO model, and additional liquidity from LPs on DEXs, Lista will avoid issues such as frozen funds (fiat-backed) or held value lost (algorithmic) because of price instability.
-
-Lista was built by experienced DeFi experts and smart contract developers to position the world-class revolutionary lisUSD destablecoin as the most widely used one, by leveraging Proof-of-Stake (PoS) rewards, Binance Liquid Staking, and yield-bearing assets.
-
-The Lista DAO aims to help promote blockchain technologies into mainstream adoption by incentivizing borrowers and stakers to become a part of a new decentralized economy of scale.
-
-### Lista DAO allows users to:
-
-* Collateralise BNB.&#x20;
-* Borrow lisUSD&#x20;
-* Farm lisUSD
-* Repay the loan (lisUSD + borrowing interest)&#x20;
-* Withdraw collateral
-* Claim rewards in LISTA for borrowing lisUSD (coming soon)&#x20;
-* Participate in protocol governance, using LISTA tokens (coming soon)
-
+\
