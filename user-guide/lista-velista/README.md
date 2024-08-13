@@ -1,3 +1,0 @@
-# LISTA / veLISTA
-
-##
