@@ -50,7 +50,7 @@
   * [Repay lisUSD](user-guide/collateral-debt-position/repay-lisusd.md)
   * [Withdraw collateral](user-guide/collateral-debt-position/withdraw-collateral.md)
 * [Liquid staking - slisBNB](user-guide/liquid-staking-slisbnb/README.md)
-  * [Get slisBNB](user-guide/liquid-staking-slisbnb/get-slisbnb.md)
+  * [How to swap for slisBNB](user-guide/liquid-staking-slisbnb/how-to-swap-for-slisbnb.md)
   * [Mint slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
   * [Redeem BNB from slisBNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
   * [Bridging slisBNB to Ethereum](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)

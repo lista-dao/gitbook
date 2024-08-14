@@ -9,7 +9,8 @@ Step 1: Funding your wallet with BNB
 3.  Select the Coin to transfer, which will be BNB in this case, and choose the BNB smart chain (BEP-20) network to transfer your funds through.
 
     ![](https://docs.bsc.lista.org/\~gitbook/image?url=https%3A%2F%2Flh7-us.googleusercontent.com%2FepCaqTmH4Lwhua28wPBCQQLjsUgenpe452uYzFEo5psnZLpyVWJL9rGhxUIe8X7cgWYP5vLTXiwmTDf0fzb69OqFZRxjUuaRt1TtPW3Zh5BV\_4xRBLnkRlxQLtzUqKyPnze\_26bQfUWDFd2EM6VT-js\&width=768\&dpr=4\&quality=100\&sign=f4a4403f\&sv=1)
-4. Select the amount of BNB that you would like to transfer into your Binance Web3 wallet, and click withdraw. Note: To qualify for Lista DAO’s “The Drop” campaign, a minimum of 0.01 BNB is required to be liquid staked into slisBNB. ![](https://docs.bsc.lista.org/\~gitbook/image?url=https%3A%2F%2Flh7-us.googleusercontent.com%2FI6RDRx\_L0URN9pp5d7xEiFxJtmBxaXnKgzvrqmSt0ycflbQKbEU4p7wkat6Pxwfm8l-whVBTwZm6DQAkt9-26iregNlPGpV5iRjYPNr3OqM3S2FDctWjYZ9uc-KFwSrcz7aVLkCJ9k\_he3aFBGECH9A\&width=300\&dpr=4\&quality=100\&sign=11148b60\&sv=1)
+4. Select the amount of BNB that you would like to transfer into your Binance Web3 wallet, and click withdraw. Note: To qualify for Lista DAO’s “The Drop” campaign, a minimum of 0.01 BNB is required to be liquid staked into slisBNB.\
+   ![](https://docs.bsc.lista.org/\~gitbook/image?url=https%3A%2F%2Flh7-us.googleusercontent.com%2FI6RDRx\_L0URN9pp5d7xEiFxJtmBxaXnKgzvrqmSt0ycflbQKbEU4p7wkat6Pxwfm8l-whVBTwZm6DQAkt9-26iregNlPGpV5iRjYPNr3OqM3S2FDctWjYZ9uc-KFwSrcz7aVLkCJ9k\_he3aFBGECH9A\&width=300\&dpr=4\&quality=100\&sign=11148b60\&sv=1)
 
 #### Step 2: Liquid staking BNB into slisBNB on Lista DAO <a href="#step-2-liquid-staking-bnb-into-slisbnb-on-lista-dao" id="step-2-liquid-staking-bnb-into-slisbnb-on-lista-dao"></a>
 
