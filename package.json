@@ -1,0 +1,16 @@
+{
+  "name": "gitbook",
+  "version": "1.0.0",
+  "description": "--- cover: .gitbook/assets/image (30).png coverY: 0 layout:   cover:     visible: true     size: full   title:     visible: true   description:     visible: true   tableOfContents:     visible: true   outline:     visible: true   pagination:     visible: true ---",
+  "main": "create-language-branch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "glob": "^11.0.0",
+    "openai": "^4.55.7"
+  }
+}
