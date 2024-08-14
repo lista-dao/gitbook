@@ -1,34 +1,34 @@
-# Farming on Thena
+# 在 Thena 上进行农耕
 
-Farming on Thena consists of two major steps:
+在 Thena 上进行农耕主要包括两个步骤：
 
-1. Depositing lisUSD and your desired pair token in exchange for sAMM-lisUSD pair tokens.
-2. Staking sAMM-lisUSD pair tokens.
+1. 存入 lisUSD 和您想要配对的代币，以换取 sAMM-lisUSD 配对代币。
+2. 质押 sAMM-lisUSD 配对代币。
 
-Taking out your LP tokens and liquidity consists of two major steps:
+取出您的 LP 代币和流动性也主要包括两个步骤：
 
-1. Unstaking your LP tokens.
-2. Removing liquidity from the respective lisUSD pair pool.
+1. 解质押您的 LP 代币。
+2. 从相应的 lisUSD 配对池中移除流动性。
 
-## Providing liquidity to the pool
+## 向池提供流动性
 
 {% hint style="info" %}
-**BEFORE YOU START**
+**开始之前**
 
-The volatile pool tends to have far fewer rewards. Before completing your transaction, make sure you understand which pool you are dealing with.
+波动性池往往有更少的奖励。在完成交易之前，请确保您了解您正在处理的是哪个池。
 {% endhint %}
 
-1. Navigate to [ThenaFi's Liquidity pools.](https://thena.fi/pools)
-   1. Instead, you may want to search for lisUSD stable pools on the Liquidity section on Thena’s app.
-   2. Find it then click **Manage**.
-   3. In the pop-up, click **Get sAMM-**lisUSD **/\[Your desired pair Token] LP**.
-2. Add your desired amount to the LP pair. Make sure you have enough of both tokens to fulfill your deposit.
-3. Then click **Add Liquidity & Stake LP**.
+1. 导航到 [ThenaFi 的流动性池。](https://thena.fi/pools)
+   1. 或者，您可能希望在 Thena 的应用程序的流动性部分搜索 lisUSD 稳定池。
+   2. 找到它，然后点击 **管理**。
+   3. 在弹出窗口中，点击 **获取 sAMM-**lisUSD **/ [您想要配对的代币] LP**。
+2. 将您想要的金额添加到 LP 对。确保您有足够的两种代币来满足您的存款。
+3. 然后点击 **添加流动性 & 质押 LP**。
 
-### Withdrawing Liquidity <a href="#withdrawing-liquidity" id="withdrawing-liquidity"></a>
+### 提取流动性 <a href="#withdrawing-liquidity" id="withdrawing-liquidity"></a>
 
-1. Search for the lisUSD pair stable pool on the Liquidity section on Thena’s app.
-2. Find it then click **Manage**.
-3. Go to the **Unstake** tab and click **Unstake LP**.
-4. If you also desire to remove liquidity, then return to the Liquidity section and click ‘Manage’ again.
-5. Go to the **Remove** tab and click **Remove Liquidity**.
+1. 在 Thena 的应用程序的流动性部分搜索 lisUSD 配对稳定池。
+2. 找到它，然后点击 **管理**。
+3. 转到 **解质押** 标签页，然后点击 **解质押 LP**。
+4. 如果您还希望移除流动性，那么返回到流动性部分，再次点击 ‘管理’。
+5. 转到 **移除** 标签页，然后点击 **移除流动性**。

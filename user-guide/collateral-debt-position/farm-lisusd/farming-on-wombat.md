@@ -1,34 +1,34 @@
-# Farming on Wombat
+# 在 Wombat 上进行农耕
 
-Farming on Wombat consists of two major steps:
+在 Wombat 上进行农耕主要包括两个步骤：
 
-1. Depositing lisUSD in exchange for lisUSD -LP tokens.
-2. Staking lisUSD-LP tokens.
+1. 存入 lisUSD 以换取 lisUSD -LP 代币。
+2. 质押 lisUSD-LP 代币。
 
-Taking out your LP tokens and liquidity consists of two major steps:
+取出你的 LP 代币和流动性也主要包括两个步骤：
 
-1. Unstaking your LP tokens.
-2. Removing liquidity from the lisUSD pool.
+1. 取消质押你的 LP 代币。
+2. 从 lisUSD 池中移除流动性。
 
-## Providing liquidity to the pool
+## 向池提供流动性
 
 {% hint style="info" %}
-**BEFORE YOU START**
+**在你开始之前**
 
-Please note that only the lisUSD Smart Pool is being topped up with liquidity and governance incentives. Before completing your transaction, ensure which pool you are dealing with.
+请注意，只有 lisUSD 智能池正在被注入流动性和治理激励。在完成你的交易之前，请确保你知道你正在处理哪个池。
 {% endhint %}
 
-## To provide liquidity:
+## 提供流动性：
 
-* Navigate to the[ ](https://app.wombat.exchange/pool?chain=bsc)lisUSD-LP on Wombat.
-  * Instead, you may want to search for lisUSD pool in the Pool section on Wombat’s app.
-  * Find it, then click **Liquidity**.
-* Add your desired amount to the lisUSD-LP token. Ensure you have enough of both tokens to fulfil your deposit, and click **Approve**.
-* Once the transaction is signed, click **Deposit & Stake**.
+* 导航到 Wombat 上的 [ ](https://app.wombat.exchange/pool?chain=bsc)lisUSD-LP。
+  * 或者，你可能想在 Wombat 的应用程序的 Pool 部分搜索 lisUSD 池。
+  * 找到它，然后点击 **流动性**。
+* 将你想要的金额添加到 lisUSD-LP 代币。确保你有足够的两种代币来完成你的存款，然后点击 **批准**。
+* 交易签名后，点击 **存款 & 质押**。
 
-### Withdrawing Liquidity <a href="#withdrawing-liquidity" id="withdrawing-liquidity"></a>
+### 提取流动性 <a href="#withdrawing-liquidity" id="withdrawing-liquidity"></a>
 
-1. Search for the lisUSD stable pool in the Liquidity section on Wombat’s app.
-2. Find it then click **Manage**.
-3. Go to the **Unstake** tab and click **Unstake LP**. If you also desire to remove liquidity, then return to the **Liquidity** section and click **Manage** again.
-4. Go to the **Remove** tab and click **Remove Liquidity**.
+1. 在 Wombat 的应用程序的流动性部分搜索 lisUSD 稳定池。
+2. 找到它，然后点击 **管理**。
+3. 转到 **取消质押** 标签页，然后点击 **取消质押 LP**。如果你还想移除流动性，那么返回到 **流动性** 部分，然后再次点击 **管理**。
+4. 转到 **移除** 标签页，然后点击 **移除流动性**。

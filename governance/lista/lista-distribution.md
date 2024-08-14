@@ -1,93 +1,93 @@
-# LISTA distribution
+# LISTA 分发
 
-## Circulating supply at launch&#x20;
+## 发行时的流通供应量&#x20;
 
-Circulating supply refers to the total amount of LISTA tokens that are freely available for trading, without any specific transfer restrictions.&#x20;
+流通供应量指的是LISTA代币总量中可以自由交易的部分，没有任何特定的转移限制。&#x20;
 
-Here are the details of Lista’s circulating supply upon launch:
+以下是Lista发行时的流通供应量细节：
 
-1. Upon launch, 10% of LISTA’s total token supply allocated towards Binance Megadrop was unlocked.
-2. Upon launch, 8.5% of LISTA’s total token supply allocated towards our Airdrop campaign was unlocked.&#x20;
-3. Upon launch, 3.5% of LISTA’s total token supply allocated towards ecosystem growth was unlocked.
-4. Upon launch, 1% of LISTA’s total token supply allocated towards investors & advisors was unlocked.&#x20;
+1. 发行时，分配给Binance Megadrop的LISTA总代币供应量的10%被解锁。
+2. 发行时，分配给我们的空投活动的LISTA总代币供应量的8.5%被解锁。&#x20;
+3. 发行时，分配给生态系统增长的LISTA总代币供应量的3.5%被解锁。
+4. 发行时，分配给投资者和顾问的LISTA总代币供应量的1%被解锁。&#x20;
 
-This brings the total circulating supply of LISTA at launch (June 20) to be set at 23%, or 230,000,000 LISTA tokens.
+这使得LISTA在发行时（6月20日）的总流通供应量设定为23%，或230,000,000个LISTA代币。
 
-### The table below is a breakdown of LISTA's token distribution.
+### 下表是LISTA代币分发的细节。
 
-| Token Name           | Lista                            |
+| 代币名称             | Lista                            |
 | -------------------- | -------------------------------- |
-| Binance Megadrop     | 10.00% of the total token supply |
-| Airdrop              | 10.00% of the total token supply |
-| Investors & Advisors | 19.00% of the total token supply |
-| Team                 | 3.50% of the total token supply  |
-| Community            | 40.00% of the total token supply |
-| DAO Treasury         | 8.00% of the total token supply  |
-| Ecosystem            | 9.50% of the total token supply  |
+| Binance Megadrop     | 总代币供应量的10.00% |
+| 空投                | 总代币供应量的10.00% |
+| 投资者 & 顾问       | 总代币供应量的19.00% |
+| 团队                | 总代币供应量的3.50%  |
+| 社区                | 总代币供应量的40.00% |
+| DAO Treasury         | 总代币供应量的8.00%  |
+| 生态系统            | 总代币供应量的9.50%  |
 
 ### Binance Megadrop (10.00%)
 
-The entirety of the token supply allocated towards Binance Megadrop, will be unlocked on launch.
+分配给Binance Megadrop的全部代币供应量，将在发行时解锁。
 
-### Airdrop (10.00%)
+### 空投 (10.00%)
 
-At Launch, 85% of the tokens allocated to the Lista DAO’s airdrop, equating to 8.5% of the total token supply, will be unlocked.&#x20;
+在发行时，Lista DAO的空投分配的代币的85%，相当于总代币供应量的8.5%，将被解锁。&#x20;
 
-The remaining 15%, which is 1.5% of LISTA’s total token supply, will be unlocked by the end of September.
+剩余的15%，即LISTA总代币供应量的1.5%，将在9月底前解锁。
 
-### Investors & advisors (19.00%)
+### 投资者 & 顾问 (19.00%)
 
-1% of the total token supply allocated towards investors & advisors will be unlocked on launch.
+分配给投资者和顾问的总代币供应量的1%将在发行时解锁。
 
-The remaining 18% will be locked for a one-year cliff until June 2025. From June 2025 onwards, this portion will be vested and unlocked linearly every quarter over the next two years until March 2027.
+剩余的18%将被锁定一年，直到2025年6月。从2025年6月开始，这部分将在接下来的两年内每季度线性解锁，直到2027年3月。
 
-### Team (3.50%)
+### 团队 (3.50%)
 
-100% of the token supply allocated to the Lista DAO team (3.50%) will be locked for a 1 year cliff until June 2025, with the first unlock happening in June 2025.
+分配给Lista DAO团队的代币供应量的100%（3.50%）将被锁定一年，直到2025年6月，第一次解锁将在2025年6月进行。
 
-From June 2025 onwards, the 3.50% token supply allocated towards the Lista DAO team will be vested and unlocked linearly every quarter (3 months) over the next 5 years until March 2029.
+从2025年6月开始，分配给Lista DAO团队的3.50%的代币供应量将在接下来的5年内每季度（3个月）线性解锁，直到2029年3月。
 
-### Community (40.00%)
+### 社区 (40.00%)
 
-Upon launch, the token supply allocated towards community incentives will be channeled towards token emissions to incentivise various DeFi activities on Lista DAO such as LPs rewards, lisUSD single staking pool, etc.&#x20;
+在发行时，分配给社区激励的代币供应量将用于代币发行，以激励Lista DAO上的各种DeFi活动，如LP奖励，lisUSD单一质押池等。&#x20;
 
-LISTA Token emissions towards these community incentives will kickstart in July, and the emissions will continue to be released at a decreasing rate of 1/√2 each year, for the next 20 years until June 2044.&#x20;
+LISTA代币向这些社区激励的发行将在7月开始，发行量将以每年1/√2的递减率继续释放，持续20年，直到2044年6月。&#x20;
 
-The token emission for community incentives will follow the formula: ![](<../../.gitbook/assets/image (27).png>)
+社区激励的代币发行将遵循以下公式：![](<../../.gitbook/assets/image (27).png>)
 
-**n**: When  n = 1 , it represents the token emissions for the first year. In the final year, n=20
+**n**: 当 n = 1 时，表示第一年的代币发行量。在最后一年，n=20
 
-**r**: r is the common ratio of the geometric series: 1/√2&#x20;
+**r**: r是几何级数的公比：1/√2&#x20;
 
-**S**: S is the sum of the geometric series: which is 40% of the token emissions, equating to 400 million LISTA
+**S**: S是几何级数的和：即代币发行的40%，相当于400 million LISTA
 
-As Lista DAO is still in its transition phase, the current emission rate is set at 312,500 LISTA per week, which is lower than the expected emission rate of 9,772,651 LISTA per month.&#x20;
+由于Lista DAO仍处于过渡阶段，当前的发行率设定为每周312,500 LISTA，这低于预期的每月9,772,651 LISTA的发行率。&#x20;
 
-This rate is divided as follows:
+这个比率分为以下几部分：
 
-* veLISTA Holders: 250,000 LISTA/week
-* Lista DAO related LPs: 62,500 LISTA/week
+* veLISTA持有者：每周250,000 LISTA
+* Lista DAO相关的LPs：每周62,500 LISTA
 
-#### Lista DAO Transition Phase
+#### Lista DAO过渡阶段
 
-During Lista DAO’s transition towards a fully decentralized Autonomous Organisation (DAO), the originally planned emissions for Lista DAO, which is 9,772,651 LISTA tokens/month in the first year, will be split into 2 equal portions of 4,886,325.5 LISTA tokens each.
+在Lista DAO向完全去中心化的自治组织（DAO）过渡期间，原计划为Lista DAO发行的代币，即第一年每月9,772,651 LISTA，将被分成两个相等的部分，每部分4,886,325.5 LISTA。
 
-First Half: The first half of the LISTA token emissions (4,886,325.5 LISTA/month in the first year) will be dynamically adjusted each month based on current needs. Prior to the emission of this portion, the community will be duly notified.
+第一部分：第一部分的LISTA代币发行（第一年每月4,886,325.5 LISTA）将根据当前需求每月动态调整。在这部分发行之前，社区将得到适当的通知。
 
-Second Half: The second half of the Lista token emissions (4,886,325.5 LISTA/month in the first year) will be channeled towards community incentives but not emitted immediately. The emission amount will gradually increase based on the progress of Lista’s platform deployment. The increase in emissions will be capped at 1,221,581 LISTA/week, or in other words, 4,886,325.5 LISTA/month in the long run.
+第二部分：Lista代币发行的第二部分（第一年每月4,886,325.5 LISTA）将用于社区激励，但不会立即发行。发行量将根据Lista平台部署的进度逐渐增加。发行量的增加将被限制在每周1,221,581 LISTA，或者说，从长远来看，每月4,886,325.5 LISTA。
 
-As of now, the emission rate of LISTA is currently set at 312,500 LISTA/week. All remaining unissued LISTA tokens will continue to be allocated to community incentives, with future decisions on emission rates determined through DAO voting. As we complete our transition to a DAO, the power to adjust LISTA’s current emission parameters will also progressively shift to veLISTA holders.
+到目前为止，LISTA的发行率目前设定为每周312,500 LISTA。所有剩余的未发行LISTA代币将继续分配给社区激励，未来的发行率决定将通过DAO投票确定。随着我们完成向DAO的过渡，调整LISTA当前发行参数的权力也将逐渐转移到veLISTA持有者。
 
 ### DAO treasury (8.00%)
 
-100% of the token supply allocated towards Lista DAO’s treasury (8.00%) will be locked for a 3 month cliff until September 2024, with the first unlock happening in September 2024.
+分配给Lista DAO的财政部的代币供应量的100%（8.00%）将被锁定3个月，直到2024年9月，第一次解锁将在2024年9月进行。
 
-From September 2024 onwards, the 8.00% token supply allocated towards Lista DAO’s treasury will be vested and unlocked linearly every quarter (3 months) over the next 4 years until June 2028.
+从2024年9月开始，分配给Lista DAO财政部的8.00%的代币供应量将在接下来的4年内每季度（3个月）线性解锁，直到2028年6月。
 
-### Ecosystem (9.50%)
+### 生态系统 (9.50%)
 
-3.50% of the total token supply allocated towards ecosystem incentives will be unlocked on launch.
+分配给生态系统激励的总代币供应量的3.50%将在发行时解锁。
 
-The remaining 6% of the token supply allocated towards ecosystem incentives will be unlocked every quarter (3 months) for the next 5 years until June 2029 according to the table below:
+剩余的6%的代币供应量将在接下来的5年内每季度（3个月）解锁，直到2029年6月，具体如下表所示：
 
-<table data-header-hidden><thead><tr><th></th><th width="262"></th><th></th></tr></thead><tbody><tr><td>Date</td><td>LISTA unlocks / quarter</td><td>Unlocked supply allocated towards ecosystem incentive</td></tr><tr><td>June 2024 </td><td>35,000,000</td><td>35,000,000 (3.50%)</td></tr><tr><td>July 2024 - March 2025 </td><td>3,125,000</td><td>44,375,000 (4.4375%)</td></tr><tr><td>June 2025 - June 2028</td><td>3,750,000</td><td>93,125,000 (9.3125%)</td></tr><tr><td>Sept 2028 - March 2029</td><td>625,000</td><td>95,000,000 (9.50%)</td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th></th><th width="262"></th><th></th></tr></thead><tbody><tr><td>日期</td><td>每季度LISTA解锁量</td><td>解锁供应量分配给生态系统激励</td></tr><tr><td>2024年6月 </td><td>35,000,000</td><td>35,000,000 (3.50%)</td></tr><tr><td>2024年7月 - 2025年3月 </td><td>3,125,000</td><td>44,375,000 (4.4375%)</td></tr><tr><td>2025年6月 - 2028年6月</td><td>3,750,000</td><td>93,125,000 (9.3125%)</td></tr><tr><td>2028年9月 - 2029年3月</td><td>625,000</td><td>95,000,000 (9.50%)</td></tr></tbody></table>

@@ -1,38 +1,36 @@
 # veLISTA
 
-## Understanding veLISTA & veToken model <a href="#id-91ff" id="id-91ff"></a>
+## 理解veLISTA和veToken模型 <a href="#id-91ff" id="id-91ff"></a>
 
-To understand how users can obtain veLISTA and what purpose veLISTA serves, we must first understand what veToken model is. The veTOKEN model, introduced by Curve Finance, is a tokenomics mechanism designed to align incentives and encourage long-term commitment among token holders. In this model, users lock their tokens (referred to as “veTokens”) for a specified period, during which they receive governance power and various rewards. The longer the lock period, the more veTokens they receive, translating to greater voting power and higher rewards.
+要理解用户如何获得veLISTA以及veLISTA的作用，我们首先需要理解什么是veToken模型。veTOKEN模型由Curve Finance引入，是一种旨在调整激励并鼓励代币持有者长期承诺的代币经济机制。在此模型中，用户将他们的代币（称为“veTokens”）锁定一段指定的时间，期间他们会获得治理权力和各种奖励。锁定期越长，他们获得的veTokens越多，这意味着更大的投票权和更高的奖励。
 
-This system incentivizes users to commit to the protocol for extended periods, fostering stability and aligning their interests with the long-term success of the platform. Hence, Lista’s token locking into veLISTA is inspired by, and functions similarly to, the Curve Finance’s veToken model.
+这个系统激励用户长期承诺协议，促进稳定性，并使他们的利益与平台的长期成功保持一致。因此，Lista的代币锁定为veLISTA的做法受到了Curve Finance的veToken模型的启发，并且功能类似。
 
-## The road to decentralization <a href="#d418" id="d418"></a>
+## 通向去中心化的道路 <a href="#d418" id="d418"></a>
 
-During Lista DAO’s transition into our veToken model, governance will be gradually passed on to veLISTA holders. Users will be able to vote on several parameters. However, this shift toward a fully decentralized governance model will be gradual rather than instantaneous.
+在Lista DAO过渡到我们的veToken模型期间，治理权将逐渐移交给veLISTA持有者。用户将能够对几个参数进行投票。然而，这种向完全去中心化治理模型的转变将是渐进的，而不是瞬间的。
 
-To ensure system security and prevent malicious actions, the core team will initially retain the power to veto harmful proposals, aligning with our mission to prioritize the best interests of Lista DAO. As Lista DAO matures, more power will be gradually transferred to the DAO. Our ultimate goal is to fully transition into a DAO where governance holds absolute power.
+为了确保系统安全并防止恶意行为，核心团队最初将保留否决有害提案的权力，这符合我们优先考虑Lista DAO最佳利益的使命。随着Lista DAO的成熟，更多的权力将逐渐转移给DAO。我们的最终目标是完全过渡到一个治理拥有绝对权力的DAO。
 
-Additionally, once veLISTA is launched, veLISTA holders will begin receiving protocol fees, further incentivizing active participation in governance and the long-term success of Lista DAO.
+此外，一旦veLISTA启动，veLISTA持有者将开始接收协议费用，进一步激励他们积极参与治理和Lista DAO的长期成功。
 
+### Lista DAO的主要收入来源
 
+Lista DAO的主要收入包括（但不限于）以下内容：
 
-### Lista DAO’s Primary Revenue Sources
+1. veLISTA提前解锁费用
+2. lisUSD借款费用
+3. ETH提现费用
+4. LST奖励和操作佣金费用
 
-Lista DAO’s primary revenue includes (but not limited to) the following:
+<table data-header-hidden><thead><tr><th width="113"></th><th width="144"></th><th width="252"></th><th width="140"></th><th></th></tr></thead><tbody><tr><td>资产</td><td>项目</td><td>描述</td><td>veLISTA持有者会获得份额吗？</td><td>状态</td></tr><tr><td>LISTA</td><td>提前解锁费用</td><td>用户支付溢价以便在锁定期结束前领取他们锁定的LISTA。</td><td>是</td><td>已上线</td></tr><tr><td>lisUSD</td><td>铸币费用</td><td><p>当用户借用lisUSD时，将收取一次性借款费用。</p><p><br></p><p>示例：<br>如果用户借用101 lisUSD，用户将收到100lisUSD，借款费用基于101 lisUSD计算</p></td><td>是</td><td>即将上线</td></tr><tr><td>lisUSD</td><td>借款费用</td><td>当用户借用lisUSD时，他们会以利率形式产生借款费用。他们持有借款金额的时间越长，他们随时间积累的利息就越多。</td><td>是</td><td>已上线</td></tr><tr><td>ETH</td><td>提现费用</td><td>如果用户希望立即提取ETH而不等待7-8天，他们必须支付提现费用。</td><td>是</td><td>ETH: 已上线</td></tr><tr><td>slisBNB</td><td>流动性质押奖励和操作佣金费用</td><td>Lista DAO从slisBNB获得的流动性质押奖励中获得一部分。当slisBNB被铸造时，Lista DAO也会收取一小部分操作佣金费用</td><td>是</td><td>已上线</td></tr></tbody></table>
 
-1. veLISTA early Unlock fees
-2. lisUSD borrowing fees
-3. ETH withdrawal fees
-4. LST rewards and operation Commission fees
+### Lista DAO的一般运营成本
 
-<table data-header-hidden><thead><tr><th width="113"></th><th width="144"></th><th width="252"></th><th width="140"></th><th></th></tr></thead><tbody><tr><td>Asset</td><td>Item</td><td>Description</td><td>Will veLISTA Holders earn a share?</td><td>Status</td></tr><tr><td>LISTA</td><td>Early Unlock Fee</td><td>Users pay a premium in order to claim their locked LISTA before the locking period ends.</td><td>Yes</td><td>Live</td></tr><tr><td>lisUSD</td><td>Minting Fee</td><td><p>When users borrow lisUSD, a one-time borrow fee will be charged.</p><p><br></p><p>Example:<br>If users borrow 101 lisUSD, users will receive 100lisUSD, the borrowing fee is calculated based on 101 lisUSD</p></td><td>Yes</td><td>Coming soon</td></tr><tr><td>lisUSD</td><td>Borrowing Fee</td><td>When users borrow lisUSD, they incur borrowing fees in the form of interest rates. The longer they hold the borrowed amount, the more interest they accumulate over time.</td><td>Yes</td><td>Live</td></tr><tr><td>ETH</td><td>Withdrawal Fees</td><td>If users wish to withdraw ETH immediately without waiting 7-8 days, they must pay a withdrawal fee.</td><td>Yes</td><td>ETH: Live</td></tr><tr><td>slisBNB</td><td>Liquid staking rewards and operation Commission fees</td><td>Lista DAO earns a share of liquid staking rewards that comes from slisBNB. Lista DAO also charges a small operation commission fee when slisBNB is minted</td><td>Yes</td><td>Live</td></tr></tbody></table>
+Lista DAO的运营成本包括（但可能不限于）以下内容：
 
-### Lista DAO’s General Operational Cost
+1. lisUSD单一质押池
+2. 风险缓冲基金
+3. 运营成本
 
-Lista DAO’s operational costs includes (but may not be limited) to the following:
-
-1. lisUSD single staking pool
-2. Risk buffer fund
-3. Operational cost
-
-<table data-header-hidden><thead><tr><th width="126"></th><th width="149"></th><th width="402"></th><th></th></tr></thead><tbody><tr><td>Asset</td><td>Item</td><td>Description</td><td>Status</td></tr><tr><td>lisUSD</td><td>lisUSD Single staking pool</td><td><p>Users who stake lisUSD in this pool will earn lisUSD rewards. </p><p><br></p><p>By the end of August 2024, LISTA token emissions will be used instead of lisUSD to incentivize this pool instead.</p><p><br></p></td><td>Live</td></tr><tr><td>lisUSD</td><td>Risk Buffer Fund</td><td><p>A risk buffer for lisUSD is set aside, which serves to cover any potential shortfalls that may happen during black swan events. </p><p><br></p></td><td>Live</td></tr><tr><td>Lista DAO</td><td>Operational cost</td><td>A portion of Lista DAO’s revenue will be set aside for operational costs, which will be calculated manually. </td><td>Live</td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="126"></th><th width="149"></th><th width="402"></th><th></th></tr></thead><tbody><tr><td>资产</td><td>项目</td><td>描述</td><td>状态</td></tr><tr><td>lisUSD</td><td>lisUSD单一质押池</td><td><p>在此池中质押lisUSD的用户将获得lisUSD奖励。</p><p><br></p><p>到2024年8月底，将使用LISTA代币排放代替lisUSD来激励这个池。</p><p><br></p></td><td>已上线</td></tr><tr><td>lisUSD</td><td>风险缓冲基金</td><td><p>设立了一个lisUSD的风险缓冲，用于覆盖在黑天鹅事件期间可能发生的任何潜在短缺。</p><p><br></p></td><td>已上线</td></tr><tr><td>Lista DAO</td><td>运营成本</td><td>Lista DAO的收入的一部分将被留作运营成本，这将手动计算。</td><td>已上线</td></tr></tbody></table>

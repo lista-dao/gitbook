@@ -1,21 +1,21 @@
-# veLISTA Locking mechanics
+# veLISTA 锁定机制
 
-Participating in Lista DAO’s governance requires that a user lock an amount of LISTA tokens. Once locked, the user will receive veLISTA, which is used in determining voting power.
+参与 Lista DAO 的治理需要用户锁定一定数量的 LISTA 代币。一旦锁定，用户将收到 veLISTA，这将用于确定投票权。
 
-Lista's token locking into veLISTA is inspired by, and functions similarly to, the popular veToken model created by Curve.
+Lista 的代币锁定到 veLISTA 的方式受到了 Curve 创建的流行 veToken 模型的启发，并且功能类似。
 
-## How Locking Works
+## 锁定工作原理
 
-1. Users receive veLISTA by locking LISTA for a number of weeks. "Weeks" refers to the number of weeks that must pass before the tokens can be withdrawn. The maximum duration for a lock is 52 weeks.
-2. The longer the lock duration, the more veLISTA the user receives.
-3. Each address can only have 1 lock with 1 unlock duration.
-4. It is possible to increase the amount of veLISTA locked, as well as extending the duration of an existing lock.
-5. Every Wednesday at UTC+0, the number of weeks for a lock decreases by 1. When the lock duration reaches 0 weeks, the tokens may be withdrawn at any time.
-6. Users will have to lock their LISTA into veLISTA **1 day prior to the rewards distribution before they can start claiming rewards.** \
-   Example: User A will have to lock his LISTA into veLISTA **before** July 31 (Wednesday) at 00:00 UTC to be eligible for the rewards that will be distributed on August 1 (Thursday).
+1. 用户通过锁定 LISTA 一定周数来获得 veLISTA。"周数"指的是必须过去的周数，然后才能提取代币。锁定的最长期限为 52 周。
+2. 锁定期限越长，用户收到的 veLISTA 就越多。
+3. 每个地址只能有 1 个锁定，有 1 个解锁期限。
+4. 可以增加 veLISTA 锁定的数量，也可以延长现有锁定的期限。
+5. 每周三在 UTC+0 时，锁定的周数减少 1。当锁定期限达到 0 周时，可以随时提取代币。
+6. 用户必须在奖励分发前的**1 天将他们的 LISTA 锁定到 veLISTA，然后他们才能开始领取奖励。** \
+   示例：用户 A 必须在 7 月 31 日（周三）的 00:00 UTC **之前**将他的 LISTA 锁定到 veLISTA，才有资格获得 8 月 1 日（周四）分发的奖励。
 
-## Withdrawing early from Locked Positions
+## 提前退出锁定位置
 
-It is possible to exit a locked position early by paying an Early Unlock fee.  The fee to exit early starts at 100% and decays linearly based on the number of weeks remaining until the tokens unlock. The exact calculation used is:
+通过支付提前解锁费用，可以提前退出锁定位置。提前退出的费用从 100% 开始，根据代币解锁剩余的周数线性衰减。使用的确切计算方式是：
 
-**Early Unlock Fee = (total\_Locked\_amount \* weeks\_to\_unlock)/52**
+**提前解锁费用 = (total\_Locked\_amount \* weeks\_to\_unlock)/52**

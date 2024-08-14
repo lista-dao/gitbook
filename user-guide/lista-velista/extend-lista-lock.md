@@ -1,14 +1,14 @@
-# Extend LISTA lock
+# 延长LISTA锁定
 
-Users can choose to extend their LISTA locks at any point in time.
+用户可以在任何时候选择延长他们的LISTA锁定。
 
-## Here is how you can do it:
+## 下面是你可以做到的方式：
 
-1. To extend your lock on your LISTA tokens, head over to the Lista DAO’s locking page [here](https://lista.org/lock), and connect your wallet to Lista DAO’s DApp.
+1. 要延长你的LISTA代币的锁定，前往Lista DAO的锁定页面[这里](https://lista.org/lock)，并将你的钱包连接到Lista DAO的DApp。
 
 <figure><img src="../../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
 
-2. On the right hand side, click on “extend” , and drag the extension button to the number of weeks that user would like to extend their lock for.
+2. 在右侧，点击“延长”，并将延长按钮拖动到用户希望延长锁定的周数。
 
 <div align="left">
 
@@ -16,7 +16,7 @@ Users can choose to extend their LISTA locks at any point in time.
 
 </div>
 
-3. Click on the “Extend” button, and sign the transaction.
+3. 点击“延长”按钮，并签署交易。
 
 <div align="left">
 
@@ -24,7 +24,7 @@ Users can choose to extend their LISTA locks at any point in time.
 
 </div>
 
-4. Once the “Extension” transaction is completed, you are done! Your new unlocking date will appear on your Lock dashboard.
+4. 一旦“延长”交易完成，你就完成了！你的新解锁日期将出现在你的锁定仪表板上。
 
 <div align="left">
 

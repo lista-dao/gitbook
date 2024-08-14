@@ -1,187 +1,175 @@
-# FAQ
+# 常见问题
 
-### What is Lista DAO? <a href="#what-is-lista" id="what-is-lista"></a>
+### 什么是Lista DAO？<a href="#what-is-lista" id="what-is-lista"></a>
 
-Lista DAO functions as the open-source decentralized stablecoin lending protocol powered by LSDfi. Users can perform staking and liquid staking on Lista DAO, as well as borrow lisUSD against a variety of decentralized collateral. Present on the BNB Chain and Ethereum, Lista DAO aims to position lisUSD as the number one stablecoin in the crypto space, leveraging on innovative liquid staking solutions.
+Lista DAO是一个开源的去中心化稳定币借贷协议，由LSDfi驱动。用户可以在Lista DAO上进行质押和流动性质押，以及借用lisUSD对各种去中心化抵押品进行借贷。Lista DAO存在于BNB链和以太坊上，旨在将lisUSD定位为加密空间中的第一稳定币，利用创新的流动性质押解决方案。
 
-### Is Lista DAO audited? <a href="#is-lista-audited" id="is-lista-audited"></a>
+### Lista DAO是否经过审计？<a href="#is-lista-audited" id="is-lista-audited"></a>
 
-Yes, Lista DAO is audited multiple times by some of the best Web3 security auditors in the space such as Peckshield, Veridise, Slowmist, Blocksec and Supremacy. You can find the audit reports [here](https://docs.bsc.lista.org/security).
+是的，Lista DAO已经多次由一些Web3安全审计领域的顶级审计师，如Peckshield、Veridise、Slowmist、Blocksec和Supremacy进行审计。你可以在[这里](https://docs.bsc.lista.org/security)找到审计报告。
 
-### What is lisUSD? <a href="#what-is-lisusd" id="what-is-lisusd"></a>
+### 什么是lisUSD？<a href="#what-is-lisusd" id="what-is-lisusd"></a>
 
-lisUSD is Lista DAO’s decentralized stablecoin pegged to the USD, and is fully over-collateralized by crypto assets such as BNB, ETH, slisBNB and wBETH. In phase 1, lisUSD leverages on the MakerDAO models on BNB Chain for a decentralized and unbiased stablecoin product.
+lisUSD是Lista DAO的去中心化稳定币，与美元挂钩，完全由BNB、ETH、slisBNB和wBETH等加密资产超额抵押。在第一阶段，lisUSD利用BNB链上的MakerDAO模型，为去中心化和无偏见的稳定币产品提供支持。
 
-### What is slisBNB <a href="#what-is-slisbnb" id="what-is-slisbnb"></a>
+### 什么是slisBNB？<a href="#what-is-slisbnb" id="what-is-slisbnb"></a>
 
-slisBNB is the native yield bearing and liquid staking token for BNB, built by Lista DAO. slisBNB appreciates against BNB in line with BNB’s staking APR, allowing users have the freedom to earn additional yields on different DeFi platforms while earning staking rewards passively.
+slisBNB是Lista DAO构建的BNB的本地收益承载和流动性质押代币。slisBNB按照BNB的质押APR与BNB升值，使用户有自由在不同的DeFi平台上赚取额外的收益，同时被动地赚取质押奖励。
 
-### What is collateral? <a href="#what-is-collateral" id="what-is-collateral"></a>
+### 什么是抵押品？<a href="#what-is-collateral" id="what-is-collateral"></a>
 
-Collateral is any asset which a borrower must provide to take out a loan, acting as a security for the debt.
+抵押品是借款人必须提供的任何资产，作为债务的保证。
 
-### What does collateral ratio mean? <a href="#what-does-collateral-ratio-mean" id="what-does-collateral-ratio-mean"></a>
+### 抵押比例是什么意思？<a href="#what-does-collateral-ratio-mean" id="what-does-collateral-ratio-mean"></a>
 
-This is the ratio between the dollar value of the collateral deposited by the borrower and amount of debt borrowed in lisUSD.
+这是借款人存入的抵押品的美元价值与以lisUSD借入的债务金额之间的比率。
 
-The collateral ratio will fluctuate over time as the price of the collateral changes. Borrowers can influence the ratio by adjusting collateral and/or debt — i.e. adding more collateral or paying off some of your debt in lisUSD.
+随着抵押品价格的变动，抵押比例会随时间波动。借款人可以通过调整抵押品和/或债务来影响比率，即增加更多的抵押品或偿还部分lisUSD债务。
 
-For example: Let’s say the current price of BNB is $2000 and you decide to deposit 1 BNB as collateral. If you borrow 400 lisUSD, then the collateral ratio for your debt position would be 2000:400 = 500%. If you borrowed 1000 lisUSD, then the collateral ratio of your debt position would be 2000:1000 = 200% instead.
+例如：假设BNB的当前价格是2000美元，你决定存入1个BNB作为抵押品。如果你借入400 lisUSD，那么你的债务位置的抵押比例将是2000:400 = 500%。如果你借入1000 lisUSD，那么你的债务位置的抵押比例将是2000:1000 = 200%。
 
-### What is the minimum collateral ratio & borrow amount to borrow lisUSD? <a href="#what-is-the-minimum-collateral-ratio-and-borrow-amount-to-borrow-lisusd" id="what-is-the-minimum-collateral-ratio-and-borrow-amount-to-borrow-lisusd"></a>
+### 借用lisUSD的最低抵押比例和借款金额是多少？<a href="#what-is-the-minimum-collateral-ratio-and-borrow-amount-to-borrow-lisusd" id="what-is-the-minimum-collateral-ratio-and-borrow-amount-to-borrow-lisusd"></a>
 
-Currently, Lista DAO offers a range of collateral assets as collateral on BNBchain as you can see below:
+目前，Lista DAO在BNB链上提供了一系列的抵押资产作为抵押品，如下所示：
 
 #### 1) BNB <a href="#id-1-bnb" id="id-1-bnb"></a>
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 150%
-* Minimum Collateral Deposit: 0.1 BNB
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0.1%
-* Withdrawal Options: BNB/slisBNB
+* 最低借款：15 lisUSD
+* 最低抵押比例：150%
+* 最低抵押存款：0.1 BNB
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0.1%
+* 提款选项：BNB/slisBNB
 
 #### 2) slisBNB (Lista DAO) <a href="#id-2-slisbnb-listadao" id="id-2-slisbnb-listadao"></a>
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 150%
-* Minimum Collateral Deposit: 0.1 slisBNB
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal fee: 0.1%
-* Withdrawal Options: BNB/slisBNB
+* 最低借款：15 lisUSD
+* 最低抵押比例：150%
+* 最低抵押存款：0.1 slisBNB
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0.1%
+* 提款选项：BNB/slisBNB
 
 #### 3) ETH <a href="#id-3-eth" id="id-3-eth"></a>
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 110%
-* Minimum Collateral Deposit: 0.1 ETH
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0.1%
-* Withdrawal Options: ETH/WBETH
+* 最低借款：15 lisUSD
+* 最低抵押比例：110%
+* 最低抵押存款：0.1 ETH
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0.1%
+* 提款选项：ETH/WBETH
 
 #### 3) WBETH (Binance) <a href="#id-3-wbeth-binance" id="id-3-wbeth-binance"></a>
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 110%
-* Minimum Collateral Deposit: 0.1 WBETH
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0.1%
-* Withdrawal Options: WBETH
+* 最低借款：15 lisUSD
+* 最低抵押比例：110%
+* 最低抵押存款：0.1 WBETH
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0.1%
+* 提款选项：WBETH
 
 #### 4) BTCB (Binance) <a href="#id-4-btcb-binance" id="id-4-btcb-binance"></a>
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 110%
-* Minimum Collateral Deposit: 0.001 BTCB
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: BTCB
+* 最低借款：15 lisUSD
+* 最低抵押比例：110%
+* 最低抵押存款：0.001 BTCB
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0%
+* 提款选项：BTCB
 
 #### 5) weETH (Ether.fi) <a href="#id-5-weeth-ether.fi" id="id-5-weeth-ether.fi"></a>
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.1 weETH
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: weETH
+* 最低借款：15 lisUSD
+* 最低抵押比例：200%
+* 最低抵押存款：0.1 weETH
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0%
+* 提款选项：weETH
 
 #### 6) ezETH (Renzo Protocol) <a href="#id-6-ezeth-renzo-protocol" id="id-6-ezeth-renzo-protocol"></a>
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.1 ezETH
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: ezETH
+* 最低借款：15 lisUSD
+* 最低抵押比例：200%
+* 最低抵押存款：0.1 ezETH
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0%
+* 提款选项：ezETH
 
 #### 7) STONE (StakeStone) <a href="#id-7-stone-stakestone" id="id-7-stone-stakestone"></a>
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.1 STONE
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: STONE
+* 最低借款：15 lisUSD
+* 最低抵押比例：200%
+* 最低抵押存款：0.1 STONE
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0%
+* 提款选项：STONE
 
 #### 8) SolvBTC (Solv Protocol) <a href="#id-8-solvbtc-solv-protocol" id="id-8-solvbtc-solv-protocol"></a>
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.001 SolvBTC
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: SolvBTC
+* 最低借款：15 lisUSD
+* 最低抵押比例：200%
+* 最低抵押存款：0.001 SolvBTC
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0%
+* 提款选项：SolvBTC
 
 9\) BBTC (BounceBit)
 
-Requirements:
+要求：
 
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.001 BBTC
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: BBTC
+* 最低借款：15 lisUSD
+* 最低抵押比例：200%
+* 最低抵押存款：0.001 BBTC
+* 借款费用：（动态费率，由我们的AMO模块决定）
+* 提款费：0%
+* 提款选项：BBTC
 
-### How can users earn on lisUSD? <a href="#how-can-users-earn-on-lisusd" id="how-can-users-earn-on-lisusd"></a>
+### 用户如何通过lisUSD获利？<a href="#how-can-users-earn-on-lisusd" id="how-can-users-earn-on-lisusd"></a>
 
-Users can earn with lisUSD in a variety of ways. They can stake their lisUSD on ListaDAO, which accrues lisUSD rewards. They can provide liquidity for slisBNB and lisUSD in various liquidity pools such as PancakeSwap, Wombat Exchange, ThenaFi, Curve and Uniswap to further earn trading and LP fees.
+用户可以通过多种方式利用lisUSD获利。他们可以在ListaDAO上质押他们的lisUSD，从而获得lisUSD奖励。他们还可以在PancakeSwap、Wombat Exchange、ThenaFi、Curve和Uniswap等各种流动性池中为slisBNB和lisUSD提供流动性，以进一步赚取交易和LP费用。
 
-Please note that while we strive to maintain price stability, lisUSD may not always be perfectly pegged to the USD, and it can deviate slightly in both directions under stressful market conditions.
+请注意，虽然我们努力维持价格稳定，但lisUSD可能并不总是完美地挂钩美元，在压力市场条件下，它可能在两个方向上略有偏离。
 
-### Will my position be liquidated on Lista DAO? <a href="#will-my-position-be-liquidated-on-lista" id="will-my-position-be-liquidated-on-lista"></a>
+### 我在Lista DAO上的位置会被清算吗？<a href="#will-my-position-be-liquidated-on-lista" id="will-my-position-be-liquidated-on-lista"></a>
 
-Yes, liquidations are a common concept in lending protocols like Lista DAO, and thus, users need to be aware that their loan positions are at risk of being liquidated if they no longer have sufficient collateral to maintain the MCR of the loan.
+是的，清算是像Lista DAO这样的借贷协议中的一个常见概念，因此，用户需要知道，如果他们不再有足够的抵押品来维持贷款的MCR，他们的贷款位置有被清算的风险。
 
-For example, if you are a borrower, and the value of your collateral drops below the MCR of 150%, liquidation will occur. You will still keep your borrowed lisUSD, but your borrowed position will be closed and your collateral will be used to compensate liquidators.
+例如，如果你是一个借款人，你的抵押品的价值跌破150%的MCR，清算将会发生。你仍然可以保留你借入的lisUSD，但你的借款位置将被关闭，你的抵押品将被用来补偿清算人。
 
-### Are users at risk of losing their funds? <a href="#are-users-at-risk-of-losing-their-funds" id="are-users-at-risk-of-losing-their-funds"></a>
+### 用户有失去他们的资金的风险吗？<a href="#are-users-at-risk-of-losing-their-funds" id="are-users-at-risk-of-losing-their-funds"></a>
 
-As a non-custodial system, all the tokens sent to the protocol will be held and managed by smart contracts without the interference of any person or legal entity. That means your funds will only be subject to the rules set forth in the smart contract code.
+作为一个非托管系统，所有发送到协议的代币将由智能合约持有和管理，不受任何人或法人实体的干扰。这意味着你的资金只会受到智能合约代码中规定的规则的约束。
 
-Although Lista DAO has rigorously designed our platform and audited our code, there may be additional unforeseen risks, and thus not all risks can be fully excluded.any DeFi protocol and investment carries risk. Lista DAO has made our code and audit reports available online, and users are welcome to assess the risk themselves.
+尽管Lista DAO已经严格设计了我们的平台并审计了我们的代码，但可能还有其他未知的风险，因此并不能完全排除所有的风险。任何DeFi协议和投资都有风险。Lista DAO已经将我们的代码和审计报告在线公开，用户可以自行评估风险。
 
-Lista DAO is currently in the initial development stages and there are a variety of unforeseeable risks. You acknowledge and agree that there are numerous risks associated with acquiring LISTA, holding LISTA, and using LISTA for participation in Lista DAO. In the worst scenario, this could lead to the loss of all or part of LISTA held. IF YOU DECIDE TO ACQUIRE LISTA OR PARTICIPATE IN LISTA DAO, YOU EXPRESSLY ACKNOWLEDGE, ACCEPT AND ASSUME THE FOLLOWING RISKS:
+Lista DAO目前处于初始开发阶段，存在各种无法预见的风险。你承认并同意，获取LISTA、持有LISTA和使用LISTA参与Lista DAO有许多风险。在最坏的情况下，这可能导致持有的全部或部分LISTA的损失。如果你决定获取LISTA或参与Lista DAO，你明确承认、接受并承担以下风险：
 
-■ Uncertain Regulations and Enforcement Actions: The regulatory status of Lista DAO, LISTA and distributed ledger technology is unclear or unsettled in many jurisdictions. The regulation of digital assets has become a primary target of regulation in all major countries in the world. It is impossible to predict how, when or whether regulatory agencies may apply existing regulations or create new regulations with respect to such technology and its applications, including LISTA and/or Lista DAO. Regulatory actions could negatively impact LISTA and/or Lista DAO in various ways. Lista DAO or any of its affiliates may cease operations in a jurisdiction in the event that regulatory actions, or changes to law or regulation, make it illegal to operate in such jurisdiction, or commercially undesirable to obtain the necessary regulatory approval(s) to operate in such jurisdiction. After consulting with a wide range of legal advisors to mitigate the legal risks as much as possible, Lista DAO have worked with the specialist blockchain department at GS Legal LLC and obtained a legal opinion on the token distribution, and will be conducting business in accordance with the prevailing market practice.
+■ 不确定的法规和执法行动：Lista DAO、LISTA和分布式账本技术在许多司法管辖区的监管状态是不清楚或未定的。数字资产的监管已经成为全球主要国家监管的主要目标。无法预测监管机构何时、如何或是否会对这种技术及其应用（包括LISTA和/或Lista DAO）应用现有的法规或制定新的法规。监管行动可能会以各种方式对LISTA和/或Lista DAO产生负面影响。Lista DAO或其任何关联公司可能会在监管行动或法律或法规的变更使其在某个司法管辖区内的运营变得非法，或者在该司法管辖区内获取必要的监管批准变得商业上不可取时，停止在该司法管辖区内的运营。在咨询了广泛的法律顾问以尽可能地减轻法律风险后，Lista DAO已经与GS Legal LLC的专业区块链部门合作，获得了关于代币分发的法律意见，并将按照市场惯例进行业务。
 
-■ Inadequate disclosure of information: As at the date hereof, Lista DAO is still under development and its design concepts, consensus mechanisms, algorithms, codes, and other technical details and parameters may be constantly and frequently updated and changed. Although this material contains the most current information relating to Lista DAO, it is not absolutely complete and may still be adjusted and updated by the Lista DAO from time to time. The Lista DAO has neither the ability nor obligation to keep holders of LISTA informed of every detail (including development progress and expected milestones) regarding the project to develop Lista DAO, hence insufficient information disclosure is inevitable and reasonable.
+■ 信息披露不足：截至本日，Lista DAO仍在开发中，其设计概念、共识机制、算法、代码和其他技术细节和参数可能会不断频繁地更新和改变。尽管这份材料包含了关于Lista DAO的最新信息，但它并不绝对完整，可能仍会被Lista DAO不时调整和更新。Lista DAO既没有能力也没有义务让LISTA的持有者了解每一个细节（包括开发进度和预期的里程碑）关于开发Lista DAO的项目，因此信息披露不足是不可避免和合理的。
 
-■ Failure to develop: There is the risk that the development of Lista DAO will not be executed or implemented as planned, for a variety of reasons, including without limitation the event of a decline in the prices of any digital asset, virtual currency or LISTA, unforeseen technical difficulties, and shortage of development funds for activities.
+■ 开发失败：存在Lista DAO的开发可能无法按计划执行或实施的风险，原因可能有很多，包括但不限于任何数字资产、虚拟货币或LISTA的价格下跌、未预见的技术困难，以及活动的开发资金短缺。
 
-■ Security weaknesses: Hackers or other malicious groups or organisations may attempt to interfere with LISTA and/or Lista DAO in a variety of ways, including, but not limited to, malware attacks, denial of service attacks, consensus-based attacks, Sybil attacks, smurfing and spoofing. Furthermore, there is a risk that a third party or a member of Lista DAO or its affiliates may intentionally or unintentionally introduce weaknesses into the core infrastructure of LISTA and/or Lista DAO, which could negatively affect LISTA and/or Lista DAO. Further, the future of cryptography and security innovations are highly unpredictable and advances in cryptography, or technical advances (including without limitation development of quantum computing), could present unknown risks to LISTA and/or Lista DAO by rendering ineffective the cryptographic consensus mechanism that underpins that blockchain protocol.
+■ 安全漏洞：黑客或其他恶意团体或组织可能会试图以各种方式干扰LISTA和/或Lista DAO，包括但不限于恶意软件攻击、拒绝服务攻击、基于共识的攻击、Sybil攻击、smurfing和spoofing。此外，存在第三方或Lista DAO成员或其关联公司可能故意或无意地将弱点引入LISTA和/或Lista DAO的核心基础设施，这可能对LISTA和/或Lista DAO产生负面影响。此外，密码学和安全创新的未来高度不可预测，密码学的进步或技术进步（包括但不限于量子计算的发展）可能会对LISTA和/或Lista DAO带来未知的风险，通过使支撑该区块链协议的密码学共识机制失效。
 
-■ Risk of Dissolution: Early-stage projects such as Lista DAO involve a high degree of risk. Financial and operating risks confronting start-up companies are significant, and the aforementioned entities are not immune to these. Start-up companies often experience unexpected problems in the areas of product development, marketing, financing, and general management, among others, which frequently cannot be solved. It is possible that, due to any number of reasons, including, but not limited to, an unfavourable fluctuation in the value of cryptographic and fiat currencies, decrease in the utility of LISTA due to negative adoption of Lista DAO, the failure of commercial relationships, or intellectual property ownership related challenges, Lista DAO may no longer be viable to operate and Lista DAO may be dissolved.
+■ 解散风险：像Lista DAO这样的初创项目涉及到高度的风险。初创公司面临的财务和运营风险是重大的，上述实体并不免疫这些风险。初创公司经常在产品开发、营销、融资和一般管理等领域遇到意想不到的问题，这些问题往往无法解决。有可能由于各种原因，包括但不限于加密货币和法定货币价值的不利波动、Lista DAO的负面采用导致LISTA的效用降低、商业关系的失败，或与知识产权所有权相关的挑战，Lista DAO可能不再具有运营的可行性，Lista DAO可能被解散。
 
-■ Other risks: In addition, the potential risks briefly mentioned above are not exhaustive and there are other risks (as more particularly set out in the Terms and Conditions) associated with your participation in Lista DAO, as well as acquisition of, holding and use of LISTA, including those that Lista DAO cannot anticipate. Such risks may further materialise as unanticipated variations or combinations of the aforementioned risks. You should conduct full due diligence on Lista DAO, its affiliates, as well as understand the overall framework, mission and vision for Lista DAO prior to participating in the same and/or acquiring LISTA.
-
-■ **Uncertain Regulations and Enforcement Actions:** The regulatory status of Lista DAO, LISTA and distributed ledger technology is unclear or unsettled in many jurisdictions. The regulation of digital assets has become a primary target of regulation in all major countries in the world. It is impossible to predict how, when or whether regulatory agencies may apply existing regulations or create new regulations with respect to such technology and its applications, including LISTA and/or Lista DAO. Regulatory actions could negatively impact LISTA and/or Lista DAO in various ways. The Company, the Distributor (or their respective affiliates) may cease operations in a jurisdiction in the event that regulatory actions, or changes to law or regulation, make it illegal to operate in such jurisdiction, or commercially undesirable to obtain the necessary regulatory approval(s) to operate in such jurisdiction. After consulting with a wide range of legal advisors to mitigate the legal risks as much as possible, the Company and Distributor have worked with the specialist blockchain department at GS Legal LLC and obtained a legal opinion on the token distribution, and will be conducting business in accordance with the prevailing market practice.
-
-■ **Inadequate disclosure of information**: As at the date hereof, Lista DAO is still under development and its design concepts, consensus mechanisms, algorithms, codes, and other technical details and parameters may be constantly and frequently updated and changed. Although this material contains the most current information relating to Lista DAO, it is not absolutely complete and may still be adjusted and updated by the Lista team from time to time. The Lista team has neither the ability nor obligation to keep holders of LISTA informed of every detail (including development progress and expected milestones) regarding the project to develop Lista DAO, hence insufficient information disclosure is inevitable and reasonable.
-
-■ **Failure to develop**: There is the risk that the development of Lista DAO will not be executed or implemented as planned, for a variety of reasons, including without limitation the event of a decline in the prices of any digital asset, virtual currency or LISTA, unforeseen technical difficulties, and shortage of development funds for activities.
-
-■ **Security weaknesses:** Hackers or other malicious groups or organisations may attempt to interfere with LISTA and/or Lista DAO in a variety of ways, including, but not limited to, malware attacks, denial of service attacks, consensus-based attacks, Sybil attacks, smurfing and spoofing. Furthermore, there is a risk that a third party or a member of the Company, the Distributor or their respective affiliates may intentionally or unintentionally introduce weaknesses into the core infrastructure of LISTA and/or Lista DAO, which could negatively affect LISTA and/or Lista DAO. Further, the future of cryptography and security innovations are highly unpredictable and advances in cryptography, or technical advances (including without limitation development of quantum computing), could present unknown risks to LISTA and/or Lista DAO by rendering ineffective the cryptographic consensus mechanism that underpins that blockchain protocol.
-
-■ **Risk of Dissolution**: Start-up companies such as the Company, the Distributor or their affiliates involve a high degree of risk. Financial and operating risks confronting start-up companies are significant, and the aforementioned entities are not immune to these. Start-up companies often experience unexpected problems in the areas of product development, marketing, financing, and general management, among others, which frequently cannot be solved. It is possible that, due to any number of reasons, including, but not limited to, an unfavourable fluctuation in the value of cryptographic and fiat currencies, decrease in the utility of LISTA due to negative adoption of Lista DAO, the failure of commercial relationships, or intellectual property ownership related challenges, Lista DAO may no longer be viable to operate and the Company, the Distributor or their affiliates may be dissolved.
-
-■ **Other risks:** In addition, the potential risks briefly mentioned above are not exhaustive and there are other risks (as more particularly set out in the Terms and Conditions) associated with your participation in Lista DAO, as well as acquisition of, holding and use of LISTA, including those that the Company or the Distributor cannot anticipate. Such risks may further materialise as unanticipated variations or combinations of the aforementioned risks. You should conduct full due diligence on the Company, the Distributor, their respective affiliates, and the Lista team, as well as understand the overall framework, mission and vision for Lista DAO prior to participating in the same and/or acquiring LISTA.
+■ 其他风险：此外，上述简要提到的潜在风险并不详

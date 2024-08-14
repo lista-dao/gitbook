@@ -1,21 +1,21 @@
-# Roadmap
+# 路线图
 
-### Q2 2024
+### 2024年第二季度
 
-1. We will be focusing on building a safe and secure protocol with solid liquidity and strong utility case for lisUSD on BNBchain. This will include the formation & strengthening of partnerships and integrations between different DeFi Protocols on BNBchain.
-2. We will also be focused on integrating ETH LSTs, LRTs and respective LP tokens as a collateral option for lisUSD, diversifying our portfolio as well as providing users with more collateral options.
-3. At the same time, we will also be upgrading our smart contracts to be more scalable, which includes the following features; collateral addition module, liquidation module, and AMO module upgrades.
-4. Multichain strategy, where we will begin exploring cross-chain opportunities, starting with Ethereum.&#x20;
-5. Transitioning of our codebase from Maker DAO to Liquity.
+1. 我们将专注于在BNBchain上构建一个安全可靠的协议，具有稳固的流动性和强大的lisUSD实用性。这将包括在BNBchain上的不同DeFi协议之间形成和加强合作关系和集成。
+2. 我们还将专注于将ETH LSTs、LRTs和相应的LP代币作为lisUSD的抵押选项进行集成，以多样化我们的投资组合，并为用户提供更多的抵押选项。
+3. 同时，我们还将升级我们的智能合约，使其更具可扩展性，这包括以下功能：抵押增加模块、清算模块和AMO模块升级。
+4. 多链策略，我们将开始探索跨链机会，首先从以太坊开始。
+5. 我们的代码库将从Maker DAO转移到Liquity。
 
-### **Q3 2024**
+### **2024年第三季度**
 
-1. Introduce BNB restaking and respective Liquid restaking tokens (LRTs) into the Lista DAO ecosystem.&#x20;
-2. Launch of veLISTA & the veTOKEN model for Lista DAO
-3. To turn on LISTA Token emissions
-4. Further user interface & user experience (UIUX) optimization
+1. 将BNB重新质押和相应的Liquid重新质押代币（LRTs）引入Lista DAO生态系统。
+2. 启动veLISTA和Lista DAO的veTOKEN模型
+3. 开启LISTA Token发行
+4. 进一步优化用户界面和用户体验（UIUX）
 
-### Q4 2024
+### 2024年第四季度
 
-1. Multichain expansion to Ethereum
-2. Further improvements in slisBNB utility & application scenarios
+1. 多链扩展到以太坊
+2. 进一步提高slisBNB实用性和应用场景的改进

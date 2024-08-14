@@ -1,17 +1,17 @@
-# About slisBNB
+# 关于 slisBNB
 
-slisBNB is the native yield bearing and liquid staking token for BNB, built on Lista DAO. slisBNB appreciates against BNB in line with BNB’s staking APR, allowing users have the freedom to earn additional yields on different DeFi platforms while earning staking rewards passively.&#x20;
+slisBNB 是 BNB 的本地收益和流动性质押代币，基于 Lista DAO 构建。slisBNB 会随着 BNB 的质押 APR 线性增值，使用户在赚取被动质押奖励的同时，有自由在不同的 DeFi 平台上赚取额外的收益。
 
-slisBNB currently holds the highest Total Value Locked (TVL) among liquid staking tokens for BNB in the market, and it is live on both BNB Smart Chain, and Ethereum network.
+slisBNB 目前在市场上对于 BNB 的流动性质押代币中，持有最高的总锁定价值（TVL），并且它在 BNB 智能链和以太坊网络上都已上线。
 
-## Partnerships and integrations
+## 合作伙伴和集成
 
-To enhance the utility of slisBNB, we have integrated it into multiple other DeFi protocols.
+为了增强 slisBNB 的实用性，我们已将其集成到多个其他 DeFi 协议中。
 
-Firstly, users can deposit slisBNB as a form of collateral on Lista DAO's platform to borrow lisUSD.
+首先，用户可以在 Lista DAO 的平台上存入 slisBNB 作为抵押品，以借用 lisUSD。
 
-Secondly, the integration with [Tranchess’s](https://tranchess.com/) architecture introduces four new derivatives of slisBNB, each serving a unique purpose within the ecosystem. These derivatives offer a wide range of investment opportunities tailored to different risk appetites and strategies.
+其次，与 [Tranchess](https://tranchess.com/) 的架构集成引入了四种新的 slisBNB 衍生品，每种都在生态系统中有着独特的作用。这些衍生品提供了一系列针对不同风险偏好和策略的投资机会。
 
-Additionally, we have several slisBNB liquidity pools available on DEXes like [Thena](https://thena.fi/) Finance and [PancakeSwap](https://pancakeswap.finance/), where users can easily swap into other assets.
+此外，我们在像 [Thena](https://thena.fi/) Finance 和 [PancakeSwap](https://pancakeswap.finance/) 这样的 DEX 上有几个 slisBNB 流动性池，用户可以轻松地换成其他资产。
 
-Last but not least, through the integration with [Karak](https://karak.network/), a universal staking layer, slisBNB gains the ability to be restaked. This feature allows slisBNB to secure diverse trust networks and applications beyond the BNB Smart Chain, significantly expanding its usability and utility.
+最后但同样重要的是，通过与 [Karak](https://karak.network/)，一个通用的质押层，的集成，slisBNB 获得了重新质押的能力。这个功能使 slisBNB 能够保护超出 BNB 智能链的多样化信任网络和应用程序，大大扩展了其可用性和实用性。

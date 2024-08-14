@@ -1,29 +1,27 @@
 ---
-description: How to withdraw collateral
+description: 如何取回抵押品
 ---
 
-# Withdraw collateral
+# 取回抵押品
 
 {% hint style="info" %}
-**Longer vs instant withdrawal**
+**长期 vs 立即取回**
 
-Before withdrawing, please ensure your outstanding loan is repaid to avoid liquidation of your collateral.
+在取回之前，请确保您的未偿贷款已偿还，以避免抵押品被清算。
 
 \
 **BNB**
 
-BNB takes 7–15 days to be withdrawn, while withdrawing BNB LSTs (Eg. slisBNB) is immediate.
+BNB 的取回时间为7-15天，而取回 BNB LSTs（例如 slisBNB）则是立即的。
 
-slisBNB is the interest-bearing BNB staking asset and allows you either exchange it for BNB on major DEXs or hold and keep getting BNB Staking rewards that accumulate in slisBNB over time. The longer you hold, the more BNB you'll get when exchanging BNB LSTs to BNB.
+slisBNB 是带有利息的 BNB 质押资产，允许您在主要的 DEXs 上将其兑换为 BNB，或者持有并继续获得随着时间积累在 slisBNB 中的 BNB 质押奖励。持有的时间越长，当您将 BNB LSTs 兑换为 BNB 时，您将获得的 BNB 越多。
 
-
-
-The minimum amount to withdraw is 0.1 BNB.
+取回的最小金额为 0.1 BNB。
 {% endhint %}
 
-To withdraw your BNB:
+要取回您的 BNB：
 
-1. On the [borrow page ](https://helio.money/app/loans/), click the **-** button under **My Collateral** to withdraw your BNB.
-2. On the next page, enter the desired amount to withdraw and choose the option: BNB or BNB LSTs. Then click **Proceed**.
-3. Confirm the transaction in MetaMask to receive the withdrawn assets to the connected MetaMask wallet address.
-4. Once the transaction completes, click **Okay** to go back to the borrow page.
+1. 在[借款页面](https://helio.money/app/loans/)，点击 **My Collateral** 下的 **-** 按钮以取回您的 BNB。
+2. 在下一页，输入希望取回的金额，并选择选项：BNB 或 BNB LSTs。然后点击 **Proceed**。
+3. 在 MetaMask 中确认交易，以将取回的资产接收到已连接的 MetaMask 钱包地址。
+4. 一旦交易完成，点击 **Okay** 返回借款页面。

@@ -1,10 +1,10 @@
-# LRT Collateral Options
+# LRT 抵押选项
 
-Restaking refers to the process of staking an asset again after it has already been staked once. This method allows the staked asset to be utilized in a different staking program or on another platform, increasing its utility and providing the holder with additional rewards, although this comes with heightened risks of slashing.
+再质押指的是在一种资产已经被质押一次之后，再次对其进行质押的过程。这种方法允许已质押的资产在不同的质押程序或其他平台上被利用，增加其效用，并为持有者提供额外的奖励，尽管这带来了更高的削减风险。
 
-Liquid restaking tokens (LRTs) is a specific variant of this process, which involves liquid staking tokens. Here, a staker initially commits their assets to a validator and receives a token that represents this stake. The staker can then use this liquid staking token to participate in a restaking protocol, further leveraging their initial investment.
+流动性再质押代币（LRTs）是这个过程的一个特定变体，涉及到流动性质押代币。在这里，质押者最初将他们的资产承诺给验证者，并收到一个代表这个质押的代币。然后，质押者可以使用这个流动性质押代币参与再质押协议，进一步利用他们的初始投资。
 
-Here are the available Liquid Restaking Tokens (LRTs) that can be used as collateral to borrow lisUSD:
+以下是可用作借用 lisUSD 抵押的流动性再质押代币（LRTs）：
 
 * weETH (Ether.fi)
 * ezETH (Renzo Protocol)

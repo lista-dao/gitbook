@@ -1,30 +1,30 @@
-# Current vs Expected Borrow Rates
+# 当前借款利率 vs 预期借款利率
 
 <figure><img src="../../../../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
 
-## Current Borrow Rates
+## 当前借款利率
 
-The current borrow rate is the borrow rate that users will pay their loan on. The current borrow rate will fluctuate and update any time someone borrows or repays lisUSD.&#x20;
+当前借款利率是用户需要偿还贷款的利率。每当有人借款或偿还 lisUSD 时，当前借款利率都会波动并更新。
 
-If nobody interacts with the repayment / borrowing contracts for lisUSD, the current borrow rate will refresh and update once every few hours.&#x20;
+如果没有人与 lisUSD 的偿还/借款合约进行交互，那么当前借款利率将每隔几小时刷新并更新一次。
 
-### Specifications:
+### 规格：
 
-1. Current borrow rates will be rounded to 8 decimal places.
-2. Current borrow rates will be updated every 5 minutes.
-3. Current borrow rate will change based on the price of lisUSD, and borrow rates that users **pay** will be based on the current borrow rate, **not** the expected borrow rate.
-4. When users borrow or repay lisUSD, demand and supply of lisUSD changes, and thus, price of lisUSD changes, which in turn, changes the current borrow rates. However, the current borrowing rates will change only if lisUSD's change in price is more than $0.002. In other words, if the change in lisUSD's price is equal or less than $0.002, current borrow rates will not change.
+1. 当前借款利率将四舍五入到8位小数。
+2. 当前借款利率每5分钟更新一次。
+3. 当前借款利率将根据 lisUSD 的价格变化，用户**支付**的借款利率将基于当前借款利率，**而不是**预期借款利率。
+4. 当用户借款或偿还 lisUSD 时，lisUSD 的需求和供应变化，因此，lisUSD 的价格变化，进而改变当前借款利率。然而，只有当 lisUSD 的价格变动超过 $0.002 时，当前借款利率才会变动。换句话说，如果 lisUSD 的价格变动等于或小于 $0.002，当前借款利率将不会改变。
 
-## Expected Borrow Rate
+## 预期借款利率
 
-The expected borrowing rate for lisUSD is updated every 15 minutes based on lisUSD prices. The Expected Borrow Rate shows what your next loan rate **might** be, and it doest not mean it will become the borrow rate.&#x20;
+根据 lisUSD 的价格，lisUSD 的预期借款利率每15分钟更新一次。预期借款利率显示了你的下一笔贷款利率**可能**是多少，并不意味着它将成为借款利率。
 
-If this expected borrow rate goes down, users may consider borrowing more lisUSD, which can lower its price. If it goes up, users may consider repaying their loan sooner to help boost lisUSD’s price.&#x20;
+如果这个预期借款利率下降，用户可能会考虑借款更多的 lisUSD，这可以降低其价格。如果它上升，用户可能会考虑提前偿还他们的贷款，以帮助提升 lisUSD 的价格。
 
-The idea of having an expected borrowing rate is to indirect affect the demand and supply of lisUSD, helping to manage lisUSD's price expectations. This helps to keep lisUSD stable at $1.
+设立预期借款利率的想法是为了间接影响 lisUSD 的需求和供应，帮助管理 lisUSD 的价格预期。这有助于保持 lisUSD 稳定在 $1。
 
-### Specifications:
+### 规格：
 
-1. Expected borrow rates will be rounded to 8 decimal places.&#x20;
-2. Expected borrow rates will be updated every 15 minutes.
-3. Expected borrow rates simply estimates what the future borrowing rates may be, relative to the price of lisUSD. It does not guarantee that the expected borrow rates will become the future current borrowing rates.&#x20;
+1. 预期借款利率将四舍五入到8位小数。
+2. 预期借款利率每15分钟更新一次。
+3. 预期借款利率只是估计未来借款利率可能是多少，相对于 lisUSD 的价格。它并不保证预期借款利率将成为未来的当前借款利率。

@@ -1,7 +1,7 @@
 # LISTA
 
-LISTA is the governance token for Lista DAO. It can be locked into veLISTA which allows users to participate in protocol governance, such as raising proposals and voting on them on Lista DAO’s [Snapshot platform](https://snapshot.org/#/listavote.eth). Additionally, veLISTA holders will also earn a variety of rewards in the form of LISTA emissions and other platform rewards.&#x20;
+LISTA是Lista DAO的治理代币。用户可以将其锁定为veLISTA，从而参与协议治理，例如在Lista DAO的[Snapshot平台](https://snapshot.org/#/listavote.eth)上提出提案并对其进行投票。此外，veLISTA持有者还将以LISTA发行和其他平台奖励的形式获得各种奖励。
 
-Similar to lisUSD, LISTA token is a medium of exchange in its own right, which can be swapped or put in a farming pool on a DEX at the user’s discretion, e.g. to maximise their capital efficiency, obtain borrowings, and/or compound their yield.&#x20;
+与lisUSD类似，LISTA代币本身也是一种交换媒介，用户可以根据自己的判断在DEX上进行交换或放入农场池，例如，以最大化他们的资本效率，获得借款和/或复合他们的收益。
 
-The total supply of LISTA is 1 billion. Check us out on CoinMarketCap [here](https://coinmarketcap.com/currencies/lista-dao/).
+LISTA的总供应量为10亿。在CoinMarketCap上查看我们[这里](https://coinmarketcap.com/currencies/lista-dao/)。

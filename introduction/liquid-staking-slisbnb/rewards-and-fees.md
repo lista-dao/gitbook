@@ -1,6 +1,6 @@
-# Rewards and Fees
+# 奖励和费用
 
-Staking rewards are received for delegating BNB to ListaDAO's validator. Validator take its cut from rewards before sharing it to the protocol as claimable tokens. The rewards earned are split into two parts:
+将BNB委托给ListaDAO的验证者可以获得质押奖励。验证者在将奖励分享给协议作为可领取的代币之前，会先从中抽取一部分。所赚取的奖励分为两部分：
 
-* **95% goes to slisBNB holders** in the form of slisBNB value appreciation: slisBNB holders’ share of the BNB pool keeps increasing due to the increase in the slisBNB/BNB exchange-rate.
-* **5% goes to the protocol**.
+* **95%归slisBNB持有者所有**，以slisBNB价值增值的形式：由于slisBNB/BNB汇率的提高，slisBNB持有者在BNB池中的份额持续增加。
+* **5%归协议所有**。

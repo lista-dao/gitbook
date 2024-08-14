@@ -1,10 +1,10 @@
-# Protocol fees
+# 协议费用
 
-veLISTA holders will also earn community incentives given out in the form of the following tokens:
+veLISTA持有者还将以以下代币形式获得社区激励：
 
-1. lisUSD rewards
-2. WBETH liquid staking rewards
-3. slisBNB liquid staking rewards
-4. LISTA emission rewards
+1. lisUSD奖励
+2. WBETH流动性质押奖励
+3. slisBNB流动性质押奖励
+4. LISTA发行奖励
 
-Over 50% of Protocol fees will be turned into community incentives and distributed to veLISTA holders.
+超过50%的协议费用将转化为社区激励，并分发给veLISTA持有者。

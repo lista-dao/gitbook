@@ -1,27 +1,27 @@
-# Liquid staking - slisBNB
+# 流动性质押 - slisBNB
 
-## What is liquid staking?
+## 什么是流动性质押？
 
-Liquid staking tokens represent a user's staked assets on a blockchain network. These tokens allow users to participate in Proof-of-Stake (PoS) networks without sacrificing liquidity.&#x20;
+流动性质押代币代表用户在区块链网络上的质押资产。这些代币允许用户参与权益证明（PoS）网络，而不牺牲流动性。
 
-Traditionally, when a user stake their cryptocurrency in a PoS network, the assets are locked up for a certain period and cannot be used. Liquid staking introduces a tokenized version of these staked assets that users can trade, sell, or use in decentralized finance (DeFi) applications while they're still staked.&#x20;
+传统上，当用户在 PoS 网络中质押他们的加密货币时，这些资产会被锁定一段时间，不能使用。流动性质押引入了这些质押资产的代币化版本，用户可以在它们仍然被质押的同时交易、出售，或在去中心化金融（DeFi）应用中使用。
 
-These liquid staking tokens are usually issued at a 1:1 ratio to the staked assets and earn rewards in the same way as the original staked assets. Therefore, they allow users to simultaneously secure the network, earn staking rewards, and have the flexibility to participate in other parts of the crypto economy.
+这些流动性质押代币通常以 1:1 的比例发行与质押资产，并以与原始质押资产相同的方式获得奖励。因此，它们允许用户同时保护网络，赚取质押奖励，并有灵活性参与加密经济的其他部分。
 
-## Benefits of Liquid staking
+## 流动性质押的好处
 
-As the name suggests, one of the key advantages of liquid staking is liquidity, as it allows users to stake their tokens while retaining the flexibility to trade or use them in decentralized finance (DeFi) applications without waiting for lock-up periods to end. This flexibility enhances capital efficiency and enables users to capitalize on market opportunities quickly.&#x20;
+顾名思义，流动性质押的一个关键优势是流动性，因为它允许用户质押他们的代币，同时保持交易或在去中心化金融（DeFi）应用中使用它们的灵活性，而无需等待锁定期结束。这种灵活性提高了资本效率，并使用户能够快速抓住市场机会。
 
-In general, liquid staking provides 3 key advantages within the current DeFi ecosystem:
+总的来说，流动性质押在当前的 DeFi 生态系统中提供了3个关键优势：
 
-#### Increased Capital Efficiency
+#### 提高资本效率
 
-Traditional staking provides users with the opportunity to receive rewards for verifying transactions. Liquid staking allows users to continue earning these rewards while also generating additional yield through various DeFi protocols. This approach maximizes the utility of staked assets by enabling simultaneous participation in staking rewards and other DeFi activities.
+传统的质押为用户提供了验证交易并获得奖励的机会。流动性质押允许用户在继续获得这些奖励的同时，通过各种 DeFi 协议生成额外的收益。这种方法通过使质押资产能同时参与质押奖励和其他 DeFi 活动，最大化了质押资产的效用。
 
-#### Unlocked Liquidity
+#### 解锁流动性
 
-Unlike traditional staking protocols that often require long “unbonding” periods, Liquid Staking Tokens (LSTs) provide the flexibility to exit positions or engage in market activities promptly. By converting staked assets into tokens, LSTs unlock their inherent value, allowing them to be traded and used as collateral across DeFi protocols.
+与通常需要长期“解绑”期的传统质押协议不同，流动性质押代币（LSTs）提供了退出头寸或及时参与市场活动的灵活性。通过将质押资产转化为代币，LSTs 解锁了它们的内在价值，允许它们在 DeFi 协议中被交易和用作抵押。
 
-#### Composability in DeFi:&#x20;
+#### DeFi 中的组合性：
 
-LSTs enhance flexibility by allowing users to stake on one platform while leveraging their LSTs on another. These tokens represent receipts for staked assets, making them compatible with a wide range of DeFi applications, including lending pools and prediction markets.
+LSTs 通过允许用户在一个平台上质押，同时在另一个平台上利用他们的 LSTs，增强了灵活性。这些代币代表质押资产的收据，使它们与广泛的 DeFi 应用兼容，包括借贷池和预测市场。

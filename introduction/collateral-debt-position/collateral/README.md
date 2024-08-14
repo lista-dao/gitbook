@@ -1,5 +1,5 @@
-# Collateral
+# 抵押品
 
-Lista DAO offers a diverse range of collateral asset options, from L1 tokens, to LSTs and LRTs.
+Lista DAO提供了多样化的抵押资产选项，从L1代币，到LST和LRT。
 
-This flexibility enables users to leverage different assets they own as security, depending on their individual investment strategies and risk preferences. By providing a broad selection, Lista DAO enhances user accessibility and convenience, catering to a wide spectrum of financial needs and preferences within the community.
+这种灵活性使用户能够利用他们拥有的不同资产作为保证，这取决于他们的个人投资策略和风险偏好。通过提供广泛的选择，Lista DAO增强了用户的可访问性和便利性，满足了社区内广泛的金融需求和偏好。

@@ -1,28 +1,28 @@
-# Farming on Magpie
+# 在Magpie上进行农耕
 
-Farming on Magpie consists of two major steps:
+在Magpie上进行农耕主要包括两个步骤：
 
-1. Depositing lisUSD in exchange for lisUSD-LP tokens.
-2. Staking lisUSD-LP tokens.
+1. 存入lisUSD以换取lisUSD-LP代币。
+2. 质押lisUSD-LP代币。
 
-Taking out your liquidity pool tokens consists of one single step, which is withdrawing your lisUSD-LP tokens.
+取出你的流动性池代币只需要一个步骤，那就是提取你的lisUSD-LP代币。
 
-### Providing liquidity to the pool <a href="#providing-liquidity-to-the-pool" id="providing-liquidity-to-the-pool"></a>
+### 为池提供流动性 <a href="#providing-liquidity-to-the-pool" id="providing-liquidity-to-the-pool"></a>
 
-1. Navigate over to [the pool at Magpie](https://www.magpiexyz.io/stake?pool=hay).
-2. Click on the **Deposit** tab, and add your desired amount of lisUSD to the liquidity pool. You will receive proportional lisUSD-LP tokens in exchange.
-3. The transaction should be approved before funds are deposited in the pool. Click **Approve**.
-4.  When approved, click **Deposit** to deposit funds in the pool.
+1. 导航至[Magpie的池](https://www.magpiexyz.io/stake?pool=hay)。
+2. 点击**存款**选项卡，并将你希望的lisUSD数量添加到流动性池中。你将按比例收到lisUSD-LP代币作为交换。
+3. 交易应在资金存入池之前得到批准。点击**批准**。
+4. 当得到批准后，点击**存款**将资金存入池中。
 
     ![](https://docs.bsc.lista.org/\~gitbook/image?url=https%3A%2F%2Flh4.googleusercontent.com%2FN9sFqiufhRQhOBhb1pG7SftIrsyHAbaApgrDCvkRJyBinTrxZhrbRe\_HNZGZlQ3QTXP9dWDgDOpEGTTjc\_mSP6Q4prTPGlptX55b8eYLM\_p8\_yjSHnVVnslbhqPb\_Fmcf1DqpPk-wXFoHbgi\_ciQJLiRBujImvnoGPH3ADbjiL23CijkQCmKT9w\&width=768\&dpr=4\&quality=100\&sign=6152345e\&sv=1)
 
-### Staking liquidity into the pool <a href="#staking-liquidity-into-the-pool" id="staking-liquidity-into-the-pool"></a>
+### 将流动性质押到池中 <a href="#staking-liquidity-into-the-pool" id="staking-liquidity-into-the-pool"></a>
 
-1. Once you acquire your lisUSD-LP tokens, you can stake them in the **Deposit LP** tab.
-2. The transaction should be approved before Wombats lisUSD-LP are deposited in the pool. Click **Approve**.
-3. When approved, click **Deposit** to deposit your Wombats lisUSD-LP.
+1. 一旦你获得了lisUSD-LP代币，你可以在**存入LP**选项卡中质押它们。
+2. 交易应在Wombats lisUSD-LP存入池之前得到批准。点击**批准**。
+3. 当得到批准后，点击**存款**将你的Wombats lisUSD-LP存入。
 
-### Withdrawing Liquidity <a href="#withdrawing-liquidity" id="withdrawing-liquidity"></a>
+### 提取流动性 <a href="#withdrawing-liquidity" id="withdrawing-liquidity"></a>
 
-1. In Magpie, unstaking, claiming rewards, and withdrawing liquidity is a single process, done through the **Withdraw** tab.
-2. Choose the amount to withdraw and click **Withdraw**.
+1. 在Magpie中，取消质押、领取奖励和提取流动性是一个过程，通过**提款**选项卡完成。
+2. 选择要提取的金额并点击**提款**。

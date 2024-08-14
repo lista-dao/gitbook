@@ -1,47 +1,43 @@
-# Mechanics
+# 机制
 
-### ListaStakeManager Introduction
+### ListaStakeManager 介绍
 
-slisBNB is the yield bearing & liquid staking token for Lista. Users can get slisBNB by staking their BNB through ListaStakeManager smart contract which handles the BNB liquid staking on BSC.
+slisBNB 是 Lista 的产出和流动性质押代币。用户可以通过 ListaStakeManager 智能合约质押他们的 BNB 来获取 slisBNB，该合约处理 BSC 上的 BNB 流动性质押。
 
 \
 
-
-Here are the functionalities provided by ListaStakeManager:
+以下是 ListaStakeManager 提供的功能：
 
 <figure><img src="../../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
-### Stake BNB
+### 质押 BNB
 
-Users can stake BNB through ListaStakeManager. In return, they receive a corresponding amount of slisBNB as the liquid staking token (LST), representing their staked assets
-
-\
-
-
-### Minting LST
-
-Upon staking, ListaStakeManager mints slisBNB. slisBNB can be freely traded, transferred, or used in DeFi applications, providing users with liquidity while their original assets remain staked.
+用户可以通过 ListaStakeManager 质押 BNB。作为回报，他们会收到相应数量的 slisBNB 作为流动性质押代币（LST），代表他们的质押资产。
 
 \
 
+### 铸造 LST
 
-### Earning Rewards from Multiple Validators
-
-The staked BNB generate rewards from multiple validators, which are then aggregated and distributed proportionally to LST holders. This ensures that users benefit from the performance of various validators, potentially increasing the overall yield.
+在质押时，ListaStakeManager 会铸造 slisBNB。slisBNB 可以自由交易、转移或用于 DeFi 应用，为用户提供流动性，同时他们的原始资产仍然被质押。
 
 \
 
+### 从多个验证者那里获得奖励
 
-<figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption><p>Unstaking</p></figcaption></figure>
+质押的 BNB 会从多个验证者那里产生奖励，这些奖励然后被聚合并按比例分配给 LST 持有者。这确保了用户能够从各种验证者的表现中获益，可能会增加总体收益。
 
-<figure><img src="../../.gitbook/assets/image (13).png" alt=""><figcaption><p>Withdraw</p></figcaption></figure>
+\
 
-### Unstaking and Withdraw
+<figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption><p>取消质押</p></figcaption></figure>
 
-Users can initiate withdrawal requests to unstake their assets through the smart contract. Upon receiving a withdrawal request, a bot sends a request to unbond BNB from the validators. After the 7-day unbonding period, the slisBNB tokens will be burned, and users can claim the released BNB through the ListaStakeManager.
+<figure><img src="../../.gitbook/assets/image (13).png" alt=""><figcaption><p>提取</p></figcaption></figure>
 
+### 取消质押和提取
 
+用户可以通过智能合约发起提款请求，取消质押他们的资产。收到提款请求后，一个机器人会发送请求，解除 BNB 与验证者的绑定。在 7 天的解绑期后，slisBNB 代币将被销毁，用户可以通过 ListaStakeManager 提取已释放的 BNB。
 
-### Rebalance
+\
 
-&#x20;ListaStakeManager allows Bot to periodically rebalance the staked BNB across validators to optimize reliability and reward rates.
+### 重新平衡
+
+ListaStakeManager 允许机器人定期重新平衡质押的 BNB，以优化可靠性和奖励率。

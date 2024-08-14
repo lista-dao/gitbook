@@ -17,32 +17,32 @@ layout:
     visible: true
 ---
 
-# Overview
+# 概述
 
-Lista DAO, a decentralized autonomous organization, functions as the leading liquid staking solution for BNB and a Collateralized Debt Position (CDP) protocol where users can borrow our stablecoin, lisUSD, against a variety of collateral options.  Lista DAO is also backed up by Binance Lab, with a strategic investment of 10 Miliion USD.
+Lista DAO是一个去中心化自治组织，作为BNB的领先流动性质押解决方案和一个抵押债务位置（CDP）协议，用户可以借用我们的稳定币lisUSD，并提供各种抵押选项。Lista DAO还得到了Binance Lab的支持，获得了1000万美元的战略投资。
 
-Since our launch, Lista DAO has achieved several milestones, including our official TGE on Binance(June 20th, 2024) of our governance token, LISTA, key updates such as our AMO, the launch of ListaPie, and our Lista innovation zone. Our strategic partnerships with Etherfi, Renzo Protocol, Stakestone, Bouncebit, Solv Protocol and many others have expanded our ecosystem and brought additional value to our users. By adhering to our core values and continuously innovating, Lista DAO strives to be a leader in the DeFi space, providing users with secure, efficient, and empowering financial solutions.
+自我们启动以来，Lista DAO已经实现了几个里程碑，包括我们的治理代币LISTA在Binance（2024年6月20日）的官方TGE，关键更新如我们的AMO，ListaPie的启动，以及我们的Lista创新区。我们与Etherfi、Renzo Protocol、Stakestone、Bouncebit、Solv Protocol等众多合作伙伴的战略合作关系扩大了我们的生态系统，并为我们的用户带来了额外的价值。通过坚持我们的核心价值并不断创新，Lista DAO致力于成为DeFi领域的领导者，为用户提供安全、高效和赋权的金融解决方案。
 
-## Mission
+## 使命
 
-Our mission is to drive the evolution of DeFi by tackling key challenges in liquidity provision and delivering premier liquid staking solutions for BNB. Through robust offerings such as liquidity staking and CDP mechanisms, Lista DAO aims to empower users with efficient and secure financial tools.&#x20;
+我们的使命是通过解决流动性提供的关键挑战，推动DeFi的进化，并为BNB提供首屈一指的流动性质押解决方案。通过健全的产品如流动性质押和CDP机制，Lista DAO旨在为用户提供高效和安全的金融工具。
 
-## Vision
+## 愿景
 
-Our long-term vision for Lista DAO is to establish it as a cornerstone of the DeFi ecosystem, fostering widespread adoption of our products. We prioritize continuous development, consistently innovating and introducing new features and services to meet the evolving needs of our users. Transparency is foundational to our operations, ensuring that all processes and decisions are transparent and accessible to the community. Lista DAO upholds the highest security standards, implementing comprehensive measures and conducting regular audits to uphold the integrity and safety of our platform and user funds. For more detailed information, you can view our audits here \[insert hyperlink].
+我们对Lista DAO的长期愿景是将其建立为DeFi生态系统的基石，促进我们产品的广泛采用。我们优先考虑持续的开发，不断创新并引入新的功能和服务，以满足我们用户的不断变化的需求。透明性是我们运营的基础，确保所有的过程和决策都是透明的，对社区开放。Lista DAO坚持最高的安全标准，实施全面的措施并定期进行审计，以维护我们平台和用户资金的完整性和安全性。更多详细信息，您可以在这里查看我们的审计\[插入超链接]。
 
-## Core features
+## 核心特性
 
-### Collateral Debt Position (CDP)
+### 抵押债务位置 (CDP)
 
-Modeled after MakerDAO, our CDP system allows users to lock a variety of collateral and mint stablecoins (lisUSD) against it, providing a secure way to leverage assets.&#x20;
+我们的CDP系统模仿了MakerDAO，允许用户锁定各种抵押品并发行稳定币（lisUSD），提供了一种安全的资产杠杆方式。
 
-### Liquid staking solution
+### 流动性质押解决方案
 
-Inspired by Lido DAO, our liquidity staking mechanism allows users to stake their BNB, earn rewards, and maintain their liquidity at the same time. This enhances overall liquidity within the DeFi ecosystem while ensuring flexibility and accessibility for users.
+受Lido DAO启发，我们的流动性质押机制允许用户质押他们的BNB，赚取奖励，同时保持他们的流动性。这增强了DeFi生态系统内的整体流动性，同时确保了用户的灵活性和可访问性。
 
-## Our tokens
+## 我们的代币
 
-<table data-view="cards"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td><h3>LISTA</h3></td><td>LISTA is our governance token, empowering holders with voting rights and a say in the future direction of the platform. </td><td></td></tr><tr><td><h3>lisUSD</h3></td><td>lisUSD is a stablecoin minted through our CDP mechanism, maintaining a stable value pegged to the US dollar.</td><td></td></tr><tr><td><h3>slisBNB</h3></td><td>slisBNB is Lista DAO’s liquid staking token, representing staked BNB and allowing users to earn rewards while maintaining liquidity. </td><td></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td><h3>LISTA</h3></td><td>LISTA是我们的治理代币，赋予持有者投票权和对平台未来方向的发言权。</td><td></td></tr><tr><td><h3>lisUSD</h3></td><td>lisUSD是通过我们的CDP机制铸造的稳定币，保持与美元挂钩的稳定价值。</td><td></td></tr><tr><td><h3>slisBNB</h3></td><td>slisBNB是Lista DAO的流动性质押代币，代表质押的BNB，允许用户在保持流动性的同时赚取奖励。</td><td></td></tr></tbody></table>
 
 \

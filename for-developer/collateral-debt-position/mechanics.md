@@ -1,216 +1,158 @@
-# Mechanics
+# 机制
 
-In the Lista mechanism, users can earn rewards by strategically utilizing their assets, which may include BNB, ETH, slisBNB, wBETH, and BTCB. The process begins with users depositing these assets into the Interaction (CDP) module, where they are used as collateral to borrow LisUSD.\
+在Lista机制中，用户可以通过策略性地利用他们的资产来获得奖励，这些资产可能包括BNB、ETH、slisBNB、wBETH和BTCB。这个过程从用户将这些资产存入交互（CDP）模块开始，这些资产被用作抵押品来借用LisUSD。
 
+除了存入资产和借用LisUSD，用户还可以通过在Lista生态系统内抵押LisUSD和BNB来获得奖励。通过参与这些抵押活动，他们可以积累利息和额外的奖励，大大增加他们的总收入。
 
-In addition to depositing assets and borrowing LisUSD, users can earn rewards by staking LisUSD and BNB within the Lista ecosystem. By participating in these staking activities, they accrue interest and additional rewards, significantly enhancing their overall earnings.
+### 费用
 
-\
+1. 借款利息 - 向Lista支付的借用lisUSD的利息。利率是由Lista治理平台设定的固定数字。
+2. 清算罚款 - 在清算过程中以Dutch行动方式出售用户抵押品时，以lisUSD形式扣除的百分比。
 
+### 抵押比例
 
-### Fees
+抵押比例是用户抵押品价值的百分比，决定了用户的最大借款额度；它的计算方式如下：（铸造的lisUSD总量 / 抵押品的总价值 * 100）。不同的资产会有不同的抵押比例，这取决于资产的波动性。抵押比例被用作清算标准，决定何时应该发生清算事件。
 
-1. Borrowing interest — an interest paid to Lista for borrowing lisUSD. The rate is a fixed number set by the Lista governance platform.
-2. Liquidation penalty — percentage subtracted in the form of lisUSD when selling user's collateral in a Dutch action during the liquidation process.
+### CDP模块
 
-### Collateral ratio
+以下各节将逐一介绍CDP模块的功能，解释用户如何通过提供抵押品借用LisUSD，以及不同合约之间的交互。
 
-Collateral ratio is a percentage of the user's collateral value that determines the maximum borrowing limit for the user; it is calculated as follows: (total amount of lisUSD minted / total value of the collateral \* 100). Different assets will have different collateral ratios, depending on asset volatility. Collateral ratio is used as a liquidation bar to decide when a liquidation event should happen.
-
-\
-
-
-### CDP Module
-
-The following sections will introduce the functions of the CDP Module one by one, explaining how users can borrow LisUSD by providing collateral and the interactions between different involved contracts.
-
-\
-
-
-**a. Deposit Collateral**
+**a. 存入抵押品**
 
 <figure><img src="../../.gitbook/assets/image (42).png" alt=""><figcaption></figcaption></figure>
 
-1. User Deposits Collateral: The user initiates the deposit process by transferring their collateral to the Interaction contract.
-2. Interaction: It moves the collateral to the GemJoin (like a Treasury).
-3. GemJoin: receives the collateral from Interaction.
-4. Vat: The Vat contract, which is the core of the CDP engine. It records the user’s collateral information and ensures that the collateral enters the system.
+1. 用户存入抵押品：用户通过将他们的抵押品转移到交互合约来启动存款过程。
+2. 交互：它将抵押品移动到GemJoin（类似于财政部）。
+3. GemJoin：从交互中接收抵押品。
+4. Vat：Vat合约是CDP引擎的核心。它记录用户的抵押品信息，并确保抵押品进入系统。
 
-\
+这个过程确保了用户的抵押品被安全地存入并在CDP模块中记录，使他们可以继续借用LisUSD。
 
-
-This process ensures that the user’s collateral is securely deposited and recorded within the CDP Module, allowing them to proceed with borrowing LisUSD against their collateral.
-
-\
-
-
-**b. Borrow LisUSD**
+**b. 借用LisUSD**
 
 <figure><img src="../../.gitbook/assets/image (40).png" alt=""><figcaption></figcaption></figure>
 
-1. User Initiates Borrowing: The user requests to borrow a specific amount of LisUSD against their deposited collateral by calling borrow().
-2. Interaction: This request is processed by the Interaction, which then communicates with Vat. The user also pays interest during the process, the interest rate is a fixed number set by the Lista governance platform.
-3. Vat: records an increase in the user's debt corresponding to the borrowed LisUSD against the specific collateral.&#x20;
-4. HayJoin: Interaction calls the \`exit()\` to mint the specified amount of LisUSD and sends it to the user.
-5. ListaDistributor: Interaction calls ListaDistributor contract’s snapshot method to record user’s debt value against the collateral for calculating and distributing future rewards to the user.
+1. 用户发起借款：用户请求借用一定数量的LisUSD作为他们存入的抵押品，通过调用borrow()。
+2. 交互：这个请求由交互处理，然后与Vat通信。用户在此过程中也需要支付利息，利息率是由Lista治理平台设定的固定数字。
+3. Vat：记录用户债务的增加，对应于针对特定抵押品借用的LisUSD。
+4. HayJoin：交互调用\`exit()\`来铸造指定数量的LisUSD并发送给用户。
+5. ListaDistributor：交互调用ListaDistributor合约的snapshot方法，记录用户对抵押品的债务值，以计算和分发未来的奖励给用户。
 
-\
+这个序列确保用户的债务被准确记录，借用的LisUSD成功铸造并转移到用户，利息按照Lista治理确定的固定利率支付。
 
-
-This sequence ensures that the user's debt is accurately recorded, the borrowed LisUSD is successfully minted and transferred to the user, and interest payments are made according to the fixed rate determined by Lista governance.
-
-\
-
-
-**c. Payback LisUSD**
+**c. 还款LisUSD**
 
 <figure><img src="../../.gitbook/assets/image (39).png" alt=""><figcaption></figcaption></figure>
 
-1. User Initiates Payback: The user initiates the payback process by specifying the amount of LisUSD to be repaid against the specific collateral.
-2. Interaction: This payback request is processed by the Interaction
-3. Vat: It updates the user’s debt, reducing it by the amount of LisUSD repaid. If the user fully repays their debt, the CDP (Collateralized Debt Position) is closed
-4. HayJoin: Interaction calls the \`join()\` method, which burns LisUSD from the user’s account
-5. ListaDistributor: Interaction calls ListaDistributor contract’s snapshot method to record user’s debt value against the collateral for calculating and distributing future rewards to the user.
+1. 用户发起还款：用户通过指定要偿还的LisUSD金额来启动还款过程。
+2. 交互：这个还款请求由交互处理。
+3. Vat：它更新用户的债务，减少LisUSD偿还的金额。如果用户完全偿还他们的债务，CDP（抵押债务位置）就会关闭。
+4. HayJoin：交互调用\`join()\`方法，从用户的账户中燃烧LisUSD。
+5. ListaDistributor：交互调用ListaDistributor合约的snapshot方法，记录用户对抵押品的债务值，以计算和分发未来的奖励给用户。
 
-\
+这个过程确保用户的债务被准确地减少或清除，相应数量的LisUSD被燃烧，有效地从流通中移除。
 
-
-This process ensures that the user’s debt is accurately reduced or cleared, and the corresponding amount of LisUSD is burned, effectively removing it from circulation.
-
-\
-
-
-**d. Withdraw Collateral**\
-
+**d. 提取抵押品**
 
 <figure><img src="../../.gitbook/assets/image (38).png" alt=""><figcaption></figcaption></figure>
 
-1. User Initiates Withdrawal: The user initiates the withdrawal process by specifying the amount of collateral they wish to withdraw.
-2. Interaction: The withdrawal request is processed by the Interaction contract. Please note that if the user has borrowed LisUSD and has not yet paid it back, the amount of collateral they can withdraw is less than the original deposit amount, as some collateral must remain to secure the outstanding debt.
-3. GemJoin: Interaction calls the \`exit()\` method, which transfers the specified amount of collateral from GemJoin back to the user.
-4. Vat: It records the user's collateral information, updating the system to reflect that the collateral has left the system
+1. 用户发起提款：用户通过指定他们希望提取的抵押品数量来启动提款过程。
+2. 交互：提款请求由交互合约处理。请注意，如果用户已经借用了LisUSD并且还没有偿还，他们可以提取的抵押品数量将少于原始存款金额，因为必须保留一些抵押品来保证未偿还的债务。
+3. GemJoin：交互调用\`exit()\`方法，将指定数量的抵押品从GemJoin转移回用户。
+4. Vat：它记录用户的抵押品信息，更新系统以反映抵押品已经离开系统。
 
-\
+这个过程确保用户的抵押品被准确地提取并返回，同时系统记录抵押品状态的变化。
 
-
-This process ensures that the user's collateral is accurately withdrawn and returned, while the system records the change in collateral status.
-
-\
-
-
-**e. Stake LisUSD**
-
-
+**e. 抵押LisUSD**
 
 <figure><img src="../../.gitbook/assets/image (34).png" alt=""><figcaption></figcaption></figure>
 
-\
+1. 用户发起抵押：用户调用\`join()\`方法抵押指定数量的LisUSD。这部分LisUSD然后被转移到Jar合约。
+2. Jar：Jar合约记录以下信息：
+   1. 用户抵押的LisUSD余额。
+   2. 增加所有用户抵押的LisUSD总量。
+   3. 用户抵押LisUSD的时间。
+3. ListaDistributor：ListaDistributor从Jar中获取用户的余额快照。它将用于计算和分发未来的奖励给用户。
 
-
-1. User Initiates Staking: The user calls the \`join()\` method to stake a specified amount of LisUSD. This amount of LisUSD is then transferred to the Jar contract.
-2. Jar: The Jar contract records the following information:
-   1. The user’s staked LisUSD balance.
-   2. Increase the total amount of LisUSD staked by all users.
-   3. The time when the user staked the LisUSD.
-3. ListaDistributor: ListaDistributor takes a snapshot of the user’s balance from the Jar. it will be used for calculating and distributing future rewards to the user.
-
-\
-
-
-**f. Unstake LisUSD**
+**f. 取消抵押LisUSD**
 
 <figure><img src="../../.gitbook/assets/image (33).png" alt=""><figcaption></figcaption></figure>
 
-1. User Initiates Unstaking: The user calls the \`exit()\` method to unstake a specified amount of LisUSD.&#x20;
-2. Jar: This amount of LisUSD, plus any rewarded amount, is transferred back to the user. It also records the following information:
-   1. The user’s staked LisUSD balance is reduced by the unstaked amount X.
-   2. The total staked amount of LisUSD is reduced by the unstaked amount X.
-   3. A record of the withdrawal is saved.
-3. ListaDistributor: The ListaDistributor takes a snapshot of the user’s balance and records the user's staked LisUSD balance for future reward calculations.
+1. 用户发起取消抵押：用户调用\`exit()\`方法取消抵押指定数量的LisUSD。
+2. Jar：这部分LisUSD，加上任何奖励金额，被转回给用户。它还记录以下信息：
+   1. 用户抵押的LisUSD余额减少了取消抵押的数量X。
+   2. LisUSD的总抵押金额减少了取消抵押的数量X。
+   3. 保存了提款的记录。
+3. ListaDistributor：ListaDistributor获取用户余额的快照，并记录用户抵押的LisUSD余额，以便未来的奖励计算。
 
-\
+这个过程用户只会与Jar合约交互，它负责管理和分发利息给抵押LisUSD的参与者。
 
-
-This process user will only interact with the Jar contract, it is responsible for managing and distributing interest to the participants of who stakes LisUSD.
-
-\
-
-
-**g. Liquidation**
+**g. 清算**
 
 <figure><img src="../../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
-The flowchart shows how an auction is being kick started.
+流程图显示了如何启动一个拍卖。
 
-**g.1 How an auction get started**
+**g.1 如何启动一个拍卖**
 
-Determine Price and Ratio:
+确定价格和比例：
 
-* Price of 1 unit of collateral: $2
-* Collateral ratio: 66%
-* Collateral price based on collateral ratio: 2∗0.66=$1.322
+* 1单位抵押品的价格：$2
+* 抵押比例：66%
+* 基于抵押比例的抵押品价格：2∗0.66=$1.322
 
-User Deposit and Borrow Limit:
+用户存款和借款限额：
 
-* Assume User deposits 10 units of collateral: 10∗2=$20
-* Borrow limit: 20∗0.66=$13.2
-* Assume User borrows $13.2 of lisUSD: 13.2 lisUSD
+* 假设用户存入10单位的抵押品：10∗2=$20
+* 借款限额：20∗0.66=$13.2
+* 假设用户借用$13.2的lisUSD：13.2 lisUSD
 
-Monitor Collateral Price Decrease:
+监控抵押品价格下降：
 
-* Assume the price of 1 unit of collateral decreases to: $1.8
-* Collateral unit price with safety margin: 1.8∗0.66=$1.188
-* Current worth of collateral with safety margin: 1.188∗10=$11.88
-* Determine liquidation status:
-  * 13.2−11.88=$1.32 (positive difference indicates liquidation)
+* 假设1单位抵押品的价格下降到：$1.8
+* 抵押品单位价格与安全边际：1.8∗0.66=$1.188
+* 当前抵押品的价值与安全边际：1.188∗10=$11.88
+* 确定清算状态：
+  * 13.2−11.88=$1.32（正差值表示清算）
 
-Liquidation Auction Preparation:
+清算拍卖准备：
 
-* Amount of collateral that goes to Dutch auction: 10 units
-* Liquidation penalty (fixed by Lista governance): 13% of the debt
-* Debt to cover in the auction: 13.2∗1.13=$14.916
-* Buffer (percentage similar to liquidation penalty, fixed by Lista governance): 2%
-* Starting auction price (top): 1.8∗1.02=$1.836
+* 进入荷兰拍卖的抵押品数量：10单位
+* 清算罚款（由Lista治理确定）：债务的13%
+* 拍卖中要覆盖的债务：13.2∗1.13=$14.916
+* 缓冲（与清算罚款类似的百分比，由Lista治理确定）：2%
+* 拍卖开始价格（顶部）：1.8∗1.02=$1.836
 
-Trigger Auction:
+触发拍卖：
 
-* Somebody triggers the auction and gets a tip + chip as a reward (details described later).
+* 有人触发拍卖并获得小费+筹码作为奖励（详细内容稍后描述）。
 
-\
-
-
-**g.2 Buy from Auction**
+**g.2 从拍卖中购买**
 
 <figure><img src="../../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 
-The flowchart shows how the user buys collateral from an auction.
+流程图显示了用户如何从拍卖中购买抵押品。
 
-\
+示例：
 
+拍卖开始和价格下降：
 
-Example:
+* 拍卖开始，价格逐渐下降。
+* 清算人可以参与购买自定义数量的清算抵押品。
+* 价格线性下降（受特定条件的干扰）：
+  * 公式： $$f(x) = x * e^{2 pi i \xi x}$$
+  * 示例：1.836∗((3600-600)/3600)=$1.53
 
-Auction Start and Price Decrease:
+暂停拍卖的条件：
 
-* Auction starts, and the price gradually decreases.
-* Liquidator can participate to buy a customized amount of liquidated collateral.
-* Linear decrease of price (subject to disruption by specific conditions):
-  * Formula:  $$f(x) = x * e^{2 pi i \xi x}$$
-  * Example: 1.836∗((3600-600)/3600)=$1.53
+* 拍卖可以因为以下两种条件之一而暂停：
+  * 尾部（特定的时间过去，由Lista治理确定）
+  * 尖峰（价格下跌的百分比；40%的开始拍卖价格，由Lista治理确定）
+* 一旦满足任一要求，拍卖将重新开始。
 
-Conditions to Pause Auction:
+**g.3 重新开始拍卖**
 
-* The auction can pause because of one of two conditions:
-  * Tail (specific amount of time elapsed, fixed by Lista governance)
-  * Cusp (% of price drop; 40% start auction price, fixed by Lista governance)
-* Once either requirement is met, the auction will be restarted.
+等待有人重新开始拍卖。重新开始者获得小费+筹码作为奖励。
 
-\
-
-
-**g.3 Restart Auction**
-
-Wait until someone restarts the auction. The restarter gets a tip + chip as a reward.
-
-* Tip (flat fee, fixed by Lista governance): 5 lisUSD
-* Chip (dynamic fee, fixed by Lista governance): 0 lisUSD
+* 小费（固定费用，由Lista治理确定）：5 lisUSD
+* 筹码（动态费用，由Lista治理确定）：0 lisUSD

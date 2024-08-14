@@ -1,74 +1,74 @@
-# Algorithmic Market Operations (AMO)
+# 算法市场操作 (AMO)
 
-To maintain lisUSD’s price stability & peg at $1, it is crucial to balance lisUSD’s supply and demand in the circulating market and LPs. Previously, the borrow rate of lisUSD was regularly adjusted to indirectly affect the supply and demand of lisUSD. With the launch of our AMO, Lista DAO will implement a dynamic borrow rate, similar to Curve Finance’s [MonetaryPolicy contracts](https://docs.curve.fi/crvUSD/monetarypolicy/) for crvUSD, to further strengthen price stability of lisUSD.
+为了维持lisUSD的价格稳定性和$1的锚定，平衡流通市场和LPs中的lisUSD供需至关重要。以前，lisUSD的借款利率会定期调整，以间接影响lisUSD的供需。随着我们AMO的启动，Lista DAO将实施动态借款利率，类似于Curve Finance的[MonetaryPolicy合约](https://docs.curve.fi/crvUSD/monetarypolicy/)对crvUSD的处理，以进一步增强lisUSD的价格稳定性。
 
-At the start, the Lista core team will decide the parameter based on market conditions. In the futures, parameter changes will require a proposal and community vote.&#x20;
+一开始，Lista核心团队将根据市场条件决定参数。在未来，参数变更将需要提案和社区投票。
 
-## Interest Rate Mechanics
+## 利率机制
 
-The interest rates in lisUSD markets are not static but fluctuate based on a set of factors, including:
+lisUSD市场的利率不是静态的，而是根据一系列因素波动，包括：
 
-1. The price of lisUSD, which is determined through Binance oracle.
-2. The variables r0, and Beta.
+1. 通过Binance oracle确定的lisUSD的价格。
+2. 变量r0和Beta。
 
-### The formula for calculating the Borrowing interest rate (r) is as follows:
+### 计算借款利率（r）的公式如下：
 
 ![](https://lh7-us.googleusercontent.com/docsz/AD\_4nXfRbturnppWrw7w0t-PLXhA2vzUoiV-iNor96k0jyzwnkHgvWjGfpEo85koiXXrodJJdSlZKPgDfYANjMgBFRgzIrQuoNqbLL\_m6Ku7XoCEPIUOFU2D6hvjwJTgzzcDyMAEoIlnBlIy4fW\_S2m7\_Dwghk5v?key=qpnu5MtZ54GEwy9P7UA52A)
 
-### Key variables in this calculation include:
+### 此计算中的关键变量包括：
 
-**r:** Annual Percentage Yield (APY)
+**r：** 年化收益率 (APY)
 
-**r0**: Default annual rate, different for each collateral type, configured when launched on the smart contract
+**r0：** 默认年利率，每种抵押品类型不同，启动智能合约时配置
 
-**exp(x)**: Exponential function of  x (e\*e\*e\*...\*e)
+**exp(x)：** x的指数函数 (e\*e\*e\*...\*e)
 
-**Price(lisUSD)**: Current price of lisUSD, obtained from an oracle
+**Price(lisUSD)：** lisUSD的当前价格，从oracle获取
 
-**Beta**: Adjustment parameter, configured when launched on the smart contract
+**Beta：** 调整参数，启动智能合约时配置
 
-_Note\* For each different Collateral, a different r0 is set. However, the maximum r0 will always be capped at 200% or less at any point in time._&#x20;
+_注\* 对于每种不同的抵押品，都会设置不同的r0。然而，r0的最大值在任何时候都将被限制在200%或以下。_
 
-_Note\* For each different Collateral, a different Beta will be set. As seen in r calculation, the Beta has a huge effect on x, and thus r._&#x20;
+_注\* 对于每种不同的抵押品，都会设置不同的Beta。如在r的计算中所见，Beta对x，从而对r有巨大的影响。_
 
-### Example:
+### 示例：
 
-r0 = 8%, Price(lisUSD) = $0.98, Beta = 2%\
-r = 8% \* exp\[(1 - 0.98)/2%] = 21.746%&#x20;
+r0 = 8%，Price(lisUSD) = $0.98，Beta = 2%\
+r = 8% \* exp\[(1 - 0.98)/2%] = 21.746%；
 
-This means if the price of lisUSD is $0.98, with  r0 = 8%  and Beta = 2% , the current borrowing rate will be 21.746%. Users will repay lisUSD, reducing the supply.
+这意味着如果lisUSD的价格是$0.98，r0 = 8% 且 Beta = 2%，当前的借款利率将是21.746%。用户将偿还lisUSD，减少供应。
 
-## Calculation for r&#x20;
+## 计算r
 
-For accuracy and consistency, both r and r0 are expressed in terms of 10^27 to denote precision and are calculated per second.
+为了精确和一致，r和r0都以10^27表示，以表示精度，并按秒计算。
 
-### Here are the steps taken when calculating for r:
+### 计算r时的步骤如下：
 
-1. Retrieve the current price of lisUSD to get price(lisUSD). (r0, Beta is fixed for each collateral)
-2. Update the current borrow rate every 15 minutes or when users interact with the contract (borrow, repay)
-3. Calculate the borrow interest based on the current rate
+1. 获取lisUSD的当前价格以得到price(lisUSD)。（r0，Beta对每种抵押品固定）
+2. 每15分钟或当用户与合约交互（借款，偿还）时更新当前借款利率
+3. 根据当前利率计算借款利息
 
-The exact formula for calculating the interest rate (r) is as follows:
+计算利率（r）的确切公式如下：
 
 ![](https://lh7-us.googleusercontent.com/docsz/AD\_4nXfgarTeoLR1RoaLXOnfPPHESQmX4s-A14bVKyUlWWtxtY6XIYSqS1Tz\_jFC8Uc6CMPQ8Yopx9FZ8ltTyRyqy9bXRZTiFGrq7WEGitmIROHEHnA2LoLJUfy\_sd6uaRRJlbbGuvyr0ER-YCKi1yZ9URa5dEtL?key=qpnu5MtZ54GEwy9P7UA52A)
 
-**r**: Interest rate per second, in terms of 10^27, converted to APY, always be less than 200% at any point in time
+**r：** 每秒利率，以10^27表示，转换为APY，任何时候都不超过200%
 
-**r0**: Default rate, different for each collateral type, configured when launched on the smart contract
+**r0：** 默认利率，每种抵押品类型不同，启动智能合约时配置
 
-**exp(x)**: Exponential function of x ((e\*e\*...\*e)
+**exp(x)：** x的指数函数 ((e\*e\*...\*e)
 
-**Price(target)**: Target price ($1), calculated in terms of 10^8
+**Price(target)：** 目标价格（$1），以10^8计算
 
-**Price(lisUSD)**: Current price of lisUSD, obtained from Binance oracle, in terms of 10^8
+**Price(lisUSD)：** lisUSD的当前价格，从Binance oracle获取，以10^8表示
 
-**Beta**: Adjustment parameter, configured when launched on the smart contract, tentative rang: (3 \* 10^5, 10^8)
+**Beta：** 调整参数，启动智能合约时配置，暂定范围：(3 \* 10^5, 10^8)
 
-**APY(Default)**: Confirms r0&#x20;
+**APY(Default)：** 确认r0
 
-All smart contract details can be found [here](./#source-code-parameters).&#x20;
+所有智能合约细节可以在[这里](./#source-code-parameters)找到。
 
-## Source code parameters:
+## 源代码参数：
 
 r0:
 
@@ -103,7 +103,7 @@ uint256 constant PEG = 1e8;
 
 Price(lisUSD):&#x20;
 
-[Oracle address](https://bscscan.com/address/0xf3afD82A4071f272F403dC176916141f44E6c750#readProxyContract)
+[Oracle地址](https://bscscan.com/address/0xf3afD82A4071f272F403dC176916141f44E6c750#readProxyContract)
 
 ```solidity
 uint256 price = oracle.peek(address _lisUSD)

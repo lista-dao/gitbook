@@ -1,25 +1,25 @@
-# veLISTA emissions
+# veLISTA 发行
 
-To incentivize user participation in liquidity pools and borrowing/staking lisUSD, LISTA offers community incentives in the form of LISTA emission towards the following type of users:
+为了激励用户参与流动性池以及借入/质押 lisUSD，LISTA 提供了以 LISTA 发行形式的社区激励，针对以下类型的用户：
 
-* LP providers for slisBNB, lisUSD, and LISTA
-* Users who single stakes lisUSD
-* lisUSD borrowers
-* slisBNB Holders
-* Users who swaps against lisUSD pools
+* slisBNB、lisUSD 和 LISTA 的 LP 提供者
+* 单独质押 lisUSD 的用户
+* lisUSD 借款人
+* slisBNB 持有者
+* 与 lisUSD 池进行交换的用户
 
-## Rewards breakdown
+## 奖励细则
 
-To recap, according to our [tokenomics](broken-reference), 40% of LISTA's remaining supply will be channeled towards community incentives. The emission percentages are allocated towards various pools and programs, which includes 3 different categories:
+回顾一下，根据我们的 [tokenomics](broken-reference)，LISTA 剩余供应的 40% 将用于社区激励。发行百分比被分配给各种池和程序，包括 3 个不同的类别：
 
-1. Referral program (5%)
-2. LP pools (33%)
-3. Exchange incentives (2%)
+1. 推荐计划（5%）
+2. LP 池（33%）
+3. 交易激励（2%）
 
-The ratio is currently set by the Lista DAO team. In the future, this ratio can be adjusted through governance.
+这个比例目前由 Lista DAO 团队设定。在未来，这个比例可以通过治理进行调整。
 
-| Type                    | Item                | Description                                                                  | Ratio |
+| 类型                    | 项目                | 描述                                                                  | 比例 |
 | ----------------------- | ------------------- | ---------------------------------------------------------------------------- | ----- |
-| In-platform Incentives  | Referral program    | Both Referrers & Referees will be eligible for LISTA rewards                 | 5%    |
-| Out-platform Incentives | LP pools            | Liquidity providers for whitelisted LPs will be eligible for LISTA reward    | 33%   |
-| Out-platform Incentives | exchange incentives | Users who swap for/against lisUSD on DEXes will be eligible for LISTA reward | 2%    |
+| 平台内激励  | 推荐计划    | 推荐人和被推荐人都将有资格获得 LISTA 奖励                 | 5%    |
+| 平台外激励 | LP 池            | 白名单 LP 的流动性提供者将有资格获得 LISTA 奖励    | 33%   |
+| 平台外激励 | 交易激励 | 在 DEXes 上交换 lisUSD 的用户将有资格获得 LISTA 奖励 | 2%    |

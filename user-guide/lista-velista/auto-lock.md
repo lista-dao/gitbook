@@ -1,14 +1,14 @@
-# Auto lock
+# 自动锁定
 
-Users can choose to turn on the “Auto lock” function anytime they want to avoid the hassle of manually relocking their LISTA tokens every week. Users can also choose the number of weeks that they would like to auto lock their LISTA at.&#x20;
+用户可以选择随时开启“自动锁定”功能，以避免每周手动重新锁定他们的 LISTA 代币的麻烦。用户还可以选择他们希望自动锁定 LISTA 的周数。
 
-Here is how you can do it:
+以下是您可以执行此操作的方式：
 
-1. Head over to Lista DAO’s locking page [here](https://lista.org/lock), and connect your wallet to Lista DAO’s DApp.
+1. 转到 Lista DAO 的锁定页面[这里](https://lista.org/lock)，并将您的钱包连接到 Lista DAO 的 DApp。
 
 <figure><img src="../../.gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
 
-2. Simply turn on the “Auto lock” function on the top right hand corner by clicking on it.&#x20;
+2. 只需在右上角点击以开启“自动锁定”功能。
 
 <div align="left">
 
@@ -16,7 +16,7 @@ Here is how you can do it:
 
 </div>
 
-3. Users can choose to auto lock their LISTA tokens for any amount of time in perpetuity, between 1 to 52 weeks. In this example, we are choosing to auto lock LISTA tokens perpetually at 20 weeks. Once you have confirmed the autolock period, turn on the Auto lock function in step 2, and a pop-up will appear. Click on “confirm”, and sign the transaction.&#x20;
+3. 用户可以选择在永久期间自动锁定他们的 LISTA 代币，时间范围在 1 到 52 周之间。在这个例子中，我们选择在 20 周内永久自动锁定 LISTA 代币。一旦您确认了自动锁定期，就在步骤 2 中开启自动锁定功能，然后会出现一个弹出窗口。点击“确认”，并签署交易。
 
 <div align="left">
 
@@ -24,4 +24,4 @@ Here is how you can do it:
 
 </div>
 
-4. Once the “Enable Auto lock” transaction is completed, you are done!
+4. 一旦“启用自动锁定”交易完成，您就完成了！

@@ -1,46 +1,46 @@
-# Flash Loan
+# 闪电贷款
 
-Flash Loans are uncollateralized loans that allow the user to borrow lisUSD as long as the borrowed amount (and a fee) is returned before the end of the transaction.
+闪电贷款是无抵押贷款，用户可以借用lisUSD，只要在交易结束前归还借款金额（和费用）。
 
 {% hint style="warning" %}
-To use Flash Loans and get profit from them, you need a good understanding of BNB Chain (and Smart Chain), programming, and smart contracts.
+要使用闪电贷款并从中获利，你需要对BNB链（和智能链）、编程和智能合约有深入的理解。
 {% endhint %}
 
-### Application of Flash Loans
+### 闪电贷款的应用
 
-There are various applications of Flash Loans.
+闪电贷款有各种应用。
 
-An obvious example is arbitrage between assets, where the user can flash-loan lisUSD to purchase BNB in a Dutch auction that happens during somebody's [Lista loan liquidation](https://docs.helio.money/protocol/loan-liquidation), immediately swap lisUSD for another asset on a DEX, then immediately swap the obtained asset for lisUSD on another DEX where the asset's ratio is higher, and repay Lista the flash loan + interest, keeping the difference — all within one loan transaction.
+一个明显的例子是资产之间的套利，用户可以闪电贷款lisUSD在某人的[Lista贷款清算](https://docs.helio.money/protocol/loan-liquidation)期间购买在荷兰拍卖中的BNB，立即在DEX上将lisUSD换成另一种资产，然后立即在另一个DEX上将获得的资产换成lisUSD，其中该资产的比率更高，然后偿还Lista闪电贷款+利息，保留差额——所有这些都在一次贷款交易中完成。
 
-### Involved entities
+### 参与实体
 
-1. flashLender — Lista smart contract implementing the "server side" of the flash loans functionality.
-2. flashBorrower — the smart contract implementing the "client side", which EOA can copy, modify, and deploy to interact through with flashLender. A stub example of the smart contract is available later on this page.
-3. EOA (Externally Owned Account) — an account that interacts with the copy of flashBorrower they deploy. Effectively, EOA is a developer who copies flashBorrower, modifies, and deploys it on BSC to interact with flashLender through.
+1. flashLender — 实现闪电贷款功能的"服务器端"的Lista智能合约。
+2. flashBorrower — 实现"客户端"的智能合约，EOA可以复制、修改并部署以通过flashLender进行交互。本页面后面提供了一个智能合约的示例。
+3. EOA（Externally Owned Account） — 与他们部署的flashBorrower副本进行交互的账户。实际上，EOA是一个复制flashBorrower，修改并在BSC上部署它以通过flashLender进行交互的开发者。
 
-flashLender can be used to borrow (mint) and repay (burn) [Lista destablecoins](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/hay.sol), with a fee, in one transaction. EOA needs to interact with their own deployed copy of flashBorrower, which in turn interacts with flashLender.
+flashLender可以在一次交易中借用（铸造）和偿还（销毁）[Lista稳定币](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/hay.sol)，并收取费用。EOA需要与他们自己部署的flashBorrower副本进行交互，该副本反过来与flashLender进行交互。
 
-### Flash Loan Fee
+### 闪电贷款费用
 
-To get the fee, call the `flashFee(address token, uint256 amount)` function that returns the fee amount in 18 Decimals.
+要获取费用，调用`flashFee(address token, uint256 amount)`函数，该函数返回18位小数的费用金额。
 
-### Code example
+### 代码示例
 
 flashLender — [flash.sol](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol)
 
 flashBorrower — [flashBorrower.sol](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/mock/flashBorrower.sol)
 
-### Step-by-step
+### 逐步操作
 
-#### 1. Set up your flashBorrower contract
+#### 1. 设置你的flashBorrower合约
 
-Your contract must conform to the [ERC3156FlashBorrower ](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol)interface by implementing the `onFlashLoan()` function.&#x20;
+你的合约必须符合[ERC3156FlashBorrower](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol)接口，通过实现`onFlashLoan()`函数。
 
-To interact with flashLender, your contract must implement _`flashBorrow(token, amount)`_ and _`onFlashLoan(initiator, token, amount, fee, data)`_, which is a callback function called during the execution of _`flashLoan()`._&#x20;
+要与flashLender交互，你的合约必须实现`flashBorrow(token, amount)`和`onFlashLoan(initiator, token, amount, fee, data)`，这是在执行`flashLoan()`期间调用的回调函数。
 
-Implement any custom logic within _`onFlashLoan()`._
+在`onFlashLoan()`中实现任何自定义逻辑。
 
-Here's an example stub contract you can look through to better understand how to implement flashBorrower.
+以下是一个示例存根合约，你可以通过它更好地理解如何实现flashBorrower。
 
 ```
 pragma solidity ^0.8.10;
@@ -99,62 +99,61 @@ contract FlashBorrower is IERC3156FlashBorrower {
 ```
 
 {% hint style="info" %}
-* The flashBorrower must implement the [IERC3156FlashBorrower](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol), and [onFlashLoan()](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol#L30) must return the [CALLBACK\_SUCCESS](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol#L108) hash.&#x20;
+* flashBorrower必须实现[IERC3156FlashBorrower](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol)，并且[onFlashLoan()](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol#L30)必须返回[CALLBACK\_SUCCESS](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol#L108)哈希。
 {% endhint %}
 
-#### 2. Understand how to interact with flashLender
+#### 2. 理解如何与flashLender交互
 
-Understand the parameters used in flashLender:
+理解在flashLender中使用的参数：
 
-1. `CALLBACK_SUCCESS` — Hash of custom string, returned on success.
-2. `token` (address) — address of the BNB ERC-20 token that EOA flash-loans.
-3. `amount` (uint256) — amount of the flash loan.
-4. `receiver` (IERC3156FlashBorrower) — address of the flashBorrowed deployed by the EOA.
-5. `data` (bytes calldata) — rudimentary non-used parameter left not to change the `flashLoan()` signature.
+1. `CALLBACK_SUCCESS` — 成功返回的自定义字符串的哈希。
+2. `token` (address) — EOA闪电贷款的BNB ERC-20代币的地址。
+3. `amount` (uint256) — 闪电贷款的金额。
+4. `receiver` (IERC3156FlashBorrower) — EOA部署的flashBorrowed的地址。
+5. `data` (bytes calldata) — 基础的未使用参数，保留不改变`flashLoan()`签名。
 
-Understand the functions you want to interact with:
+理解你想要交互的函数：
 
-1. `maxFlashLoan(address token)` — returns “max” if _token_ is supported destablecoin.
-2. `flashFee(address token, uint256 amount)` — applies “toll” on _amount_ and returns if _token_ is a supported destablecoin.
-3. `flashLoan(IERC3156FlashBorrower receiver, address token, uint256 amount, bytes calldata data)` — mints _token `amount`_ to _`receiver`_ with extra _data_ (if any), and expects a return equal to `CALLBACK_SUCCESS`.
-4. `function accrue()` — sends the surplus fee to _vow.sol_.
+1. `maxFlashLoan(address token)` — 如果_token_是支持的destablecoin，返回“max”。
+2. `flashFee(address token, uint256 amount)` — 对_amount_应用“toll”，并返回如果_token_是支持的destablecoin。
+3. `flashLoan(IERC3156FlashBorrower receiver, address token, uint256 amount, bytes calldata data)` — 用额外的_data_（如果有的话）向_receiver_铸造_token `amount`_，并期望返回等于`CALLBACK_SUCCESS`的值。
+4. `function accrue()` — 将剩余的费用发送到_vow.sol_。
 
-If you're curious, understand the MakerDao parameters/constants used in the [flash.sol](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol).
+如果你感到好奇，理解在[flash.sol](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol)中使用的MakerDao参数/常量。
 
-1. `vat` — Address of vat.sol.
-2. `hayJoin` — Address of hayJoin.sol.
-3. `hay` — Address of hay.sol.
-4. `vow` — Address of vow.sol.
-5. `max` — Maximum allowed borrowable amount.
-6. `toll` — Fee on return of loan.
-7. `WAD` — 18 Decimals.
-8. `RAY` — 27 Decimals.
-9. `RAD` — 45 Decimals.
-10. `CALLBACK_SUCCESS` — Hash of custom string, returned on success.
+1. `vat` — vat.sol的地址。
+2. `hayJoin` — hayJoin.sol的地址。
+3. `hay` — hay.sol的地址。
+4. `vow` — vow.sol的地址。
+5. `max` — 允许的最大可借金额。
+6. `toll` — 贷款回报的费用。
+7. `WAD` — 18位小数。
+8. `RAY` — 27位小数。
+9. `RAD` — 45位小数。
+10. `CALLBACK_SUCCESS` — 成功返回的自定义字符串的哈希。
 
 {% hint style="info" %}
-For a deeper understanding of the MakerDao contract, such as var, hay, vow, etc, start with the [vat docs](https://docs.makerdao.com/smart-contract-modules/core-module/vat-detailed-documentation) and proceed to other smart contracts documented there.
+要深入理解MakerDao合约，如var、hay、vow等，从[vat文档](https://docs.makerdao.com/smart-contract-modules/core-module/vat-detailed-documentation)开始，然后继续阅读其他在那里记录的智能合约。
 {% endhint %}
 
-#### 3. Interact with flashLender&#x20;
+#### 3. 与flashLender交互
 
-flashLender is available by the following addresses:
+flashLender可以通过以下地址获取：
 
-* Testnet — coming soon
-* Mainnet — [0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa](https://bscscan.com/address/0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa)&#x20;
+* 测试网 — 即将推出
+* 主网 — [0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa](https://bscscan.com/address/0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa)
 
-A typical interaction follows this workflow:
+典型的交互遵循这个工作流程：
 
-1. An EOA calls _`flashBorrow(token, amount)`_ on a borrowing contract _flashBorrower.sol_.
-2. _flashBorrower_ approves _flashLender_ in advance to repay the loan with a fee. Then it calls the _`flashLoan(receiver, token, amount, data)`_ function on _flashLender_ which mints a specified amount to the _flashBorrower_.
-3. The same function _flashLoan(receiver, token, amount, data)_ then calls (CALLBACK) the the _`onFlashLoan(initiator, token, amount, fee, data)`_ function on the _flashBorrower_, which implements the custom logic of whatever the EOA wants to do with the borrowed lisUSD, then _`onFlashLoan()`_ returns the KECCAK256 of “`ERC3156FlashBorrower.onFlashLoan`" if its execution was successful. The custom logic is thought-up and implemented completely by the EOA.
-4. flashLender then burns the minted loan and stores the fee as surplus.
+1. EOA在借款合约_flashBorrower.sol_上调用`flashBorrow(token, amount)`。
+2. _flashBorrower_提前批准_flashLender_偿还贷款和费用。然后它在_flashLender_上调用`flashLoan(receiver, token, amount, data)`函数，该函数向_flashBorrower_铸造指定的金额。
+3. 同样的函数`flashLoan(receiver, token, amount, data)`然后调用（回调）_flashBorrower_上的`onFlashLoan(initiator, token, amount, fee, data)`函数，该函数实现了EOA想要用借来的lisUSD做什么的自定义逻辑，然后`onFlashLoan()`如果执行成功，则返回“`ERC3156FlashBorrower.onFlashLoan`"的KECCAK256。自定义逻辑完全由EOA想出并实现。
+4. flashLender然后销毁铸造的贷款，并将费用存储为剩余。
 
 {% hint style="info" %}
-* The flashBorrower must implement the [I](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol), and [onFlashLoan()](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol#L30) must return the [CALLBACK\_SUCCESS](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol#L108) hash.&#x20;
+* flashBorrower必须实现[I](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol)，并且[onFlashLoan()](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol#L30)必须返回[CALLBACK\_SUCCESS](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol#L108)哈希。
 {% endhint %}
 
-### Close-to-life usage example
+### 接近实际使用的示例
 
-Look into [the tests ](https://github.com/helio-money/helio-smart-contracts/blob/master/test/flash.test.js)to find a close-to-life usage example.
-
+查看[测试](https://github.com/helio-money/helio-smart-contracts/blob/master/test/flash.test.js)以找到接近实际使用的示例。

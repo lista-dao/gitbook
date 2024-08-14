@@ -1,28 +1,28 @@
-# Collateral Debt Position
+# 抵押债务位置
 
-Lista DAO functions as a open-source CDP protocol where users can deposit a variety of Crypto assets (BNB, ETH, Stablecoins, and other cryptocurrencies) as collateral and borrow our decentralized stablecoin, **lisUSD**, against these assets. It uses and expands the proven MakerDAO model for a decentralized, unbiased, collateral-backed stablecoin.
+Lista DAO 作为一个开源的 CDP 协议，用户可以存入各种加密资产（BNB、ETH、稳定币和其他加密货币）作为抵押，并借用我们的去中心化稳定币，**lisUSD**，对这些资产进行借贷。它使用并扩展了经过验证的 MakerDAO 模型，为去中心化、无偏见、抵押支持的稳定币。
 
-## Why Lista DAO?
+## 为什么选择 Lista DAO？
 
-Many stablecoin protocols have become too dependent on one model (entirely collateralized) or gone to another extreme (entirely algorithmic with no backing).
+许多稳定币协议过于依赖一个模型（完全抵押）或转向另一个极端（完全算法化，无后盾）。
 
-Collateralized stablecoins either carry custodial risk or require on-chain overcollateralization. These models provide a fairly tight peg with higher confidence than purely algorithmic designs.
+抵押稳定币要么承担保管风险，要么需要链上超额抵押。这些模型提供了相当紧密的锚定，比纯算法设计的信心更高。
 
-Purely algorithmic designs such as Basis, Empty Set Dollar, and Seigniorage Shares provide a highly trustless and scalable model that captures the early Bitcoin vision of decentralized money but is lacking in terms of stability.
+纯算法设计，如 Basis、Empty Set Dollar 和 Seigniorage Shares，提供了一个高度无信任和可扩展的模型，捕捉了早期比特币对去中心化货币的愿景，但在稳定性方面存在不足。
 
-Unfortunately, the decentralized crypto-lending model we saw in the past decade did little to democratize financial services. Most blockchain-based lending protocols promise low fees, fast execution, and high returns, but they continue to suffer inefficiencies in design stemming from the “Stablecoin Trilemma”. This trilemma forces stablecoin developers to focus on mechanisms that can sacrifice either decentralization, price stability, or capital efficiency.
+不幸的是，我们在过去十年看到的去中心化加密货币借贷模型对金融服务的民主化贡献甚微。大多数基于区块链的借贷协议承诺低费用、快速执行和高回报，但他们仍然受到“稳定币三难”的设计效率问题的困扰。这个三难迫使稳定币开发者专注于可能牺牲去中心化、价格稳定或资本效率的机制。
 
-The intent behind Lista DAO is to propose a solution to the capital efficiency problem of overcollateralized stablecoins experience by allowing users to leverage their funds with a collateral debt position (CDP). Through a combination of Liquid Staking, the functionality of the MakerDAO model, and additional liquidity from LPs on DEXs, Lista will avoid issues such as frozen funds (fiat-backed) or held value lost (algorithmic) because of price instability.
+Lista DAO 的意图是提出一个解决方案，解决超额抵押稳定币资本效率问题，通过允许用户利用他们的资金进行抵押债务位置（CDP）。通过 Liquid Staking、MakerDAO 模型的功能，以及来自 DEXs 上 LPs 的额外流动性，Lista 将避免因价格不稳定而导致的冻结资金（法币支持）或价值损失（算法）等问题。
 
-Lista was built by experienced DeFi experts and smart contract developers to position the world-class revolutionary lisUSD destablecoin as the most widely used one, by leveraging Proof-of-Stake (PoS) rewards, Binance Liquid Staking, and yield-bearing assets.
+Lista 是由经验丰富的 DeFi 专家和智能合约开发者建立的，目标是通过利用权益证明（PoS）奖励、币安 Liquid Staking 和产生收益的资产，将 lisUSD 稳定币定位为最广泛使用的稳定币。
 
-The Lista DAO aims to help promote blockchain technologies into mainstream adoption by incentivizing borrowers and stakers to become a part of a new decentralized economy of scale.
+Lista DAO 的目标是通过激励借款人和质押人成为新的去中心化经济规模的一部分，来推动区块链技术进入主流应用。
 
-#### Lista DAO allows users to: <a href="#lista-dao-allows-users-to" id="lista-dao-allows-users-to"></a>
+#### Lista DAO 允许用户：<a href="#lista-dao-allows-users-to" id="lista-dao-allows-users-to"></a>
 
-* Collateralise BNB.
-* Borrow lisUSD
-* Farm lisUSD
-* Repay the loan (lisUSD + borrowing interest)
-* Withdraw collateral
-* Claim rewards in LISTA for borrowing lisUSD&#x20;
+* 抵押 BNB。
+* 借用 lisUSD
+* 农场 lisUSD
+* 还款（lisUSD + 借款利息）
+* 提取抵押品
+* 借用 lisUSD 后在 LISTA 中领取奖励

@@ -1,13 +1,13 @@
 ---
-description: How to farm lisUSD
+description: 如何种植lisUSD
 ---
 
-# Farm lisUSD
+# 种植lisUSD
 
-We offer several DEX options to farm with your borrowed lisUSD and will release them step by step. Currently, we offer:
+我们提供了几个DEX选项，您可以使用借来的lisUSD进行种植，并将逐步发布它们。目前，我们提供：
 
-* Farming on Magpie
-* Farming on Thena
-* Farming on Wombat
+* 在Magpie上种植
+* 在Thena上种植
+* 在Wombat上种植
 
-Mind that each DEX has slightly different mechanics of how to provide liquidity to the DEX and farm rewards. We will add instructions here when releasing a new option.
+请注意，每个DEX提供流动性给DEX和种植奖励的机制略有不同。当我们发布新选项时，我们将在此处添加说明。

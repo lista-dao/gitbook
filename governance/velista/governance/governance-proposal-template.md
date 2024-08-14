@@ -1,76 +1,76 @@
-# Governance proposal template
+# 治理提案模板
 
-This is a template for submitting proposals to Lista DAO governance for external parties.
+这是一个供外部方提交给Lista DAO治理的提案模板。
 
-## Proposal Structure
+## 提案结构
 
-### Title:
+### 标题：
 
-\[A concise and descriptive title for the proposal]
+\[为提案提供一个简洁且描述性强的标题]
 
-### Date:
+### 日期：
 
-\[The date the proposal is being made, in the DD-MM-YYYY format]
+\[提案的日期，格式为DD-MM-YYYY]
 
-### References:
+### 参考资料：
 
-\[Name of the external party’s Project]
+\[外部方的项目名称]
 
-\[External Project’s Whitepaper]
+\[外部项目的白皮书]
 
-\[External Project’s Documentation]
+\[外部项目的文档]
 
-\[Source code for the system(s) that interact with the proposed asset]
+\[与提议资产交互的系统的源代码]
 
-\[External Project’s Smart contract addresses]
+\[外部项目的智能合约地址]
 
-\[List of Oracle data sources]
+\[Oracle数据源列表]
 
-\[Audits both procedural and smart contract-focused]
+\[程序和智能合约焦点的审计]
 
-\[Communities - social media links]
+\[社区 - 社交媒体链接]
 
-## Body Paragraphs:
+## 正文段落：
 
-### Summary:&#x20;
+### 摘要：
 
-A brief summary of the proposal; no more than 2-3 sentences
+简要总结提案；不超过2-3句
 
-### Abstract:
+### 摘要：
 
-Introduce and expand on the proposal. Touch on two main topics:
+介绍并扩展提案。触及两个主题：
 
-1. key points on how the proposal will improve Lista DAO’s platform & protocol performance.&#x20;
-2. What and how will the overall implementation process look like.
+1. 关于提案如何改善Lista DAO的平台和协议性能的关键点。
+2. 整体实施过程将是什么样的，以及如何进行。
 
-### Motivation:
+### 动机：
 
-What problems will this proposal address/solve? What’s the value-add? This section can have sub-sections for improved readability.
+此提案将解决/解决哪些问题？增值是什么？此部分可以有子部分以提高可读性。
 
-### Specification:&#x20;
+### 规格：
 
-Provide a comprehensive description of the proposed change, including any relevant parameters or risk considerations. Comments on proposals should focus on technical aspects and specify any changes to be made. This section can include sub-sections for improved readability.
+提供关于建议更改的全面描述，包括任何相关参数或风险考虑。对提案的评论应关注技术方面，并指定要进行的任何更改。此部分可以包含子部分以提高可读性。
 
-### Benefits (Pros):
+### 好处（优点）：
 
-List the benefits of implementing the proposal and how it will advance the protocol.
+列出实施提案的好处以及它将如何推进协议。
 
-### Downside (Cons):&#x20;
+### 缺点（弊端）：
 
-Identify any potential downsides to implementing the proposal.
+确定实施提案的任何潜在缺点。
 
-### Voting:&#x20;
+### 投票：
 
-Define what a “yes” and “no” vote entails.
+定义“赞成”和“反对”投票的含义。
 
-#### Additional questions for collateral onboarding
+#### 关于抵押品上线的额外问题
 
-1. Explain the positioning of the asset in the Lista DAO ecosystem. Why would it be a good collateral asset?
-2. Provide a brief history of the project and the different components: DAO (is it live?), products (are they live?). How did it overcome some of the challenges it faced?
-3. How is the asset currently used?
-4. Token (& Protocol) permissions (minting) and upgradability. Is there a multisig? What can it do? Who are the signers?
-5. Market data (Market Cap, 24h Volume, Volatility, Exchanges, Maturity)
-6. Social channels data (Size of communities, activity on Github)
-7. Contracts date of deployments, number of transactions, number of holders for tokens
-8. List any possible oracle data sources for the proposed Collateral type.
-9. (Optional) List any parties interested in taking part in liquidations for the proposed Collateral type.
+1. 解释资产在Lista DAO生态系统中的定位。为什么它会是一个好的抵押资产？
+2. 提供项目的简要历史和不同组成部分：DAO（是否已上线？），产品（是否已上线？）。它是如何克服所面临的一些挑战的？
+3. 资产目前如何使用？
+4. 令牌（和协议）权限（铸币）和可升级性。是否有多签名？它能做什么？签名者是谁？
+5. 市场数据（市值，24小时交易量，波动性，交易所，成熟度）
+6. 社交渠道数据（社区规模，Github上的活动）
+7. 合约部署日期，交易数量，令牌持有人数量
+8. 列出任何可能的Oracle数据源，用于提议的抵押品类型。
+9. （可选）列出任何有兴趣参与提议的抵押品类型清算的方。

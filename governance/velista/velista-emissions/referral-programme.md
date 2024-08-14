@@ -1,3 +1,3 @@
-# Referral Programme
+# 推荐计划
 
-More details about our referral programme will come soon.
+我们的推荐计划的更多细节即将公布。

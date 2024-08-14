@@ -1,9 +1,9 @@
-# Classic collateral options
+# 经典抵押选项
 
-Lista DAO offers a range of traditional collateral options, including L1 tokens and wrapped tokens, which can be used as collateral to borrow lisUSD. Below is the list:
+Lista DAO提供了一系列传统的抵押选项，包括L1代币和包装代币，这些可以用作抵押以借用lisUSD。以下是列表：
 
-* BTCB (Binance issued Bitcoin on BSC)
+* BTCB（Binance在BSC上发行的比特币）
 * BNB
 * ETH
-* SolvBTC (Solv Protocol)
-* BBTC (BounceBit)
+* SolvBTC（Solv协议）
+* BBTC（BounceBit）

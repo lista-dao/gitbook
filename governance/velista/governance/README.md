@@ -1,38 +1,38 @@
-# Governance
+# 治理
 
-## Scope
+## 范围
 
-Voting empowers the Lista DAO community, allowing members to influence and shape the future development of Lista DAO. As Lista DAO matures, more power will be gradually transferred to the DAO. Our ultimate goal is to fully transition into a DAO where governance holds absolute power.
+投票赋予了Lista DAO社区权力，允许成员影响并塑造Lista DAO的未来发展。随着Lista DAO的成熟，更多的权力将逐渐转移到DAO。我们的最终目标是完全转变为一个DAO，其中治理拥有绝对的权力。
 
-Explore Lista DAO’s native voting portal on Snapshot [here](https://snapshot.org/#/listavote.eth).
+在Snapshot [这里](https://snapshot.org/#/listavote.eth) 探索Lista DAO的本地投票门户。
 
-veLISTA holders possess voting rights within Lista’s governance system. As Lista DAO matures, more topics will be added into the scope for governance. The following topics currently falls within the scope of governance:
+veLISTA持有者在Lista的治理系统中拥有投票权。随着Lista DAO的成熟，将会有更多的主题加入到治理的范围中。以下主题目前属于治理的范围：
 
-1. Modifying fees rate: withdrawal fees, early Unlock fees for veLISTA
-2. Adding or removing a collateral
-3. Increase and decrease Collateral Rate and collateral debt cap
-4. Protocol fee sharing for veLISTA holder
-5. Voting on the share of LISTA Emission on Liquidity Pool
+1. 修改费率：提现费，veLISTA的提前解锁费
+2. 添加或移除抵押品
+3. 增加和减少抵押率和抵押债务上限
+4. veLISTA持有者的协议费用分享
+5. 对LISTA Emission在流动性池中的份额进行投票
 
-All governance proposals must be voted on by veLISTA holders, while only the Lista DAO Core team can submit proposals. The results of proposals will be implemented by the Lista DAO team.
+所有的治理提案都必须由veLISTA持有者投票，而只有Lista DAO核心团队可以提交提案。提案的结果将由Lista DAO团队实施。
 
-Community proposals, posted by the Lista DAO community, are used to propose ideas and express the community’s point of view. The Lista DAO team will incorporate well-supported ideas or designs into Core proposals. Additionally, community members can provide feedback and make suggestions on our Forum, contributing to the ongoing development of the protocol.
+社区提案，由Lista DAO社区发布，用于提出想法并表达社区的观点。Lista DAO团队将会将得到良好支持的想法或设计纳入核心提案。此外，社区成员可以在我们的论坛上提供反馈和建议，为协议的持续发展做出贡献。
 
-## Voting Threshold
+## 投票阈值
 
-Governance of Lista DAO operates under specific rules & conditions:
+Lista DAO的治理遵循特定的规则和条件：
 
-1. Voting Eligibility: Users with any amount of veLISTA are entitled to vote on proposals. Their voting power is directly proportional to the amount of veLISTA they hold relative to other veLISTA holders.
-2. Proposal Submission: Only core team members can submit proposals for voting.
-3. Voting period: Each proposal’s voting period will last for a period of 3 days, before the final results are tallied
-4. Proposal Approval: A proposal is considered approved when it receives support from over 50% of the veLISTA tokens cast in the vote.
-5. Implementation: Once a proposal is passed, it will be implemented within 1 to 2 weeks. If there are delays due to special circumstances, the Lista core team will provide an explanation.
+1. 投票资格：持有任何数量的veLISTA的用户都有权对提案进行投票。他们的投票权力与他们相对于其他veLISTA持有者持有的veLISTA数量成正比。
+2. 提案提交：只有核心团队成员可以提交投票提案。
+3. 投票期：每个提案的投票期将持续3天，然后进行最终的结果统计
+4. 提案批准：当一个提案得到超过50%的veLISTA代币投票支持时，该提案被视为获得批准。
+5. 实施：一旦提案通过，将在1到2周内实施。如果由于特殊情况导致延迟，Lista核心团队将提供解释。
 
-## Veto
+## 否决
 
-The Lista DAO Core Team has always prioritized the best interests of Lista DAO. That said, the team retains veto rights and can take corrective actions to ensure the security and proper functioning of the protocol without a Snapshot poll. In any veto action, the Lista Core Team will provide a detailed explanation to the community.
+Lista DAO核心团队一直将Lista DAO的最佳利益放在首位。也就是说，团队保留否决权，并可以采取纠正行动，确保协议的安全和正常运行，而无需进行Snapshot投票。在任何否决行动中，Lista核心团队将向社区提供详细的解释。
 
-Possible actions include, but are not limited to:
+可能的行动包括但不限于：
 
-* Pausing relevant smart contracts to fix a critical bug in the protocol
-* Rejecting a successfully added gauge if the token(s) in question are deemed unsafe, malicious, and/or detrimental to the Lista’s ecosystem
+* 暂停相关的智能合约以修复协议中的重大错误
+* 如果被认为是不安全的、恶意的和/或对Lista的生态系统有害的代币，拒绝成功添加的计量器

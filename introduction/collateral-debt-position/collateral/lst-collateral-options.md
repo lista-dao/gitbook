@@ -1,12 +1,12 @@
-# LST Collateral Options
+# LST 抵押选项
 
-Liquid staking tokens represent a user's staked assets on a blockchain network. These tokens allow users to participate in Proof-of-Stake (PoS) networks without sacrificing liquidity.
+流动性质押代币代表用户在区块链网络上的质押资产。这些代币允许用户参与权益证明（PoS）网络，而不牺牲流动性。
 
-Traditionally, when a user stake their cryptocurrency in a PoS network, the assets are locked up for a certain period and cannot be used. Liquid staking introduces a tokenized version of these staked assets that users can trade, sell, or use in decentralized finance (DeFi) applications while they're still staked.
+传统上，当用户在 PoS 网络中质押他们的加密货币时，资产会被锁定一段时间，不能被使用。流动性质押引入了这些质押资产的代币化版本，用户可以在它们仍然被质押的同时交易、出售，或在去中心化金融（DeFi）应用中使用。
 
-These liquid staking tokens are usually issued at a 1:1 ratio to the staked assets and earn rewards in the same way as the original staked assets. Therefore, they allow users to simultaneously secure the network, earn staking rewards, and have the flexibility to participate in other parts of the crypto economy.
+这些流动性质押代币通常以 1:1 的比例发行与质押资产，并以与原始质押资产相同的方式获得奖励。因此，它们允许用户同时保护网络，赚取质押奖励，并有灵活性参与加密经济的其他部分。
 
-In line with our ongoing commitment to enhancing the security of the Lista DAO and diversifying our Total Value Locked (TVL), we are delighted to announce the integration of the following LST assets as collateral:
+为了与我们持续的承诺一致，以增强 Lista DAO 的安全性并多样化我们的总价值锁定（TVL），我们很高兴宣布将以下 LST 资产集成为抵押：
 
 * slisBNB (Lista)
 * STONE (Stakestone)

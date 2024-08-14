@@ -1,39 +1,39 @@
 ---
-description: How to Get slisBNB
+description: 如何获取slisBNB
 ---
 
-# Get slisBNB
+# 获取slisBNB
 
-This guide will show you how to get slisBNB.
+本指南将向您展示如何获取slisBNB。
 
-### Mint slisBNB <a href="#mint-slisbnb" id="mint-slisbnb"></a>
+### 铸造slisBNB <a href="#mint-slisbnb" id="mint-slisbnb"></a>
 
-[How to mint slisBNB](https://docs.bsc.lista.org/get-started/about-slisbnb/how-to-mint-slisbnb)
+[如何铸造slisBNB](https://docs.bsc.lista.org/get-started/about-slisbnb/how-to-mint-slisbnb)
 
-### How to Swap BNB to slisBNB <a href="#how-to-swap-bnb-to-slisbnb" id="how-to-swap-bnb-to-slisbnb"></a>
+### 如何将BNB兑换为slisBNB <a href="#how-to-swap-bnb-to-slisbnb" id="how-to-swap-bnb-to-slisbnb"></a>
 
 ![](https://docs.bsc.lista.org/\~gitbook/image?url=https%3A%2F%2F1284749027-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeuAQJMk753IWaCTi0zzi%252Fuploads%252Frcfh3KRDp34aqXiZgD8U%252Fimage.png%3Falt%3Dmedia%26token%3Dfc60faf2-e059-4c41-b903-f58054bccc08\&width=768\&dpr=4\&quality=100\&sign=a2ef9c70\&sv=1)
 
-#### Step 1: Open Binance Web3 Wallet <a href="#step-1-open-binance-web3-wallet" id="step-1-open-binance-web3-wallet"></a>
+#### 步骤1：打开Binance Web3 Wallet <a href="#step-1-open-binance-web3-wallet" id="step-1-open-binance-web3-wallet"></a>
 
-1. Launch the Binance Web3 Wallet on your device.
-2. Ensure you are logged in and have BNB in your wallet.
+1. 在您的设备上启动Binance Web3 Wallet。
+2. 确保您已登录并且钱包中有BNB。
 
-#### Step 2: Navigate to Swap <a href="#step-2-navigate-to-swap" id="step-2-navigate-to-swap"></a>
+#### 步骤2：导航至Swap <a href="#step-2-navigate-to-swap" id="step-2-navigate-to-swap"></a>
 
-1. After logging in, click the "Swap" tab at the bottom of the screen.
+1. 登录后，点击屏幕底部的"Swap"标签。
 
-#### Step 3: Select BNB to slisBNB <a href="#step-3-select-bnb-to-slisbnb" id="step-3-select-bnb-to-slisbnb"></a>
+#### 步骤3：选择BNB到slisBNB <a href="#step-3-select-bnb-to-slisbnb" id="step-3-select-bnb-to-slisbnb"></a>
 
-1. Choose **BNB** from the dropdown as the token you want to swap.
-2. Enter the amount of BNB you wish to swap. For example, 0.1 BNB as shown in the image.
-3. In the "To" section, select **slisBNB** from the dropdown as the token you want to receive.
+1. 从下拉菜单中选择**BNB**作为您要兑换的代币。
+2. 输入您希望兑换的BNB数量。例如，如图所示的0.1 BNB。
+3. 在"To"部分，从下拉菜单中选择**slisBNB**作为您希望接收的代币。
 
-#### Step 4: Review the Swap Details <a href="#step-4-review-the-swap-details" id="step-4-review-the-swap-details"></a>
+#### 步骤4：查看Swap详情 <a href="#step-4-review-the-swap-details" id="step-4-review-the-swap-details"></a>
 
-1. Verify the details to ensure they are correct.
+1. 验证详情以确保它们是正确的。
 
-#### Step 5: Execute the Swap <a href="#step-5-execute-the-swap" id="step-5-execute-the-swap"></a>
+#### 步骤5：执行Swap <a href="#step-5-execute-the-swap" id="step-5-execute-the-swap"></a>
 
-1. Click the **Swap** button to initiate the transaction.
-2. Confirm any prompts that appear to complete the swap.
+1. 点击**Swap**按钮以启动交易。
+2. 确认出现的任何提示以完成兑换。

@@ -1,17 +1,17 @@
-# Price stability
+# 价格稳定
 
-### lisUSD's price stability mechanism[​](https://helio.money/docs/price-stability#hays-price-stability-mechanism)​ <a href="#hays-price-stability-mechanism" id="hays-price-stability-mechanism"></a>
+### lisUSD的价格稳定机制[​](https://helio.money/docs/price-stability#hays-price-stability-mechanism)​ <a href="#hays-price-stability-mechanism" id="hays-price-stability-mechanism"></a>
 
-Lista DAO is able to maintain lisUSD’s $1 value with respect to USD in the following scenarios:
+Lista DAO能够在以下情况下保持lisUSD对美元的1美元价值：
 
-**When lisUSD > $1, the supply of lisUSD needs to increase:**
+**当lisUSD > $1，lisUSD的供应需要增加：**
 
-* Since lisUSD is at a premium, borrowers are incentivised to borrow more lisUSD to sell for other assets for arbitrage opportunities.
-* To reduce demand for lisUSD farming, Lista DAO will reduce lisUSD farming rewards by decreasing lisUSD borrowing interest.
+* 由于lisUSD处于溢价状态，借款人被激励去借更多的lisUSD去出售以获取其他资产的套利机会。
+* 为了减少对lisUSD农场的需求，Lista DAO将通过降低lisUSD借款利率来减少lisUSD农场的奖励。
 
-**When lisUSD< $1, the supply of lisUSD needs to decrease**
+**当lisUSD< $1，lisUSD的供应需要减少**
 
-Comment
+评论
 
-* Since lisUSD is at a discount, borrowers are incentivised to buy lisUSD from the market to pay back the debt.
-* To decrease lisUSD borrowing demand, Lista DAO will increase lisUSD borrowing interest, which increases lisUSD farming rewards
+* 由于lisUSD处于折扣状态，借款人被激励去从市场上购买lisUSD来偿还债务。
+* 为了减少lisUSD的借款需求，Lista DAO将增加lisUSD的借款利率，从而增加lisUSD农场的奖励。

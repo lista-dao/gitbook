@@ -2,6 +2,6 @@
 
 ### Immunefi Bug Bounty Program
 
-Immunefi is a leading bug bounty platform focused on blockchain and smart contract security. It provides a secure environment for ethical hackers to identify and report vulnerabilities in blockchain projects. By leveraging Immunefi, we ensure that our platform remains robust and secure, protecting our users and their assets.
+Immunefi是一个领先的Bug赏金平台，专注于区块链和智能合约的安全。它为道德黑客提供了一个安全的环境，以识别并报告区块链项目中的漏洞。通过利用Immunefi，我们确保我们的平台保持强大和安全，保护我们的用户和他们的资产。
 
-You can find our Immunefi bug bounty program and report any issues [here](https://immunefi.com/bug-bounty/listadao/).
+您可以在[这里](https://immunefi.com/bug-bounty/listadao/)找到我们的Immunefi bug赏金计划，并报告任何问题。
