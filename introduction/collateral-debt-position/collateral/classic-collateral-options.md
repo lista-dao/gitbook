@@ -1,9 +1,10 @@
 # Classic collateral options
 
-Lista DAO offers a range of traditional collateral options, including L1 tokens and wrapped tokens, which can be used as collateral to borrow lisUSD. Below is the list:
+Lista DAO offers a range of traditional collateral options, which can be used as collateral to borrow lisUSD. Below is the list of our classic collateral options:
 
-* BTCB (Binance issued Bitcoin on BSC)
 * BNB
 * ETH
-* SolvBTC (Solv Protocol)
-* BBTC (BounceBit)
+* slisBNB
+* wBETH
+* BTCB
+
