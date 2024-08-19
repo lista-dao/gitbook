@@ -10,22 +10,31 @@ Below is a table of all eligible pools that users can provide liquidity into to 
 | Lista DAO      | veLISTA Holder                |
 | Lista DAO      | Borrow lisUSD                 |
 | Lista DAO      | slisBNB holder                |
-| Pancake Swap   | slisBNB/BNB                   |
-| Pancake Swap   | lisUSD/WBNB V3                |
-| Pancake Swap   | lisUSD/BTCB V3                |
-| Pancake Swap   | lisUSD/ETH V3                 |
-| Pancake Swap   | lisUSD/USDT V3                |
-| Pancake Swap   | lisUSD/USDT Stable Swap       |
-| Thena Finance  | slisBNB/BNB correlated        |
-| Thena Finance  | lisUSD/FRAX(stable)           |
-| Thena Finance  | lisUSD/USDT(stable)           |
-| Thena Finance  | lisUSD/frxETH narrow          |
-| Thena Finance  | lisUSD/frxETH wide            |
-| Thena Finance  | lisUSD/BNB narrow             |
-| Thena Finance  | lisUSD/BNB wide               |
-| Thena Finance  | lisUSD/BNB ICHI               |
+| Pancake Swap   | slisBNB/BNB V3 LP             |
+| Pancake Swap   | lisUSD/USDT V3 LP             |
+| Pancake Swap   | lisUSD/USDT stablepool LP     |
+| slisBNB        | LISTA/BNB LP                  |
+| Pancake Swap   | LISTA/USDT LP                 |
+| Pancake Swap   | lisUSD/WBNB V3 LP             |
+| Pancake Swap   | lisUSD/BTCB V3 LP             |
+| Pancake Swap   | lisUSD/ETH V3 LP              |
+| Thena Finance  | LISTA/USDT Narrow LP          |
+| Thena Finance  | slisBNB/BNB correlated LP     |
+| Thena Finance  | lisUSD/FRAX(stable) LP        |
+| Thena Finance  | lisUSD/USDT(cl stable) LP     |
+| Thena Finance  | lisUSD/BNB ICHI LP            |
+| Thena Finance  | lisUSD/frxETH narrow LP       |
+| Thena Finance  | lisUSD/frxETH wide LP         |
+| Thena Finance  | lisUSD/BNB narrow LP          |
+| Thena Finance  | lisUSD/BNB wide LP            |
 | Venus Protocol | lisUSD isolated lending pool  |
 | Venus Protocol | slisBNB isolated lending pool |
+| Biswap         | lisUSD/USDT                   |
+| Kinza          | lisUSD supply                 |
+| Kinza          | slisBNB supply                |
+| APX            | lisUSD staking                |
+| Meuna          | lisUSD                        |
+| Meuna          | slisBNB                       |
 
 ## LP pool reward Conditions
 
@@ -83,22 +92,3 @@ Users who stake their lisUSD on Lista DAO's single staking pool will also be eli
 
 1. Users have to single stake lisUSD on Lista DAO's [platform](https://lista.org/cdp/earn).
 2. Rewards are given out every 1 second the moment lisUSD tokens has been staked on Lista DAO's lisUSD single staking pool.
-
-### 3. slisBNB holders
-
-Users who hold slisBNB in their wallets will also be eligible for LISTA rewards. The rewards distributed to each user are proportionate to the daily average amount of slisBNB the user hold relative to the total daily average amount of slisBNB held by all users. The total TVL of slisBNB will exclude all blacklisted addresses.
-
-**Rules and conditions:**
-
-1. All slisBNB holders who are not on the blacklist will receive LISTA emissions. \
-   \
-   Certain DApps contracts are blacklisted and will not receive LISTA rewards. This is because these DApps contracts fall under another category for LISTA rewards. For example, the slisBNB/BNB pools on ThenaFi and PancakeSwap already falls under the external LP pool category, and therefore, the slisBNB in these pools will not receive LISTA rewards under this category.&#x20;
-2. Rewards are given out every 2 weeks (Biweekly). \
-   \
-   Each user’s slisBNB balance in their wallet is recorded daily in a snapshot. Over a two-week period (from the first Wednesday to the third Wednesday UTC+0), we calculate the average daily amount of slisBNB held by each user. Rewards are then distributed proportionally based on this daily average.\
-   \
-   For example:\
-   1\. Alice holds a daily average of 10 slisBNB over two weeks. \
-   2\. There are a total of 99 other slisBNB holders, each holding a daily average of 10 slisBNB over two weeks. \
-   3\. The total daily average amount of slisBNB held by all users over these 2 particular weeks, including Alice, is 100x10=1000 slisBNB. \
-   4\.  Alice will share 10/1000 which is 1% of the LISTA rewards allocated towards slisBNB holders for these two weeks.&#x20;
