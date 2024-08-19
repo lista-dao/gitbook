@@ -86,7 +86,7 @@
 ## Partnerships
 
 * [Brand Kit](partnerships/brand-kit.md)
-* [Our channels](partnerships/our-channels.md)
+* [Our Channels](partnerships/our-channels.md)
 
 ## Legal Disclaimer
 
