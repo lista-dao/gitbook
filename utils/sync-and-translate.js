@@ -11,17 +11,23 @@ function getChangedFiles() {
     const diffOutput = execSync("git diff --name-status HEAD~1 HEAD", {
       encoding: "utf8",
     });
-    const fileChanges = diffOutput.split("\n").map((line) => {
-      const [status, ...fileParts] = line.split(/\s+/);
-      if (line.endsWith(".md")) {
-        if (status.startsWith("R")) {
-          return { status, oldFile: fileParts[0], file: fileParts[1] };
+    const fileChanges = diffOutput
+      .split("\n")
+      .filter((line) => {
+        const [status, ...fileParts] = line.split(/\s+/);
+        return Boolean(status) && Boolean(fileParts[0]);
+      })
+      .map((line) => {
+        const [status, ...fileParts] = line.split(/\s+/);
+        if (line.endsWith(".md")) {
+          if (status.startsWith("R")) {
+            return { status, oldFile: fileParts[0], file: fileParts[1] };
+          }
+          return { status, file: fileParts[0] };
         }
-        return { status, file: fileParts[0] };
-      }
 
-      return { status, file: fileParts?.[1] ?? fileParts[0] };
-    });
+        return { status, file: fileParts?.[1] ?? fileParts[0] };
+      });
     return fileChanges;
   } catch (error) {
     console.error("Error getting changed files:", error);
