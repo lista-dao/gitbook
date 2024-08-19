@@ -1,9 +1,9 @@
-# 经典抵押选项
+# 经典抵押品选项
 
-Lista DAO提供了一系列传统的抵押选项，包括L1代币和包装代币，这些可以用作抵押以借用lisUSD。以下是列表：
+Lista DAO 提供了一系列传统的抵押品选项，这些抵押品可以用来借入 lisUSD。以下是我们的经典抵押品选项列表：
 
-* BTCB（Binance在BSC上发行的比特币）
 * BNB
 * ETH
-* SolvBTC（Solv协议）
-* BBTC（BounceBit）
+* slisBNB
+* wBETH
+* BTCB
