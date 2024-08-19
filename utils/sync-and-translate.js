@@ -8,13 +8,17 @@ const languageBranches = ["zh-CN"];
 
 function getChangedFiles() {
   try {
-    const diffOutput = execSync("git diff --name-status HEAD~1 HEAD", {
+    const diffOutput = execSync("git diff --name-status HEAD~4 HEAD", {
+      // return to head~1
       encoding: "utf8",
     });
     const files = diffOutput.split("\n").filter((line) => line.endsWith(".md"));
     const fileChanges = files.map((line) => {
-      const [status, file] = line.split(/\s+/);
-      return { status, file };
+      const [status, ...fileParts] = line.split(/\s+/);
+      if (status.startsWith("R")) {
+        return { status, oldFile: fileParts[0], file: fileParts[1] };
+      }
+      return { status, file: fileParts[0] };
     });
     return fileChanges;
   } catch (error) {
@@ -23,6 +27,12 @@ function getChangedFiles() {
   }
 }
 
+const deleteFile = (file) => {
+  if (fs.existsSync(file)) {
+    console.log(`Deleting file: ${file}`);
+    fs.unlinkSync(file);
+  }
+};
 async function syncAndTranslate() {
   const changedFiles = getChangedFiles();
   console.log(`Changed files: ${JSON.stringify(changedFiles, null, 2)}`);
@@ -31,35 +41,31 @@ async function syncAndTranslate() {
     try {
       execSync(`git checkout ${branch}`);
 
-      for (const { status, file } of changedFiles) {
+      for (const { status, file, oldFile } of changedFiles) {
         const targetFile = path.join(process.cwd(), file); // Ensure the correct path
         console.log(`Processing file: ${file} with status: ${status}`);
 
         if (status === "D") {
-          if (fs.existsSync(targetFile)) {
-            console.log(`Deleting file: ${targetFile}`);
-            fs.unlinkSync(targetFile);
-          }
+          deleteFile(targetFile);
         } else {
-          const content = fs.readFileSync(
-            path.join(process.cwd(), file),
-            "utf-8"
-          );
+          if (oldFile) {
+            const oldFilePath = path.join(process.cwd(), oldFile);
+            deleteFile(oldFilePath);
+          }
+          execSync(`git checkout origin/en -- ${file}`); // 確保文件是最新的英文版本
+          const content = fs.readFileSync(targetFile, "utf-8");
           const translatedContent = await translateContent(content, branch);
           fs.writeFileSync(targetFile, translatedContent, "utf-8");
-          console.log(`Translated content written to: ${targetFile}`);
+          execSync(`git add ${targetFile}`);
         }
-
-        execSync(`git add ${targetFile}`);
-        console.log(`Added file to git: ${targetFile}`);
       }
 
-      execSync(
-        `git commit -m "Sync and translate ${changedFiles.length} files to ${branch}" || true`
-      );
+      //   execSync(
+      //     `git commit -m "Sync and translate ${changedFiles.length} files to ${branch}" || true`
+      //   );
       console.log(`Committed changes to branch: ${branch}`);
 
-      execSync(`git push`);
+      //   execSync(`git push`);
     } catch (error) {
       console.error(`Error processing branch ${branch}:`, error);
     }

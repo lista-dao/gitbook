@@ -14,7 +14,7 @@ async function translateContent(content, language) {
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4-turbo",
       messages: [{ role: "system", content: prompt }],
       max_tokens: 4096,
       temperature: 0.2,
