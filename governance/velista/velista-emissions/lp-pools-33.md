@@ -4,37 +4,10 @@
 
 Below is a table of all eligible pools that users can provide liquidity into to earn LISTA rewards.&#x20;
 
-| **Protocol**   | **Pool Name**                               |
-| -------------- | ------------------------------------------- |
-| Lista DAO      | lisUSD single staking pool                  |
-| Lista DAO      | veLISTA Holder (coming soon)                |
-| Lista DAO      | Borrow lisUSD                               |
-| Lista DAO      | slisBNB holder (coming soon)                |
-| Pancake Swap   | slisBNB/BNB V3 LP                           |
-| Pancake Swap   | lisUSD/USDT V3 LP                           |
-| Pancake Swap   | lisUSD/USDT stablepool LP                   |
-| slisBNB        | LISTA/BNB LP (coming soon)                  |
-| Pancake Swap   | LISTA/USDT LP (coming soon)                 |
-| Pancake Swap   | lisUSD/WBNB V3 LP (coming soon)             |
-| Pancake Swap   | lisUSD/BTCB V3 LP                           |
-| Pancake Swap   | lisUSD/ETH V3 LP                            |
-| Thena Finance  | LISTA/USDT Narrow LP                        |
-| Thena Finance  | slisBNB/BNB correlated LP                   |
-| Thena Finance  | lisUSD/FRAX(stable) LP                      |
-| Thena Finance  | lisUSD/USDT(cl stable) LP                   |
-| Thena Finance  | lisUSD/BNB ICHI LP                          |
-| Thena Finance  | lisUSD/frxETH narrow LP (coming soon)       |
-| Thena Finance  | lisUSD/frxETH wide LP (coming soon)         |
-| Thena Finance  | lisUSD/BNB narrow LP (coming soon)          |
-| Thena Finance  | lisUSD/BNB wide LP (coming soon)            |
-| Venus Protocol | lisUSD isolated lending pool (coming soon)  |
-| Venus Protocol | slisBNB isolated lending pool (coming soon) |
-| Biswap         | lisUSD/USDT (coming soon)                   |
-| Kinza          | lisUSD supply (coming soon)                 |
-| Kinza          | slisBNB supply (coming soon)                |
-| APX            | lisUSD staking (coming soon)                |
-| Meuna          | lisUSD (coming soon)                        |
-| Meuna          | slisBNB (coming soon)                       |
+| **Protocol** | **Pool Name**              |
+| ------------ | -------------------------- |
+| Lista DAO    | lisUSD single staking pool |
+| Lista DAO    | Borrow lisUSD              |
 
 ## LP pool reward Conditions
 
