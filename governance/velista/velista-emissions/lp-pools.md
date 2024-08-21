@@ -1,6 +1,6 @@
-# LP pools (33%)
+# LP pools
 
-## Eligible LP pools (33%)
+## Eligible LP pools
 
 Below is a table of all eligible pools that users can provide liquidity into to earn LISTA rewards.&#x20;
 
@@ -11,13 +11,13 @@ Below is a table of all eligible pools that users can provide liquidity into to 
 
 ## LP pool reward Conditions
 
-In order to be eligible for LISTA rewards under the LP pools' category (33%), users have to stake their LP tokens on Lista DAO under our [rewards](https://lista.org/rewards) section.
+In order to be eligible for LISTA rewards under the LP pools' category, users have to stake their LP tokens on Lista DAO under our [rewards](https://lista.org/rewards) section.
 
 Additionally, certain conditions will have to be met for different type of LPs.
 
 ## Internal LPs
 
-Users who engage in Lista DAO’s DeFi ecosystem will have the opportunity to earn LISTA rewards. These rewards are allocated as part of the LP pools rewards within our community incentives, constituting 33% of LISTA’s total supply.
+Users who engage in Lista DAO’s DeFi ecosystem will have the opportunity to earn LISTA rewards. These rewards are allocated as part of the LP pools rewards within our community incentives.
 
 ### 1. lisUSD borrowers
 
@@ -36,3 +36,7 @@ Users who stake their lisUSD on Lista DAO's single staking pool will also be eli
 
 1. Users have to single stake lisUSD on Lista DAO's [platform](https://lista.org/cdp/earn).
 2. Rewards are given out every 1 second the moment lisUSD tokens has been staked on Lista DAO's lisUSD single staking pool.
+
+### 3. Additional LPs
+
+Additional liquidity pools will be added in the future.&#x20;
