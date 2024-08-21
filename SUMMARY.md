@@ -32,7 +32,7 @@
     * [Governance proposal template](governance/velista/governance/governance-proposal-template.md)
   * [Protocol fees](governance/velista/protocol-fees.md)
   * [veLISTA emissions](governance/velista/velista-emissions/README.md)
-    * [LP pools (33%)](governance/velista/velista-emissions/lp-pools-33.md)
+    * [LP pools](governance/velista/velista-emissions/lp-pools.md)
     * [Referral Programme](governance/velista/velista-emissions/referral-programme.md)
     * [lisUSD swappers](governance/velista/velista-emissions/lisusd-swappers.md)
   * [Revenue / Cost](governance/velista/revenue-cost.md)
