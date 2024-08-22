@@ -65,8 +65,7 @@ async function syncAndTranslate() {
             const translatedContent = await translateContent(content, branch);
             fs.writeFileSync(targetFile, translatedContent, "utf-8");
           }
-        }
-        execSync(`git checkout origin/en -- ${file}`);
+        } else execSync(`git checkout origin/en -- ${file}`);
       }
       execSync(`git add .`);
       execSync(
