@@ -2,11 +2,8 @@
 
 To incentivize user participation in liquidity pools and borrowing/staking lisUSD, LISTA offers community incentives in the form of LISTA emission towards the following type of users:
 
-* LP providers for slisBNB, lisUSD, and LISTA
 * Users who single stakes lisUSD
 * lisUSD borrowers
-* slisBNB Holders
-* Users who swaps against lisUSD pools
 
 ## Rewards breakdown
 
