@@ -1,6 +1,6 @@
 # 目录
 
-## 简介
+## 引言
 
 * [概览](README.md)
 * [抵押债务头寸](introduction/collateral-debt-position/README.md)
@@ -11,7 +11,7 @@
   * [lisUSD](introduction/collateral-debt-position/lisusd/README.md)
     * [价格稳定性](introduction/collateral-debt-position/lisusd/price-stability.md)
     * [算法市场操作 (AMO)](introduction/collateral-debt-position/lisusd/algorithmic-market-operations-amo/README.md)
-      * [当前与预期借款利率](introduction/collateral-debt-position/lisusd/algorithmic-market-operations-amo/current-vs-expected-borrow-rates.md)
+      * [当前与预期的借款利率](introduction/collateral-debt-position/lisusd/algorithmic-market-operations-amo/current-vs-expected-borrow-rates.md)
     * [lisUSD 的流动性](introduction/collateral-debt-position/lisusd/lisusds-liquidity.md)
   * [技术指南](introduction/collateral-debt-position/technical-guide.md)
 * [流动性质押 - slisBNB](introduction/liquid-staking-slisbnb/README.md)
@@ -31,7 +31,7 @@
   * [治理](governance/velista/governance/README.md)
     * [治理提案模板](governance/velista/governance/governance-proposal-template.md)
   * [协议费用](governance/velista/protocol-fees.md)
-  * [veLISTA 发放](governance/velista/velista-emissions/README.md)
+  * [veLISTA 发行](governance/velista/velista-emissions/README.md)
     * [LP 池](governance/velista/velista-emissions/lp-pools.md)
     * [推荐计划](governance/velista/velista-emissions/referral-programme.md)
     * [lisUSD 交换者](governance/velista/velista-emissions/lisusd-swappers.md)
@@ -68,7 +68,7 @@
 ## 安全
 
 * [审计报告](security/audit-reports.md)
-* [漏洞赏金](security/bug-bounty.md)
+* [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
 
 ## 开发者
 
