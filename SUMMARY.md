@@ -68,7 +68,7 @@
 ## Security
 
 * [Audit Reports](security/audit-reports.md)
-* [Bug Bounty](security/bug-bounty.md)
+* [Bug Bounty (Immunefi)](security/bug-bounty-immunefi.md)
 
 ## FOR DEVELOPER
 
