@@ -9,14 +9,16 @@ Explore Lista DAO’s native voting portal on Snapshot [here](https://snapshot.o
 veLISTA holders possess voting rights within Lista’s governance system. As Lista DAO matures, more topics will be added into the scope for governance. The following topics currently falls within the scope of governance:
 
 1. Modifying fees rate: withdrawal fees, early Unlock fees for veLISTA
-2. Adding or removing a collateral
+2. Adding of a new collateral
 3. Increase and decrease Collateral Rate and collateral debt cap
 4. Protocol fee sharing for veLISTA holder
 5. Voting on the share of LISTA Emission on Liquidity Pool
 
+_Note\* Collateral options  from the Lista Innovation Zone can be removed without requiring a governance vote. This allows us to swiftly and efficiently remove any collateral deemed risky, ensuring the process remains smooth and protects the platform from potential vulnerabilities._
+
 All governance proposals must be voted on by veLISTA holders, while only the Lista DAO Core team can submit proposals. The results of proposals will be implemented by the Lista DAO team.
 
-Community proposals, posted by the Lista DAO community, are used to propose ideas and express the community’s point of view. The Lista DAO team will incorporate well-supported ideas or designs into Core proposals. Additionally, community members can provide feedback and make suggestions on our Forum, contributing to the ongoing development of the protocol.
+Community proposals, posted by the Lista DAO community, are used to propose ideas and express the community’s point of view. The Lista DAO team will incorporate well-supported ideas or designs into Core proposals. Additionally, community members can provide feedback and make suggestions on our Forum, contributing to the ongoing development of the protocol.&#x20;
 
 ## Voting Threshold
 
