@@ -33,7 +33,7 @@ The entirety of the token supply allocated towards Binance Megadrop, will be unl
 
 At Launch, 85% of the tokens allocated to the Lista DAO’s airdrop, equating to 8.5% of the total token supply, will be unlocked.&#x20;
 
-The remaining 15%, which is 1.5% of LISTA’s total token supply, will be unlocked by the end of September.
+The remaining 15%, which is 1.5% of LISTA’s total token supply, will be unlocked by Q2 2025.
 
 ### Investors & advisors (19.00%)
 
