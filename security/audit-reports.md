@@ -8,6 +8,8 @@ Lista's smart contracts have undergone multiple external audits and security ass
 
 | Feature            | Report                                                                                                                                                                                             |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Token Emission     | [salus\_lista\_emission\_v1.0.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/salus\_lista\_emission\_v1.0.pdf)                                                                   |
+| Token Emission     | [blocksec\_lista\_emission\_v1.0.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/blocksec\_lista\_emission\_v1.0.pdf)                                                             |
 | AMO                | [BlockSec\_060824\_AMO\_DynamicDutyCalculator\_v1.0-signed.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/BlockSec\_060824\_AMO\_DynamicDutyCalculator\_v1.0-signed.pdf) |
 | AMO                | [Salus\_080824\_AMO\_DynamicDutyCalculator.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Salus\_080824\_AMO\_DynamicDutyCalculator.pdf)                                 |
 | OFT                | [BlockSec\_OFT\_190624](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/BlockSec\_OFT\_190624.pdf)                                                                             |

@@ -73,6 +73,8 @@
 ## FOR DEVELOPER
 
 * [Overview](for-developer/overview.md)
+* [LISTA Governance](for-developer/lista-governance/README.md)
+  * [Smart Contract](for-developer/lista-governance/smart-contract.md)
 * [Collateral Debt Position](for-developer/collateral-debt-position/README.md)
   * [Mechanics](for-developer/collateral-debt-position/mechanics.md)
   * [Flash Loan](for-developer/collateral-debt-position/flash-loan.md)
