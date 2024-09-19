@@ -1,4 +1,4 @@
-# 收入/成本
+# 收入 / 成本
 
 Lista DAO 的主要收入来源包括（但不限于）以下几点：
 
@@ -7,7 +7,7 @@ Lista DAO 的主要收入来源包括（但不限于）以下几点：
 3. ETH 提款费
 4. LST 奖励和运营佣金费
 
-<table data-header-hidden><thead><tr><th width="113"></th><th width="144"></th><th width="252"></th><th width="140"></th><th></th></tr></thead><tbody><tr><td>资产</td><td>项目</td><td>描述</td><td>veLISTA 持有者是否赚取分红？</td><td>状态</td></tr><tr><td>LISTA</td><td>提前解锁费</td><td>用户为了在锁定期结束前提取他们锁定的 LISTA，需要支付额外费用。</td><td>是</td><td>上线中</td></tr><tr><td>lisUSD</td><td>清算费</td><td>在清算过程中，抵押品将被出售以偿还债务，并收取清算费。您可以参考<a href="https://docs.bsc.lista.org/v/eglish-new/introduction/collateral-debt-position/collateral/loan-liquidation">这里</a>的贷款清算过程。</td><td>是</td><td>上线中</td></tr><tr><td>lisUSD</td><td>铸币费</td><td><p>当用户借出 lisUSD 时，将收取一次性借款费。</p><p><br></p><p>示例：<br>如果用户借出 101 lisUSD，用户将收到 100lisUSD，借款费基于 101 lisUSD 计算</p></td><td>是</td><td>即将上线</td></tr><tr><td>lisUSD</td><td>借款费</td><td>当用户借出 lisUSD 时，他们将产生借款费，形式为利息。他们持有借款金额的时间越长，随着时间的推移，他们累积的利息越多。</td><td>是</td><td>上线中</td></tr><tr><td>ETH</td><td>提款费</td><td>如果用户希望立即提取 ETH 而不等待 7-8 天，他们必须支付提款费。</td><td>是</td><td>ETH: 上线中</td></tr><tr><td>slisBNB</td><td>流动性质押奖励和运营佣金费</td><td>Lista DAO 从 slisBNB 获得的流动性质押奖励中赚取一部分。当 slisBNB 被铸造时，Lista DAO 还会收取一小部分运营佣金费。</td><td>是</td><td>上线中</td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="113"></th><th width="144"></th><th width="252"></th><th width="140"></th><th></th></tr></thead><tbody><tr><td>资产</td><td>项目</td><td>描述</td><td>veLISTA 持有者是否赚取分红？</td><td>状态</td></tr><tr><td>LISTA</td><td>提前解锁费</td><td>用户为了在锁定期结束前提取他们锁定的 LISTA，需要支付额外费用。</td><td>是</td><td>上线中</td></tr><tr><td>lisUSD</td><td>清算费</td><td>在清算过程中，抵押品将被出售以偿还债务，并收取清算费。您可以参考<a href="https://docs.bsc.lista.org/v/eglish-new/introduction/collateral-debt-position/collateral/loan-liquidation">这里</a>的贷款清算过程。</td><td>是</td><td>上线中</td></tr><tr><td>lisUSD</td><td>铸币费</td><td><p>当用户借出 lisUSD 时，将收取一次性借款费。</p><p><br></p><p>示例：<br>如果用户借出 101 lisUSD，用户将收到 100lisUSD，借款费基于 101 lisUSD 计算</p></td><td>是</td><td>即将上线</td></tr><tr><td>lisUSD</td><td>借款费</td><td>当用户借出 lisUSD 时，他们将产生借款费，形式为利息。他们持有借款金额的时间越长，随着时间的推移，累积的利息越多。</td><td>是</td><td>上线中</td></tr><tr><td>ETH</td><td>提款费</td><td>如果用户希望立即提取 ETH 而不等待 7-8 天，他们必须支付提款费。</td><td>是</td><td>ETH: 上线中</td></tr><tr><td>slisBNB</td><td>流动性质押奖励和运营佣金费</td><td>Lista DAO 从 slisBNB 获得的流动性质押奖励中赚取一部分。当 slisBNB 被铸造时，Lista DAO 还会收取一小部分运营佣金费。</td><td>是</td><td>上线中</td></tr></tbody></table>
 
 ### Lista DAO 的一般运营成本
 
