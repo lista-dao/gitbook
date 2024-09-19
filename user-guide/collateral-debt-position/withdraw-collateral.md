@@ -2,21 +2,21 @@
 description: 如何取回抵押品
 ---
 
-# 取回抵押品
+# 提取抵押品
 
 {% hint style="info" %}
-**长期 vs 立即取回**
+**延时提取 vs 即时提取**
 
 在取回之前，请确保您的未偿贷款已偿还，以避免抵押品被清算。
 
 \
 **BNB**
 
-BNB 的取回时间为7-15天，而取回 BNB LSTs（例如 slisBNB）则是立即的。
+提取BNB需要7- 15天，而提取BNB LSTs（例如slisBNB）则是即时的。
 
-slisBNB 是带有利息的 BNB 质押资产，允许您在主要的 DEXs 上将其兑换为 BNB，或者持有并继续获得随着时间积累在 slisBNB 中的 BNB 质押奖励。持有的时间越长，当您将 BNB LSTs 兑换为 BNB 时，您将获得的 BNB 越多。
+slisBNB是一种计息的BNB质押资产，您可以将其在去中心化交易所（DEX）上兑换为BNB，或者持有并持续获得BNB质押奖励，这些奖励会随着时间累积算在slisBNB的余额中。您持有的时间越长，将BNB LSTs兑换为BNB时获得的BNB就越多。
 
-取回的最小金额为 0.1 BNB。
+提取的最小金额为0.1 BNB
 {% endhint %}
 
 要取回您的 BNB：
