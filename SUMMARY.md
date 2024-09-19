@@ -1,9 +1,9 @@
-# 目录
+# Table of contents
 
 ## 引言
 
 * [概述](README.md)
-* [抵押债务头寸](introduction/collateral-debt-position/README.md)
+* [抵押借贷](introduction/collateral-debt-position/README.md)
   * [抵押品](introduction/collateral-debt-position/collateral/README.md)
     * [经典抵押选项](introduction/collateral-debt-position/collateral/classic-collateral-options.md)
     * [Lista 创新区](introduction/collateral-debt-position/collateral/lista-innovation-zone.md)
