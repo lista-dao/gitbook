@@ -31,7 +31,7 @@
   * [治理](governance/velista/governance/README.md)
     * [治理提案模板](governance/velista/governance/governance-proposal-template.md)
   * [协议费用](governance/velista/protocol-fees.md)
-  * [veLISTA 发行](governance/velista/velista-emissions/README.md)
+  * [veLISTA 排放](governance/velista/velista-emissions/README.md)
     * [LP 池](governance/velista/velista-emissions/lp-pools.md)
     * [推荐计划](governance/velista/velista-emissions/referral-programme.md)
     * [lisUSD 换手者](governance/velista/velista-emissions/lisusd-swappers.md)
