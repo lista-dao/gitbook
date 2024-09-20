@@ -3,14 +3,10 @@
 ## How to claim your veLISTA rewards
 
 Users will also be eligible to receive share protocol incentive rewards when they lock their veLISTA. \
-\
-Users will earn rewards in the following tokens:\
-1\. slisBNB\
-2\. wBETH \
-3\. lisUSD \
-4\. LISTA&#x20;
+Following [LIP-001](https://snapshot.org/#/listavote.eth/proposal/0x415d54c2b9c85d9b4b631ab2f2b9a9aebfeaddb5cd116e0d0d742db0e51f7236), all protocol incentive rewards will be converted into LISTA rewards.\
 
-Here is how they can do it:
+
+Here is how they can claim their LISTA rewards:
 
 1. Head over to the rewards section on Lista DAO [here](https://lista.org/rewards):
 

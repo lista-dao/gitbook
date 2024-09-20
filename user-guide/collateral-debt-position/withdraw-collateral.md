@@ -21,9 +21,17 @@ slisBNB is the interest-bearing BNB staking asset and allows you either exchange
 The minimum amount to withdraw is 0.1 BNB.
 {% endhint %}
 
-To withdraw your BNB:
+To withdraw your collateral:
 
-1. On the [borrow page ](https://helio.money/app/loans/), click the **-** button under **My Collateral** to withdraw your BNB.
-2. On the next page, enter the desired amount to withdraw and choose the option: BNB or BNB LSTs. Then click **Proceed**.
-3. Confirm the transaction in MetaMask to receive the withdrawn assets to the connected MetaMask wallet address.
-4. Once the transaction completes, click **Okay** to go back to the borrow page.
+1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard).
+
+<figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
+
+2. Select which collateral type you would like to withdraw, and click "Withdraw".
+3. Input the amount of collateral you would like to withdraw, and click "Withdraw".
+
+<figure><img src="../../.gitbook/assets/image (57).png" alt=""><figcaption></figcaption></figure>
+
+4. Confirm the transaction in MetaMask and you are done.
+
+<figure><img src="../../.gitbook/assets/image (58).png" alt=""><figcaption></figcaption></figure>

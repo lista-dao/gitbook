@@ -7,4 +7,6 @@ Lista DAO offers a range of traditional collateral options, which can be used as
 * slisBNB
 * wBETH
 * BTCB
+* FDUSD
+* WSTETH
 

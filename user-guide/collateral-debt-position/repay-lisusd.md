@@ -15,11 +15,19 @@ Your loan cannot go under 15 lisUSD, so you can either choose to repay it to the
 
 To repay back your lisUSD loan:
 
-1. On the [borrow page](https://helio.money/app/loans/), click **Repay** under **My Borrowed Funds**.
-2. On the next page, enter the amount of lisUSD you intend to repay back and click **Approve**.
-3. Confirm the action in MetaMask.
-4. After the approval is complete, click **Proceed** to submit the repaying transaction.
-5. Once the transaction completes, click **Okay** to go to the borrow page and see if the outstanding loan is repaid.
+1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard).
+
+<figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
+
+2. Select which collateral type you would like to repay your lisUSD against, and click "Repay".
+3. Enter the amount of lisUSD you would like to repay, and click on "Repay"
+
+<figure><img src="../../.gitbook/assets/image (54).png" alt=""><figcaption></figcaption></figure>
+
+4. Confirm the action in MetaMask.
+5. Once the transaction completes, click **Okay**, and you are done.
+
+<figure><img src="../../.gitbook/assets/image (55).png" alt=""><figcaption></figcaption></figure>
 
 [\
 ](https://docs.bsc.lista.org/get-started/boost-vault-lisusd)

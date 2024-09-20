@@ -24,13 +24,19 @@ The minimum deposit transaction is 0.1 for BNB deposits.
 The maximum total borrow limit for lisUSD is currently set at 69,000,000 lisUSD tokens.
 {% endhint %}
 
-1. On the borrow[ ](https://helio.money/app/loans/), click the **+** button under **My Collateral** to deposit BNB. You can also choose to deposit a different collateral by clicking on the drop down button on the right side of **My Collateral.**&#x20;
+1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard).&#x20;
 
-<figure><img src="https://docs.bsc.lista.org/~gitbook/image?url=https%3A%2F%2F1284749027-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeuAQJMk753IWaCTi0zzi%252Fuploads%252FCWCGLkGqr2dwa2hnRiRc%252Fimage.png%3Falt%3Dmedia%26token%3Dc1aa3faf-8991-41db-b5ca-3cc4d4ff84e8&#x26;width=768&#x26;dpr=4&#x26;quality=100&#x26;sign=d1f74a4b&#x26;sv=1" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
 
-2. On the next page, enter the desired amount of the selected asset and click **Proceed**.
+2. Select the type of collateral you would like to deposit, and click on "Deposit".
 
-<figure><img src="https://docs.bsc.lista.org/~gitbook/image?url=https%3A%2F%2F1284749027-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeuAQJMk753IWaCTi0zzi%252Fuploads%252FOfflsnW2krfzLSraZzD6%252Fimage.png%3Falt%3Dmedia%26token%3D3b741c00-ccb5-4967-9f81-dc54a5d42f8c&#x26;width=768&#x26;dpr=4&#x26;quality=100&#x26;sign=859c9e1f&#x26;sv=1" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (50).png" alt=""><figcaption></figcaption></figure>
+
+3. Enter the amount of collateral that you would like to deposit, and click deposit.
+
+<figure><img src="../../.gitbook/assets/image (51).png" alt=""><figcaption></figcaption></figure>
+
+
 
 3. Confirm the transaction in MetaMask.
 
