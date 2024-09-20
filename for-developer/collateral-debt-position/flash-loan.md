@@ -1,4 +1,4 @@
-# 闪电贷款
+# 闪电贷
 
 闪电贷款是无抵押贷款，用户可以借用lisUSD，只要在交易结束前归还借款金额（和费用）。
 
@@ -10,7 +10,7 @@
 
 闪电贷款有各种应用。
 
-一个明显的例子是资产之间的套利，用户可以闪电贷款lisUSD在某人的[Lista贷款清算](https://docs.helio.money/protocol/loan-liquidation)期间购买在荷兰拍卖中的BNB，立即在DEX上将lisUSD换成另一种资产，然后立即在另一个DEX上将获得的资产换成lisUSD，其中该资产的比率更高，然后偿还Lista闪电贷款+利息，保留差额——所有这些都在一次贷款交易中完成。
+一个明显的例子是资产之间的套利，用户可以闪电贷款lisUSD在某人的[Lista贷款清算](https://docs.helio.money/protocol/loan-liquidation)期间购买在荷兰拍卖中的BNB，然后立即在DEX上将lisUSD换成另一种资产，再立即在另一个DEX上将获得的资产换成lisUSD，其中该资产的比率更高，然后偿还Lista闪电贷款+利息，保留差额——所有这些都在一次贷款交易中完成。
 
 ### 参与实体
 
@@ -114,10 +114,10 @@ contract FlashBorrower is IERC3156FlashBorrower {
 
 理解你想要交互的函数：
 
-1. `maxFlashLoan(address token)` — 如果_token_是支持的destablecoin，返回“max”。
-2. `flashFee(address token, uint256 amount)` — 对_amount_应用“toll”，并返回如果_token_是支持的destablecoin。
-3. `flashLoan(IERC3156FlashBorrower receiver, address token, uint256 amount, bytes calldata data)` — 用额外的_data_（如果有的话）向_receiver_铸造_token `amount`_，并期望返回等于`CALLBACK_SUCCESS`的值。
-4. `function accrue()` — 将剩余的费用发送到_vow.sol_。
+1. `maxFlashLoan(address token)` — 如果\_token\_是支持的destablecoin，返回“max”。
+2. `flashFee(address token, uint256 amount)` — 对\_amount\_应用“toll”，并返回如果\_token\_是支持的destablecoin。
+3. `flashLoan(IERC3156FlashBorrower receiver, address token, uint256 amount, bytes calldata data)` — 用额外的\_data\_（如果有的话）向\_receiver\_铸造\_token `amount`\_，并期望返回等于`CALLBACK_SUCCESS`的值。
+4. `function accrue()` — 将剩余的费用发送到\_vow.sol\_。
 
 如果你感到好奇，理解在[flash.sol](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol)中使用的MakerDao参数/常量。
 
@@ -145,9 +145,9 @@ flashLender可以通过以下地址获取：
 
 典型的交互遵循这个工作流程：
 
-1. EOA在借款合约_flashBorrower.sol_上调用`flashBorrow(token, amount)`。
-2. _flashBorrower_提前批准_flashLender_偿还贷款和费用。然后它在_flashLender_上调用`flashLoan(receiver, token, amount, data)`函数，该函数向_flashBorrower_铸造指定的金额。
-3. 同样的函数`flashLoan(receiver, token, amount, data)`然后调用（回调）_flashBorrower_上的`onFlashLoan(initiator, token, amount, fee, data)`函数，该函数实现了EOA想要用借来的lisUSD做什么的自定义逻辑，然后`onFlashLoan()`如果执行成功，则返回“`ERC3156FlashBorrower.onFlashLoan`"的KECCAK256。自定义逻辑完全由EOA想出并实现。
+1. EOA在借款合约\_flashBorrower.sol\_上调用`flashBorrow(token, amount)`。
+2. \_flashBorrower\_提前批准\_flashLender\_偿还贷款和费用。然后它在\_flashLender\_上调用`flashLoan(receiver, token, amount, data)`函数，该函数向\_flashBorrower\_铸造指定的金额。
+3. 同样的函数`flashLoan(receiver, token, amount, data)`然后调用（回调）\_flashBorrower\_上的`onFlashLoan(initiator, token, amount, fee, data)`函数，该函数实现了EOA想要用借来的lisUSD做什么的自定义逻辑，然后`onFlashLoan()`如果执行成功，则返回“`ERC3156FlashBorrower.onFlashLoan`"的KECCAK256。自定义逻辑完全由EOA想出并实现。
 4. flashLender然后销毁铸造的贷款，并将费用存储为剩余。
 
 {% hint style="info" %}

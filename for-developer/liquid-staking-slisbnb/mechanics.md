@@ -38,4 +38,4 @@ slisBNB 是 Lista 的产出和流动性质押代币。用户可以通过 ListaSt
 
 ### 重新平衡
 
-ListaStakeManager 允许 Bot 定期在各验证者之间重新平衡质押的 **BNB**，以优化系统的可靠性和奖励率。
+ListaStakeManager 允许 Bot 定期在各验证者之间重新平衡质押的 BNB，以优化系统的可靠性和奖励率。
