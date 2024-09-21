@@ -44,5 +44,3 @@ Lista DAO是一个去中心化自治组织，提供BNB的领先流动质押解�
 ## 我们的代币
 
 <table data-view="cards"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td><h4>LISTA</h4></td><td>LISTA是我们的治理代币，赋予持有者投票权和对平台未来方向的发言权。</td><td></td></tr><tr><td><h4>lisUSD</h4></td><td>lisUSD是通过我们的CDP机制铸造的稳定币，保持与美元挂钩的稳定价值。</td><td></td></tr><tr><td><h4>slisBNB</h4></td><td>slisBNB是Lista DAO的流动性质押代币，代表质押的BNB，允许用户在保持流动性的同时赚取奖励。</td><td></td></tr></tbody></table>
-
-\\
