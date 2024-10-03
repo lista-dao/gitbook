@@ -37,7 +37,7 @@ Currently, Lista DAO offers a range of collateral assets as collateral on BNBcha
 Requirements:
 
 * Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 150%
+* Minimum Collateral Ratio: 120%
 * Minimum Collateral Deposit: 0.1 BNB
 * Borrowing Fee: (dynamic rate, decided by our AMO module)
 * Withdrawal Fee: 0.1%
@@ -48,7 +48,7 @@ Requirements:
 Requirements:
 
 * Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 150%
+* Minimum Collateral Ratio: 125%
 * Minimum Collateral Deposit: 0.1 slisBNB
 * Borrowing Fee: (dynamic rate, decided by our AMO module)
 * Withdrawal fee: 0.1%
@@ -59,7 +59,7 @@ Requirements:
 Requirements:
 
 * Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 110%
+* Minimum Collateral Ratio: 125%
 * Minimum Collateral Deposit: 0.1 ETH
 * Borrowing Fee: (dynamic rate, decided by our AMO module)
 * Withdrawal Fee: 0.1%
@@ -70,7 +70,7 @@ Requirements:
 Requirements:
 
 * Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 110%
+* Minimum Collateral Ratio: 125%
 * Minimum Collateral Deposit: 0.1 WBETH
 * Borrowing Fee: (dynamic rate, decided by our AMO module)
 * Withdrawal Fee: 0.1%
@@ -81,7 +81,7 @@ Requirements:
 Requirements:
 
 * Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 110%
+* Minimum Collateral Ratio: 125%
 * Minimum Collateral Deposit: 0.001 BTCB
 * Borrowing Fee: (dynamic rate, decided by our AMO module)
 * Withdrawal Fee: 0%
@@ -92,7 +92,7 @@ Requirements:
 Requirements:
 
 * Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
+* Minimum Collateral Ratio: 130%
 * Minimum Collateral Deposit: 0.1 weETH
 * Borrowing Fee: (dynamic rate, decided by our AMO module)
 * Withdrawal Fee: 0%
