@@ -8,6 +8,8 @@ Lista's smart contracts have undergone multiple external audits and security ass
 
 | Feature            | Report                                                                                                                                                                                             |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LP Staking         | [PeckShield-Audit-Report-Restake-v1.0.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/PeckShield-Audit-Report-Restake-v1.0.pdf)                                                   |
+| LP Staking         | [Salus-Audit-Report-Restake-v1.0.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/Salus-Audit-Report-Restake-v1.0.pdf)                                                             |
 | Token Emission     | [salus\_lista\_emission\_v1.0.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/salus\_lista\_emission\_v1.0.pdf)                                                                   |
 | Token Emission     | [blocksec\_lista\_emission\_v1.0.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/blocksec\_lista\_emission\_v1.0.pdf)                                                             |
 | AMO                | [BlockSec\_060824\_AMO\_DynamicDutyCalculator\_v1.0-signed.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/BlockSec\_060824\_AMO\_DynamicDutyCalculator\_v1.0-signed.pdf) |
