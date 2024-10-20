@@ -13,6 +13,7 @@
     * [Algorithmic Market Operations (AMO)](introduction/collateral-debt-position/lisusd/algorithmic-market-operations-amo/README.md)
       * [Current vs Expected Borrow Rates](introduction/collateral-debt-position/lisusd/algorithmic-market-operations-amo/current-vs-expected-borrow-rates.md)
     * [lisUSD's liquidity](introduction/collateral-debt-position/lisusd/lisusds-liquidity.md)
+    * [clisBNB](introduction/collateral-debt-position/lisusd/clisbnb.md)
   * [Technical Guide](introduction/collateral-debt-position/technical-guide.md)
 * [Liquid staking - slisBNB](introduction/liquid-staking-slisbnb/README.md)
   * [About slisBNB](introduction/liquid-staking-slisbnb/about-slisbnb.md)
@@ -45,6 +46,7 @@
   * [Borrow lisUSD](user-guide/collateral-debt-position/borrow-lisusd.md)
   * [Repay lisUSD](user-guide/collateral-debt-position/repay-lisusd.md)
   * [Withdraw collateral](user-guide/collateral-debt-position/withdraw-collateral.md)
+  * [Delegating clisBNB to your Binance web3 MPC Wallet](user-guide/collateral-debt-position/delegating-clisbnb-to-your-binance-web3-mpc-wallet.md)
 * [Liquid staking - slisBNB](user-guide/liquid-staking-slisbnb/README.md)
   * [How to swap for slisBNB](user-guide/liquid-staking-slisbnb/how-to-swap-for-slisbnb.md)
   * [Mint slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
@@ -60,6 +62,7 @@
   * [Auto lock](user-guide/lista-velista/auto-lock.md)
   * [Unlock LISTA](user-guide/lista-velista/unlock-lista.md)
   * [Claim Rewards](user-guide/lista-velista/claim-rewards.md)
+  * [Staking external LP tokens on Lista DAO](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
 
 ## Security
 
