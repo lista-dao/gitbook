@@ -36,6 +36,7 @@
     * [LP pools](governance/velista/velista-emissions/lp-pools.md)
     * [Referral Programme](governance/velista/velista-emissions/referral-programme.md)
     * [lisUSD swappers](governance/velista/velista-emissions/lisusd-swappers.md)
+  * [Auto-Compounding](governance/velista/auto-compounding.md)
   * [Revenue / Cost](governance/velista/revenue-cost.md)
   * [Analytics](governance/velista/analytics.md)
 
