@@ -5,7 +5,7 @@
 * [概览](README.md)
 * [抵押债务头寸](introduction/collateral-debt-position/README.md)
   * [抵押品](introduction/collateral-debt-position/collateral/README.md)
-    * [经典抵押品选项](introduction/collateral-debt-position/collateral/classic-collateral-options.md)
+    * [经典抵押选项](introduction/collateral-debt-position/collateral/classic-collateral-options.md)
     * [Lista 创新区](introduction/collateral-debt-position/collateral/lista-innovation-zone.md)
     * [贷款清算](introduction/collateral-debt-position/collateral/loan-liquidation.md)
   * [lisUSD](introduction/collateral-debt-position/lisusd/README.md)
@@ -32,10 +32,11 @@
   * [治理](governance/velista/governance/README.md)
     * [治理提案模板](governance/velista/governance/governance-proposal-template.md)
   * [协议费用](governance/velista/protocol-fees.md)
-  * [veLISTA 发行](governance/velista/velista-emissions/README.md)
+  * [veLISTA 发放](governance/velista/velista-emissions/README.md)
     * [LP 池](governance/velista/velista-emissions/lp-pools.md)
     * [推荐计划](governance/velista/velista-emissions/referral-programme.md)
-    * [lisUSD 交换者](governance/velista/velista-emissions/lisusd-swappers.md)
+    * [lisUSD 换手者](governance/velista/velista-emissions/lisusd-swappers.md)
+  * [自动复利](governance/velista/auto-compounding.md)
   * [收入 / 成本](governance/velista/revenue-cost.md)
   * [分析](governance/velista/analytics.md)
 
@@ -69,7 +70,7 @@
 * [审计报告](security/audit-reports.md)
 * [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
 
-## 开发者专区
+## 开发者
 
 * [概览](for-developer/overview.md)
 * [LISTA 治理](for-developer/lista-governance/README.md)
@@ -87,7 +88,7 @@
 ## 合作伙伴关系
 
 * [品牌套件](partnerships/brand-kit.md)
-* [我们的频道](partnerships/our-channels.md)
+* [我们的渠道](partnerships/our-channels.md)
 
 ## 法律免责声明
 
