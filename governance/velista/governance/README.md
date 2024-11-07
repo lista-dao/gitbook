@@ -14,7 +14,9 @@ veLISTA holders possess voting rights within Lista’s governance system. As Lis
 4. Protocol fee sharing for veLISTA holder
 5. Voting on the share of LISTA Emission on Liquidity Pool
 
-_Note\* Collateral options  from the Lista Innovation Zone can be removed without requiring a governance vote. This allows us to swiftly and efficiently remove any collateral deemed risky, ensuring the process remains smooth and protects the platform from potential vulnerabilities._
+_Note\* Collateral options  from the Lista Innovation Zone can be removed without requiring a governance vote. This allows us to swiftly and efficiently remove any collateral deemed risky, ensuring the process remains smooth and protects the platform from potential vulnerabilities._&#x20;
+
+_Note\*_ T_o ensure the stability and responsiveness of our platform, The core team reserves the right to adjust the borrow rate flexibly in response to significant market fluctuations. This approach allows us to adapt to rapidly changing market conditions without requiring a snapshot proposal. Users can rest assured that any adjustments will be made with careful consideration to maintain balance and align with market realities._
 
 All governance proposals must be voted on by veLISTA holders, while only the Lista DAO Core team can submit proposals. The results of proposals will be implemented by the Lista DAO team.
 

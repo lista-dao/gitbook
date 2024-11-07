@@ -4,6 +4,10 @@ To maintain lisUSD’s price stability & peg at $1, it is crucial to balance lis
 
 At the start, the Lista core team will decide the parameter based on market conditions. In the futures, parameter changes will require a proposal and community vote.&#x20;
 
+Additionally, to ensure the stability and responsiveness of our platform, the core team reserves the right to adjust the borrow rate flexibly in response to significant market fluctuations. This approach allows us to adapt to rapidly changing market conditions without requiring a snapshot proposal.&#x20;
+
+Users can rest assured that any adjustments will be made with careful consideration to maintain balance and align with market realities.
+
 ## Interest Rate Mechanics
 
 The interest rates in lisUSD markets are not static but fluctuate based on a set of factors, including:
