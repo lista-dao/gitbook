@@ -14,12 +14,12 @@
 | Thena slisBNB/BNB correlated    | 0xFf5ed1E64aCA62c822B178FFa5C36B40c112Eb00 |
 | Thena lisUSD/FRAX stable        | 0x1Cf9c6D475CdcA67942d41B0a34BD9cB9D336C4d |
 | Thena lisUSD/USDT cl stable     | 0xC23d348f9cC86dDB059ec798e87E7F76FBC077C1 |
-| Thena lisUSD/frxETH norrow      | 0x9B4FcbC3a01378B85d81DEFbaf9359155718be4a |
+| Thena lisUSD/frxETH narrow      | 0x9B4FcbC3a01378B85d81DEFbaf9359155718be4a |
 | Thena lisUSD/frxETH wide        | 0x11bf1122871e13c13466681022C74B496B59147a |
-| Thena lisUSD/BNB norrow         | 0x39D099F6A78c7Cef7a527f55c921E7e1EE39716a |
+| Thena lisUSD/BNB narrow         | 0x39D099F6A78c7Cef7a527f55c921E7e1EE39716a |
 | Thena lisUSD/BNB wide           | 0x9f6C251C3122207Adf561714C1171534B569eFf4 |
 | Thena lisUSD/BNB ichi           | 0xF6aB5cfdB46357f37b0190b793fB199D62Dcf504 |
-| Thena LISTA/USDT norrow         | 0x4b2D67Bf25245783Fc4C33a48962775437F9159c |
+| Thena LISTA/USDT narrow         | 0x4b2D67Bf25245783Fc4C33a48962775437F9159c |
 
 ### 2. Staking And Vault
 
