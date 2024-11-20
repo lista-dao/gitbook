@@ -8,6 +8,8 @@ Additionally, to ensure the stability and responsiveness of our platform, the co
 
 Users can rest assured that any adjustments will be made with careful consideration to maintain balance and align with market realities.
 
+**The maximum borrow rate at any point in time will be capped at 20%.**
+
 ## Interest Rate Mechanics
 
 The interest rates in lisUSD markets are not static but fluctuate based on a set of factors, including:
