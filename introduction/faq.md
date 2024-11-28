@@ -40,7 +40,7 @@ Requirements:
 * Minimum Collateral Ratio: 120%
 * Minimum Collateral Deposit: 0.1 BNB
 * Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0.1%
+* Withdrawal Fee: 0%
 * Withdrawal Options: BNB/slisBNB
 
 #### 2) slisBNB (Lista DAO) <a href="#id-2-slisbnb-listadao" id="id-2-slisbnb-listadao"></a>
@@ -51,7 +51,7 @@ Requirements:
 * Minimum Collateral Ratio: 125%
 * Minimum Collateral Deposit: 0.1 slisBNB
 * Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal fee: 0.1%
+* Withdrawal fee: 0%
 * Withdrawal Options: BNB/slisBNB
 
 #### 3) ETH <a href="#id-3-eth" id="id-3-eth"></a>
@@ -65,7 +65,7 @@ Requirements:
 * Withdrawal Fee: 0.1%
 * Withdrawal Options: ETH/WBETH
 
-#### 3) WBETH (Binance) <a href="#id-3-wbeth-binance" id="id-3-wbeth-binance"></a>
+#### 4) WBETH (Binance) <a href="#id-3-wbeth-binance" id="id-3-wbeth-binance"></a>
 
 Requirements:
 
@@ -73,10 +73,10 @@ Requirements:
 * Minimum Collateral Ratio: 125%
 * Minimum Collateral Deposit: 0.1 WBETH
 * Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0.1%
+* Withdrawal Fee: 0%
 * Withdrawal Options: WBETH
 
-#### 4) BTCB (Binance) <a href="#id-4-btcb-binance" id="id-4-btcb-binance"></a>
+#### 5) BTCB (Binance) <a href="#id-4-btcb-binance" id="id-4-btcb-binance"></a>
 
 Requirements:
 
@@ -87,29 +87,7 @@ Requirements:
 * Withdrawal Fee: 0%
 * Withdrawal Options: BTCB
 
-#### 5) weETH (Ether.fi) <a href="#id-5-weeth-ether.fi" id="id-5-weeth-ether.fi"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 130%
-* Minimum Collateral Deposit: 0.1 weETH
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: weETH
-
-#### 6) ezETH (Renzo Protocol) <a href="#id-6-ezeth-renzo-protocol" id="id-6-ezeth-renzo-protocol"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.1 ezETH
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: ezETH
-
-#### 7) STONE (StakeStone) <a href="#id-7-stone-stakestone" id="id-7-stone-stakestone"></a>
+#### 6) STONE (StakeStone) <a href="#id-7-stone-stakestone" id="id-7-stone-stakestone"></a>
 
 Requirements:
 
@@ -120,7 +98,7 @@ Requirements:
 * Withdrawal Fee: 0%
 * Withdrawal Options: STONE
 
-#### 8) SolvBTC (Solv Protocol) <a href="#id-8-solvbtc-solv-protocol" id="id-8-solvbtc-solv-protocol"></a>
+#### 7) SolvBTC (Solv Protocol) <a href="#id-8-solvbtc-solv-protocol" id="id-8-solvbtc-solv-protocol"></a>
 
 Requirements:
 
@@ -131,16 +109,16 @@ Requirements:
 * Withdrawal Fee: 0%
 * Withdrawal Options: SolvBTC
 
-9\) BBTC (BounceBit)
+#### 8) SolvBTC.BBN (Solv Protocol) <a href="#id-8-solvbtc-solv-protocol" id="id-8-solvbtc-solv-protocol"></a>
 
 Requirements:
 
 * Minimum Borrow: 15 lisUSD
 * Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.001 BBTC
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
+* Minimum Collateral Deposit: 0.001 SolvBTC.BBN
+* Borrowing Fee: 7.5%
 * Withdrawal Fee: 0%
-* Withdrawal Options: BBTC
+* Withdrawal Options: SolvBTC
 
 ### How can users earn on lisUSD? <a href="#how-can-users-earn-on-lisusd" id="how-can-users-earn-on-lisusd"></a>
 
