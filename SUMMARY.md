@@ -21,6 +21,7 @@
   * [Technical Guide](introduction/liquid-staking-slisbnb/technical-guide.md)
 * [Binance Launchpool: clisBNB](introduction/binance-launchpool-clisbnb/README.md)
   * [Minting clisBNB with slisBNB](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
+* [BNB Validator: Lista DAO](introduction/bnb-validator-lista-dao.md)
 * [Roadmap](introduction/roadmap.md)
 * [FAQ](introduction/faq.md)
 
