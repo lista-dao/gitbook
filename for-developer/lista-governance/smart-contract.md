@@ -21,7 +21,26 @@
 | Thena lisUSD/BNB ichi           | 0xF6aB5cfdB46357f37b0190b793fB199D62Dcf504 |
 | Thena LISTA/USDT narrow         | 0x4b2D67Bf25245783Fc4C33a48962775437F9159c |
 
-### 2. Staking And Vault
+### 2. CollateralDistributor
+
+| Name        | Address                                    |
+| ----------- | ------------------------------------------ |
+| BNB         | 0x83F861165bc61Af54caB4BE9a96C2b92e3a2AE5b |
+| slisBNB     | 0x77c9b49a58325131D08F9dC120388f20c57c2572 |
+| ETH         | 0xfF6F8ca13Db1beC5Becfaf208B1D3c942B63f955 |
+| wBETH       | 0x0Bfb1BD05E13B7757C26c839d9c385c8C8d8dAD1 |
+| wstETH      | 0xf0Fc2DeD2F7dD1bfDad4008A9e0CD0248408e956 |
+| BTCB        | 0x6C5285Cb6C660Bc08CF175f632131b06b213fc5E |
+| USDT        | 0x1716Ac5A34B46bc736f6f5C2D58661d5FBb47c73 |
+| FDUSD       | 0x01a6Fcc74852088c72862C12C54f992720Eb8281 |
+| STONE       | 0xF09Fef5E373C969E4631F139A91531c257E22889 |
+| solvBTC     | 0x3C161234622caF322e4f5363d46187EB3F010eb0 |
+| solvBTC.BBN | 0xc4A8A6c81f79dc6218319CE68138E743b8EDd830 |
+| sUSDX       | 0x56627826504E2CbDd7213e38089c2a4E6327204C |
+
+
+
+### 3. Staking And Vault
 
 | Name           | Address                                    |
 | -------------- | ------------------------------------------ |
