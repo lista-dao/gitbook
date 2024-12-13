@@ -66,6 +66,7 @@
   * [Unlock LISTA](user-guide/lista-velista/unlock-lista.md)
   * [Claim Rewards](user-guide/lista-velista/claim-rewards.md)
   * [Staking external LP tokens on Lista DAO](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
+  * [veLISTA Bribe Market](user-guide/lista-velista/velista-bribe-market.md)
 
 ## Security
 
