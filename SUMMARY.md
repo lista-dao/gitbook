@@ -38,6 +38,8 @@
   * [Protocol fees](governance/velista/protocol-fees.md)
   * [veLISTA emissions](governance/velista/velista-emissions/README.md)
     * [LP pools](governance/velista/velista-emissions/lp-pools.md)
+  * [Gauge Voting for veLISTA](governance/velista/gauge-voting-for-velista.md)
+  * [veLISTA Bribe Market](governance/velista/velista-bribe-market.md)
   * [Auto-Compounding](governance/velista/auto-compounding.md)
   * [Revenue / Cost](governance/velista/revenue-cost.md)
   * [Analytics](governance/velista/analytics.md)
@@ -66,7 +68,7 @@
   * [Unlock LISTA](user-guide/lista-velista/unlock-lista.md)
   * [Claim Rewards](user-guide/lista-velista/claim-rewards.md)
   * [Staking external LP tokens on Lista DAO](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
-  * [veLISTA Bribe Market](user-guide/lista-velista/velista-bribe-market.md)
+  * [Gauge Voting](user-guide/lista-velista/gauge-voting.md)
 
 ## Security
 
