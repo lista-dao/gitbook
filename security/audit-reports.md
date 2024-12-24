@@ -1,13 +1,15 @@
 # 审计报告
 
-Lista的智能合约经过了多次外部审计和安全评估。要了解更多信息，请查看详细报告：
+Lista的智能合约已经经过多次外部审计和安全评估。要了解更多信息，请查看详细报告：
 
 **2024**
 
 | 功能                                                | 报告                                                                                                                                                                                                                   |
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| slisBNB Provider                                    | [Bailsec\_SlisbnbProvider\_Final\_Report\_241127.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Bailsec_SlisbnbProvider_Final_Report_241127.pdf)                                              |
-| slisBNB Provider                                    | [blocksec\_lista\_SlisbnbProvider-VotingIncentive\_v1.0\_signed\_241127.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/blocksec_lista_SlisbnbProvider-VotingIncentive_v1.0_signed_241127.pdf) |
+| USDT Staking to Pancake                             | [blocksec\_lista\_usdtLpdistributor\_v1.0-signed.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/blocksec_lista_usdtLpdistributor_v1.0-signed.pdf)                                                    |
+| USDT Staking to Pancake                             | [bailsec\_lista\_usdtLpdistributor\_final\_report.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/bailsec_lista_usdtLpdistributor_final_report.pdf)                                                   |
+| slisBNB Provider                                    | [Bailsec\_SlisbnbProvider\_Final\_Report\_241127.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Bailsec_SlisbnbProvider_Final_Report_241127.pdf)                                            |
+| slisBNB Provider                                    | [blocksec\_lista\_SlisbnbProvider-VotingIncentive\_v1.0\_signed\_241127.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/blocksec_lista_SlisbnbProvider-VotingIncentive_v1.0_signed_241127.pdf)|
 | PSM                                                 | [https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/blocksec\_psm\_241122.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/blocksec_psm_241122.pdf)                           |
 | PSM                                                 | [https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/salus\_PSM\_241122.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/salus_PSM_241122.pdf)                                 |
 | Emission Voting & ClisBNB Launchpool Distributor    | [https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/salus\_emission\_voting\_211024.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/salus_emission_voting_211024.pdf)        |
