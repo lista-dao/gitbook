@@ -20,7 +20,7 @@
   * [关于 slisBNB](introduction/liquid-staking-slisbnb/about-slisbnb.md)
   * [奖励与费用](introduction/liquid-staking-slisbnb/rewards-and-fees.md)
   * [技术指南](introduction/liquid-staking-slisbnb/technical-guide.md)
-* [Binance Launchpool: clisBNB](introduction/binance-launchpool-clisbnb/README.md)
+* [币安 Launchpool: clisBNB](introduction/binance-launchpool-clisbnb/README.md)
   * [用 slisBNB 铸造 clisBNB](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
 * [BNB 验证器: Lista DAO](introduction/bnb-validator-lista-dao.md)
 * [路线图](introduction/roadmap.md)
@@ -48,16 +48,16 @@
 
 * [抵押债务头寸](user-guide/collateral-debt-position/README.md)
   * [提供抵押品](user-guide/collateral-debt-position/provide-collateral.md)
-  * [借用 lisUSD](user-guide/collateral-debt-position/borrow-lisusd.md)
+  * [借入 lisUSD](user-guide/collateral-debt-position/borrow-lisusd.md)
   * [偿还 lisUSD](user-guide/collateral-debt-position/repay-lisusd.md)
   * [提取抵押品](user-guide/collateral-debt-position/withdraw-collateral.md)
-  * [将 clisBNB 委托给您的 Binance web3 MPC 钱包](user-guide/collateral-debt-position/delegating-clisbnb-to-your-binance-web3-mpc-wallet.md)
+  * [将 clisBNB 委托给您的币安 web3 MPC 钱包](user-guide/collateral-debt-position/delegating-clisbnb-to-your-binance-web3-mpc-wallet.md)
 * [流动性质押 - slisBNB](user-guide/liquid-staking-slisbnb/README.md)
   * [如何兑换 slisBNB](user-guide/liquid-staking-slisbnb/how-to-swap-for-slisbnb.md)
   * [铸造 slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
   * [从 slisBNB 兑换 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
   * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
-* [使用 Binance Web3 钱包](user-guide/using-binance-web3-wallet/README.md)
+* [使用币安 Web3 钱包](user-guide/using-binance-web3-wallet/README.md)
   * [将 BNB 流动性质押到 slisBNB](user-guide/using-binance-web3-wallet/liquid-staking-bnb-into-slisbnb.md)
   * [获取 lisUSD](user-guide/using-binance-web3-wallet/obtaining-lisusd.md)
   * [在 APX Finance 上交易](user-guide/using-binance-web3-wallet/trading-on-apx-finance.md)
@@ -78,12 +78,12 @@
 ## 开发者专区
 
 * [概览](for-developer/overview.md)
-* [治理](for-developer/governance/README.md)
-  * [智能合约](for-developer/governance/smart-contract.md)
+* [LISTA 治理](for-developer/lista-governance/README.md)
+  * [智能合约](for-developer/lista-governance/smart-contract.md)
 * [抵押债务头寸](for-developer/collateral-debt-position/README.md)
   * [机制](for-developer/collateral-debt-position/mechanics.md)
   * [闪电贷](for-developer/collateral-debt-position/flash-loan.md)
-  * [多重预言机](for-developer/collateral-debt-position/multi-oracle.md)
+  * [多源预言机](for-developer/collateral-debt-position/multi-oracle.md)
   * [智能合约](for-developer/collateral-debt-position/smart-contract.md)
 * [流动性质押(slisBNB)](for-developer/liquid-staking-slisbnb/README.md)
   * [机制](for-developer/liquid-staking-slisbnb/mechanics.md)
@@ -95,6 +95,6 @@
 * [品牌套件](partnerships/brand-kit.md)
 * [我们的渠道](partnerships/our-channels.md)
 
-## 法律免责声明
+## 法律声明
 
-* [法律免责声明](legal-disclaimer/legal-disclaimer.md)
+* [法律声明](legal-disclaimer/legal-disclaimer.md)

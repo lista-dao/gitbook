@@ -8,23 +8,23 @@
 
 ### 1. ERC20Distributor
 
-| 名称                            | 地址                                      |
-| ------------------------------- | ------------------------------------------ |
-| Pancake Stable pool lisUSD/USDT | 0xe8f4644637f127aFf11F9492F41269eB5e8b8dD2 |
-| Thena slisBNB/BNB correlated    | 0xFf5ed1E64aCA62c822B178FFa5C36B40c112Eb00 |
-| Thena lisUSD/FRAX stable        | 0x1Cf9c6D475CdcA67942d41B0a34BD9cB9D336C4d |
-| Thena lisUSD/USDT cl stable     | 0xC23d348f9cC86dDB059ec798e87E7F76FBC077C1 |
-| Thena lisUSD/frxETH narrow      | 0x9B4FcbC3a01378B85d81DEFbaf9359155718be4a |
-| Thena lisUSD/frxETH wide        | 0x11bf1122871e13c13466681022C74B496B59147a |
-| Thena lisUSD/BNB narrow         | 0x39D099F6A78c7Cef7a527f55c921E7e1EE39716a |
-| Thena lisUSD/BNB wide           | 0x9f6C251C3122207Adf561714C1171534B569eFf4 |
-| Thena lisUSD/BNB ichi           | 0xF6aB5cfdB46357f37b0190b793fB199D62Dcf504 |
-| Thena LISTA/USDT narrow         | 0x4b2D67Bf25245783Fc4C33a48962775437F9159c |
+| 名称                              | 地址                                      |
+| --------------------------------- | ---------------------------------------- |
+| Pancake Stable pool lisUSD/USDT   | 0xe8f4644637f127aFf11F9492F41269eB5e8b8dD2 |
+| Thena slisBNB/BNB correlated      | 0xFf5ed1E64aCA62c822B178FFa5C36B40c112Eb00 |
+| Thena lisUSD/FRAX stable          | 0x1Cf9c6D475CdcA67942d41B0a34BD9cB9D336C4d |
+| Thena lisUSD/USDT cl stable       | 0xC23d348f9cC86dDB059ec798e87E7F76FBC077C1 |
+| Thena lisUSD/frxETH narrow        | 0x9B4FcbC3a01378B85d81DEFbaf9359155718be4a |
+| Thena lisUSD/frxETH wide          | 0x11bf1122871e13c13466681022C74B496B59147a |
+| Thena lisUSD/BNB narrow           | 0x39D099F6A78c7Cef7a527f55c921E7e1EE39716a |
+| Thena lisUSD/BNB wide             | 0x9f6C251C3122207Adf561714C1171534B569eFf4 |
+| Thena lisUSD/BNB ichi             | 0xF6aB5cfdB46357f37b0190b793fB199D62Dcf504 |
+| Thena LISTA/USDT narrow           | 0x4b2D67Bf25245783Fc4C33a48962775437F9159c |
 
 ### 2. CollateralDistributor
 
 | 名称        | 地址                                      |
-| ----------- | ------------------------------------------ |
+| ----------- | ---------------------------------------- |
 | BNB         | 0x83F861165bc61Af54caB4BE9a96C2b92e3a2AE5b |
 | slisBNB     | 0x77c9b49a58325131D08F9dC120388f20c57c2572 |
 | ETH         | 0xfF6F8ca13Db1beC5Becfaf208B1D3c942B63f955 |
@@ -41,7 +41,7 @@
 ### 3. 质押与金库
 
 | 名称           | 地址                                      |
-| -------------- | ------------------------------------------ |
+| -------------- | ---------------------------------------- |
 | PancakeStaking | 0xE31f0BcE1F825A8e27f2Cc30B54af19DA2978f10 |
 | ThenaStaking   | 0xFA5B482882F9e025facCcE558c2F72c6c50AC719 |
 | PancakeVault   | 0x62DfeC5C9518fE2e0ba483833d1BAD94ecF68153 |
