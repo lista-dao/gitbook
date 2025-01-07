@@ -19,15 +19,27 @@ function getChangedFiles() {
       })
       .map((line) => {
         const [status, ...fileParts] = line.split(/\s+/);
+        if (status.startsWith("R")) {
+          const oldPath = fileParts[0];
+          const newPath = fileParts[1];
+          if (fs.existsSync(newPath) && fs.lstatSync(newPath).isDirectory()) {
+            const oldFiles = glob.sync(`${oldPath}/**/*`);
+            return oldFiles.map((oldFile) => ({
+              status: "R",
+              oldFile: oldFile,
+              file: oldFile.replace(oldPath, newPath),
+            }));
+          }
+        }
         if (line.endsWith(".md")) {
           if (status.startsWith("R")) {
             return { status, oldFile: fileParts[0], file: fileParts[1] };
           }
           return { status, file: fileParts[0] };
         }
-
         return { status, file: fileParts?.[1] ?? fileParts[0] };
-      });
+      })
+      .flat();
     return fileChanges;
   } catch (error) {
     console.error("Error getting changed files:", error);
