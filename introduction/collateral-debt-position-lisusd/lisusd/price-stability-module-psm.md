@@ -8,9 +8,9 @@ With the launch of the PSM, users will be able to mint lisUSD using USDT or USDC
 
 NOTE: The 0% fee is not permanent. In the future, if lisUSD trades at a premium, a mint fee may be introduced, with fee adjustments made in precise increments of 0.01%.
 
-A) Fee precision: 1 basis point (0.01%).
+A) Fee precision: 1 basis point (0.01%)
 
-B) Convert fee will be charged in lisUSD.
+B) Convert fee will be charged in lisUSD
 
 ### 2. PSM Minting Cap
 
