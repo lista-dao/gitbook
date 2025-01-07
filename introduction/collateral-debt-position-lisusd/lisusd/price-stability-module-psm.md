@@ -26,6 +26,4 @@ For users who wish to convert lisUSD back into centralized stablecoins, a daily 
 
 These conversions will incur a 2% fee so as to encourage users to swap lisUSD into other stablecoins directly on PancakeSwap for potentially better rates.
 
-The centralized stablecoins acquired via the PSM will play a critical role in maintaining the stability of lisUSD, ensuring its value remains closely pegged to 1 USD.
-
-\
+The centralized stablecoins acquired via the PSM will play a critical role in maintaining the stability of lisUSD, ensuring its value remains closely pegged to 1 USD.\
