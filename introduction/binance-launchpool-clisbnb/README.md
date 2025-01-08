@@ -1,4 +1,4 @@
-# clisBNB
+# Binance Launchpool: clisBNB
 
 clisBNB is a “certificate” token that users receive after depositing BNB into a Collateralized Debt Position (CDP) on the Lista DAO platform. It is designed to represent the user’s BNB on a 1:1 ratio, ensuring that every clisBNB is directly linked to the amount of BNB locked within the CDP. This means that for every 1 BNB that users deposit, they will receive 1 clisBNB in return.
 
@@ -26,7 +26,7 @@ One important feature of clisBNB is that it is non-transferable. Once issued, cl
 
 clisBNB is automatically burnt or destroyed when users withdraw their BNB or the corresponding slisBNB from Lista DAO’s CDP. This mechanism ensures that clisBNB always accurately represents the amount of BNB in the user’s position. Once the underlying BNB is withdrawn, the associated clisBNB is removed from the system to prevent any mismatches in value.
 
-### 4. Minting clisBNB to Another Address <a href="#id-7699" id="id-7699"></a>
+### 4. Minting clisBNB to another Address <a href="#id-7699" id="id-7699"></a>
 
 clisBNB offers users a unique feature: when depositing BNB into a CDP, they have the option to mint clisBNB to another address. However, once this address has been chosen and the clisBNB has been sent over, it will no longer be transferable to any other wallet. Having this function enables greater flexibility, especially for users who may want to delegate certain actions related to another wallet, such as the accumulation of stardust points.
 

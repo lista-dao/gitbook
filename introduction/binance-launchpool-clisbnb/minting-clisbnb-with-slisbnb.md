@@ -10,7 +10,7 @@ When users deposit their slisBNB into the Collateralized Debt Position (CDP) to 
 
 ## Benefits <a href="#cdca" id="cdca"></a>
 
-### 1. Increased capital efficiency for slisBNB <a href="#id-3474" id="id-3474"></a>
+### 1. Increased Capital efficiency for slisBNB <a href="#id-3474" id="id-3474"></a>
 
 With this update, users who deposit **slisBNB** as collateral on Lista DAO’s CDP can now unlock even greater potential for their assets. Not only can they borrow **lisUSD** against their slisBNB, but they will also remain eligible to participate in **Binance Launchpool rewards** simultaneously.
 

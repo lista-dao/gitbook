@@ -10,7 +10,7 @@ Becoming a BSC validator aligns with Lista DAO’s mission of promoting decentra
 2. Community Benefits: Rewards earned as a validator will be reinvested into the DAO, creating additional value for veLISTA holders and protocol participants.
 3. Carefully Set Parameters: Commission rates and governance processes have been designed to balance user returns and operational sustainability.
 
-## What’s Next?
+## What’s next?
 
 Lista DAO will begin participating as a BSC validator, reinforcing our ecosystem’s presence on the Binance Smart Chain.
 
