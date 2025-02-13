@@ -37,10 +37,39 @@
 | solvBTC     | 0x3C161234622caF322e4f5363d46187EB3F010eb0 |
 | solvBTC.BBN | 0xc4A8A6c81f79dc6218319CE68138E743b8EDd830 |
 | sUSDX       | 0x56627826504E2CbDd7213e38089c2a4E6327204C |
+| pumpBTC     | 0xE3221bC1084EFB5D43Cf94CD8DE6B32Cf37fEB85 |
+| mBTC        | 0xE61f4386608578199471747E4654Ae450adEE39A |
+| mCAKE       | 0xB1da312097C7CBf9b49ef9d29D21a0646d9A5aF4 |
+| mwBETH      | 0xE786eC5b4838410C24e5C1c75633d7C59705d6be |
 
 
 
-### 3. Staking And Vault
+### 3. BorrowListaDistributor
+
+| Name        | Address                                    |
+| ----------- | ------------------------------------------ |
+| BNB         | 0x564fa71EABe7683af701d32f34421Ecc118b1eBb |
+| slisBNB     | 0x419352db842B7F6F33DBF541d23938cfFC181d1a |
+| ETH         | 0x88620F85Ba52a186314471D8eef7F6FCFec4A2E6 |
+| wBETH       | 0xc952Cc3d981Baad5d4D041721e1e179e42E6E2D5 |
+| wstETH      | 0x73538cCe62901BD374BA314AcefC6c49EbDA0093 |
+| BTCB        | 0xcB8f70FbC3cEcAFf9a5D53236DCb4Ef76BCcd2d6 |
+| USDT        | 0x7247ddB894C4dc6BE9ea7328fcfEf0a07e20F59d |
+| FDUSD       | 0x98a3fF86aF8107aBB40A706340b485e0B3E84c54 |
+| STONE       | 0x7AD627aEb610d3f82466d8f9e1b9A6E1c916Da80 |
+| solvBTC     | 0x5dEBc8917EF4f614B0998dDD8dE7DD421fADe245 |
+| solvBTC.BBN | 0xa97aed02F9Cd1D59186B3883e23eFE9f5E347900 |
+| sUSDX       | 0x46c5721dd7275BA19010a4f0e8FEBfdf6595Be54 |
+| pumpBTC     | 0x58FE0f18507DD331ddF91Db9c111536d2a5c725A |
+| mBTC        | 0x982d1DB2D643Ff4f497D5A4F566A565376eCF70C |
+| mCAKE       | 0xa3BCE2dEf1823A551A407b14572C54D2aDB0Fd45 |
+| mwBETH      | 0xF8d1D8a862eA77Bf4f826BF6612bFf0d0883eafa |
+
+
+
+
+
+### 4. Staking And Vault
 
 | Name           | Address                                    |
 | -------------- | ------------------------------------------ |
