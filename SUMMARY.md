@@ -89,6 +89,8 @@
   * [Mechanics](for-developer/liquid-staking-slisbnb/mechanics.md)
   * [Cross-Chain Bridge](for-developer/liquid-staking-slisbnb/cross-chain-bridge.md)
   * [Smart Contract](for-developer/liquid-staking-slisbnb/smart-contract.md)
+* [clisBNB](for-developer/clisbnb/README.md)
+  * [Smart Contract](for-developer/clisbnb/smart-contract.md)
 
 ## Partnerships
 
