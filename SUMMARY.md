@@ -32,6 +32,7 @@
   * [LISTA distribution](governance/lista/lista-distribution.md)
 * [veLISTA](governance/velista/README.md)
   * [veLISTA Summary](governance/velista/velista-summary.md)
+  * [Lista DAO: Unlocking veLISTA Utility](governance/velista/lista-dao-unlocking-velista-utility.md)
   * [veLISTA Locking mechanics](governance/velista/velista-locking-mechanics.md)
   * [Governance](governance/velista/governance/README.md)
     * [Governance proposal template](governance/velista/governance/governance-proposal-template.md)
