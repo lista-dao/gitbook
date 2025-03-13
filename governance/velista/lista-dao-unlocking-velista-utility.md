@@ -6,7 +6,11 @@ Lista DAO is committed to expanding the utility of veLISTA, introducing a series
 
 As the first of these enhancements, we are introducing the Borrow lisUSD Rebate Mechanism, a feature that directly reduces borrowing costs for veLISTA holders.
 
-The borrow rebate mechanism rewards users by providing lisUSD rebates based on their veLISTA holdings, allowing them to optimize their borrowing experience within the Lista DAO ecosystem. More veLISTA utility features will be announced soon!
+The borrow rebate mechanism rewards users by providing lisUSD rebates based on their veLISTA holdings, allowing them to optimize their borrowing experience within the Lista DAO ecosystem.
+
+With the launch of lisUSD’s Rebate mechanism, eligible veLISTA holders can now benefit from both the lisUSD borrow rebate and LISTA emission rewards simultaneously.
+
+More veLISTA utility features will be announced soon
 
 ## Core Logic
 
