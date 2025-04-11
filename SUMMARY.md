@@ -9,7 +9,7 @@
     * [Lista Innovation Zone](introduction/collateral-debt-position-lisusd/collateral/lista-innovation-zone.md)
     * [Loan liquidation](introduction/collateral-debt-position-lisusd/collateral/loan-liquidation.md)
   * [lisUSD](introduction/collateral-debt-position-lisusd/lisusd/README.md)
-    * [Price stability Module (PSM)](introduction/collateral-debt-position-lisusd/lisusd/price-stability-module-psm.md)
+    * [Stable Pool - Price stability Module (PSM)](introduction/collateral-debt-position-lisusd/lisusd/stable-pool-price-stability-module-psm.md)
     * [lisUSD Saving Rate (LSR)](introduction/collateral-debt-position-lisusd/lisusd/lisusd-saving-rate-lsr.md)
     * [D3M - Direct Deposit Module](introduction/collateral-debt-position-lisusd/lisusd/d3m-direct-deposit-module.md)
     * [Algorithmic Market Operations (AMO)](introduction/collateral-debt-position-lisusd/lisusd/algorithmic-market-operations-amo/README.md)

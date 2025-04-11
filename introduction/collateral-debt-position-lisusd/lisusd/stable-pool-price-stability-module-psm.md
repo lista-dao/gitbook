@@ -1,4 +1,6 @@
-# Price stability Module (PSM)
+# Stable Pool - Price stability Module (PSM)
+
+## Price Stability Module (PSM)
 
 The Peg Stability Module (PSM) is a critical component designed to maintain the stability and usability of lisUSD by facilitating seamless conversions between centralized stablecoins and lisUSD. Here’s a breakdown of its main features:
 
@@ -28,4 +30,12 @@ These conversions will incur a 2% fee so as to encourage users to swap lisUSD in
 
 The centralized stablecoins acquired via the PSM will play a critical role in maintaining the stability of lisUSD, ensuring its value remains closely pegged to 1 USD.
 
-\
+## lisUSD Stablepool
+
+Through the use of our PSM module, the stablepool is created under our [Earn](https://lista.org/earn) section here:
+
+<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+Users can now deposit their USDT to enjoy a yields coming from LISTA token emission, as well as lisUSD saving rate. Through the PSM, the USDT deposited into the USDT Stablepool will be swapped into lisUSD at a 1:1 ratio and deposited into the lisUSD stable pool.
+
+More information on lisUSD saving rate (LSR) can be found [here](lisusd-saving-rate-lsr.md) in the next section.\
