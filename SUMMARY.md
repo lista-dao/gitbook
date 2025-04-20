@@ -94,6 +94,11 @@
 * [clisBNB](for-developer/clisbnb/README.md)
   * [Smart Contract](for-developer/clisbnb/smart-contract.md)
 
+***
+
+* [Lista Lending](lista-lending/README.md)
+  * [Smart Contract](lista-lending/smart-contract.md)
+
 ## Partnerships
 
 * [Brand Kit](partnerships/brand-kit.md)
