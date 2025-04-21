@@ -132,7 +132,7 @@ To deploy a vault, specify the following parameters:
 
 ### Step 2.3 Fill in the params
 
-![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXeGvAXo0gAEzsaOkYxIK1Dm0adyqL92MlzaInn7f_XazsyW77r5QT_wQ8-GtQveOJTqVSYH-KlSPAYdi4fZhWk-VnzBb-xITBSokRxl-WtoMxzaUG-kI7HXHMSrmNUu9BO32ITa?key=ZbB0Bdp_i9xaaxZIxmtWD2y_)
+<figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXeGvAXo0gAEzsaOkYxIK1Dm0adyqL92MlzaInn7f_XazsyW77r5QT_wQ8-GtQveOJTqVSYH-KlSPAYdi4fZhWk-VnzBb-xITBSokRxl-WtoMxzaUG-kI7HXHMSrmNUu9BO32ITa?key=ZbB0Bdp_i9xaaxZIxmtWD2y_" alt=""><figcaption></figcaption></figure>
 
 ### Step 2.4: Execute the Deployment Script
 
@@ -277,9 +277,9 @@ Parameters:
 
 
 
-#### Step 4: Deploy the TimeLock
+### Step 4: Deploy the TimeLock
 
-### Step 4.1: Prepare Parameters
+#### Step 4.1: Prepare Parameters
 
 First, you need to prepare three key address parameters:
 
@@ -289,13 +289,13 @@ First, you need to prepare three key address parameters:
 
 Before beginning deployment, make sure you've decided on these three addresses. You should fill in the actual addresses you want to use in the table.
 
-### Step  4.2: Deploy the Timelock Contract
+#### Step  4.2: Deploy the Timelock Contract
 
 Navigate to the repository at[ https://github.com/lista-dao/moolah](https://github.com/lista-dao/moolah) and switch to the feature/deployScripts branch.
 
 Step 4.3 Fill in the params
 
-![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXcWIqKdLYE030gQ7c8ycJepyI9iJaILG5K-CrdqY-_84AUR40c4GD66fl63cfvc53-b8d4K1FgjUGqAM_oGfq1U2xRzuCCpO2zHisDLaxhp_Www77LcdH86uKidjyysTdsSc3JI?key=ZbB0Bdp_i9xaaxZIxmtWD2y_)
+<figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcWIqKdLYE030gQ7c8ycJepyI9iJaILG5K-CrdqY-_84AUR40c4GD66fl63cfvc53-b8d4K1FgjUGqAM_oGfq1U2xRzuCCpO2zHisDLaxhp_Www77LcdH86uKidjyysTdsSc3JI?key=ZbB0Bdp_i9xaaxZIxmtWD2y_" alt=""><figcaption></figcaption></figure>
 
 Run the following command to deploy the Timelock contract:
 
@@ -314,7 +314,7 @@ Make sure you have sufficient funds in your deployment wallet to cover gas fees 
 \
 
 
-#### Step 5: Verify and Activate
+### Step 5: Verify and Activate
 
 
 
