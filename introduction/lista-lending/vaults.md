@@ -88,7 +88,7 @@ Before creating a Lista Vault, ensure you have the following:
 
 ***
 
-#### Step 1: Define Vault Parameters
+### Step 1: Define Vault Parameters
 
 To deploy a vault, specify the following parameters:
 
@@ -106,7 +106,9 @@ To deploy a vault, specify the following parameters:
    * Guardian: Optional role for risk oversight (e.g., to pause actions).
    * Allocator: The role to allocate vault markets
 
-#### Step 2: Deploy the Vault Step 2.1: Prepare the Parameters
+### Step 2: Deploy the Vault
+
+#### Step 2.1: Prepare the Parameters
 
 #### Before deployment, you need to prepare the following parameters:
 
@@ -120,7 +122,7 @@ To deploy a vault, specify the following parameters:
 
 #### All these parameters need values (marked as "TODO" in your reference image).
 
-### Step 2.2: Clone the Repository
+#### Step 2.2: Clone the Repository
 
 #### Navigate to the specific branch of the Moolah repository:
 
@@ -130,11 +132,11 @@ To deploy a vault, specify the following parameters:
 
 #### git checkout feature/deployScripts
 
-### Step 2.3 Fill in the params
+#### Step 2.3 Fill in the params
 
 <figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXeGvAXo0gAEzsaOkYxIK1Dm0adyqL92MlzaInn7f_XazsyW77r5QT_wQ8-GtQveOJTqVSYH-KlSPAYdi4fZhWk-VnzBb-xITBSokRxl-WtoMxzaUG-kI7HXHMSrmNUu9BO32ITa?key=ZbB0Bdp_i9xaaxZIxmtWD2y_" alt=""><figcaption></figcaption></figure>
 
-### Step 2.4: Execute the Deployment Script
+#### Step 2.4: Execute the Deployment Script
 
 #### Run the following command to deploy the vault contract to BSC network:
 
@@ -153,11 +155,11 @@ To deploy a vault, specify the following parameters:
 \
 
 
-#### Step 3: Configure the Vault
+### Step 3: Configure the Vault
 
-### Here are methods you can use to configure your vault.
+Here are methods you can use to configure your vault.
 
-### 1. Set Fee
+#### 1. Set Fee
 
 Role: MANAGER\
 Method: setFee\
@@ -169,7 +171,7 @@ Parameter:
 
 ***
 
-### 2. Set Fee Recipient
+#### 2. Set Fee Recipient
 
 Role: MANAGER\
 Method: setFeeRecipient\
@@ -181,19 +183,17 @@ Parameter:
 
 ***
 
-### 3. Set Skim Recipient
+#### 3. Set Skim Recipient
 
 Role: MANAGER\
 Method: setSkimRecipient\
 Parameter:
 
-* newSkimRecipient (address): The address that will receive mistakenly transferred tokens.\
-  \
-
+* newSkimRecipient (address): The address that will receive mistakenly transferred tokens.
 
 ***
 
-### 4. Set Market Supply Cap
+#### 4. Set Market Supply Cap
 
 Role: CURATOR\
 Method: setCap\
@@ -211,7 +211,7 @@ Note: These parameters should match the configuration used when the market was c
 
 ***
 
-### 5. Set Deposit Queue
+#### 5. Set Deposit Queue
 
 Role: ALLOCATOR\
 Method: setSupplyQueue\
@@ -223,7 +223,7 @@ Parameter:
 
 ***
 
-### 6. Update Withdraw Queue
+#### 6. Update Withdraw Queue
 
 Role: ALLOCATOR\
 Method: updateWithdrawQueue\
@@ -237,7 +237,7 @@ Note: The indexes refer to positions in the current withdraw queue.
 
 ***
 
-### 7. Set Market Removal
+#### 7. Set Market Removal
 
 Role: CURATOR\
 Method: setMarketRemoval\
@@ -254,7 +254,7 @@ Note: This marks a market for removal. The market will only be removed after the
 
 ***
 
-### 8. Role Management
+#### 8. Role Management
 
 #### 8.1 Grant Role
 
