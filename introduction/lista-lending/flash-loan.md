@@ -50,7 +50,7 @@ To use a flash loan with Moolah, you need to:
 
 ### Lista Lending Specific Callbacks
 
-Moolah implements a broader callback system:
+Lista Lending implements a broader callback system:
 
 * IMoolahLiquidateCallback: For liquidation operations
 * IMoolahRepayCallback: For repayment operations

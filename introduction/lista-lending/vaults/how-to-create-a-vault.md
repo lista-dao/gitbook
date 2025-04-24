@@ -1,76 +1,4 @@
-# Vaults
-
-A Lista Vault supports a single loan asset and distributes deposited funds across multiple Lista markets. By depositing into a vault, users can earn passive yield from the interest paid by borrowers.
-
-Vaults incorporate automated risk management, dynamically adjusting risk exposure for all deposited assets, relieving users of the need to manage these factors themselves. Users retain complete control over their funds, with the ability to monitor the vault’s status at any time and withdraw their liquidity whenever they choose.
-
-Any users can act as suppliers and deposit into a vault to earn passive yields generated from borrower interest payments.
-
-Key features:
-
-1. Vaults streamline managing positions across lending markets
-2. Specialized curators manage each Lista Vault to safeguard vault depositors.
-3. There are no lock up periods for deposits or withdrawals
-4. All vault actions are on-chain and managed through curator access for clear oversight and risk control.
-
-### Default Parameters
-
-* Loan to value Ratio (LTV)
-  * Limited to the following fixed options:
-    * The LTV (Loan-to-Value ratio) is determined based on the quality of collateral.&#x20;
-    * In the first phase of Lista Lending, since our collateral is relatively high-quality, the LTV ratio is set at 80%.&#x20;
-    * For ptclisBNB 0427, as its maturity date is approaching, we also assigned a very high LTV
-    * Custom ratios are not permitted
-
-
-
-* Interest Rate Model (IRM)
-  * only one IRM rate-setting method is available (AdaptiveCurveIRM)
-* Fee
-  * Determined by Lista DAO; vaults cannot modify this fee independently.
-
-### Core Rules
-
-#### 1. Oracle
-
-Lista Lending will utilize a basket of different Oracles with backups to ensure that the risk price manipulation through oracle pricing greatly reduced
-
-* First supported:
-  * Chainlink (Main oracle)
-  * Binance Oracle (checking oracle)
-  * Redstone (Backup oracle)
-
-#### 2. Vault Owner
-
-* Can decide which markets to invest funds in.
-* By default, the depositor delegates risk management to the Vault Owner, who has full control.
-* Vault owners will be solely responsible for what happens to the assets deposited into the vault.
-
-#### 3. Customize Bad Debt Handling
-
-Bad debts can be either amortized (spread out, gradually being reduced over time) or handled manually.
-
-#### 4. Account Management Functions
-
-Operates via traditional function calls, or message signatures based on the[ EIP-712](https://eips.ethereum.org/EIPS/eip-712) standard.
-
-#### 5. Time locks
-
-Vault Owners can optionally set timelocks to govern critical parameter changes and risk management processes.
-
-#### 6. Vault Fees
-
-Vaults can independently charge fee, up to a maximum of 50% of their generated profits, with the specific use of these funds determined by the Vault Owner.
-
-#### 7. Assignors
-
-Vaults can designate an Allocator or Curator role, tasked with strategically distributing liquidity across various markets.
-
-—------------------—------------------—------------------—------------------—------------------—---------------
-
-### Create a Vault Guide
-
-#### Overview
+# How to create a vault
 
 Lista Lending enables permissionless creation of lending vaults on BNB Chain, allowing curators to deploy custom liquidity pools that optimize yield and manage risk. A Lista Vault accepts a single loan asset (e.g., lisUSD) and allocates deposits across multiple Lista markets. This guide walks you through the process of deploying and configuring a vault, empowering you to curate lending opportunities within Lista DAO’s ecosystem.
 
@@ -86,7 +14,7 @@ Before creating a Lista Vault, ensure you have the following:
 * Market Knowledge: Familiarity with Lista Lending markets (loan/collateral pairs) to allocate liquidity effectively.
 * Oracle Selection: Chainlink (Main), Binance Oracle(comparative), Redstone(Backup) for price feeds.
 
-***
+## Creating a vault - Guide
 
 ### Step 1: Define Vault Parameters
 
@@ -106,7 +34,9 @@ To deploy a vault, specify the following parameters:
    * Guardian: Optional role for risk oversight (e.g., to pause actions).
    * Allocator: The role to allocate vault markets
 
-### Step 2: Deploy the Vault
+***
+
+### Step 2: Deploy the vault
 
 #### Step 2.1: Prepare the Parameters
 
@@ -126,11 +56,11 @@ To deploy a vault, specify the following parameters:
 
 #### Navigate to the specific branch of the Moolah repository:
 
-#### git clone https://github.com/lista-dao/moolah.git
+#### `git clone https://github.com/lista-dao/moolah.git`
 
-#### cd moolah
+`cd moolah`
 
-#### git checkout feature/deployScripts
+`git checkout feature/deployScripts`
 
 #### Step 2.3 Fill in the params
 
@@ -138,11 +68,11 @@ To deploy a vault, specify the following parameters:
 
 #### Step 2.4: Execute the Deployment Script
 
-#### Run the following command to deploy the vault contract to BSC network:
+Run the following command to deploy the vault contract to BSC network:
 
-#### forge script script/deploy\_moolahVault.sol --rpc-url bsc --broadcast --verify -vvv
+`forge script script/deploy_moolahVault.sol --rpc-url bsc --broadcast --verify -vvv`
 
-#### This command will:
+This command will:
 
 * #### Execute the deployment script
 * #### Connect to the BSC network
@@ -152,134 +82,110 @@ To deploy a vault, specify the following parameters:
 
 #### Make sure you have sufficient funds in your wallet to cover gas fees and that your environment is properly configured for Foundry.
 
-\
-
+***
 
 ### Step 3: Configure the Vault
 
 Here are methods you can use to configure your vault.
 
-#### 1. Set Fee
+#### 3.1 Set Fee
 
-Role: MANAGER\
-Method: setFee\
+Role: `MANAGER`\
+Method: `setFee`\
 Parameter:
 
-* newFee (uint256): The new fee value, with a precision of 1e18.\
-  \
+* `newFee (uint256)`: The new fee value, with a precision of 1e18.
 
+#### 3.2 Set Fee Recipient
 
-***
-
-#### 2. Set Fee Recipient
-
-Role: MANAGER\
-Method: setFeeRecipient\
+Role: `MANAGER`\
+Method: `setFeeRecipient`\
 Parameter:
 
-* newFeeRecipient (address): The address that will receive collected fees.\
-  \
+* `newFeeRecipient (address)`: The address that will receive collected fees.
 
+#### 3.3 Set Skim Recipient
 
-***
-
-#### 3. Set Skim Recipient
-
-Role: MANAGER\
-Method: setSkimRecipient\
+Role: `MANAGER`\
+Method: `setSkimRecipient`\
 Parameter:
 
-* newSkimRecipient (address): The address that will receive mistakenly transferred tokens.
+* `newSkimRecipient (address)`: The address that will receive mistakenly transferred tokens.
 
-***
+#### 3.4 Set Market Supply Cap
 
-#### 4. Set Market Supply Cap
-
-Role: CURATOR\
-Method: setCap\
+Role: `CURATOR`\
+Method: `setCap`\
 Parameters:
 
-* loanToken (address): Loan token of the market.
-* collateralToken (address): Collateral token of the market.
-* oracle (address): Price oracle for the market.
-* irm (address): Interest rate model.
-* lltv (uint256): Loan-to-value threshold.
-* newSupplyCap (uint256): Maximum deposit cap for the specified market.\
+* `loanToken (address)`: Loan token of the market.
+* `collateralToken (address)`: Collateral token of the market.
+* `oracle (address)`: Price oracle for the market.
+* `irm (address)`: Interest rate model.
+* `lltv (uint256)`: Loan-to-value threshold.
+* `newSupplyCap (uint256)`: Maximum deposit cap for the specified market.\
 
 
 Note: These parameters should match the configuration used when the market was created.
 
-***
+#### 3.5 Set Deposit Queue
 
-#### 5. Set Deposit Queue
-
-Role: ALLOCATOR\
-Method: setSupplyQueue\
+Role: `ALLOCATOR`\
+Method: `setSupplyQueue`\
 Parameter:
 
-* newSupplyQueue (bytes32\[]): An array of marketIds defining the deposit order. Deposits will be routed to markets in the specified sequence.\
-  \
+* `newSupplyQueue (bytes32[])`: An array of marketIds defining the deposit order. Deposits will be routed to markets in the specified sequence.
 
+#### 3.6 Update Withdraw Queue
 
-***
-
-#### 6. Update Withdraw Queue
-
-Role: ALLOCATOR\
-Method: updateWithdrawQueue\
+Role: `ALLOCATOR`\
+Method: `updateWithdrawQueue`\
 Parameter:
 
-* indexes (uint256\[]): Array of indexes that reorders the existing withdraw queue.\
-  \
+* `indexes (uint256[])`: Array of indexes that reorders the existing withdraw queue.\
 
 
 Note: The indexes refer to positions in the current withdraw queue.
 
-***
+#### 3.7 Set Market Removal
 
-#### 7. Set Market Removal
-
-Role: CURATOR\
-Method: setMarketRemoval\
+Role: `CURATOR`\
+Method: `setMarketRemoval`\
 Parameters:
 
-* loanToken (address)
-* collateralToken (address)
-* oracle (address)
-* irm (address)
-* lltv (uint256)\
-
+* `loanToken (address)`
+* `collateralToken (address)`
+* `oracle (address)`
+* `irm (address)`
+* `lltv (uint256)`&#x20;
 
 Note: This marks a market for removal. The market will only be removed after the Vault's position in it is zero, and the updateWithdrawQueue function has been called.
 
+#### 3.8 Role Management
+
+#### 3.8.1 Grant Role
+
+Role: `ADMIN` or `MANAGER`\
+Method: `grantRole`\
+Parameters:
+
+* `role (bytes32)`: Role identifier.
+* `account (address)`: Address to assign the role to.
+
+#### 3.8.2 Revoke Role
+
+Role: `ADMIN` or `MANAGER`\
+Method: `revokeRole`\
+Parameters:
+
+* `role (bytes32)`: Role identifier.
+* `account (address)`: Address to remove the role from.
+
 ***
-
-#### 8. Role Management
-
-#### 8.1 Grant Role
-
-Role: ADMIN or MANAGER\
-Method: grantRole\
-Parameters:
-
-* role (bytes32): Role identifier.
-* account (address): Address to assign the role to.\
-
-
-#### 8.2 Revoke Role
-
-Role: ADMIN or MANAGER\
-Method: revokeRole\
-Parameters:
-
-* role (bytes32): Role identifier.
-* account (address): Address to remove the role from.
-
-
 
 ### Step 4: Deploy the TimeLock
 
-#### Step 4.1: Prepare Parameters
+#### 4.1: Prepare Parameters
 
 First, you need to prepare three key address parameters:
 
@@ -289,17 +195,17 @@ First, you need to prepare three key address parameters:
 
 Before beginning deployment, make sure you've decided on these three addresses. You should fill in the actual addresses you want to use in the table.
 
-#### Step  4.2: Deploy the Timelock Contract
+#### 4.2: Deploy the Timelock Contract
 
-Navigate to the repository at[ https://github.com/lista-dao/moolah](https://github.com/lista-dao/moolah) and switch to the feature/deployScripts branch.
+Navigate to the repository at[ https://github.com/lista-dao/moolah](https://github.com/lista-dao/moolah) and switch to the `feature/deployScripts` branch.
 
-Step 4.3 Fill in the params
+#### 4.3: Fill in the params
 
 <figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcWIqKdLYE030gQ7c8ycJepyI9iJaILG5K-CrdqY-_84AUR40c4GD66fl63cfvc53-b8d4K1FgjUGqAM_oGfq1U2xRzuCCpO2zHisDLaxhp_Www77LcdH86uKidjyysTdsSc3JI?key=ZbB0Bdp_i9xaaxZIxmtWD2y_" alt=""><figcaption></figcaption></figure>
 
 Run the following command to deploy the Timelock contract:
 
-forge script script/deploy\_timeLock.sol --rpc-url bsc -vvv --broadcast --verify
+`forge script script/deploy_timeLock.sol --rpc-url bsc -vvv --broadcast --verify`
 
 This command will:
 
@@ -311,12 +217,7 @@ This command will:
 
 Make sure you have sufficient funds in your deployment wallet to cover gas fees and that you have properly configured your environment variables for authentication with the network and verification service.
 
-\
-
-
 ### Step 5: Verify and Activate
-
-
 
 1. Verify on BscScan
    * Submit your vault’s contract code to BscScan for transparency (use the deployed address).
