@@ -1,2 +1,1 @@
-# Using Binance Web3 Wallet
-
+# Using Binance Wallet
