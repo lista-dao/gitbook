@@ -61,7 +61,7 @@ Weekly rebate calculation: (100,000 × 0.99%) / 365 × 7\
 User C borrows 100,000 lisUSD at a 10% borrow rate.\
 User C holds 10B veLISTA, exceeding the 1000M cap.
 
-Rebate rate: 5% (Maximum cap applied).
+Rebate rate: 2.5% (Maximum cap applied).
 
 Weekly rebate calculation:\
 (100,000 × 2.5%) / 365 × 7\
