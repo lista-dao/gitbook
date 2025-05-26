@@ -61,12 +61,7 @@ The token emission for community incentives will follow the formula: ![](<../../
 
 **S**: S is the sum of the geometric series: which is 40% of the token emissions, equating to 400 million LISTA
 
-As Lista DAO is still in its transition phase, the current emission rate is set at 312,500 LISTA per week, which is lower than the expected emission rate of 9,772,651 LISTA per month.&#x20;
-
-This rate is divided as follows:
-
-* veLISTA Holders: 250,000 LISTA/week
-* Lista DAO related LPs: 62,500 LISTA/week
+As Lista DAO is still in its transition phase, the current emission rate is set at **540,000 LISTA** per week, which is lower than the expected emission rate of 9,772,651 LISTA per month.&#x20;
 
 #### Lista DAO Transition Phase
 
@@ -76,7 +71,7 @@ First Half: The first half of the LISTA token emissions (4,886,325.5 LISTA/month
 
 Second Half: The second half of the Lista token emissions (4,886,325.5 LISTA/month in the first year) will be channeled towards community incentives but not emitted immediately. The emission amount will gradually increase based on the progress of Lista’s platform deployment. The increase in emissions will be capped at 1,221,581 LISTA/week, or in other words, 4,886,325.5 LISTA/month in the long run.
 
-As of now, the emission rate of LISTA is currently set at 312,500 LISTA/week. All remaining unissued LISTA tokens will continue to be allocated to community incentives, with future decisions on emission rates determined through DAO voting. As we complete our transition to a DAO, the power to adjust LISTA’s current emission parameters will also progressively shift to veLISTA holders.
+As of now, the emission rate of LISTA is currently set at **540,00 LISTA/week**. All remaining unissued LISTA tokens will continue to be allocated to community incentives, with future decisions on emission rates determined through DAO voting. As we complete our transition to a DAO, the power to adjust LISTA’s current emission parameters will also progressively shift to veLISTA holders.
 
 ### DAO treasury (8.00%)
 
