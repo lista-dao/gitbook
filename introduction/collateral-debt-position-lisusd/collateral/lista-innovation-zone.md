@@ -6,8 +6,14 @@ However, we are also aware of the increased risks associated with these new asse
 
 Below is the list of assets under the Lista Innovation Zone:
 
-* weETH (Etherfi)
-* ezETH (Renzo Protocol)
-* BBTC (Bouncebit)
+* USD1 (World Liberty Finance)
 * solvBTC (Solv Protocol)
-* STONE (Stakestone)
+* SolvBTC.BNN (Babylon)
+* Stone (Stakestone)
+* sUSDX (Stables Labs)
+* pumpBTC (PumpBTC)
+* mBTC (Magpie)
+* mCAKE (Magpie)
+* mwBETH (EigenPie)
+* USDF (Astherus)
+* asUSDF (Astherus)
