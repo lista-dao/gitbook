@@ -3,6 +3,8 @@ const { Pinecone } = require("@pinecone-database/pinecone");
 const { franc } = require("franc");
 const axios = require("axios");
 const winston = require("winston");
+const simpleRateLimiter = require("./simple-rate-limiter");
+// const simpleCostMonitor = require("./simple-cost-monitor");
 require("dotenv").config();
 
 // 配置日誌
@@ -127,6 +129,12 @@ class GitBookRAGBot {
 • 可以問關於功能、配置、最佳實踐等
 • 如果找不到相關內容，我會告知並建議改進問題
 
+⚠️ 使用限制：
+• 每分鐘最多 3 次請求
+• 每小時最多 10 次請求
+• 每天最多 30 次請求
+• 問題長度限制 500 字符
+
 示例問題：
 • "如何配置數據庫連接？"
 • "What are the deployment options?"
@@ -136,7 +144,62 @@ class GitBookRAGBot {
       ctx.reply(helpMessage);
     });
 
-    // 處理文本消息
+    // 用戶統計命令（簡化版）
+    this.bot.command("stats", (ctx) => {
+      const userId = ctx.from.id;
+
+      const statsMessage = `
+📊 您的使用統計
+
+🤖 系統狀態：
+• 服務狀態：✅ 正常運行
+• 用戶 ID：${userId}
+
+⚠️ 使用限制：
+• 每分鐘：最多 2 次請求
+• 每小時：最多 8 次請求
+• 問題長度：最多 500 字符
+
+💡 提示：合理使用可確保更好的服務體驗！
+      `;
+
+      ctx.reply(statsMessage);
+    });
+
+    // 管理員專用命令（簡化版）
+    this.bot.command("admin", async (ctx) => {
+      const userId = ctx.from.id;
+      const adminIds = (process.env.ADMIN_USER_IDS || "")
+        .split(",")
+        .map((id) => parseInt(id.trim()));
+
+      if (!adminIds.includes(userId)) {
+        await ctx.reply("❌ 您沒有管理員權限");
+        return;
+      }
+
+      const adminMessage = `
+🔧 系統管理面板
+
+📊 系統狀態：
+• 狀態：✅ 正常運行
+• 時間：${new Date().toLocaleString("zh-TW")}
+• 模式：Serverless (Webhook)
+• 保護：Rate Limiter Only
+
+⚡ 限制配置：
+• 每分鐘：最多 2 次請求
+• 每小時：最多 8 次請求  
+• 問題長度：最多 500 字符
+• 最小間隔：15 秒
+
+如需調整，請修改環境變量配置
+      `;
+
+      await ctx.reply(adminMessage);
+    });
+
+    // 處理文本消息（簡化版）
     this.bot.on("text", async (ctx) => {
       const question = ctx.message.text;
       const userId = ctx.from.id;
@@ -148,8 +211,8 @@ class GitBookRAGBot {
         // 發送「正在思考」消息
         const thinkingMsg = await ctx.reply("🤔 正在搜索相關內容...");
 
-        // 處理問題
-        const answer = await this.processQuestion(question);
+        // 處理問題（包含速率限制檢查）
+        const answer = await this.processQuestion(question, userId);
 
         // 刪除思考消息並發送答案
         await ctx.deleteMessage(thinkingMsg.message_id);
@@ -179,16 +242,36 @@ class GitBookRAGBot {
     });
   }
 
-  async processQuestion(question) {
+  async processQuestion(question, userId) {
     try {
-      // 檢測語言
+      // 1. 速率限制檢查
+      const rateLimitCheck = simpleRateLimiter.checkUserAccess(
+        userId,
+        question
+      );
+      if (!rateLimitCheck.allowed) {
+        logger.warn(`用戶 ${userId} 被速率限制阻擋: ${rateLimitCheck.reason}`);
+        return rateLimitCheck.reason;
+      }
+
+      // 2. 成本限制檢查 (暫時註解)
+      // const costCheck = simpleCostMonitor.checkCostLimits(
+      //   userId,
+      //   question.length
+      // );
+      // if (!costCheck.allowed) {
+      //   logger.warn(`用戶 ${userId} 被成本限制阻擋: ${costCheck.reason}`);
+      //   return costCheck.reason;
+      // }
+
+      // 3. 檢測語言
       const detectedLang = this.detectLanguage(question);
       logger.info(`檢測到語言: ${detectedLang}`);
 
-      // 生成問題嵌入
+      // 4. 生成問題嵌入
       const questionEmbedding = await this.generateEmbedding(question);
 
-      // 檢索相關內容
+      // 5. 檢索相關內容
       const relevantChunks = await this.retrieveRelevantChunks(
         questionEmbedding,
         detectedLang
@@ -198,12 +281,19 @@ class GitBookRAGBot {
         return this.getNoResultsMessage(detectedLang);
       }
 
-      // 調用 Grok API 生成回答
+      // 6. 調用 OpenAI API 生成回答
       const answer = await this.generateAnswer(
         question,
         relevantChunks,
         detectedLang
       );
+
+      // 7. 記錄使用情況
+      simpleRateLimiter.logUsage(userId, question, 0);
+      // simpleCostMonitor.logAPIUsage(userId, {
+      //   inputTokens: Math.ceil((question.length + answer.length) / 3),
+      //   outputTokens: Math.ceil(answer.length / 3),
+      // });
 
       return answer;
     } catch (error) {
@@ -319,16 +409,32 @@ class GitBookRAGBot {
 - 直接回答問題，基於提供的上下文
 - 保持專業和準確
 - 如果上下文不足以回答問題，請說明
-- 使用 Markdown 格式
-- 如果可能，提供具體的步驟或示例`
+- 使用 Telegram 專用 Markdown 格式提升閱讀性：
+  • **粗體**：重要概念、標題
+  • _斜體_：強調重點
+  • \`代碼\`：技術術語、參數、指令
+  • \`\`\`代碼塊\`\`\`：多行代碼或配置
+  • 🔸 項目符號：列舉要點
+  • 📝 數字列表：步驟說明
+  • 🎯 表情符號：增加視覺區分
+- 如果可能，提供具體的步驟或示例
+- 結構化回答：使用標題、列表、分段`
           : `You are a professional technical documentation assistant. Answer user questions based on the provided GitBook documentation content in English.
 
 Requirements:
 - Answer directly based on the provided context
 - Maintain professional and accurate tone  
 - If context is insufficient, please indicate so
-- Use Markdown formatting
-- Provide specific steps or examples when possible`;
+- Use Telegram-specific Markdown formatting for better readability:
+  • **Bold**: Important concepts, headings
+  • _Italic_: Emphasis points
+  • \`Code\`: Technical terms, parameters, commands
+  • \`\`\`Code blocks\`\`\`: Multi-line code or configurations
+  • 🔸 Bullet points: List items
+  • 📝 Numbered lists: Step-by-step instructions
+  • 🎯 Emojis: Visual distinction
+- Provide specific steps or examples when possible
+- Structure answers: Use headings, lists, paragraphs`;
 
       const userPrompt =
         language === "zh-CN"
@@ -372,14 +478,32 @@ Please answer in English:`;
 
       const answer = response.data.choices[0].message.content;
 
-      // 添加來源信息
+      // 記錄 OpenAI API 使用
+      //   const usage = response.data.usage;
+      //   if (usage) {
+      //     costMonitor.recordAPIUsage("openai", {
+      //       inputTokens: usage.prompt_tokens || 0,
+      //       outputTokens: usage.completion_tokens || 0,
+      //     });
+      //   }
+
+      // 添加來源信息 - 轉換為可點擊的連結
       const sources = [
         ...new Set(relevantChunks.map((c) => c.metadata.filename)),
       ];
+
+      const sourceLinks = sources.map((filename) => {
+        // 移除 .md 副檔名並轉換路徑為 URL
+        const urlPath = filename.replace(/\.md$/, "");
+        const url = `https://docs.bsc.lista.org/${urlPath}`;
+        const displayName = filename.replace(/\.md$/, "").split("/").pop();
+        return `[${displayName}](${url})`;
+      });
+
       const sourceText =
         language === "zh-CN"
-          ? `\n\n📚 **參考來源：** ${sources.join(", ")}`
-          : `\n\n📚 **Sources:** ${sources.join(", ")}`;
+          ? `\n\n📚 **參考來源：** ${sourceLinks.join(", ")}`
+          : `\n\n📚 **Sources:** ${sourceLinks.join(", ")}`;
 
       return answer + sourceText;
     } catch (error) {
@@ -421,6 +545,30 @@ If the issue persists, the topic might not be covered in the documentation yet.`
     } catch (error) {
       logger.error("Webhook 處理失敗:", error);
       res.status(500).send("Error");
+    }
+  }
+
+  // Vercel 函數入口點
+  async handler(req, res) {
+    try {
+      // 初始化 bot（如果還沒初始化）
+      if (!this.pinecone) {
+        await this.initialize();
+      }
+
+      if (req.method === "POST" && req.url === "/webhook") {
+        return await this.handleWebhook(req, res);
+      } else if (req.method === "GET") {
+        res.status(200).json({
+          status: "Bot is running!",
+          timestamp: new Date().toISOString(),
+        });
+      } else {
+        res.status(404).json({ error: "Not found" });
+      }
+    } catch (error) {
+      logger.error("Handler 錯誤:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 
