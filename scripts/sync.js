@@ -289,7 +289,10 @@ class GitBookRAGSyncer {
 
       for (const chunk of chunks) {
         const embedding = await this.generateEmbedding(chunk.content);
-        const vectorId = `${path.basename(filename, ".md")}_${chunk.index}`;
+        const langPrefix = language === "zh-CN" ? "zh-CN" : "en";
+        const vectorId = `${langPrefix}_${path.basename(filename, ".md")}_${
+          chunk.index
+        }`;
 
         vectors.push({
           id: vectorId,

@@ -347,11 +347,11 @@ class GitBookRAGInitializer {
         // 生成嵌入
         const embedding = await this.generateEmbedding(chunk.content);
 
-        // 使用完整文件路徑生成向量 ID，替換路徑分隔符為下劃線
+        // 使用完整文件路徑生成向量 ID，加入語言標識避免覆蓋
         const cleanFilename = filename
           .replace(/[\/\\]/g, "_")
           .replace(/\.md$/, "");
-        const vectorId = `${cleanFilename}_${chunk.index}`;
+        const vectorId = `${language}_${cleanFilename}_${chunk.index}`;
 
         vectors.push({
           id: vectorId,
