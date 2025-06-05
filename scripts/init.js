@@ -62,14 +62,21 @@ class GitBookRAGInitializer {
       await this.createRAGBranch();
 
       // 處理所有分支
+      let totalProcessed = 0;
       for (const branch of this.config.branches) {
-        await this.processBranch(branch);
+        const branchTotal = await this.processBranch(branch);
+        totalProcessed += branchTotal;
       }
 
       // 提交並推送 RAG 分支
       await this.commitAndPushRAG();
 
-      logger.info("GitBook RAG 系統初始化完成");
+      logger.info(
+        `GitBook RAG 系統初始化完成，總共處理 ${totalProcessed} 個文本塊`
+      );
+
+      // 最終驗證 Pinecone 狀態
+      await this.verifyPineconeStats(totalProcessed);
     } catch (error) {
       logger.error("初始化失敗:", { error: error.message, stack: error.stack });
       throw error;
@@ -203,6 +210,7 @@ class GitBookRAGInitializer {
       }
 
       logger.info(`${branch} 分支處理完成，共生成 ${totalChunks} 個文本塊`);
+      return totalChunks;
     } catch (error) {
       logger.error(`處理 ${branch} 分支失敗:`, error);
       throw error;
@@ -333,6 +341,7 @@ class GitBookRAGInitializer {
   async storeChunks(chunks, filename, language) {
     try {
       const vectors = [];
+      let totalUploaded = 0;
 
       for (const chunk of chunks) {
         // 生成嵌入
@@ -359,13 +368,49 @@ class GitBookRAGInitializer {
         });
       }
 
-      // 批量上傳到 Pinecone
-      if (vectors.length > 0) {
-        await this.index.upsert(vectors);
+      // 分批上傳到 Pinecone (每批最多100個向量)
+      const batchSize = 100;
+      for (let i = 0; i < vectors.length; i += batchSize) {
+        const batch = vectors.slice(i, i + batchSize);
+
+        let retries = 3;
+        while (retries > 0) {
+          try {
+            await this.index.upsert(batch);
+            totalUploaded += batch.length;
+            logger.info(
+              `批次上傳成功: ${batch.length} 個向量 (${filename}, 批次 ${
+                Math.floor(i / batchSize) + 1
+              })`
+            );
+            break;
+          } catch (error) {
+            retries--;
+            logger.warn(
+              `批次上傳失敗 (${filename}), 剩餘重試次數: ${retries}`,
+              error.message
+            );
+            if (retries === 0) {
+              throw error;
+            }
+            // 等待 1 秒後重試
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        }
+      }
+
+      // 驗證上傳數量
+      if (totalUploaded === vectors.length) {
         logger.info(
-          `成功上傳 ${vectors.length} 個向量到 Pinecone (${filename})`
+          `成功上傳 ${totalUploaded} 個向量到 Pinecone (${filename})`
+        );
+      } else {
+        logger.error(
+          `上傳數量不匹配: 期望 ${vectors.length}, 實際 ${totalUploaded} (${filename})`
         );
       }
+
+      return totalUploaded;
     } catch (error) {
       logger.error(`存儲向量失敗 (${filename}):`, error);
       throw error;
@@ -412,6 +457,40 @@ class GitBookRAGInitializer {
     } catch (error) {
       logger.error("提交推送失敗:", error);
       throw error;
+    }
+  }
+
+  async verifyPineconeStats(expectedCount) {
+    try {
+      logger.info("驗證 Pinecone 索引狀態...");
+
+      // 等待幾秒讓 Pinecone 完成索引
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+
+      const stats = await this.index.describeIndexStats();
+
+      logger.info(`Pinecone 索引統計: ${stats.totalRecordCount} 條記錄`);
+      logger.info(`期望記錄數: ${expectedCount}`);
+
+      if (stats.totalRecordCount === expectedCount) {
+        logger.info("✅ 記錄數匹配，上傳成功！");
+      } else {
+        logger.warn(
+          `⚠️ 記錄數不匹配！期望: ${expectedCount}, 實際: ${stats.totalRecordCount}`
+        );
+        logger.warn(
+          "可能原因: 1) 部分上傳失敗 2) Pinecone 同步延遲 3) 重複 ID 覆蓋"
+        );
+      }
+
+      // 顯示 namespace 分布
+      if (stats.namespaces) {
+        Object.entries(stats.namespaces).forEach(([ns, data]) => {
+          logger.info(`Namespace ${ns || "default"}: ${data.recordCount} 記錄`);
+        });
+      }
+    } catch (error) {
+      logger.error("驗證 Pinecone 狀態失敗:", error);
     }
   }
 }
