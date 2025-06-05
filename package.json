@@ -1,0 +1,39 @@
+{
+  "name": "gitbook-rag-bot",
+  "version": "1.0.0",
+  "description": "GitBook RAG Bot with Telegram integration",
+  "main": "bot/bot.js",
+  "scripts": {
+    "setup": "node scripts/setup-pinecone.js",
+    "init": "node scripts/init.js",
+    "sync": "node scripts/sync.js",
+    "start": "node bot/bot.js",
+    "dev": "nodemon bot/bot.js"
+  },
+  "dependencies": {
+    "@pinecone-database/pinecone": "^6.1.0",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "franc": "^6.2.0",
+    "marked": "^9.1.6",
+    "simple-git": "^3.20.0",
+    "telegraf": "^4.15.6",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "gitbook",
+    "rag",
+    "telegram",
+    "bot",
+    "pinecone",
+    "embeddings"
+  ],
+  "author": "",
+  "license": "MIT"
+}

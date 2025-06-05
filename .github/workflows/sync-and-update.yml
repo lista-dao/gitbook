@@ -1,0 +1,116 @@
+name: Sync and Update RAG
+
+on:
+  push:
+    branches: [en, zh-CN]
+  workflow_dispatch: # 允許手動觸發
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync-content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 獲取完整歷史，用於 git diff
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Cache BGE-M3 model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: ${{ runner.os }}-bge-m3-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-bge-m3-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check changed branch
+        id: branch
+        run: |
+          echo "branch=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          echo "Changed branch: ${{ github.ref_name }}"
+
+      - name: Switch to RAG branch
+        run: |
+          git fetch origin RAG || echo "RAG branch doesn't exist yet"
+          git checkout RAG || git checkout -b RAG
+
+      - name: Run sync script
+        env:
+          PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+          PINECONE_INDEX_NAME: ${{ vars.PINECONE_INDEX_NAME || 'gitbook-rag' }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          echo "開始同步 ${{ github.ref_name }} 分支"
+          node scripts/sync.js
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git add .
+          if git diff --staged --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "沒有檢測到變更"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "檢測到變更，準備提交"
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git commit -m "Auto-sync: Update from ${{ github.ref_name }} branch
+          
+          - Synced markdown files from ${{ github.ref_name }}
+          - Updated vector embeddings in Pinecone
+          - Triggered by: ${{ github.event_name }}
+          - Commit: ${{ github.sha }}"
+          
+          git push origin RAG
+
+      - name: Summary
+        run: |
+          echo "## 🚀 同步完成" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **源分支**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **目標分支**: RAG" >> $GITHUB_STEP_SUMMARY
+          echo "- **有變更**: ${{ steps.changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **觸發事件**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **提交**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.changes.outputs.has_changes }}" == "true" ]; then
+            echo "✅ 內容已成功同步到 RAG 分支並更新向量數據庫" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ 沒有檢測到 Markdown 文件變更，跳過同步" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  notify-deployment:
+    needs: sync-content
+    runs-on: ubuntu-latest
+    if: ${{ needs.sync-content.outputs.has_changes == 'true' }}
+    
+    steps:
+      - name: Trigger Vercel deployment
+        if: vars.VERCEL_DEPLOY_HOOK_URL
+        run: |
+          curl -X POST "${{ vars.VERCEL_DEPLOY_HOOK_URL }}"
+          echo "✅ 已觸發 Vercel 部署" >> $GITHUB_STEP_SUMMARY 
