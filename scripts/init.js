@@ -55,6 +55,9 @@ class GitBookRAGInitializer {
       // 初始化嵌入模型
       await this.initializeEmbedder();
 
+      // 清理舊的索引數據
+      await this.clearExistingIndex();
+
       // 創建 RAG 分支
       await this.createRAGBranch();
 
@@ -107,6 +110,47 @@ class GitBookRAGInitializer {
     } catch (error) {
       logger.error("Pinecone Inference API 初始化失敗:", error);
       throw error;
+    }
+  }
+
+  async clearExistingIndex() {
+    try {
+      logger.info("檢查並清理現有索引數據");
+
+      // 檢查索引統計
+      const stats = await this.index.describeIndexStats();
+
+      if (stats.totalRecordCount > 0) {
+        logger.info(`發現 ${stats.totalRecordCount} 個現有向量，開始清理...`);
+
+        // 刪除所有 namespace 中的數據
+        const namespaces = Object.keys(stats.namespaces || {});
+
+        if (namespaces.length === 0 || namespaces.includes("")) {
+          // 如果只有默認 namespace 或沒有 namespace，直接清空
+          await this.index.deleteAll();
+          logger.info("已清空默認 namespace 中的所有數據");
+        } else {
+          // 如果有多個 namespace，逐個清空
+          for (const ns of namespaces) {
+            if (ns) {
+              await this.index.namespace(ns).deleteAll();
+              logger.info(`已清空 namespace "${ns}" 中的數據`);
+            } else {
+              await this.index.deleteAll();
+              logger.info("已清空默認 namespace 中的數據");
+            }
+          }
+        }
+
+        logger.info("索引清理完成");
+      } else {
+        logger.info("索引為空，無需清理");
+      }
+    } catch (error) {
+      logger.error("清理索引失敗:", error);
+      // 不拋出錯誤，允許繼續執行
+      logger.warn("跳過索引清理，繼續執行初始化");
     }
   }
 
@@ -167,13 +211,25 @@ class GitBookRAGInitializer {
 
   async getMarkdownFiles(branch) {
     try {
-      // 獲取分支的文件列表
-      const files = await this.git.show([`origin/${branch}:`, "--name-only"]);
+      // 使用 ls-tree 遞歸獲取所有文件
+      const files = await this.git.raw([
+        "ls-tree",
+        "-r",
+        "--name-only",
+        `origin/${branch}`,
+      ]);
 
-      return files
+      const markdownFiles = files
         .split("\n")
         .filter((file) => file.endsWith(".md") && file.trim())
         .map((file) => file.trim());
+
+      logger.info(
+        `${branch} 分支發現 ${markdownFiles.length} 個 Markdown 文件`
+      );
+      markdownFiles.forEach((file) => logger.info(`  - ${file}`));
+
+      return markdownFiles;
     } catch (error) {
       logger.error(`獲取 ${branch} 分支文件列表失敗:`, error);
       return [];
@@ -187,8 +243,12 @@ class GitBookRAGInitializer {
       // 獲取文件內容
       const content = await this.git.show([`origin/${branch}:${filePath}`]);
 
-      // 複製文件到 RAG 分支
-      const targetPath = `doc/${branch}/${path.basename(filePath)}`;
+      // 保持目錄結構，複製文件到 RAG 分支
+      const targetPath = `doc/${branch}/${filePath}`;
+      const targetDir = path.dirname(targetPath);
+
+      // 確保目標目錄存在
+      await fs.mkdir(targetDir, { recursive: true });
       await fs.writeFile(targetPath, content, "utf8");
 
       // 解析和分塊
@@ -278,14 +338,19 @@ class GitBookRAGInitializer {
         // 生成嵌入
         const embedding = await this.generateEmbedding(chunk.content);
 
-        const vectorId = `${path.basename(filename, ".md")}_${chunk.index}`;
+        // 使用完整文件路徑生成向量 ID，替換路徑分隔符為下劃線
+        const cleanFilename = filename
+          .replace(/[\/\\]/g, "_")
+          .replace(/\.md$/, "");
+        const vectorId = `${cleanFilename}_${chunk.index}`;
 
         vectors.push({
           id: vectorId,
           values: embedding,
           metadata: {
             lang: language,
-            filename: path.basename(filename),
+            filename: filename, // 保持完整路徑
+            filepath: filename, // 添加完整文件路徑
             pair_id: vectorId,
             content: chunk.content,
             heading: chunk.heading,
