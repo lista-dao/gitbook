@@ -1,2 +1,0 @@
-# LISTA Governance
-

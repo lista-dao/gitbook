@@ -35,7 +35,7 @@ class SmartProcessor {
 
   // ===================== 統一 Embedding 生成 =====================
 
-  async generateEmbedding(text, inputType = "query") {
+  async generateEmbedding(text, inputType = "passage") {
     try {
       let embedding;
 
@@ -206,14 +206,11 @@ class SmartProcessor {
 
   async extractLLMMetadata(content, filename) {
     try {
-      // 限制內容長度以控制成本，但保留重要部分
-      const truncatedContent = this.smartTruncateContent(content);
-
       const prompt = `分析以下技術文檔，提取結構化metadata。只返回JSON，不要其他文字。
 
 文檔: ${filename}
 內容：
-${truncatedContent}
+${content}
 
 返回JSON格式：
 {
@@ -228,7 +225,7 @@ ${truncatedContent}
 }`;
 
       logger.info(`準備調用 OpenAI API (${filename})`, {
-        contentLength: truncatedContent.length,
+        contentLength: content.length,
         hasApiKey: !!process.env.OPENAI_API_KEY,
       });
 
@@ -294,28 +291,6 @@ ${truncatedContent}
       });
       return {}; // 降級到基礎檢測
     }
-  }
-
-  // 智能截取內容，保留重要部分
-  smartTruncateContent(content) {
-    if (content.length <= 2000) {
-      return content;
-    }
-
-    // 提取前 1000 字符 + 中間重要部分 + 後 500 字符
-    const start = content.substring(0, 1000);
-    const end = content.substring(content.length - 500);
-
-    // 尋找中間的重要標題或代碼塊
-    const middleMatch = content
-      .substring(1000, content.length - 500)
-      .match(/(#+\s+.{0,100}|```[\s\S]{0,200}```)/g);
-
-    const middle = middleMatch
-      ? "\n\n...(中間內容)...\n" + middleMatch.slice(0, 3).join("\n") + "\n"
-      : "\n\n...(省略中間內容)...\n";
-
-    return start + middle + end;
   }
 
   // 驗證 LLM 返回結果
@@ -385,22 +360,23 @@ ${truncatedContent}
 
   extractBasicConcepts(content) {
     const conceptPatterns = {
-      airdrop: /airdrop|空投|token distribution|代幣分發/gi,
-      staking: /staking|質押|stake|validator|驗證者/gi,
-      lending: /lending|borrowing|借貸|borrow|lend|vault|金庫/gi,
+      airdrop:
+        /airdrop|空投|token distribution|代幣分發|代币分发|Airdrop|Megadrop|megadrop/gi,
+      staking: /staking|質押|质押|stake|validator|驗證者|验证者/gi,
+      lending: /lending|borrowing|借貸|借贷|borrow|lend|vault|金庫|金库/gi,
       governance: /governance|治理|voting|投票|proposal|提案/gi,
-      contract: /contract|合約|smart contract|智能合約/gi,
+      contract: /contract|合約|合约|smart contract|智能合約|智能合约/gi,
       defi: /defi|decentralized finance|去中心化金融/gi,
-      bridge: /bridge|跨鏈|cross.?chain/gi,
-      swap: /swap|exchange|交換|兌換/gi,
-      liquidity: /liquidity|流動性|pool|資金池/gi,
-      yield: /yield|farming|挖礦|收益/gi,
+      bridge: /bridge|跨鏈|跨链|cross.?chain/gi,
+      swap: /swap|exchange|交換|交换|兌換|兑换/gi,
+      liquidity: /liquidity|流動性|流动性|pool|資金池|资金池/gi,
+      yield: /yield|farming|挖礦|挖矿|收益/gi,
     };
 
     const detectedConcepts = [];
     for (const [concept, pattern] of Object.entries(conceptPatterns)) {
       if (pattern.test(content)) {
-        detectedConcepts.push(concept);
+        detectedConcepts.push(concept.toLowerCase()); // 確保概念都是小寫
       }
     }
 
@@ -459,34 +435,99 @@ ${truncatedContent}
 
   // ===================== 增強搜索過濾器 (利用 LLM metadata) =====================
 
-  buildSmartFilters(question, preferredLang) {
+  buildSmartFilters(question) {
     const questionLower = question.toLowerCase();
 
-    // 基本語言過濾器
-    let baseFilter = { language: preferredLang };
+    // 動態檢測查詢語言
+    const hasChinese = /[\u4e00-\u9fff]/.test(question);
+    let baseFilter = {};
+
+    // 如果查詢包含中文，優先搜索中文內容，否則搜索英文
+    if (hasChinese) {
+      baseFilter.lang = "zh-CN";
+    } else {
+      baseFilter.lang = "en";
+    }
 
     // 1. 優先匹配 LLM 提取的概念和主題
     const llmConceptMapping = {
-      airdrop: ["airdrop", "空投", "drop", "claim", "領取", "distribution"],
-      staking: ["staking", "質押", "stake", "validator", "驗證", "delegate"],
-      lending: ["lending", "借貸", "borrow", "lend", "vault", "collateral"],
-      governance: ["governance", "治理", "voting", "投票", "proposal", "dao"],
-      contract: ["contract", "合約", "address", "地址", "smart contract"],
-      bridge: ["bridge", "跨鏈", "cross-chain", "transfer"],
-      swap: ["swap", "exchange", "交換", "trade"],
-      yield: ["yield", "farming", "挖礦", "reward", "收益"],
+      airdrop: [
+        "airdrop",
+        "空投",
+        "drop",
+        "claim",
+        "distribution",
+        "token distribution",
+        "megadrop",
+        "代幣分發",
+        "代币分发",
+      ],
+      staking: [
+        "staking",
+        "stake",
+        "validator",
+        "delegate",
+        "delegation",
+        "質押",
+        "质押",
+      ],
+      lending: [
+        "lending",
+        "borrow",
+        "lend",
+        "vault",
+        "collateral",
+        "borrowing",
+        "借貸",
+        "借贷",
+      ],
+      governance: [
+        "governance",
+        "voting",
+        "proposal",
+        "dao",
+        "治理",
+        "投票",
+        "提案",
+      ],
+      contract: [
+        "contract",
+        "address",
+        "smart contract",
+        "合約",
+        "合约",
+        "智能合約",
+        "智能合约",
+      ],
+      bridge: ["bridge", "cross-chain", "transfer", "跨鏈", "跨链"],
+      swap: [
+        "swap",
+        "exchange",
+        "trade",
+        "trading",
+        "交換",
+        "交换",
+        "兌換",
+        "兑换",
+      ],
+      yield: ["yield", "farming", "reward", "rewards", "挖礦", "挖矿", "收益"],
     };
 
     // 檢測概念匹配
     const matchedConcepts = [];
     for (const [concept, keywords] of Object.entries(llmConceptMapping)) {
-      if (keywords.some((keyword) => questionLower.includes(keyword))) {
+      if (
+        keywords.some((keyword) =>
+          questionLower.includes(keyword.toLowerCase())
+        )
+      ) {
         matchedConcepts.push(concept);
       }
     }
 
+    // 放寬過濾器邏輯，只在有強概念匹配時才添加過濾器
     if (matchedConcepts.length > 0) {
-      // 使用 $or 查詢匹配多個可能的概念字段
+      // 使用更寬鬆的 $or 查詢
       baseFilter.$or = [
         { concepts: { $in: matchedConcepts } }, // 基礎檢測的概念
         { topics: { $in: matchedConcepts } }, // LLM 提取的主題
@@ -494,33 +535,49 @@ ${truncatedContent}
       ];
     }
 
-    // 2. 內容類型匹配
+    // 2. 內容類型匹配（簡化）
     if (
-      ["how", "tutorial", "教程", "如何", "怎麼"].some((term) =>
+      ["how", "tutorial", "guide", "如何", "教程", "指南"].some((term) =>
         questionLower.includes(term)
       )
     ) {
-      baseFilter.content_type = { $in: ["tutorial", "guide"] };
+      if (!baseFilter.$or) baseFilter.$or = [];
+      baseFilter.$or.push({ content_type: { $in: ["tutorial", "guide"] } });
     }
 
     if (
-      ["api", "reference", "參考", "documentation"].some((term) =>
+      ["api", "reference", "documentation", "文檔", "文档"].some((term) =>
         questionLower.includes(term)
       )
     ) {
-      baseFilter.content_type = { $in: ["reference", "api"] };
+      if (!baseFilter.$or) baseFilter.$or = [];
+      baseFilter.$or.push({ content_type: { $in: ["reference", "api"] } });
     }
 
-    // 3. 內容特徵檢測
+    // 3. 內容特徵檢測（簡化）
     if (
-      ["code", "代碼", "example", "示例", "contract"].some((term) =>
-        questionLower.includes(term)
-      )
+      [
+        "code",
+        "example",
+        "contract",
+        "代碼",
+        "代码",
+        "示例",
+        "合約",
+        "合约",
+      ].some((term) => questionLower.includes(term))
     ) {
-      baseFilter.has_code = true;
+      if (!baseFilter.$or) baseFilter.$or = [];
+      baseFilter.$or.push({ has_code: true });
     }
 
-    logger.info("使用增強過濾器", baseFilter);
+    logger.info("使用增強過濾器", {
+      lang: baseFilter.lang,
+      matchedConcepts,
+      hasOrQuery: !!baseFilter.$or,
+      orFiltersCount: baseFilter.$or?.length || 0,
+    });
+
     return baseFilter;
   }
 }

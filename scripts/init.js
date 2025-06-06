@@ -39,7 +39,7 @@ class GitBookRAGInitializer {
 
     // 配置
     this.config = {
-      branches: ["en", "zh-CN"],
+      branches: ["en"], // 只處理英文分支
       ragBranch: "RAG",
       mainBranch: "main",
       chunkSize: { min: 200, max: 500 },
@@ -192,7 +192,6 @@ class GitBookRAGInitializer {
 
       // 確保目錄結構存在
       await fs.mkdir("doc", { recursive: true });
-      await fs.mkdir("doc/zh-CN", { recursive: true });
       await fs.mkdir("doc/en", { recursive: true });
     } catch (error) {
       logger.error("RAG 分支創建失敗:", error);
@@ -271,7 +270,7 @@ class GitBookRAGInitializer {
       const chunks = await this.parseAndChunk(content, filePath);
 
       // 生成嵌入並存儲到 Pinecone
-      await this.storeChunks(chunks, filePath, branch);
+      await this.storeChunks(chunks, filePath);
 
       logger.info(`文件 ${filePath} 處理完成，生成 ${chunks.length} 個文本塊`);
       return chunks.length;
@@ -388,7 +387,7 @@ class GitBookRAGInitializer {
     }
   }
 
-  async storeChunks(chunks, filename, language) {
+  async storeChunks(chunks, filename) {
     try {
       // 檢查 chunks 是否為有效數組
       if (!Array.isArray(chunks)) {
@@ -411,19 +410,20 @@ class GitBookRAGInitializer {
           "passage"
         );
 
-        // 使用完整文件路徑生成向量 ID，加入語言標識避免覆蓋
+        // 使用完整文件路徑生成向量 ID
         const cleanFilename = filename
           .replace(/[\/\\]/g, "_")
           .replace(/\.md$/, "");
-        const vectorId = `${language}_${cleanFilename}_${chunk.index}`;
+        const vectorId = `en_${cleanFilename}_${chunk.index}`;
 
-        // 構建增強的 metadata
+        // 構建增強的 metadata，統一設為英文
         const enhancedMetadata = {
-          lang: language,
+          lang: "en", // 統一設為英文
           filename: filename, // 保持完整路徑
           filepath: filename, // 添加完整文件路徑
           pair_id: vectorId,
           content: chunk.content,
+          chunk_content: chunk.content, // 添加 chunk_content 字段作為備用
           heading: chunk.heading,
           chunk_index: chunk.index,
           // 從智能處理器獲取的增強 metadata
@@ -431,8 +431,8 @@ class GitBookRAGInitializer {
           // 基本檢測 (作為備用)
           has_code: /```/.test(chunk.content),
           has_links: /\[.*\]\(.*\)/.test(chunk.content),
-          // 搜索優化
-          searchable_content: chunk.content.toLowerCase().substring(0, 1000),
+          // 搜索優化 - 加強 airdrop 等關鍵詞檢測
+          searchable_content: this.buildSearchableContent(chunk.content),
         };
 
         vectors.push({
@@ -552,6 +552,48 @@ class GitBookRAGInitializer {
     } catch (error) {
       logger.error("驗證 Pinecone 狀態失敗:", error);
     }
+  }
+
+  buildSearchableContent(content) {
+    // 轉換為小寫並移除多餘空白
+    let searchableText = content.toLowerCase().replace(/\s+/g, " ").trim();
+
+    // 添加關鍵概念的變體形式，確保檢索時能匹配
+    const conceptMappings = {
+      airdrop: [
+        "airdrop",
+        "空投",
+        "token distribution",
+        "代幣分發",
+        "drop",
+        "claim",
+      ],
+      staking: ["staking", "質押", "stake", "validator", "驗證者"],
+      governance: ["governance", "治理", "voting", "投票", "dao"],
+      lending: ["lending", "借貸", "borrow", "lend", "vault"],
+      lista: ["lista", "lista dao", "lista protocol"],
+    };
+
+    // 檢測並添加相關概念標記
+    const detectedConcepts = [];
+    for (const [concept, variations] of Object.entries(conceptMappings)) {
+      for (const variation of variations) {
+        if (searchableText.includes(variation)) {
+          detectedConcepts.push(concept);
+          break;
+        }
+      }
+    }
+
+    // 在搜索內容前添加概念標記，提高檢索準確性
+    if (detectedConcepts.length > 0) {
+      searchableText = `concepts:${detectedConcepts.join(
+        ","
+      )} ${searchableText}`;
+    }
+
+    // 限制長度但保留重要信息
+    return searchableText.substring(0, 1200);
   }
 }
 

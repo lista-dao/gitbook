@@ -276,31 +276,39 @@ class GitBookRAGBot {
       const detectedLang = this.detectLanguage(question);
       logger.info(`檢測到語言: ${detectedLang}`);
 
-      // 4. 生成問題嵌入
+      // 4. 如果是中文問題，先翻譯成英文
+      let searchQuestion = question;
+      if (detectedLang === "zh-CN") {
+        logger.info("檢測到中文問題，正在翻譯成英文...");
+        searchQuestion = await this.translateToEnglish(question);
+        logger.info(`翻譯結果: ${searchQuestion}`);
+      }
+
+      // 5. 生成問題嵌入（使用英文問題，統一用passage類型）
       const questionEmbedding = await this.smartProcessor.generateEmbedding(
-        question,
-        "query"
+        searchQuestion,
+        "passage"
       );
 
-      // 5. 檢索相關內容
+      // 6. 檢索相關內容（統一用英文檢索）
       const relevantChunks = await this.retrieveRelevantChunks(
         questionEmbedding,
-        detectedLang,
-        question
+        "en", // 統一檢索英文內容
+        searchQuestion
       );
 
       if (relevantChunks.length === 0) {
         return this.getNoResultsMessage(detectedLang);
       }
 
-      // 6. 調用 OpenAI API 生成回答
+      // 7. 調用 OpenAI API 生成回答（用原始語言回答）
       const answer = await this.generateAnswer(
-        question,
+        question, // 使用原始問題
         relevantChunks,
-        detectedLang
+        detectedLang // 使用原始語言
       );
 
-      // 7. 記錄使用情況
+      // 8. 記錄使用情況
       simpleRateLimiter.logUsage(userId, question, 0);
       // simpleCostMonitor.logAPIUsage(userId, {
       //   inputTokens: Math.ceil((question.length + answer.length) / 3),
@@ -331,41 +339,68 @@ class GitBookRAGBot {
     }
   }
 
-  async retrieveRelevantChunks(embedding, preferredLang, question) {
+  async retrieveRelevantChunks(embedding, language, question) {
     try {
       const allChunks = [];
 
-      // 使用簡單過濾器
-      const simpleFilter = this.buildSmartFilters(question, preferredLang);
+      // 使用智能過濾器（統一檢索英文內容）
+      const smartFilter = this.buildSmartFilters(question);
 
-      // 首先搜索同語言內容
-      const sameLanguageQuery = await this.index.query({
+      logger.info("第一次查詢（智能過濾器）", smartFilter);
+
+      // 首先使用智能過濾器搜索
+      const smartQuery = await this.index.query({
         vector: embedding,
-        filter: simpleFilter,
+        filter: smartFilter,
         topK: this.config.maxResults,
         includeMetadata: true,
       });
 
-      if (sameLanguageQuery.matches) {
-        allChunks.push(...sameLanguageQuery.matches);
+      if (smartQuery.matches) {
+        allChunks.push(...smartQuery.matches);
       }
 
-      // 如果同語言結果不足或相似度太低，補充其他語言
+      // 如果智能過濾器結果不足，降級到純語言過濾器
       const highQualityResults = allChunks.filter(
         (match) => match.score >= this.config.similarityThreshold
       );
 
       if (highQualityResults.length < 2) {
-        const otherLang = preferredLang === "zh-CN" ? "en" : "zh-CN";
-        const otherLanguageQuery = await this.index.query({
+        logger.info("智能過濾器結果不足，使用語言過濾器降級搜索");
+
+        const languageOnlyQuery = await this.index.query({
           vector: embedding,
-          filter: { lang: otherLang },
-          topK: 2,
+          filter: { lang: "en" }, // 統一檢索英文內容
+          topK: this.config.maxResults,
           includeMetadata: true,
         });
 
-        if (otherLanguageQuery.matches) {
-          allChunks.push(...otherLanguageQuery.matches);
+        if (languageOnlyQuery.matches) {
+          // 避免重複添加
+          const existingIds = new Set(allChunks.map((chunk) => chunk.id));
+          const newChunks = languageOnlyQuery.matches.filter(
+            (chunk) => !existingIds.has(chunk.id)
+          );
+          allChunks.push(...newChunks);
+        }
+      }
+
+      // 如果結果仍然不足，進行無過濾器的純向量搜索
+      if (allChunks.filter((match) => match.score >= 0.3).length < 2) {
+        logger.info("結果仍然不足，進行無過濾器的純向量搜索");
+
+        const noFilterQuery = await this.index.query({
+          vector: embedding,
+          topK: this.config.maxResults,
+          includeMetadata: true,
+        });
+
+        if (noFilterQuery.matches) {
+          const existingIds = new Set(allChunks.map((chunk) => chunk.id));
+          const newChunks = noFilterQuery.matches.filter(
+            (chunk) => !existingIds.has(chunk.id)
+          );
+          allChunks.push(...newChunks);
         }
       }
 
@@ -373,11 +408,12 @@ class GitBookRAGBot {
       const sortedChunks = allChunks
         .sort((a, b) => b.score - a.score)
         .slice(0, this.config.maxResults)
-        .filter((chunk) => chunk.score >= 0.3); // 最低相似度閾值
+        .filter((chunk) => chunk.score >= 0.25); // 降低最低相似度閾值
 
       logger.info(`檢索到 ${sortedChunks.length} 個相關文檔塊`, {
-        scores: sortedChunks.map((c) => c.score),
+        scores: sortedChunks.map((c) => c.score.toFixed(3)),
         languages: sortedChunks.map((c) => c.metadata.lang),
+        sources: sortedChunks.map((c) => c.metadata.filename?.split("/").pop()),
       });
 
       return sortedChunks;
@@ -604,8 +640,57 @@ If the issue persists, the topic might not be covered in the documentation yet.`
 
   // ===================== 智能搜索過濾（檢索時使用） =====================
 
-  buildSmartFilters(question, preferredLang) {
-    return this.smartProcessor.buildSmartFilters(question, preferredLang);
+  buildSmartFilters(question) {
+    return this.smartProcessor.buildSmartFilters(question);
+  }
+
+  async translateToEnglish(chineseQuestion) {
+    try {
+      if (!process.env.OPENAI_API_KEY) {
+        logger.warn("未設置 OPENAI_API_KEY，跳過翻譯");
+        return chineseQuestion;
+      }
+
+      const response = await axios.post(
+        this.config.openaiApiUrl,
+        {
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content: `你是一個專業的翻譯助手。請將用戶的中文問題準確翻譯成英文，保持技術術語的準確性。
+              
+要求：
+- 保持原意不變
+- 技術術語使用標準英文
+- 簡潔明了
+- 只返回翻譯結果，不要其他內容`,
+            },
+            {
+              role: "user",
+              content: chineseQuestion,
+            },
+          ],
+          temperature: 0.1,
+          max_tokens: 200,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          timeout: 10000, // 10秒超時
+        }
+      );
+
+      const translatedQuestion =
+        response.data.choices[0].message.content.trim();
+      return translatedQuestion;
+    } catch (error) {
+      logger.error("翻譯失敗:", error);
+      // 翻譯失敗時返回原文
+      return chineseQuestion;
+    }
   }
 }
 
