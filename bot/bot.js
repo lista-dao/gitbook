@@ -73,6 +73,10 @@ class GitBookRAGBot {
       });
 
       this.index = this.pinecone.index(this.config.indexName);
+
+      // 將 Pinecone 實例傳給智能處理器
+      this.smartProcessor.setPinecone(this.pinecone);
+
       logger.info("Pinecone 初始化成功");
     } catch (error) {
       logger.error("Pinecone 初始化失敗:", error);
@@ -273,7 +277,10 @@ class GitBookRAGBot {
       logger.info(`檢測到語言: ${detectedLang}`);
 
       // 4. 生成問題嵌入
-      const questionEmbedding = await this.generateEmbedding(question);
+      const questionEmbedding = await this.smartProcessor.generateEmbedding(
+        question,
+        "query"
+      );
 
       // 5. 檢索相關內容
       const relevantChunks = await this.retrieveRelevantChunks(
@@ -324,74 +331,17 @@ class GitBookRAGBot {
     }
   }
 
-  async generateEmbedding(text) {
-    try {
-      // 優先使用 OpenAI embedding，降級到 Pinecone
-      if (process.env.OPENAI_API_KEY) {
-        return await this.generateOpenAIEmbedding(text);
-      } else {
-        logger.warn("未設置 OPENAI_API_KEY，使用 Pinecone embedding");
-        return await this.generatePineconeEmbedding(text);
-      }
-    } catch (error) {
-      logger.error("生成嵌入失敗:", error);
-      throw error;
-    }
-  }
-
-  async generateOpenAIEmbedding(text) {
-    try {
-      const response = await axios.post(
-        "https://api.openai.com/v1/embeddings",
-        {
-          model: "text-embedding-3-large",
-          input: text,
-          dimensions: 1536, // 可調整維度，降低成本可改為 512 或 256
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      logger.info(
-        `OpenAI embedding 生成成功，維度: ${response.data.data[0].embedding.length}`
-      );
-      return response.data.data[0].embedding;
-    } catch (error) {
-      logger.error("OpenAI embedding 失敗:", error);
-      // 降級到 Pinecone
-      return await this.generatePineconeEmbedding(text);
-    }
-  }
-
-  async generatePineconeEmbedding(text) {
-    try {
-      const response = await this.pinecone.inference.embed(
-        "multilingual-e5-large",
-        [text],
-        { inputType: "query" }
-      );
-      return response.data[0].values;
-    } catch (error) {
-      logger.error("Pinecone embedding 失敗:", error);
-      throw error;
-    }
-  }
-
   async retrieveRelevantChunks(embedding, preferredLang, question) {
     try {
       const allChunks = [];
 
-      // 使用智能過濾器
-      const smartFilters = this.buildSmartFilters(question, preferredLang);
+      // 使用簡單過濾器
+      const simpleFilter = this.buildSmartFilters(question, preferredLang);
 
       // 首先搜索同語言內容
       const sameLanguageQuery = await this.index.query({
         vector: embedding,
-        filter: smartFilters,
+        filter: simpleFilter,
         topK: this.config.maxResults,
         includeMetadata: true,
       });

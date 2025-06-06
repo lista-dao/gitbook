@@ -102,6 +102,9 @@ class GitBookRAGInitializer {
 
       this.index = this.pinecone.index(this.config.indexName);
 
+      // 將 Pinecone 實例傳給智能處理器
+      this.smartProcessor.setPinecone(this.pinecone);
+
       logger.info("Pinecone 連接初始化成功");
     } catch (error) {
       logger.error("Pinecone 初始化失敗:", error);
@@ -265,7 +268,7 @@ class GitBookRAGInitializer {
       await fs.writeFile(targetPath, content, "utf8");
 
       // 解析和分塊
-      const chunks = this.parseAndChunk(content, filePath);
+      const chunks = await this.parseAndChunk(content, filePath);
 
       // 生成嵌入並存儲到 Pinecone
       await this.storeChunks(chunks, filePath, branch);
@@ -296,39 +299,32 @@ class GitBookRAGInitializer {
 
   async parseAndChunk(content, filename) {
     try {
-      logger.info(`使用智能處理器解析 ${filename}`);
+      logger.info(`解析文件 ${filename}`);
 
-      // 1. 提取智能 metadata
+      // 1. 提取增強的 metadata
       const metadata = await this.smartProcessor.extractSmartMetadata(
         content,
         filename,
         this.detectLanguage.bind(this)
       );
 
-      // 2. 智能分塊
-      const chunks = this.smartProcessor.smartChunking(content, metadata, 800);
+      // 2. 使用基本分塊
+      const chunks = this.basicParseAndChunk(content, filename);
 
-      // 3. 轉換為舊格式以兼容現有代碼
-      return chunks.map((chunk, index) => ({
-        content: chunk.content,
-        heading: chunk.heading || metadata.topics?.[0] || "",
-        filename: filename,
-        index: index + 1,
-        // 附加智能 metadata
+      // 3. 為每個 chunk 附加 metadata
+      return chunks.map((chunk) => ({
+        ...chunk,
         metadata: metadata,
-        chunk_type: chunk.type,
-        has_contracts: chunk.has_contracts,
       }));
     } catch (error) {
-      logger.error(`智能解析文件 ${filename} 失敗:`, error);
-      // 降級到原有邏輯
-      return this.fallbackParseAndChunk(content, filename);
+      logger.error(`解析文件 ${filename} 失敗:`, error);
+      return [];
     }
   }
 
-  fallbackParseAndChunk(content, filename) {
+  basicParseAndChunk(content, filename) {
     try {
-      logger.warn(`使用降級解析方法處理 ${filename}`);
+      logger.info(`使用基本解析方法處理 ${filename}`);
       // 使用 marked 解析 markdown
       const tokens = marked.lexer(content);
       const chunks = [];
@@ -387,19 +383,33 @@ class GitBookRAGInitializer {
 
       return chunks;
     } catch (error) {
-      logger.error(`降級解析文件 ${filename} 失敗:`, error);
+      logger.error(`基本解析文件 ${filename} 失敗:`, error);
       return [];
     }
   }
 
   async storeChunks(chunks, filename, language) {
     try {
+      // 檢查 chunks 是否為有效數組
+      if (!Array.isArray(chunks)) {
+        logger.error(`chunks 不是數組: ${typeof chunks} (${filename})`);
+        return 0;
+      }
+
+      if (chunks.length === 0) {
+        logger.warn(`沒有文本塊需要存儲 (${filename})`);
+        return 0;
+      }
+
       const vectors = [];
       let totalUploaded = 0;
 
       for (const chunk of chunks) {
-        // 生成嵌入
-        const embedding = await this.generateEmbedding(chunk.content);
+        // 使用智能處理器生成嵌入
+        const embedding = await this.smartProcessor.generateEmbedding(
+          chunk.content,
+          "passage"
+        );
 
         // 使用完整文件路徑生成向量 ID，加入語言標識避免覆蓋
         const cleanFilename = filename
@@ -416,10 +426,11 @@ class GitBookRAGInitializer {
           content: chunk.content,
           heading: chunk.heading,
           chunk_index: chunk.index,
-          // 新增智能 metadata
+          // 從智能處理器獲取的增強 metadata
           ...(chunk.metadata || {}),
-          chunk_type: chunk.chunk_type || "text",
-          has_contracts: chunk.has_contracts || false,
+          // 基本檢測 (作為備用)
+          has_code: /```/.test(chunk.content),
+          has_links: /\[.*\]\(.*\)/.test(chunk.content),
           // 搜索優化
           searchable_content: chunk.content.toLowerCase().substring(0, 1000),
         };
@@ -476,20 +487,6 @@ class GitBookRAGInitializer {
       return totalUploaded;
     } catch (error) {
       logger.error(`存儲向量失敗 (${filename}):`, error);
-      throw error;
-    }
-  }
-
-  async generateEmbedding(text) {
-    try {
-      const response = await this.pinecone.inference.embed(
-        "multilingual-e5-large",
-        [text],
-        { inputType: "passage" }
-      );
-      return response.data[0].values;
-    } catch (error) {
-      logger.error("生成嵌入失敗:", error);
       throw error;
     }
   }

@@ -1,7 +1,7 @@
-const axios = require("axios");
 const winston = require("winston");
+const axios = require("axios");
 
-// 創建專用的logger
+// 簡化的智能處理器
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.combine(
@@ -23,129 +23,217 @@ const logger = winston.createLogger({
 
 class SmartProcessor {
   constructor(config) {
-    this.config = config || {};
-    this.openaiApiUrl = "https://api.openai.com/v1/chat/completions";
+    this.config = config;
+    // 初始化 Pinecone 實例（如果傳入）
+    this.pinecone = null;
   }
 
-  // ===================== 智能 Metadata 提取 =====================
+  // 設置 Pinecone 實例（由 init.js/sync.js/bot.js 傳入）
+  setPinecone(pinecone) {
+    this.pinecone = pinecone;
+  }
+
+  // ===================== 統一 Embedding 生成 =====================
+
+  async generateEmbedding(text, inputType = "query") {
+    try {
+      let embedding;
+
+      // 優先使用 OpenAI text-embedding-3-large，效果更好
+      if (process.env.OPENAI_API_KEY) {
+        embedding = await this.generateOpenAIEmbedding(text);
+      } else {
+        logger.warn("未設置 OPENAI_API_KEY，使用 Pinecone embedding");
+        embedding = await this.generatePineconeEmbedding(text, inputType);
+      }
+
+      // 驗證維度
+      const expectedDimensions = 1024; // Pinecone multilingual-e5-large 的維度
+      if (embedding.length !== expectedDimensions) {
+        logger.error(
+          `Embedding 維度不匹配: 期望 ${expectedDimensions}，實際 ${embedding.length}`
+        );
+        throw new Error(
+          `Embedding dimension mismatch: expected ${expectedDimensions}, got ${embedding.length}`
+        );
+      }
+
+      return embedding;
+    } catch (error) {
+      logger.error("生成嵌入失敗:", error);
+      throw error;
+    }
+  }
+
+  async generateOpenAIEmbedding(text) {
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/embeddings",
+        {
+          model: "text-embedding-3-large",
+          input: text,
+          dimensions: 1024, // 修改為 1024 維度匹配 Pinecone 索引
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      logger.info(
+        `OpenAI embedding 生成成功，維度: ${response.data.data[0].embedding.length}`
+      );
+      return response.data.data[0].embedding;
+    } catch (error) {
+      logger.error("OpenAI embedding 失敗:", error);
+      // 降級到 Pinecone
+      logger.warn("降級使用 Pinecone embedding");
+      return await this.generatePineconeEmbedding(text, "passage");
+    }
+  }
+
+  async generatePineconeEmbedding(text, inputType = "passage") {
+    try {
+      if (!this.pinecone) {
+        throw new Error("Pinecone 實例未設置，請先調用 setPinecone()");
+      }
+
+      const response = await this.pinecone.inference.embed(
+        "multilingual-e5-large",
+        [text],
+        { inputType: inputType }
+      );
+      return response.data[0].values;
+    } catch (error) {
+      logger.error("Pinecone embedding 失敗:", error);
+      throw error;
+    }
+  }
+
+  // ===================== 增強 Metadata 提取 (恢復 LLM) =====================
 
   async extractSmartMetadata(content, filename, detectLanguage) {
     try {
-      logger.info(`開始提取 ${filename} 的智能 metadata`);
+      logger.info(`開始提取 ${filename} 的增強 metadata`);
 
-      // 1. 基礎傳統提取
+      const language = detectLanguage(content);
+
+      // 1. 基礎檢測 (總是執行)
       const basicMetadata = this.extractBasicMetadata(
         content,
         filename,
-        detectLanguage
+        language
       );
 
-      // 2. LLM 智能提取
-      const llmMetadata = await this.extractLLMMetadata(content);
+      // 2. LLM 增強 (如果可用且有價值)
+      let llmMetadata = {};
+      if (this.shouldUseLLMExtraction(content)) {
+        llmMetadata = await this.extractLLMMetadata(content, filename);
+      }
 
-      // 3. 領域專用提取
-      const domainMetadata = this.extractDomainMetadata(content);
-
-      // 4. 合併所有 metadata
+      // 3. 合併結果
       const finalMetadata = {
         ...basicMetadata,
         ...llmMetadata,
-        ...domainMetadata,
         extraction_timestamp: new Date().toISOString(),
       };
 
-      logger.info(`${filename} metadata 提取完成:`, {
-        keywords: finalMetadata.keywords?.length,
-        topics: finalMetadata.topics?.length,
-        hasContracts: finalMetadata.has_contracts,
+      logger.info(`${filename} metadata 提取完成`, {
+        language: finalMetadata.language,
+        concepts: finalMetadata.concepts?.length || 0,
+        topics: finalMetadata.topics?.length || 0,
+        hasLLM: !!llmMetadata.topics,
       });
 
       return finalMetadata;
     } catch (error) {
-      logger.error(`${filename} metadata 提取失敗:`, error);
+      logger.error(`提取 ${filename} metadata 失敗:`, error);
       // 降級到基礎提取
-      return this.extractBasicMetadata(content, filename, detectLanguage);
+      return this.extractBasicMetadata(
+        content,
+        filename,
+        detectLanguage(content)
+      );
     }
   }
 
-  extractBasicMetadata(content, filename, detectLanguage) {
-    const metadata = {
-      filename,
-      content_length: content.length,
-      language: detectLanguage(content),
-    };
+  // 判斷是否值得使用 LLM 提取
+  shouldUseLLMExtraction(content) {
+    const reasons = [];
 
-    // 合約地址檢測
-    const contractAddresses = content.match(/0x[a-fA-F0-9]{40}/g) || [];
-    metadata.contract_addresses = [...new Set(contractAddresses)];
-    metadata.has_contracts = contractAddresses.length > 0;
-
-    // 數字和百分比檢測
-    const percentages = content.match(/\d+\.?\d*%/g) || [];
-    const largeNumbers = content.match(/\d{1,3}(,\d{3})+/g) || [];
-    metadata.has_percentages = percentages.length > 0;
-    metadata.has_large_numbers = largeNumbers.length > 0;
-
-    // 文檔結構檢測
-    metadata.has_tables = /\|.*\|/.test(content);
-    metadata.has_code_blocks = /```/.test(content);
-    metadata.has_lists = /^[\s]*[-*+]\s/m.test(content);
-    metadata.heading_count = (content.match(/^#+\s/gm) || []).length;
-
-    // 關鍵概念檢測
-    const concepts = {
-      airdrop: /airdrop|空投|token distribution|代幣分發/gi,
-      staking: /staking|質押|stake|validator|驗證者/gi,
-      lending: /lending|借貸|borrow|lend|vault|金庫/gi,
-      governance: /governance|治理|voting|投票|proposal|提案/gi,
-      contract: /contract|合約|smart contract|智能合約/gi,
-      oracle: /oracle|預言機|price feed|價格預言機/gi,
-      security: /audit|安全|security|漏洞|vulnerability/gi,
-    };
-
-    metadata.detected_concepts = [];
-    metadata.concept_counts = {};
-
-    for (const [concept, regex] of Object.entries(concepts)) {
-      const matches = content.match(regex) || [];
-      if (matches.length > 0) {
-        metadata.detected_concepts.push(concept);
-        metadata.concept_counts[concept] = matches.length;
-      }
-    }
-
-    // 提取關鍵詞
-    metadata.keywords = this.extractContentKeywords(content);
-
-    return metadata;
-  }
-
-  async extractLLMMetadata(content) {
+    // 檢查 API Key
     if (!process.env.OPENAI_API_KEY) {
-      logger.warn("未設置 OPENAI_API_KEY，跳過 LLM metadata 提取");
-      return {};
+      reasons.push("沒有 OPENAI_API_KEY");
+      logger.info("跳過 LLM 提取:", reasons.join(", "));
+      return false;
     }
 
+    // 檢查內容長度
+    if (content.length < 200) {
+      reasons.push(`內容太短 (${content.length} < 200)`);
+    }
+    if (content.length > 10000) {
+      reasons.push(`內容太長 (${content.length} > 10000)`);
+    }
+
+    // 檢查內容質量
+    const lines = content.trim().split("\n");
+    if (lines.length < 10) {
+      reasons.push(`行數太少 (${lines.length} < 10)`);
+    }
+
+    // 檢查是否是目錄類文件
+    if (content.includes("# Table of Contents")) {
+      reasons.push("包含目錄");
+    }
+
+    // 放寬 README 限制，很多 README 其實有價值
+    // 移除: content.includes('README') 的檢查
+
+    if (reasons.length > 0) {
+      logger.info("跳過 LLM 提取:", reasons.join(", "));
+      return false;
+    }
+
+    logger.info("使用 LLM 提取", {
+      contentLength: content.length,
+      lines: lines.length,
+    });
+    return true;
+  }
+
+  async extractLLMMetadata(content, filename) {
     try {
-      const prompt = `分析以下技術文檔內容，提取結構化metadata。
+      // 限制內容長度以控制成本，但保留重要部分
+      const truncatedContent = this.smartTruncateContent(content);
 
-內容：${content.substring(0, 2000)}
+      const prompt = `分析以下技術文檔，提取結構化metadata。只返回JSON，不要其他文字。
 
-請以JSON格式返回，必須包含這些字段：
+文檔: ${filename}
+內容：
+${truncatedContent}
+
+返回JSON格式：
 {
-  "topics": ["主要主題陣列"],
-  "entities": ["重要實體名稱"],
-  "intent_categories": ["可回答的問題類型"],
-  "content_type": "文檔類型",
-  "importance_score": 1-10整數,
-  "summary": "一句話總結",
-  "searchable_terms": ["搜尋關鍵詞陣列"]
-}
+  "topics": ["主要主題1", "主要主題2"],
+  "concepts": ["技術概念1", "技術概念2"], 
+  "entities": ["重要實體1", "重要實體2"],
+  "intent_categories": ["教程", "API文檔", "概念說明", "操作指南"],
+  "content_type": "文檔類型(如tutorial/reference/guide)",
+  "summary": "一句話總結文檔內容",
+  "searchable_terms": ["關鍵搜索詞1", "關鍵搜索詞2"],
+  "difficulty_level": "beginner/intermediate/advanced"
+}`;
 
-注意：只返回JSON，不要其他文字。`;
+      logger.info(`準備調用 OpenAI API (${filename})`, {
+        contentLength: truncatedContent.length,
+        hasApiKey: !!process.env.OPENAI_API_KEY,
+      });
 
       const response = await axios.post(
-        this.openaiApiUrl,
+        "https://api.openai.com/v1/chat/completions",
         {
           model: "gpt-4o-mini",
           messages: [{ role: "user", content: prompt }],
@@ -157,37 +245,171 @@ class SmartProcessor {
             Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
             "Content-Type": "application/json",
           },
+          timeout: 15000, // 15秒總超時
         }
       );
 
-      const llmResult = JSON.parse(response.data.choices[0].message.content);
-      logger.info("LLM metadata 提取成功");
-      return llmResult;
+      const rawContent = response.data.choices[0].message.content.trim();
+      logger.info(`OpenAI API 回應成功 (${filename})`, {
+        responseLength: rawContent.length,
+        preview: rawContent.substring(0, 100),
+      });
+
+      // 嘗試解析 JSON，如果失敗則清理後重試
+      let llmResult;
+      try {
+        llmResult = JSON.parse(rawContent);
+      } catch (parseError) {
+        logger.warn(`JSON 解析失敗，嘗試清理 (${filename})`, {
+          parseError: parseError.message,
+          rawContent: rawContent.substring(0, 200),
+        });
+
+        // 清理可能的 markdown 格式
+        const cleanedContent = rawContent
+          .replace(/```json\n?/g, "")
+          .replace(/```\n?/g, "")
+          .trim();
+        llmResult = JSON.parse(cleanedContent);
+      }
+
+      // 驗證和清理結果
+      const validatedResult = this.validateLLMResult(llmResult);
+
+      logger.info(`LLM metadata 提取成功 (${filename})`, {
+        topics: validatedResult.topics?.length,
+        concepts: validatedResult.concepts?.length,
+      });
+
+      return validatedResult;
     } catch (error) {
-      logger.error("LLM metadata 提取失敗:", error);
-      return {};
+      // 更詳細的錯誤信息
+      logger.error(`LLM metadata 提取失敗 (${filename}):`, {
+        error: error.message,
+        code: error.code,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        stack: error.stack?.split("\n").slice(0, 3).join("\n"),
+      });
+      return {}; // 降級到基礎檢測
     }
   }
 
-  extractDomainMetadata(content) {
-    const metadata = {};
+  // 智能截取內容，保留重要部分
+  smartTruncateContent(content) {
+    if (content.length <= 2000) {
+      return content;
+    }
 
-    // DeFi 協議檢測
-    const protocols = [
-      "lista",
-      "pancakeswap",
-      "uniswap",
-      "compound",
-      "aave",
-      "binance",
-    ];
-    metadata.protocols = protocols.filter((p) =>
-      new RegExp(p, "gi").test(content)
-    );
+    // 提取前 1000 字符 + 中間重要部分 + 後 500 字符
+    const start = content.substring(0, 1000);
+    const end = content.substring(content.length - 500);
 
-    // 代幣檢測
-    const tokens = content.match(/[A-Z]{2,10}(?=\s|$|,|\.|:)/g) || [];
-    const cryptoTokens = [
+    // 尋找中間的重要標題或代碼塊
+    const middleMatch = content
+      .substring(1000, content.length - 500)
+      .match(/(#+\s+.{0,100}|```[\s\S]{0,200}```)/g);
+
+    const middle = middleMatch
+      ? "\n\n...(中間內容)...\n" + middleMatch.slice(0, 3).join("\n") + "\n"
+      : "\n\n...(省略中間內容)...\n";
+
+    return start + middle + end;
+  }
+
+  // 驗證 LLM 返回結果
+  validateLLMResult(result) {
+    const validated = {};
+
+    // 確保必要字段是數組
+    [
+      "topics",
+      "concepts",
+      "entities",
+      "intent_categories",
+      "searchable_terms",
+    ].forEach((field) => {
+      if (Array.isArray(result[field])) {
+        validated[field] = result[field].slice(0, 10); // 限制數量
+      } else {
+        validated[field] = [];
+      }
+    });
+
+    // 確保字符串字段
+    ["content_type", "summary", "difficulty_level"].forEach((field) => {
+      if (typeof result[field] === "string") {
+        validated[field] = result[field].substring(0, 200); // 限制長度
+      }
+    });
+
+    return validated;
+  }
+
+  // ===================== 基礎 Metadata 提取 (移除 LLM) =====================
+
+  extractBasicMetadata(content, filename, language) {
+    const metadata = {
+      filename: filename,
+      language: language,
+      content_length: content.length,
+      word_count: content.split(/\s+/).length,
+
+      // 內容特徵檢測
+      has_code: /```/.test(content),
+      has_links: /\[.*\]\(.*\)/.test(content),
+      has_tables: /\|.*\|/.test(content),
+      has_lists: /^[\s]*[-*+]\s/m.test(content),
+
+      // 結構分析
+      heading_count: (content.match(/^#+\s/gm) || []).length,
+      main_topic: this.extractMainTopic(content),
+
+      // 技術概念檢測 (基礎版)
+      concepts: this.extractBasicConcepts(content),
+
+      // 實體提取 (代幣、協議)
+      tokens: this.extractTokens(content),
+      protocols: this.extractProtocols(content),
+
+      // 合約地址檢測
+      contract_addresses: this.extractContractAddresses(content),
+      has_contracts: /0x[a-fA-F0-9]{40}/.test(content),
+
+      created_at: new Date().toISOString(),
+    };
+
+    return metadata;
+  }
+
+  extractBasicConcepts(content) {
+    const conceptPatterns = {
+      airdrop: /airdrop|空投|token distribution|代幣分發/gi,
+      staking: /staking|質押|stake|validator|驗證者/gi,
+      lending: /lending|borrowing|借貸|borrow|lend|vault|金庫/gi,
+      governance: /governance|治理|voting|投票|proposal|提案/gi,
+      contract: /contract|合約|smart contract|智能合約/gi,
+      defi: /defi|decentralized finance|去中心化金融/gi,
+      bridge: /bridge|跨鏈|cross.?chain/gi,
+      swap: /swap|exchange|交換|兌換/gi,
+      liquidity: /liquidity|流動性|pool|資金池/gi,
+      yield: /yield|farming|挖礦|收益/gi,
+    };
+
+    const detectedConcepts = [];
+    for (const [concept, pattern] of Object.entries(conceptPatterns)) {
+      if (pattern.test(content)) {
+        detectedConcepts.push(concept);
+      }
+    }
+
+    return detectedConcepts;
+  }
+
+  extractTokens(content) {
+    const tokenPatterns = /\b[A-Z]{2,10}\b/g;
+    const commonTokens = [
       "LISTA",
       "BNB",
       "USDT",
@@ -197,395 +419,109 @@ class SmartProcessor {
       "SLISBNB",
       "CLISBNB",
     ];
-    metadata.tokens = [
-      ...new Set(tokens.filter((t) => cryptoTokens.includes(t))),
+    const tokens = [
+      ...new Set(
+        (content.match(tokenPatterns) || []).filter((token) =>
+          commonTokens.includes(token)
+        )
+      ),
     ];
-
-    // 操作類型檢測
-    const operations = {
-      mint: /mint|鑄造|生成/gi,
-      burn: /burn|銷毀|燃燒/gi,
-      swap: /swap|交換|兌換/gi,
-      farm: /farm|farming|挖礦|流動性挖礦/gi,
-      lock: /lock|鎖定|質押/gi,
-    };
-
-    metadata.operations = [];
-    for (const [op, regex] of Object.entries(operations)) {
-      if (regex.test(content)) {
-        metadata.operations.push(op);
-      }
-    }
-
-    return metadata;
+    return tokens;
   }
 
-  extractContentKeywords(content) {
-    // 提取所有英文單詞和中文詞語
-    const englishWords = content.match(/[a-zA-Z]{3,}/g) || [];
-    const chineseWords = content.match(/[\u4e00-\u9fff]{2,}/g) || [];
-
-    // 過濾常見停用詞
-    const stopWords = [
-      "the",
-      "and",
-      "for",
-      "are",
-      "but",
-      "not",
-      "you",
-      "all",
-      "can",
-      "her",
-      "was",
-      "one",
-      "our",
-      "had",
-      "day",
+  extractProtocols(content) {
+    const protocolPatterns =
+      /\b(lista|pancakeswap|uniswap|compound|aave|binance)\b/gi;
+    return [
+      ...new Set(
+        (content.match(protocolPatterns) || []).map((p) => p.toLowerCase())
+      ),
     ];
-    const filteredEnglish = englishWords.filter(
-      (word) => !stopWords.includes(word.toLowerCase()) && word.length >= 3
-    );
-
-    // 統計詞頻並取前20個
-    const wordCount = {};
-    [...filteredEnglish, ...chineseWords].forEach((word) => {
-      const normalizedWord = word.toLowerCase();
-      wordCount[normalizedWord] = (wordCount[normalizedWord] || 0) + 1;
-    });
-
-    return Object.entries(wordCount)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 20)
-      .map(([word, count]) => word);
   }
 
-  // ===================== 智能分塊策略 =====================
-
-  smartChunking(content, metadata, maxChunkSize = 800) {
-    logger.info("開始智能分塊", {
-      contentLength: content.length,
-      hasTable: metadata.has_tables,
-      hasConcepts: metadata.detected_concepts?.length,
-    });
-
-    // 選擇分塊策略
-    if (metadata.has_tables) {
-      return this.tableAwareChunking(content, maxChunkSize);
-    } else if (metadata.has_contracts) {
-      return this.contractAwareChunking(content, maxChunkSize);
-    } else if (metadata.heading_count > 2) {
-      return this.headingBasedChunking(content, maxChunkSize);
-    } else {
-      return this.semanticChunking(content, maxChunkSize);
-    }
+  extractContractAddresses(content) {
+    const addresses = content.match(/0x[a-fA-F0-9]{40}/g) || [];
+    return [...new Set(addresses)];
   }
 
-  tableAwareChunking(content, maxChunkSize) {
-    const chunks = [];
-    const lines = content.split("\n");
-    let currentChunk = "";
-    let inTable = false;
-    let chunkIndex = 0;
+  extractMainTopic(content) {
+    // 提取第一個 # 標題
+    const firstHeading = content.match(/^#\s+(.+)$/m);
+    if (firstHeading) return firstHeading[1].trim();
 
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
+    // 如果沒有，提取第二級標題
+    const secondHeading = content.match(/^##\s+(.+)$/m);
+    if (secondHeading) return secondHeading[1].trim();
 
-      // 檢測表格開始
-      if (line.includes("|") && !inTable) {
-        // 保存當前塊（如果有內容）
-        if (currentChunk.trim()) {
-          chunks.push({
-            content: currentChunk.trim(),
-            index: chunkIndex++,
-            type: "text",
-            start_line: Math.max(0, i - currentChunk.split("\n").length),
-          });
-          currentChunk = "";
-        }
-        inTable = true;
-      }
-
-      currentChunk += line + "\n";
-
-      // 檢測表格結束
-      if (inTable && (!line.includes("|") || i === lines.length - 1)) {
-        chunks.push({
-          content: currentChunk.trim(),
-          index: chunkIndex++,
-          type: "table",
-          start_line: i - currentChunk.split("\n").length + 1,
-        });
-        currentChunk = "";
-        inTable = false;
-      }
-
-      // 普通分塊邏輯
-      if (!inTable && currentChunk.length > maxChunkSize) {
-        chunks.push({
-          content: currentChunk.trim(),
-          index: chunkIndex++,
-          type: "text",
-          start_line: Math.max(0, i - currentChunk.split("\n").length),
-        });
-        currentChunk = "";
-      }
-    }
-
-    // 處理最後一塊
-    if (currentChunk.trim()) {
-      chunks.push({
-        content: currentChunk.trim(),
-        index: chunkIndex++,
-        type: "text",
-        start_line: lines.length - currentChunk.split("\n").length,
-      });
-    }
-
-    logger.info(`表格感知分塊完成: ${chunks.length} 塊`, {
-      tables: chunks.filter((c) => c.type === "table").length,
-      text: chunks.filter((c) => c.type === "text").length,
-    });
-
-    return chunks;
+    // 如果都沒有，使用文件名
+    return require("path").basename(require("path").basename(filename, ".md"));
   }
 
-  contractAwareChunking(content, maxChunkSize) {
-    const chunks = [];
-    const contractPattern = /0x[a-fA-F0-9]{40}/g;
-    let chunkIndex = 0;
-
-    // 找到所有合約地址的位置
-    const contractMatches = [...content.matchAll(contractPattern)];
-
-    if (contractMatches.length === 0) {
-      return this.semanticChunking(content, maxChunkSize);
-    }
-
-    let lastIndex = 0;
-
-    for (const match of contractMatches) {
-      const contractIndex = match.index;
-
-      // 找到合約地址前後的上下文
-      const contextStart = Math.max(0, contractIndex - 200);
-      const contextEnd = Math.min(content.length, contractIndex + 200);
-
-      // 添加合約地址前的內容
-      if (contractIndex > lastIndex + maxChunkSize) {
-        const beforeContent = content.slice(lastIndex, contextStart);
-        if (beforeContent.trim()) {
-          chunks.push({
-            content: beforeContent.trim(),
-            index: chunkIndex++,
-            type: "text",
-            has_contracts: false,
-          });
-        }
-      }
-
-      // 添加包含合約地址的塊
-      const contractChunk = content.slice(contextStart, contextEnd);
-      chunks.push({
-        content: contractChunk.trim(),
-        index: chunkIndex++,
-        type: "contract",
-        has_contracts: true,
-        contract_address: match[0],
-      });
-
-      lastIndex = contextEnd;
-    }
-
-    // 添加最後剩餘的內容
-    if (lastIndex < content.length) {
-      const remainingContent = content.slice(lastIndex);
-      if (remainingContent.trim()) {
-        chunks.push({
-          content: remainingContent.trim(),
-          index: chunkIndex++,
-          type: "text",
-          has_contracts: false,
-        });
-      }
-    }
-
-    logger.info(`合約感知分塊完成: ${chunks.length} 塊`, {
-      contracts: chunks.filter((c) => c.type === "contract").length,
-    });
-
-    return chunks;
-  }
-
-  headingBasedChunking(content, maxChunkSize) {
-    const chunks = [];
-    const lines = content.split("\n");
-    let currentChunk = "";
-    let currentHeading = "";
-    let chunkIndex = 0;
-
-    for (const line of lines) {
-      // 檢測標題
-      const headingMatch = line.match(/^(#+)\s+(.+)$/);
-
-      if (headingMatch) {
-        // 保存前一個區塊
-        if (currentChunk.trim()) {
-          chunks.push({
-            content: currentChunk.trim(),
-            index: chunkIndex++,
-            type: "section",
-            heading: currentHeading,
-            heading_level: currentHeading.split("#").length - 1,
-          });
-        }
-
-        currentHeading = headingMatch[2];
-        currentChunk = line + "\n";
-      } else {
-        currentChunk += line + "\n";
-
-        // 如果塊太大，按段落分割
-        if (currentChunk.length > maxChunkSize) {
-          const paragraphs = currentChunk.split("\n\n");
-          if (paragraphs.length > 1) {
-            // 保存前面的段落
-            const saveContent = paragraphs.slice(0, -1).join("\n\n");
-            chunks.push({
-              content: saveContent.trim(),
-              index: chunkIndex++,
-              type: "section",
-              heading: currentHeading,
-              partial: true,
-            });
-            currentChunk = paragraphs[paragraphs.length - 1] + "\n";
-          }
-        }
-      }
-    }
-
-    // 處理最後一塊
-    if (currentChunk.trim()) {
-      chunks.push({
-        content: currentChunk.trim(),
-        index: chunkIndex++,
-        type: "section",
-        heading: currentHeading,
-      });
-    }
-
-    logger.info(`標題感知分塊完成: ${chunks.length} 塊`);
-    return chunks;
-  }
-
-  semanticChunking(content, maxChunkSize) {
-    const chunks = [];
-    const sentences = content.split(/[.!?。！？]\s+/);
-    let currentChunk = "";
-    let chunkIndex = 0;
-
-    for (const sentence of sentences) {
-      const testChunk = currentChunk + sentence + ". ";
-
-      if (testChunk.length > maxChunkSize && currentChunk.length > 0) {
-        chunks.push({
-          content: currentChunk.trim(),
-          index: chunkIndex++,
-          type: "semantic",
-        });
-        currentChunk = sentence + ". ";
-      } else {
-        currentChunk = testChunk;
-      }
-    }
-
-    if (currentChunk.trim()) {
-      chunks.push({
-        content: currentChunk.trim(),
-        index: chunkIndex++,
-        type: "semantic",
-      });
-    }
-
-    logger.info(`語義分塊完成: ${chunks.length} 塊`);
-    return chunks;
-  }
-
-  // ===================== 智能搜索過濾 =====================
+  // ===================== 增強搜索過濾器 (利用 LLM metadata) =====================
 
   buildSmartFilters(question, preferredLang) {
-    const filters = [];
     const questionLower = question.toLowerCase();
 
-    // 1. 精確概念匹配
-    const conceptKeywords = {
-      airdrop: ["airdrop", "空投"],
-      contract: ["contract", "address", "合約", "地址"],
-      staking: ["staking", "stake", "質押"],
-      lending: ["lending", "borrow", "借貸"],
-      governance: ["governance", "voting", "治理", "投票"],
-      security: ["audit", "security", "安全", "審計"],
+    // 基本語言過濾器
+    let baseFilter = { language: preferredLang };
+
+    // 1. 優先匹配 LLM 提取的概念和主題
+    const llmConceptMapping = {
+      airdrop: ["airdrop", "空投", "drop", "claim", "領取", "distribution"],
+      staking: ["staking", "質押", "stake", "validator", "驗證", "delegate"],
+      lending: ["lending", "借貸", "borrow", "lend", "vault", "collateral"],
+      governance: ["governance", "治理", "voting", "投票", "proposal", "dao"],
+      contract: ["contract", "合約", "address", "地址", "smart contract"],
+      bridge: ["bridge", "跨鏈", "cross-chain", "transfer"],
+      swap: ["swap", "exchange", "交換", "trade"],
+      yield: ["yield", "farming", "挖礦", "reward", "收益"],
     };
 
-    for (const [concept, keywords] of Object.entries(conceptKeywords)) {
+    // 檢測概念匹配
+    const matchedConcepts = [];
+    for (const [concept, keywords] of Object.entries(llmConceptMapping)) {
       if (keywords.some((keyword) => questionLower.includes(keyword))) {
-        filters.push({
-          name: `精確概念匹配: ${concept}`,
-          filter: { detected_concepts: { $in: [concept] } },
-          topK: 5,
-        });
+        matchedConcepts.push(concept);
       }
     }
 
-    // 2. 內容特徵匹配
+    if (matchedConcepts.length > 0) {
+      // 使用 $or 查詢匹配多個可能的概念字段
+      baseFilter.$or = [
+        { concepts: { $in: matchedConcepts } }, // 基礎檢測的概念
+        { topics: { $in: matchedConcepts } }, // LLM 提取的主題
+        { searchable_terms: { $in: matchedConcepts } }, // LLM 提取的搜索詞
+      ];
+    }
+
+    // 2. 內容類型匹配
     if (
-      questionLower.includes("address") ||
-      questionLower.includes("contract") ||
-      questionLower.includes("地址")
+      ["how", "tutorial", "教程", "如何", "怎麼"].some((term) =>
+        questionLower.includes(term)
+      )
     ) {
-      filters.push({
-        name: "合約地址匹配",
-        filter: { has_contracts: true },
-        topK: 3,
-      });
+      baseFilter.content_type = { $in: ["tutorial", "guide"] };
     }
 
     if (
-      questionLower.includes("table") ||
-      questionLower.includes("list") ||
-      questionLower.includes("表格")
+      ["api", "reference", "參考", "documentation"].some((term) =>
+        questionLower.includes(term)
+      )
     ) {
-      filters.push({
-        name: "表格數據匹配",
-        filter: { has_tables: true },
-        topK: 4,
-      });
+      baseFilter.content_type = { $in: ["reference", "api"] };
     }
 
-    // 3. 語言優先匹配
-    filters.push({
-      name: "語言匹配",
-      filter: { language: preferredLang },
-      topK: 5,
-    });
-
-    // 4. 高重要性內容
-    filters.push({
-      name: "高重要性內容",
-      filter: { importance_score: { $gte: 7 } },
-      topK: 3,
-    });
-
-    // 5. 如果沒有特定過濾條件，使用寬鬆搜索
-    if (filters.length <= 2) {
-      filters.push({
-        name: "寬鬆搜索",
-        filter: {},
-        topK: 8,
-      });
+    // 3. 內容特徵檢測
+    if (
+      ["code", "代碼", "example", "示例", "contract"].some((term) =>
+        questionLower.includes(term)
+      )
+    ) {
+      baseFilter.has_code = true;
     }
 
-    return filters.slice(0, 4); // 限制過濾策略數量
+    logger.info("使用增強過濾器", baseFilter);
+    return baseFilter;
   }
 }
 
