@@ -6,6 +6,8 @@ const simpleGit = require("simple-git");
 const { marked } = require("marked");
 const { Pinecone } = require("@pinecone-database/pinecone");
 const winston = require("winston");
+const SmartProcessor = require("../bot/smart-processor");
+const { franc } = require("franc");
 require("dotenv").config();
 
 // 配置日誌
@@ -43,6 +45,9 @@ class GitBookRAGInitializer {
       chunkSize: { min: 200, max: 500 },
       indexName: process.env.PINECONE_INDEX_NAME || "gitbook-rag",
     };
+
+    // 初始化智能處理器
+    this.smartProcessor = new SmartProcessor(this.config);
   }
 
   async initialize() {
@@ -273,8 +278,57 @@ class GitBookRAGInitializer {
     }
   }
 
-  parseAndChunk(content, filename) {
+  detectLanguage(text) {
     try {
+      const lang = franc(text);
+      // franc 返回 ISO 639-3 代碼，需要轉換
+      if (lang === "cmn" || text.match(/[\u4e00-\u9fff]/)) {
+        return "zh-CN";
+      } else {
+        return "en";
+      }
+    } catch (error) {
+      logger.error("語言檢測失敗:", error);
+      // 默認根據字符判斷
+      return text.match(/[\u4e00-\u9fff]/) ? "zh-CN" : "en";
+    }
+  }
+
+  async parseAndChunk(content, filename) {
+    try {
+      logger.info(`使用智能處理器解析 ${filename}`);
+
+      // 1. 提取智能 metadata
+      const metadata = await this.smartProcessor.extractSmartMetadata(
+        content,
+        filename,
+        this.detectLanguage.bind(this)
+      );
+
+      // 2. 智能分塊
+      const chunks = this.smartProcessor.smartChunking(content, metadata, 800);
+
+      // 3. 轉換為舊格式以兼容現有代碼
+      return chunks.map((chunk, index) => ({
+        content: chunk.content,
+        heading: chunk.heading || metadata.topics?.[0] || "",
+        filename: filename,
+        index: index + 1,
+        // 附加智能 metadata
+        metadata: metadata,
+        chunk_type: chunk.type,
+        has_contracts: chunk.has_contracts,
+      }));
+    } catch (error) {
+      logger.error(`智能解析文件 ${filename} 失敗:`, error);
+      // 降級到原有邏輯
+      return this.fallbackParseAndChunk(content, filename);
+    }
+  }
+
+  fallbackParseAndChunk(content, filename) {
+    try {
+      logger.warn(`使用降級解析方法處理 ${filename}`);
       // 使用 marked 解析 markdown
       const tokens = marked.lexer(content);
       const chunks = [];
@@ -333,7 +387,7 @@ class GitBookRAGInitializer {
 
       return chunks;
     } catch (error) {
-      logger.error(`解析文件 ${filename} 失敗:`, error);
+      logger.error(`降級解析文件 ${filename} 失敗:`, error);
       return [];
     }
   }
@@ -353,18 +407,27 @@ class GitBookRAGInitializer {
           .replace(/\.md$/, "");
         const vectorId = `${language}_${cleanFilename}_${chunk.index}`;
 
+        // 構建增強的 metadata
+        const enhancedMetadata = {
+          lang: language,
+          filename: filename, // 保持完整路徑
+          filepath: filename, // 添加完整文件路徑
+          pair_id: vectorId,
+          content: chunk.content,
+          heading: chunk.heading,
+          chunk_index: chunk.index,
+          // 新增智能 metadata
+          ...(chunk.metadata || {}),
+          chunk_type: chunk.chunk_type || "text",
+          has_contracts: chunk.has_contracts || false,
+          // 搜索優化
+          searchable_content: chunk.content.toLowerCase().substring(0, 1000),
+        };
+
         vectors.push({
           id: vectorId,
           values: embedding,
-          metadata: {
-            lang: language,
-            filename: filename, // 保持完整路徑
-            filepath: filename, // 添加完整文件路徑
-            pair_id: vectorId,
-            content: chunk.content,
-            heading: chunk.heading,
-            chunk_index: chunk.index,
-          },
+          metadata: enhancedMetadata,
         });
       }
 

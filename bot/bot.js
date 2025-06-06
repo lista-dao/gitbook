@@ -4,6 +4,7 @@ const { franc } = require("franc");
 const axios = require("axios");
 const winston = require("winston");
 const simpleRateLimiter = require("./simple-rate-limiter");
+const SmartProcessor = require("./smart-processor");
 // const simpleCostMonitor = require("./simple-cost-monitor");
 require("dotenv").config();
 
@@ -36,10 +37,13 @@ class GitBookRAGBot {
 
     this.config = {
       indexName: process.env.PINECONE_INDEX_NAME || "gitbook-rag",
-      similarityThreshold: 0.7,
-      maxResults: 3,
+      similarityThreshold: 0.5,
+      maxResults: 8,
       openaiApiUrl: "https://api.openai.com/v1/chat/completions",
     };
+
+    // 初始化智能處理器
+    this.smartProcessor = new SmartProcessor(this.config);
 
     this.setupBot();
   }
@@ -274,7 +278,8 @@ class GitBookRAGBot {
       // 5. 檢索相關內容
       const relevantChunks = await this.retrieveRelevantChunks(
         questionEmbedding,
-        detectedLang
+        detectedLang,
+        question
       );
 
       if (relevantChunks.length === 0) {
@@ -321,6 +326,49 @@ class GitBookRAGBot {
 
   async generateEmbedding(text) {
     try {
+      // 優先使用 OpenAI embedding，降級到 Pinecone
+      if (process.env.OPENAI_API_KEY) {
+        return await this.generateOpenAIEmbedding(text);
+      } else {
+        logger.warn("未設置 OPENAI_API_KEY，使用 Pinecone embedding");
+        return await this.generatePineconeEmbedding(text);
+      }
+    } catch (error) {
+      logger.error("生成嵌入失敗:", error);
+      throw error;
+    }
+  }
+
+  async generateOpenAIEmbedding(text) {
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/embeddings",
+        {
+          model: "text-embedding-3-large",
+          input: text,
+          dimensions: 1536, // 可調整維度，降低成本可改為 512 或 256
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      logger.info(
+        `OpenAI embedding 生成成功，維度: ${response.data.data[0].embedding.length}`
+      );
+      return response.data.data[0].embedding;
+    } catch (error) {
+      logger.error("OpenAI embedding 失敗:", error);
+      // 降級到 Pinecone
+      return await this.generatePineconeEmbedding(text);
+    }
+  }
+
+  async generatePineconeEmbedding(text) {
+    try {
       const response = await this.pinecone.inference.embed(
         "multilingual-e5-large",
         [text],
@@ -328,19 +376,22 @@ class GitBookRAGBot {
       );
       return response.data[0].values;
     } catch (error) {
-      logger.error("生成嵌入失敗:", error);
+      logger.error("Pinecone embedding 失敗:", error);
       throw error;
     }
   }
 
-  async retrieveRelevantChunks(embedding, preferredLang) {
+  async retrieveRelevantChunks(embedding, preferredLang, question) {
     try {
       const allChunks = [];
+
+      // 使用智能過濾器
+      const smartFilters = this.buildSmartFilters(question, preferredLang);
 
       // 首先搜索同語言內容
       const sameLanguageQuery = await this.index.query({
         vector: embedding,
-        filter: { lang: preferredLang },
+        filter: smartFilters,
         topK: this.config.maxResults,
         includeMetadata: true,
       });
@@ -396,7 +447,9 @@ class GitBookRAGBot {
       const context = relevantChunks
         .map(
           (chunk) =>
-            `**來源：${chunk.metadata.filename}**\n${chunk.metadata.content}`
+            `**來源：${chunk.metadata.filename}**\n${
+              chunk.metadata.chunk_content || chunk.metadata.content
+            }`
         )
         .join("\n\n---\n\n");
 
@@ -597,6 +650,12 @@ If the issue persists, the topic might not be covered in the documentation yet.`
       logger.error("Webhook 設置失敗:", error);
       throw error;
     }
+  }
+
+  // ===================== 智能搜索過濾（檢索時使用） =====================
+
+  buildSmartFilters(question, preferredLang) {
+    return this.smartProcessor.buildSmartFilters(question, preferredLang);
   }
 }
 
