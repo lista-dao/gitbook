@@ -1,7 +1,7 @@
 # 智能合约
 
-| 合约                             | 地址                                        |
-| -------------------------------- | ------------------------------------------ |
+| 合约                             | 地址                                      |
+| -------------------------------- | ---------------------------------------- |
 | Moolah                           | 0x8F73b65B4caAf64FBA2aF91cC5D4a2A1318E5D8C |
 | InterestRateModel                | 0xFe7dAe87Ebb11a7BEB9F534BB23267992d9cDe7c |
 | VaultAllocator                   | 0x9ECF66f016FCaA853FdA24d223bdb4276E5b524a |
@@ -16,3 +16,4 @@
 | SlisBNBProvider                  | 0x33f7A980a246f9B8FEA2254E3065576E127D4D5f |
 | BNBProvider (MEV WBNB Vault)     | 0x501bE17CcA1d8a009753Da271D6714C18c1A35c9 |
 | BNBProvider (Lista WBNB Vault)   | 0x367384C54756a25340c63057D87eA22d47Fd5701 |
+| MoolahVaultFactory               | 0x2a0Cb6401FD3c6196750dc6b46702040761D9671 |
