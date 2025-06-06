@@ -37,8 +37,8 @@ class GitBookRAGBot {
 
     this.config = {
       indexName: process.env.PINECONE_INDEX_NAME || "gitbook-rag",
-      similarityThreshold: 0.5,
-      maxResults: 8,
+      similarityThreshold: 0.6,
+      maxResults: 6,
       openaiApiUrl: "https://api.openai.com/v1/chat/completions",
     };
 
@@ -512,6 +512,7 @@ Please answer in English:`;
             Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
             "Content-Type": "application/json",
           },
+          timeout: 15000,
         }
       );
 
@@ -539,12 +540,12 @@ Please answer in English:`;
         return `[${displayName}](${url})`;
       });
 
-      const sourceText =
-        language === "zh-CN"
-          ? `\n\n📚 **參考來源：** ${sourceLinks.join(", ")}`
-          : `\n\n📚 **Sources:** ${sourceLinks.join(", ")}`;
+      //   const sourceText =
+      //     language === "zh-CN"
+      //       ? `\n\n📚 **參考來源：** ${sourceLinks.join(", ")}`
+      //       : `\n\n📚 **Sources:** ${sourceLinks.join(", ")}`;
 
-      return answer + sourceText;
+      return answer;
     } catch (error) {
       logger.error("生成回答失敗:", error);
 
