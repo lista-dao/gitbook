@@ -53,8 +53,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           echo "開始同步 ${{ github.ref_name }} 分支"
-          npm ci
-          node scripts/sync.js
+          npm ci && node scripts/sync.js
 
       - name: Check for changes
         id: changes
