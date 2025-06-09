@@ -27,7 +27,7 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
-
+   
 
       - name: Configure Git
         run: |
@@ -45,6 +45,9 @@ jobs:
           git fetch origin RAG 
           git checkout RAG 
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Run sync script
         env:
           PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
@@ -53,7 +56,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           echo "開始同步 ${{ github.ref_name }} 分支"
-          npm ci && node scripts/sync.js
+          node scripts/sync.js
 
       - name: Check for changes
         id: changes
