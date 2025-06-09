@@ -8,7 +8,17 @@
     "init": "node scripts/init.js",
     "sync": "node scripts/sync.js",
     "start": "node bot/bot.js",
-    "dev": "nodemon bot/bot.js"
+    "dev": "nodemon bot/bot.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop gitbook-rag-bot",
+    "pm2:restart": "pm2 restart gitbook-rag-bot",
+    "pm2:reload": "pm2 reload gitbook-rag-bot",
+    "pm2:logs": "pm2 logs gitbook-rag-bot",
+    "pm2:monit": "pm2 monit",
+    "pm2:status": "pm2 status",
+    "pm2:delete": "pm2 delete gitbook-rag-bot",
+    "pm2:save": "pm2 save",
+    "pm2:startup": "pm2 startup"
   },
   "dependencies": {
     "@pinecone-database/pinecone": "^6.1.0",
@@ -21,7 +31,8 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.0.2",
+    "pm2": "^5.3.1"
   },
   "engines": {
     "node": ">=18.0.0"

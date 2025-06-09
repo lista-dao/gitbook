@@ -414,7 +414,7 @@ Please answer in English:`;
 If the issue persists, the topic might not be covered in the documentation yet.`;
   }
 
-  // 啟動 Bot（開發模式）
+  // 啟動 Bot（生產模式 - 支持 PM2）
   async startPolling() {
     try {
       await this.initialize();
@@ -422,12 +422,56 @@ If the issue persists, the topic might not be covered in the documentation yet.`
       await this.bot.launch();
       logger.info("Bot 啟動成功（輪詢模式）");
 
-      process.once("SIGINT", () => this.bot.stop("SIGINT"));
-      process.once("SIGTERM", () => this.bot.stop("SIGTERM"));
+      // PM2 信號處理
+      this.setupProcessSignals();
+
+      logger.info("Bot 初始化完成，等待消息...");
     } catch (error) {
       logger.error("Bot 啟動失敗:", error);
-      throw error;
+      process.exit(1);
     }
+  }
+
+  // 設置進程信號處理（PM2 支持）
+  setupProcessSignals() {
+    const gracefulShutdown = async (signal) => {
+      logger.info(`收到 ${signal} 信號，開始關閉...`);
+
+      try {
+        if (this.bot) {
+          await this.bot.stop(signal);
+          logger.info("Telegram Bot 已停止");
+        }
+
+        // 等待正在處理的請求完成
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        process.exit(0);
+      } catch (error) {
+        logger.error("關閉過程中出錯:", error);
+        process.exit(1);
+      }
+    };
+
+    // PM2 信號處理
+    process.once("SIGINT", () => gracefulShutdown("SIGINT"));
+    process.once("SIGTERM", () => gracefulShutdown("SIGTERM"));
+    process.on("message", (msg) => {
+      if (msg === "shutdown") {
+        gracefulShutdown("PM2_SHUTDOWN");
+      }
+    });
+
+    // 未捕獲異常處理
+    process.on("uncaughtException", (error) => {
+      logger.error("未捕獲的異常:", error);
+      gracefulShutdown("UNCAUGHT_EXCEPTION");
+    });
+
+    process.on("unhandledRejection", (reason, promise) => {
+      logger.error("未處理的 Promise 拒絕:", { reason, promise });
+      gracefulShutdown("UNHANDLED_REJECTION");
+    });
   }
 
   buildSmartFilters(question) {
