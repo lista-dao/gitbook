@@ -1,5 +1,7 @@
 # Smart Contract
 
+Lista Lending is a decentralized lending protocol that allows users to borrow and lend various assets. The following contracts manage the core lending functionality, interest rate models, vault operations, and reward distributions across the protocol.
+
 | Contract                       | Address                                    |
 | ------------------------------ | ------------------------------------------ |
 | Moolah                         | 0x8F73b65B4caAf64FBA2aF91cC5D4a2A1318E5D8C |
@@ -17,4 +19,3 @@
 | BNBProvider (MEV WBNB Vault)   | 0x501bE17CcA1d8a009753Da271D6714C18c1A35c9 |
 | BNBProvider (Lista WBNB Vault) | 0x367384C54756a25340c63057D87eA22d47Fd5701 |
 | MoolahVaultFactory             | 0x2a0Cb6401FD3c6196750dc6b46702040761D9671 |
-
