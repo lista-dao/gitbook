@@ -1,7 +1,6 @@
 const winston = require("winston");
 const axios = require("axios");
 
-// 簡化的智能處理器
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.combine(
@@ -24,22 +23,17 @@ const logger = winston.createLogger({
 class SmartProcessor {
   constructor(config) {
     this.config = config;
-    // 初始化 Pinecone 實例（如果傳入）
     this.pinecone = null;
   }
 
-  // 設置 Pinecone 實例（由 init.js/sync.js/bot.js 傳入）
   setPinecone(pinecone) {
     this.pinecone = pinecone;
   }
-
-  // ===================== 統一 Embedding 生成 =====================
 
   async generateEmbedding(text, inputType = "passage") {
     try {
       let embedding;
 
-      // 優先使用 OpenAI text-embedding-3-large，效果更好
       if (process.env.OPENAI_API_KEY) {
         embedding = await this.generateOpenAIEmbedding(text);
       } else {
@@ -47,8 +41,7 @@ class SmartProcessor {
         embedding = await this.generatePineconeEmbedding(text, inputType);
       }
 
-      // 驗證維度
-      const expectedDimensions = 1024; // Pinecone multilingual-e5-large 的維度
+      const expectedDimensions = 1024;
       if (embedding.length !== expectedDimensions) {
         logger.error(
           `Embedding 維度不匹配: 期望 ${expectedDimensions}，實際 ${embedding.length}`
@@ -72,7 +65,7 @@ class SmartProcessor {
         {
           model: "text-embedding-3-large",
           input: text,
-          dimensions: 1024, // 修改為 1024 維度匹配 Pinecone 索引
+          dimensions: 1024,
         },
         {
           headers: {
@@ -88,7 +81,6 @@ class SmartProcessor {
       return response.data.data[0].embedding;
     } catch (error) {
       logger.error("OpenAI embedding 失敗:", error);
-      // 降級到 Pinecone
       logger.warn("降級使用 Pinecone embedding");
       return await this.generatePineconeEmbedding(text, "passage");
     }
@@ -112,28 +104,23 @@ class SmartProcessor {
     }
   }
 
-  // ===================== 增強 Metadata 提取 (恢復 LLM) =====================
-
   async extractSmartMetadata(content, filename, detectLanguage) {
     try {
       logger.info(`開始提取 ${filename} 的增強 metadata`);
 
       const language = detectLanguage(content);
 
-      // 1. 基礎檢測 (總是執行)
       const basicMetadata = this.extractBasicMetadata(
         content,
         filename,
         language
       );
 
-      // 2. LLM 增強 (如果可用且有價值)
       let llmMetadata = {};
       if (this.shouldUseLLMExtraction(content)) {
         llmMetadata = await this.extractLLMMetadata(content, filename);
       }
 
-      // 3. 合併結果
       const finalMetadata = {
         ...basicMetadata,
         ...llmMetadata,
@@ -150,7 +137,6 @@ class SmartProcessor {
       return finalMetadata;
     } catch (error) {
       logger.error(`提取 ${filename} metadata 失敗:`, error);
-      // 降級到基礎提取
       return this.extractBasicMetadata(
         content,
         filename,
@@ -159,18 +145,15 @@ class SmartProcessor {
     }
   }
 
-  // 判斷是否值得使用 LLM 提取
   shouldUseLLMExtraction(content) {
     const reasons = [];
 
-    // 檢查 API Key
     if (!process.env.OPENAI_API_KEY) {
       reasons.push("沒有 OPENAI_API_KEY");
       logger.info("跳過 LLM 提取:", reasons.join(", "));
       return false;
     }
 
-    // 檢查內容長度
     if (content.length < 200) {
       reasons.push(`內容太短 (${content.length} < 200)`);
     }
@@ -178,19 +161,14 @@ class SmartProcessor {
       reasons.push(`內容太長 (${content.length} > 10000)`);
     }
 
-    // 檢查內容質量
     const lines = content.trim().split("\n");
     if (lines.length < 10) {
       reasons.push(`行數太少 (${lines.length} < 10)`);
     }
 
-    // 檢查是否是目錄類文件
     if (content.includes("# Table of Contents")) {
       reasons.push("包含目錄");
     }
-
-    // 放寬 README 限制，很多 README 其實有價值
-    // 移除: content.includes('README') 的檢查
 
     if (reasons.length > 0) {
       logger.info("跳過 LLM 提取:", reasons.join(", "));
@@ -242,7 +220,7 @@ ${content}
             Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
             "Content-Type": "application/json",
           },
-          timeout: 15000, // 15秒總超時
+          timeout: 15000,
         }
       );
 
@@ -252,7 +230,6 @@ ${content}
         preview: rawContent.substring(0, 100),
       });
 
-      // 嘗試解析 JSON，如果失敗則清理後重試
       let llmResult;
       try {
         llmResult = JSON.parse(rawContent);
@@ -270,7 +247,6 @@ ${content}
         llmResult = JSON.parse(cleanedContent);
       }
 
-      // 驗證和清理結果
       const validatedResult = this.validateLLMResult(llmResult);
 
       logger.info(`LLM metadata 提取成功 (${filename})`, {
@@ -280,7 +256,6 @@ ${content}
 
       return validatedResult;
     } catch (error) {
-      // 更詳細的錯誤信息
       logger.error(`LLM metadata 提取失敗 (${filename}):`, {
         error: error.message,
         code: error.code,
@@ -289,15 +264,13 @@ ${content}
         data: error.response?.data,
         stack: error.stack?.split("\n").slice(0, 3).join("\n"),
       });
-      return {}; // 降級到基礎檢測
+      return {};
     }
   }
 
-  // 驗證 LLM 返回結果
   validateLLMResult(result) {
     const validated = {};
 
-    // 確保必要字段是數組
     [
       "topics",
       "concepts",
@@ -306,23 +279,20 @@ ${content}
       "searchable_terms",
     ].forEach((field) => {
       if (Array.isArray(result[field])) {
-        validated[field] = result[field].slice(0, 10); // 限制數量
+        validated[field] = result[field].slice(0, 10);
       } else {
         validated[field] = [];
       }
     });
 
-    // 確保字符串字段
     ["content_type", "summary", "difficulty_level"].forEach((field) => {
       if (typeof result[field] === "string") {
-        validated[field] = result[field].substring(0, 200); // 限制長度
+        validated[field] = result[field].substring(0, 200);
       }
     });
 
     return validated;
   }
-
-  // ===================== 基礎 Metadata 提取 (移除 LLM) =====================
 
   extractBasicMetadata(content, filename, language) {
     const metadata = {
@@ -331,24 +301,19 @@ ${content}
       content_length: content.length,
       word_count: content.split(/\s+/).length,
 
-      // 內容特徵檢測
       has_code: /```/.test(content),
       has_links: /\[.*\]\(.*\)/.test(content),
       has_tables: /\|.*\|/.test(content),
       has_lists: /^[\s]*[-*+]\s/m.test(content),
 
-      // 結構分析
       heading_count: (content.match(/^#+\s/gm) || []).length,
       main_topic: this.extractMainTopic(content),
 
-      // 技術概念檢測 (基礎版)
       concepts: this.extractBasicConcepts(content),
 
-      // 實體提取 (代幣、協議)
       tokens: this.extractTokens(content),
       protocols: this.extractProtocols(content),
 
-      // 合約地址檢測
       contract_addresses: this.extractContractAddresses(content),
       has_contracts: /0x[a-fA-F0-9]{40}/.test(content),
 
@@ -360,23 +325,22 @@ ${content}
 
   extractBasicConcepts(content) {
     const conceptPatterns = {
-      airdrop:
-        /airdrop|空投|token distribution|代幣分發|代币分发|Airdrop|Megadrop|megadrop/gi,
-      staking: /staking|質押|质押|stake|validator|驗證者|验证者/gi,
-      lending: /lending|borrowing|借貸|借贷|borrow|lend|vault|金庫|金库/gi,
-      governance: /governance|治理|voting|投票|proposal|提案/gi,
-      contract: /contract|合約|合约|smart contract|智能合約|智能合约/gi,
-      defi: /defi|decentralized finance|去中心化金融/gi,
-      bridge: /bridge|跨鏈|跨链|cross.?chain/gi,
-      swap: /swap|exchange|交換|交换|兌換|兑换/gi,
-      liquidity: /liquidity|流動性|流动性|pool|資金池|资金池/gi,
-      yield: /yield|farming|挖礦|挖矿|收益/gi,
+      airdrop: /airdrop|token distribution|Airdrop|Megadrop|megadrop/gi,
+      staking: /staking|stake|validator/gi,
+      lending: /lending|borrowing|borrow|lend|vault/gi,
+      governance: /governance|voting|proposal/gi,
+      contract: /contract|smart contract/gi,
+      defi: /defi|decentralized finance/gi,
+      bridge: /bridge|cross.?chain/gi,
+      swap: /swap|exchange/gi,
+      liquidity: /liquidity|pool/gi,
+      yield: /yield|farming/gi,
     };
 
     const detectedConcepts = [];
     for (const [concept, pattern] of Object.entries(conceptPatterns)) {
       if (pattern.test(content)) {
-        detectedConcepts.push(concept.toLowerCase()); // 確保概念都是小寫
+        detectedConcepts.push(concept.toLowerCase());
       }
     }
 
@@ -421,56 +385,32 @@ ${content}
   }
 
   extractMainTopic(content) {
-    // 提取第一個 # 標題
     const firstHeading = content.match(/^#\s+(.+)$/m);
     if (firstHeading) return firstHeading[1].trim();
 
-    // 如果沒有，提取第二級標題
     const secondHeading = content.match(/^##\s+(.+)$/m);
     if (secondHeading) return secondHeading[1].trim();
 
-    // 如果都沒有，使用文件名
     return require("path").basename(require("path").basename(filename, ".md"));
   }
-
-  // ===================== 增強搜索過濾器 (利用 LLM metadata) =====================
 
   buildSmartFilters(question) {
     const questionLower = question.toLowerCase();
 
-    // 動態檢測查詢語言
-    const hasChinese = /[\u4e00-\u9fff]/.test(question);
-    let baseFilter = {};
+    const baseFilter = {
+      lang: "en",
+    };
 
-    // 如果查詢包含中文，優先搜索中文內容，否則搜索英文
-    if (hasChinese) {
-      baseFilter.lang = "zh-CN";
-    } else {
-      baseFilter.lang = "en";
-    }
-
-    // 1. 優先匹配 LLM 提取的概念和主題
     const llmConceptMapping = {
       airdrop: [
         "airdrop",
-        "空投",
         "drop",
         "claim",
         "distribution",
         "token distribution",
         "megadrop",
-        "代幣分發",
-        "代币分发",
       ],
-      staking: [
-        "staking",
-        "stake",
-        "validator",
-        "delegate",
-        "delegation",
-        "質押",
-        "质押",
-      ],
+      staking: ["staking", "stake", "validator", "delegate", "delegation"],
       lending: [
         "lending",
         "borrow",
@@ -478,42 +418,14 @@ ${content}
         "vault",
         "collateral",
         "borrowing",
-        "借貸",
-        "借贷",
       ],
-      governance: [
-        "governance",
-        "voting",
-        "proposal",
-        "dao",
-        "治理",
-        "投票",
-        "提案",
-      ],
-      contract: [
-        "contract",
-        "address",
-        "smart contract",
-        "合約",
-        "合约",
-        "智能合約",
-        "智能合约",
-      ],
-      bridge: ["bridge", "cross-chain", "transfer", "跨鏈", "跨链"],
-      swap: [
-        "swap",
-        "exchange",
-        "trade",
-        "trading",
-        "交換",
-        "交换",
-        "兌換",
-        "兑换",
-      ],
-      yield: ["yield", "farming", "reward", "rewards", "挖礦", "挖矿", "收益"],
+      governance: ["governance", "voting", "proposal", "dao"],
+      contract: ["contract", "address", "smart contract"],
+      bridge: ["bridge", "cross-chain", "transfer"],
+      swap: ["swap", "exchange", "trade", "trading"],
+      yield: ["yield", "farming", "reward", "rewards"],
     };
 
-    // 檢測概念匹配
     const matchedConcepts = [];
     for (const [concept, keywords] of Object.entries(llmConceptMapping)) {
       if (
@@ -525,28 +437,23 @@ ${content}
       }
     }
 
-    // 放寬過濾器邏輯，只在有強概念匹配時才添加過濾器
     if (matchedConcepts.length > 0) {
-      // 使用更寬鬆的 $or 查詢
       baseFilter.$or = [
-        { concepts: { $in: matchedConcepts } }, // 基礎檢測的概念
-        { topics: { $in: matchedConcepts } }, // LLM 提取的主題
-        { searchable_terms: { $in: matchedConcepts } }, // LLM 提取的搜索詞
+        { concepts: { $in: matchedConcepts } },
+        { topics: { $in: matchedConcepts } },
+        { searchable_terms: { $in: matchedConcepts } },
       ];
     }
 
-    // 2. 內容類型匹配（簡化）
     if (
-      ["how", "tutorial", "guide", "如何", "教程", "指南"].some((term) =>
-        questionLower.includes(term)
-      )
+      ["how", "tutorial", "guide"].some((term) => questionLower.includes(term))
     ) {
       if (!baseFilter.$or) baseFilter.$or = [];
       baseFilter.$or.push({ content_type: { $in: ["tutorial", "guide"] } });
     }
 
     if (
-      ["api", "reference", "documentation", "文檔", "文档"].some((term) =>
+      ["api", "reference", "documentation"].some((term) =>
         questionLower.includes(term)
       )
     ) {
@@ -554,29 +461,14 @@ ${content}
       baseFilter.$or.push({ content_type: { $in: ["reference", "api"] } });
     }
 
-    // 3. 內容特徵檢測（簡化）
     if (
-      [
-        "code",
-        "example",
-        "contract",
-        "代碼",
-        "代码",
-        "示例",
-        "合約",
-        "合约",
-      ].some((term) => questionLower.includes(term))
+      ["code", "example", "contract"].some((term) =>
+        questionLower.includes(term)
+      )
     ) {
       if (!baseFilter.$or) baseFilter.$or = [];
       baseFilter.$or.push({ has_code: true });
     }
-
-    logger.info("使用增強過濾器", {
-      lang: baseFilter.lang,
-      matchedConcepts,
-      hasOrQuery: !!baseFilter.$or,
-      orFiltersCount: baseFilter.$or?.length || 0,
-    });
 
     return baseFilter;
   }

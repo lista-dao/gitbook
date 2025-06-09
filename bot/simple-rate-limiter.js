@@ -25,7 +25,7 @@ class SimpleRateLimiter {
     // 使用環境變量配置
     this.limits = {
       maxPerMinute: parseInt(process.env.RATE_LIMIT_PER_MINUTE) || 2,
-      maxPerHour: parseInt(process.env.RATE_LIMIT_PER_HOUR) || 8,
+      maxPerHour: parseInt(process.env.RATE_LIMIT_PER_HOUR) || 20,
       maxQuestionLength:
         parseInt(process.env.RATE_LIMIT_MAX_QUESTION_LENGTH) || 500,
       minIntervalSeconds: parseInt(process.env.RATE_LIMIT_MIN_INTERVAL) || 15,
@@ -44,7 +44,7 @@ class SimpleRateLimiter {
     }
 
     // 2. 檢查問題質量
-    if (question.trim().length < 3) {
+    if (question.trim().length < 5) {
       return {
         allowed: false,
         reason: "問題過於簡短，請提供更詳細的問題",

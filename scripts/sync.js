@@ -10,7 +10,6 @@ const SmartProcessor = require("../bot/smart-processor");
 const { franc } = require("franc");
 require("dotenv").config();
 
-// 配置日誌
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.combine(
@@ -37,15 +36,13 @@ class GitBookRAGSyncer {
     this.index = null;
     this.embedder = null;
 
-    // 配置
     this.config = {
-      branches: ["en", "zh-CN"],
+      branches: ["en"],
       ragBranch: "RAG",
       chunkSize: { min: 200, max: 500 },
       indexName: process.env.PINECONE_INDEX_NAME || "gitbook-rag",
     };
 
-    // 初始化智能處理器
     this.smartProcessor = new SmartProcessor(this.config);
   }
 
@@ -53,7 +50,6 @@ class GitBookRAGSyncer {
     try {
       logger.info("開始增量同步");
 
-      // 獲取變更的分支
       const changedBranch =
         process.env.GITHUB_REF_NAME || (await this.detectChangedBranch());
 
@@ -62,14 +58,11 @@ class GitBookRAGSyncer {
         return;
       }
 
-      // 初始化組件
       await this.initializePinecone();
       await this.initializeEmbedder();
 
-      // 切換到 RAG 分支
       await this.git.checkout(this.config.ragBranch);
 
-      // 獲取變更文件
       const changedFiles = await this.getChangedMarkdownFiles(changedBranch);
 
       if (changedFiles.length === 0) {
@@ -79,13 +72,9 @@ class GitBookRAGSyncer {
 
       logger.info(`檢測到 ${changedFiles.length} 個變更的 Markdown 文件`);
 
-      // 處理變更文件
       for (const file of changedFiles) {
         await this.syncFile(file, changedBranch);
       }
-
-      // 提交變更
-      await this.commitChanges(changedBranch, changedFiles.length);
 
       logger.info("增量同步完成");
     } catch (error) {
@@ -96,12 +85,10 @@ class GitBookRAGSyncer {
 
   async detectChangedBranch() {
     try {
-      // 在 GitHub Actions 環境中，通過環境變量獲取
       if (process.env.GITHUB_REF_NAME) {
         return process.env.GITHUB_REF_NAME;
       }
 
-      // 本地開發時，檢查最近的提交
       const status = await this.git.status();
       return status.current;
     } catch (error) {
@@ -124,7 +111,6 @@ class GitBookRAGSyncer {
 
       this.index = this.pinecone.index(this.config.indexName);
 
-      // 將 Pinecone 實例傳給智能處理器
       this.smartProcessor.setPinecone(this.pinecone);
 
       logger.info("Pinecone 連接成功");
@@ -138,7 +124,6 @@ class GitBookRAGSyncer {
     try {
       logger.info("初始化 Pinecone Inference API");
 
-      // 測試 Pinecone Inference API 連接
       await this.pinecone.inference.embed("multilingual-e5-large", ["test"], {
         inputType: "passage",
       });
@@ -152,14 +137,12 @@ class GitBookRAGSyncer {
 
   async getChangedMarkdownFiles(branch) {
     try {
-      // 獲取最近兩次提交的差異
       await this.git.fetch("origin", branch);
       const diff = await this.git.diffSummary([
         `origin/${branch}~1`,
         `origin/${branch}`,
       ]);
 
-      // 過濾出 Markdown 文件
       const markdownFiles = diff.files
         .filter((file) => file.file.endsWith(".md"))
         .map((file) => file.file);
@@ -176,28 +159,25 @@ class GitBookRAGSyncer {
     try {
       logger.info(`同步文件: ${filePath} (${branch})`);
 
-      // 獲取文件內容
       let content;
       try {
         content = await this.git.show([`origin/${branch}:${filePath}`]);
       } catch (error) {
-        // 文件可能被刪除
         logger.info(`文件 ${filePath} 可能已被刪除，清理相關向量`);
         await this.cleanupFileVectors(filePath);
         return;
       }
 
-      // 複製文件到 RAG 分支
-      const targetDir = branch === "zh-CN" ? "doc/zh-CN" : "doc/en";
-      const targetPath = `${targetDir}/${path.basename(filePath)}`;
+      const targetPath = `doc/${branch}/${filePath}`;
+      const targetDir = path.dirname(targetPath);
 
       await fs.mkdir(targetDir, { recursive: true });
       await fs.writeFile(targetPath, content, "utf8");
 
-      // 清理舊向量
-      await this.cleanupFileVectors(path.basename(filePath));
+      await this.cleanupFileVectors(filePath);
 
-      // 處理新內容
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const chunks = await this.parseAndChunk(content, filePath);
       await this.storeChunks(chunks, filePath, branch);
 
@@ -208,14 +188,11 @@ class GitBookRAGSyncer {
     }
   }
 
-  async cleanupFileVectors(filename) {
+  async cleanupFileVectors(filePath) {
     try {
-      const baseFilename = path.basename(filename, ".md");
-
-      // 查詢現有向量
       const queryResponse = await this.index.query({
-        vector: new Array(1024).fill(0), // 佔位向量
-        filter: { filename: path.basename(filename) },
+        vector: new Array(1024).fill(0),
+        filter: { filename: filePath },
         topK: 100,
         includeMetadata: true,
       });
@@ -223,17 +200,16 @@ class GitBookRAGSyncer {
       if (queryResponse.matches && queryResponse.matches.length > 0) {
         const idsToDelete = queryResponse.matches.map((match) => match.id);
         await this.index.deleteMany(idsToDelete);
-        logger.info(`清理文件 ${filename} 的 ${idsToDelete.length} 個舊向量`);
+        logger.info(`清理文件 ${filePath} 的 ${idsToDelete.length} 個舊向量`);
       }
     } catch (error) {
-      logger.error(`清理文件 ${filename} 向量失敗:`, error);
+      logger.error(`清理文件 ${filePath} 向量失敗:`, error);
     }
   }
 
   detectLanguage(text) {
     try {
       const lang = franc(text);
-      // franc 返回 ISO 639-3 代碼，需要轉換
       if (lang === "cmn" || text.match(/[\u4e00-\u9fff]/)) {
         return "zh-CN";
       } else {
@@ -241,7 +217,6 @@ class GitBookRAGSyncer {
       }
     } catch (error) {
       logger.error("語言檢測失敗:", error);
-      // 默認根據字符判斷
       return text.match(/[\u4e00-\u9fff]/) ? "zh-CN" : "en";
     }
   }
@@ -250,17 +225,14 @@ class GitBookRAGSyncer {
     try {
       logger.info(`解析文件 ${filename}`);
 
-      // 1. 提取增強的 metadata
       const metadata = await this.smartProcessor.extractSmartMetadata(
         content,
         filename,
         this.detectLanguage.bind(this)
       );
 
-      // 2. 使用基本分塊
       const chunks = this.basicParseAndChunk(content, filename);
 
-      // 3. 為每個 chunk 附加 metadata
       return chunks.map((chunk) => ({
         ...chunk,
         metadata: metadata,
@@ -335,7 +307,6 @@ class GitBookRAGSyncer {
 
   async storeChunks(chunks, filename, language) {
     try {
-      // 檢查 chunks 是否為有效數組
       if (!Array.isArray(chunks)) {
         logger.error(`chunks 不是數組: ${typeof chunks} (${filename})`);
         return;
@@ -353,26 +324,23 @@ class GitBookRAGSyncer {
           chunk.content,
           "passage"
         );
-        const langPrefix = language === "zh-CN" ? "zh-CN" : "en";
-        const vectorId = `${langPrefix}_${path.basename(filename, ".md")}_${
-          chunk.index
-        }`;
+        const cleanFilename = filename
+          .replace(/[\/\\]/g, "_")
+          .replace(/\.md$/, "");
+        const vectorId = `en_${cleanFilename}_${chunk.index}`;
 
-        // 構建增強的 metadata
         const enhancedMetadata = {
-          lang: language === "zh-CN" ? "zh-CN" : "en",
-          filename: path.basename(filename),
+          lang: "en",
+          filename: filename,
+          filepath: filename,
           pair_id: vectorId,
           content: chunk.content,
+          chunk_content: chunk.content,
           heading: chunk.heading,
           chunk_index: chunk.index,
-          // 從智能處理器獲取的增強 metadata
           ...(chunk.metadata || {}),
-          // 基本檢測 (作為備用)
           has_code: /```/.test(chunk.content),
           has_links: /\[.*\]\(.*\)/.test(chunk.content),
-          // 搜索優化
-          searchable_content: chunk.content.toLowerCase().substring(0, 1000),
         };
 
         vectors.push({
@@ -382,41 +350,39 @@ class GitBookRAGSyncer {
         });
       }
 
-      if (vectors.length > 0) {
-        await this.index.upsert(vectors);
-        logger.info(`上傳 ${vectors.length} 個新向量 (${filename})`);
+      const batchSize = 100;
+      let totalUploaded = 0;
+
+      for (let i = 0; i < vectors.length; i += batchSize) {
+        const batch = vectors.slice(i, i + batchSize);
+
+        let retries = 3;
+        while (retries > 0) {
+          try {
+            await this.index.upsert(batch);
+            totalUploaded += batch.length;
+            logger.info(`批次上传成功: ${batch.length} 个向量 (${filename})`);
+            break;
+          } catch (error) {
+            retries--;
+            logger.warn(
+              `批次上传失败 (${filename}), 剩余重试次数: ${retries}`,
+              error.message
+            );
+            if (retries === 0) throw error;
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        }
       }
+
+      logger.info(`成功上传 ${totalUploaded} 个向量到 Pinecone (${filename})`);
     } catch (error) {
       logger.error(`存儲向量失敗 (${filename}):`, error);
       throw error;
     }
   }
-
-  async commitChanges(branch, fileCount) {
-    try {
-      await this.git.add(".");
-
-      const status = await this.git.status();
-      if (status.files.length === 0) {
-        logger.info("沒有需要提交的更改");
-        return;
-      }
-
-      const message = `Sync ${fileCount} file(s) from ${branch} branch`;
-      await this.git.commit(message);
-
-      // 推送到遠程
-      await this.git.push("origin", this.config.ragBranch);
-
-      logger.info(`提交並推送完成: ${message}`);
-    } catch (error) {
-      logger.error("提交變更失敗:", error);
-      throw error;
-    }
-  }
 }
 
-// 主執行函數
 async function main() {
   const syncer = new GitBookRAGSyncer();
 
