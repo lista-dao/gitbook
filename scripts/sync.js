@@ -272,12 +272,16 @@ class GitBookRAGSyncer {
         } else if (
           token.type === "paragraph" ||
           token.type === "list" ||
-          token.type === "blockquote"
+          token.type === "blockquote" ||
+          token.type === "table"
         ) {
           const text = token.raw || token.text || "";
           currentChunk += text + "\n\n";
-
-          if (currentChunk.length >= this.config.chunkSize.max) {
+          const sizeLimit =
+            token.type === "table"
+              ? this.config.chunkSize.max * 3
+              : this.config.chunkSize.max;
+          if (currentChunk.length >= sizeLimit) {
             chunks.push({
               content: currentChunk.trim(),
               heading: currentHeading,

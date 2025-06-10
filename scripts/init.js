@@ -324,7 +324,7 @@ class GitBookRAGInitializer {
           // 如果是表格，优先保持完整性，适当增加切块大小限制
           const sizeLimit =
             token.type === "table"
-              ? this.config.chunkSize.max * 1.5
+              ? this.config.chunkSize.max * 3
               : this.config.chunkSize.max;
 
           if (currentChunk.length >= sizeLimit) {
