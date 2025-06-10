@@ -315,12 +315,19 @@ class GitBookRAGInitializer {
         } else if (
           token.type === "paragraph" ||
           token.type === "list" ||
-          token.type === "blockquote"
+          token.type === "blockquote" ||
+          token.type === "table"
         ) {
           const text = token.raw || token.text || "";
           currentChunk += text + "\n\n";
 
-          if (currentChunk.length >= this.config.chunkSize.max) {
+          // 如果是表格，优先保持完整性，适当增加切块大小限制
+          const sizeLimit =
+            token.type === "table"
+              ? this.config.chunkSize.max * 1.5
+              : this.config.chunkSize.max;
+
+          if (currentChunk.length >= sizeLimit) {
             chunks.push({
               content: currentChunk.trim(),
               heading: currentHeading,
@@ -341,6 +348,7 @@ class GitBookRAGInitializer {
         });
       }
 
+      logger.info(`文件 ${filename} 切分为 ${chunks.length} 个块`);
       return chunks;
     } catch (error) {
       logger.error(`基本解析文件 ${filename} 失敗:`, error);

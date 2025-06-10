@@ -253,12 +253,74 @@ class GitBookRAGBot {
         includeMetadata: true,
       });
 
-      const results = (query.matches || [])
-        .filter((chunk) => chunk.score >= 0.25)
-        .slice(0, this.config.maxResults);
+      const results = (query.matches || []).filter(
+        (chunk) => chunk.score >= 0.6
+      );
+      logger.info(`score 0.5 檢索到 ${results.length} 個相關文檔塊`);
+      if (results.length > 0) {
+        const relevantFiles = [
+          ...new Set(results.map((r) => r.metadata.filename)),
+        ].slice(0, 2);
 
-      logger.info(`檢索到 ${results.length} 個相關文檔塊`);
-      return results;
+        const allChunks = [];
+
+        for (const filename of relevantFiles) {
+          const fileFilter = {
+            filename: filename,
+          };
+
+          const fileQuery = await this.index.query({
+            vector: embedding,
+            filter: fileFilter,
+            topK: 100,
+            includeMetadata: true,
+          });
+
+          const fileChunks = fileQuery.matches.sort(
+            (a, b) =>
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+          );
+
+          allChunks.push(...fileChunks);
+        }
+
+        logger.info(
+          `檢索到 ${relevantFiles.length} 個相關文件，共 ${allChunks.length} 個文檔塊`
+        );
+        return allChunks;
+      }
+
+      logger.info(`未找到相似度大於 0.6 的文檔塊`);
+
+      const fallbackResults = (query.matches || []).filter(
+        (chunk) => chunk.score >= 0.3
+      );
+
+      if (fallbackResults.length > 0) {
+        const filename = fallbackResults[0].metadata.filename;
+        const fileFilter = {
+          filename: filename,
+        };
+
+        const fileQuery = await this.index.query({
+          vector: embedding,
+          filter: fileFilter,
+          topK: 100,
+          includeMetadata: true,
+        });
+
+        const allChunks = fileQuery.matches.sort(
+          (a, b) =>
+            (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+        );
+
+        logger.info(
+          `使用降低的相似度閾值找到文件 ${filename} 的 ${allChunks.length} 個文檔塊`
+        );
+        return allChunks;
+      }
+
+      return [];
     } catch (error) {
       logger.error("檢索相關內容失敗:", error);
       throw error;
@@ -281,6 +343,13 @@ class GitBookRAGBot {
         )
         .join("\n\n---\n\n");
 
+      // 添加调试日志
+      logger.info("传递给GPT的完整上下文:", {
+        chunkCount: relevantChunks.length,
+        contextLength: context.length,
+        context: context.substring(0, 1000) + "...", // 只显示前1000字符
+      });
+
       // 構建提示詞
       const systemPrompt =
         language === "zh-CN"
@@ -290,6 +359,7 @@ class GitBookRAGBot {
 - 直接回答問題，基於提供的上下文
 - 保持專業和準確
 - 如果上下文不足以回答問題，請說明
+- **特別注意：如果文檔中包含表格數據，務必完整提取和使用**
 - 使用 Telegram 專用 Markdown 格式提升閱讀性：
   • **粗體**：重要概念、標題
   • _斜體_：強調重點
@@ -306,6 +376,7 @@ Requirements:
 - Answer directly based on the provided context
 - Maintain professional and accurate tone  
 - If context is insufficient, please indicate so
+- **Pay special attention: If the document contains table data, be sure to extract and use it completely**
 - Use Telegram-specific Markdown formatting for better readability:
   • **Bold**: Important concepts, headings
   • _Italic_: Emphasis points
@@ -319,7 +390,7 @@ Requirements:
 
       const userPrompt =
         language === "zh-CN"
-          ? `基於以下文檔內容回答問題：
+          ? `基於以下文檔內容回答問題。**如果文檔中有表格或列表，請完整引用所有數據**：
 
 **上下文：**
 ${context}
@@ -327,8 +398,8 @@ ${context}
 **問題：**
 ${question}
 
-請用繁體中文回答：`
-          : `Answer the question based on the following documentation:
+請用繁體中文回答，確保包含所有相關數據：`
+          : `Answer the question based on the following documentation. **If there are tables or lists in the document, please quote all data completely**:
 
 **Context:**
 ${context}
@@ -336,7 +407,7 @@ ${context}
 **Question:**
 ${question}
 
-Please answer in English:`;
+Please answer in English, ensuring all relevant data is included:`;
 
       const response = await axios.post(
         this.config.openaiApiUrl,
