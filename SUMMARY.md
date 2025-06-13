@@ -83,13 +83,14 @@
   * [领取奖励](user-guide/lista-velista/claim-rewards.md)
   * [在 Lista DAO 上质押外部 LP 代币](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
   * [Gauge 投票](user-guide/lista-velista/gauge-voting.md)
+* [Lista 借贷金库管理 GUI](user-guide/lista-lending-vault-manager-gui.md)
 
 ## 安全
 
 * [审计报告](security/audit-reports.md)
-* [Bug 赏金 (Immunefi)](security/bug-bounty-immunefi.md)
+* [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
 
-## 开发者专区
+## 开发者
 
 * [概览](for-developer/overview.md)
 * [LISTA 治理](for-developer/lista-governance/README.md)
@@ -113,8 +114,8 @@
 
 ## 合作伙伴关系
 
-* [品牌工具包](partnerships/brand-kit.md)
-* [我们的频道](partnerships/our-channels.md)
+* [品牌套件](partnerships/brand-kit.md)
+* [我们的渠道](partnerships/our-channels.md)
 
 ## 法律免责声明
 
