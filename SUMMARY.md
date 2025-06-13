@@ -83,7 +83,12 @@
   * [Claim Rewards](user-guide/lista-velista/claim-rewards.md)
   * [Staking external LP tokens on Lista DAO](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
   * [Gauge Voting](user-guide/lista-velista/gauge-voting.md)
-* [Lista Lending Vault Manager GUI](user-guide/lista-lending-vault-manager-gui.md)
+* [Create Vault on Lista Lending](user-guide/create-vault-on-lista-lending/README.md)
+  * [Lista Lending Contracts](user-guide/create-vault-on-lista-lending/lista-lending-contracts.md)
+
+***
+
+* [Create Markets on Lista Lending](create-markets-on-lista-lending.md)
 
 ## Security
 

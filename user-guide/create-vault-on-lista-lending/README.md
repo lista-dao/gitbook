@@ -1,8 +1,4 @@
-# Lista Lending Vault Manager GUI
-
-## User Guide: How to Create Your Own Vault <a href="#f58f" id="f58f"></a>
-
-Ready to dive in and create your own vault? Follow this step-by-step guide to set up a vault using the Lista Lending Vault Manager.
+# Create Vault on Lista Lending
 
 ## Step 1: Access the Vault Manager <a href="#id-3c4f" id="id-3c4f"></a>
 
