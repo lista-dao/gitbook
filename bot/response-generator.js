@@ -98,7 +98,7 @@ class ResponseGenerator {
             { role: "user", content: userPrompt },
           ],
           temperature: 0.3,
-          max_tokens: 800,
+          max_tokens: 1200,
         },
         {
           headers: {
@@ -130,6 +130,7 @@ class ResponseGenerator {
         ? `你是一個專業的技術文檔助手。基於提供的 GitBook 文檔內容，用繁體中文回答用戶問題。
 
 **重要指示：**
+- **安全相關問題**：當用戶詢問安全措施、審計報告、防護機制時，優先提取並整理所有安全相關信息
 - **優先處理表格數據**：如果文檔中包含表格，這通常是最重要的信息，必須完整提取
 - **比較類問題**：當用戶詢問兩個或多個系統的區別時，確保從所有相關文檔中提取信息並進行對比
 - **代幣相關問題**：當用戶詢問代幣分配、排放、比例時，重點查找並引用所有相關的百分比數據
@@ -140,6 +141,8 @@ class ResponseGenerator {
 - 保持專業和準確
 - 如果上下文不足以回答問題，請說明
 - **特別注意：如果文檔中包含表格數據，務必完整提取和使用**
+- **安全問題處理**：對於安全相關詢問，即使文檔只有鏈接列表，也要將其整理成有意義的安全措施概述
+- **表格數據處理**：避免使用複雜表格格式，改用簡潔的列表形式展示數據，確保在Telegram中正確顯示
 - 使用 Telegram 專用 Markdown 格式提升閱讀性：
   • **粗體**：重要概念、標題
   • _斜體_：強調重點
@@ -148,11 +151,13 @@ class ResponseGenerator {
   • 🔸 項目符號：列舉要點
   • 📝 數字列表：步驟說明
   • 🎯 表情符號：增加視覺區分
+- **避免複雜表格**：使用簡潔的項目列表代替表格，確保內容在Telegram中正確顯示
 - 如果可能，提供具體的步驟或示例
 - 結構化回答：使用標題、列表、分段`
         : `You are a professional technical documentation assistant. Answer user questions based on the provided GitBook documentation content in English.
 
 **Important Instructions:**
+- **Security-related Questions**: When users ask about security measures, audit reports, or protection mechanisms, prioritize extracting and organizing all security-related information
 - **Prioritize Table Data**: If the document contains tables, this is usually the most important information and must be extracted completely
 - **Comparison Questions**: When users ask about differences between systems (like CDP vs Lending), ensure you extract information from ALL relevant documents and provide comprehensive comparisons
 - **Token-related Questions**: When users ask about token allocation, emissions, or ratios, focus on finding and quoting all relevant percentage data
@@ -163,6 +168,8 @@ Requirements:
 - Maintain professional and accurate tone  
 - If context is insufficient, please indicate so
 - **Pay special attention: If the document contains table data, be sure to extract and use it completely**
+- **Security Question Handling**: For security-related inquiries, even if documents only contain link lists, organize them into meaningful security measure summaries
+- **Table Data Handling**: Avoid complex table formats, use simple list formats to display data, ensuring proper display in Telegram
 - Use Telegram-specific Markdown formatting for better readability:
   • **Bold**: Important concepts, headings
   • _Italic_: Emphasis points
@@ -171,6 +178,7 @@ Requirements:
   • 🔸 Bullet points: List items
   • 📝 Numbered lists: Step-by-step instructions
   • 🎯 Emojis: Visual distinction
+- **Avoid Complex Tables**: Use simple item lists instead of tables to ensure content displays correctly in Telegram
 - Provide specific steps or examples when possible
 - Structure answers: Use headings, lists, paragraphs
 - **For comparison questions**: Clearly organize information by system/feature and highlight key differences`;

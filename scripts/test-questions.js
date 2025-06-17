@@ -17,13 +17,13 @@ async function testQuestionsList() {
 
     // 你的问题列表
     const questions = [
-      "what is the interest rate model for lista lending?",
-      "How can I access lista lending",
-      "what is clisBNB?",
-      "LISTA's token distribution",
-      "lista 代幣排放比例為何",
-      "what are the differences between lista lending and cdp?",
-      "LISTA 中的兩個借貸服務有什麼區別？",
+      //   "what is the interest rate model for lista lending?",
+      //   "How can I access lista lending",
+      //   "what is clisBNB?",
+      //   "LISTA's token distribution",
+      //   "lista 代幣排放比例為何",
+      //   "what are the differences between lista lending and cdp?",
+      "lista DAO 采取了哪些具体的安全措施来保护用户在 Lista Lending 平台上存入的资产？请详细说明智能合约审计、多重签名机制或其它相关防护措施。",
     ];
 
     const userInfo = { id: 123456, username: "test", first_name: "Test" };

@@ -47,10 +47,16 @@ class RetrievalService {
         (chunk) => chunk.score >= 0.5
       );
 
+      const isSecurityQuery = this.detectSecurityQuery(question);
       const isComparisonQuery = this.detectComparisonQuery(question);
+
       logger.info("檢索結果:", {
         totalResults: results.length,
-        queryType: isComparisonQuery ? "comparison" : "regular",
+        queryType: isSecurityQuery
+          ? "security"
+          : isComparisonQuery
+          ? "comparison"
+          : "regular",
       });
 
       if (results.length === 0) {
@@ -59,6 +65,10 @@ class RetrievalService {
           (chunk) => chunk.score >= 0.3
         );
         return fallbackResults;
+      }
+
+      if (isSecurityQuery) {
+        return await this.handleSecurityQuery(results, embedding, question);
       }
 
       if (isComparisonQuery) {
@@ -70,6 +80,40 @@ class RetrievalService {
       logger.error("檢索相關內容失敗:", error);
       throw error;
     }
+  }
+
+  detectSecurityQuery(question) {
+    const securityKeywords = [
+      "security",
+      "audit",
+      "audits",
+      "audited",
+      "auditing",
+      "bug bounty",
+      "immunefi",
+      "vulnerability",
+      "vulnerabilities",
+      "safe",
+      "safety",
+      "protect",
+      "protection",
+      "secure",
+      "multi-signature",
+      "multisig",
+      "time lock",
+      "timelock",
+      "oracle",
+      "price feed",
+      "liquidation",
+      "slashing",
+      "contract security",
+      "smart contract security",
+    ];
+
+    const questionLower = question.toLowerCase();
+    return securityKeywords.some((keyword) =>
+      questionLower.includes(keyword.toLowerCase())
+    );
   }
 
   detectComparisonQuery(question) {
@@ -85,12 +129,6 @@ class RetrievalService {
       "better",
       "distinguish",
       "contrast",
-      "cdp",
-      "lending",
-      "borrow",
-      "collateral",
-      "debt",
-      "position",
     ];
 
     const questionLower = question.toLowerCase();
@@ -98,13 +136,85 @@ class RetrievalService {
       questionLower.includes(keyword.toLowerCase())
     );
 
-    // 檢查是否同時提到多個系統
+    // 检查是否同时提到多个系统 - 排除安全问题
     const hasMultipleSystems =
-      (questionLower.includes("cdp") && questionLower.includes("lending")) ||
-      (questionLower.includes("collateral") &&
-        questionLower.includes("borrow"));
+      questionLower.includes("cdp") &&
+      questionLower.includes("lending") &&
+      !this.detectSecurityQuery(question); // ✅ 关键修复：排除安全问题
 
     return hasComparisonWords || hasMultipleSystems;
+  }
+
+  async handleSecurityQuery(results, embedding, question) {
+    logger.info("檢測到安全相關問題，使用專門的安全文檔檢索策略");
+
+    // 专门搜索安全相关文档
+    const securityFilenames = [
+      "security/audit-reports.md",
+      "security/bug-bounty-immunefi.md",
+    ];
+
+    const allChunks = [];
+
+    // 获取安全相关文档
+    for (const filename of securityFilenames) {
+      try {
+        const securityQuery = await this.index.query({
+          vector: embedding,
+          filter: { filename: filename },
+          topK: 50,
+          includeMetadata: true,
+        });
+
+        if (securityQuery.matches && securityQuery.matches.length > 0) {
+          const securityChunks = securityQuery.matches.sort(
+            (a, b) =>
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+          );
+          allChunks.push(...securityChunks);
+          logger.info(
+            `安全查詢 ${filename}: 找到 ${securityChunks.length} 個chunks`
+          );
+        }
+      } catch (error) {
+        logger.warn(`安全查詢 ${filename} 失敗: ${error.message}`);
+      }
+    }
+
+    // 如果安全文档没有足够内容，搜索其他包含安全信息的文档
+    if (allChunks.length < 3) {
+      logger.info("專門安全文檔結果不足，擴大搜索範圍");
+
+      const generalSecurityQuery = await this.index.query({
+        vector: embedding,
+        topK: 30,
+        includeMetadata: true,
+      });
+
+      const securityRelatedChunks =
+        generalSecurityQuery.matches?.filter((match) => {
+          const content = match.metadata.chunk_content || "";
+          const filename = match.metadata.filename || "";
+
+          return (
+            filename.includes("security") ||
+            content.toLowerCase().includes("audit") ||
+            content.toLowerCase().includes("security") ||
+            content.toLowerCase().includes("immunefi") ||
+            content.toLowerCase().includes("bug bounty")
+          );
+        }) || [];
+
+      allChunks.push(...securityRelatedChunks);
+    }
+
+    // 如果还是没有足够内容，使用原始结果
+    if (allChunks.length < 3) {
+      logger.info("安全相關檢索結果不足，使用原始檢索結果");
+      return await this.handleRegularQuery(results, embedding);
+    }
+
+    return this.deduplicateAndSort(allChunks);
   }
 
   async handleComparisonQuery(results, embedding) {
