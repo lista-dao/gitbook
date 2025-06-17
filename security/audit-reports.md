@@ -1,6 +1,6 @@
 # Audit Reports
 
-Lista's smart contracts have undergone multiple external audits and security assessments. To learn more, view the detailed reports here:
+All of Lista’s core smart contracts have been rigorously audited by reputable third-party security firms. These independent assessments ensure our protocol’s integrity and resilience against potential vulnerabilities.
 
 
 
