@@ -1,7 +1,7 @@
-# Bug Bounty
+# Bug Bounty (Immunefi)
 
-### Immunefi Bug Bounty Program
+Lista DAO partners with **Immunefi** — the leading bug bounty platform for blockchain security — to proactively identify and fix vulnerabilities. This program invites ethical hackers and security researchers to report critical issues in exchange for rewards, helping us maintain a secure and robust ecosystem.
 
-Immunefi is a leading bug bounty platform focused on blockchain and smart contract security. It provides a secure environment for ethical hackers to identify and report vulnerabilities in blockchain projects. By leveraging Immunefi, we ensure that our platform remains robust and secure, protecting our users and their assets.
+💰 **Report a vulnerability or learn more about our active bug bounty program**
 
 You can find our Immunefi bug bounty program and report any issues [here](https://immunefi.com/bug-bounty/listadao/).
