@@ -1,7 +1,7 @@
-# Bug Bounty
+# Bug Bounty (Immunefi)
 
-### Immunefi Bug Bounty Program
+Lista DAO 与 **Immunefi** 合作 —— 这是一个领先的区块链安全漏洞赏金平台 —— 以主动识别和修复漏洞。该计划邀请道德黑客和安全研究人员报告关键问题以换取奖励，帮助我们维护一个安全稳固的生态系统。
 
-Immunefi 是一个领先的 Bug Bounty 平台，专注于区块链和智能合约安全。它为道德黑客提供了一个安全的环境，以识别和报告区块链项目中的漏洞。通过利用 Immunefi，我们确保我们的平台保持强大和安全，保护我们的用户及其资产。
+💰 **报告漏洞或了解更多关于我们活跃的赏金计划**
 
-您可以在此处找到我们的 Immunefi bug bounty 计划并报告任何问题 [这里](https://immunefi.com/bug-bounty/listadao/)。
+您可以在 [这里](https://immunefi.com/bug-bounty/listadao/) 找到我们的 Immunefi 漏洞赏金计划并报告任何问题。
