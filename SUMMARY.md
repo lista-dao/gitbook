@@ -1,8 +1,9 @@
 # 目录
 
-## 引言
+## 简介
 
 * [概览](README.md)
+* [使用条款](introduction/terms-of-use.md)
 * [抵押债务头寸 - lisUSD](introduction/collateral-debt-position-lisusd/README.md)
   * [抵押品](introduction/collateral-debt-position-lisusd/collateral/README.md)
     * [经典抵押选项](introduction/collateral-debt-position-lisusd/collateral/classic-collateral-options.md)
@@ -51,10 +52,10 @@
   * [协议费用](governance/velista/protocol-fees.md)
   * [veLISTA 发行](governance/velista/velista-emissions/README.md)
     * [LP 池](governance/velista/velista-emissions/lp-pools.md)
-  * [veLISTA 投票](governance/velista/gauge-voting-for-velista.md)
+  * [veLISTA 表决](governance/velista/gauge-voting-for-velista.md)
   * [veLISTA 贿赂市场](governance/velista/velista-bribe-market.md)
   * [自动复合](governance/velista/auto-compounding.md)
-  * [LISTA 永久锁定 (LIP-016)](governance/velista/permanent-locking-of-lista-lip-016.md)
+  * [永久锁定 LISTA (LIP-016)](governance/velista/permanent-locking-of-lista-lip-016.md)
   * [收入 / 成本](governance/velista/revenue-cost.md)
   * [分析](governance/velista/analytics.md)
 
@@ -82,8 +83,13 @@
   * [解锁 LISTA](user-guide/lista-velista/unlock-lista.md)
   * [领取奖励](user-guide/lista-velista/claim-rewards.md)
   * [在 Lista DAO 上质押外部 LP 代币](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
-  * [Gauge 投票](user-guide/lista-velista/gauge-voting.md)
-* [Lista 借贷金库管理 GUI](user-guide/lista-lending-vault-manager-gui.md)
+  * [表决](user-guide/lista-velista/gauge-voting.md)
+* [在 Lista 借贷上创建金库](user-guide/create-vault-on-lista-lending/README.md)
+  * [Lista 借贷合约](user-guide/create-vault-on-lista-lending/lista-lending-contracts.md)
+
+***
+
+* [在 Lista 借贷上创建市场](create-markets-on-lista-lending.md)
 
 ## 安全
 
@@ -114,9 +120,9 @@
 
 ## 合作伙伴关系
 
-* [品牌套件](partnerships/brand-kit.md)
+* [品牌工具包](partnerships/brand-kit.md)
 * [我们的渠道](partnerships/our-channels.md)
 
-## 法律免责声明
+## 免责声明
 
-* [法律免责声明](legal-disclaimer/legal-disclaimer.md)
+* [法律免责声明](disclaimers/legal-disclaimer.md)
