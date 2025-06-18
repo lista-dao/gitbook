@@ -3,6 +3,7 @@
 ## Introduction
 
 * [Overview](README.md)
+* [Terms of Use](introduction/terms-of-use.md)
 * [Collateral Debt Position - lisUSD](introduction/collateral-debt-position-lisusd/README.md)
   * [Collateral](introduction/collateral-debt-position-lisusd/collateral/README.md)
     * [Classic collateral options](introduction/collateral-debt-position-lisusd/collateral/classic-collateral-options.md)
@@ -122,6 +123,6 @@
 * [Brand Kit](partnerships/brand-kit.md)
 * [Our Channels](partnerships/our-channels.md)
 
-## Legal Disclaimer
+## Disclaimers
 
-* [Legal Disclaimer](legal-disclaimer/legal-disclaimer.md)
+* [Legal Disclaimer](disclaimers/legal-disclaimer.md)
