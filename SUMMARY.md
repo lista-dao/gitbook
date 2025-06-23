@@ -1,12 +1,12 @@
 # 目录
 
-## 简介
+## 引言
 
-* [概览](README.md)
+* [概述](README.md)
 * [使用条款](introduction/terms-of-use.md)
 * [抵押债务头寸 - lisUSD](introduction/collateral-debt-position-lisusd/README.md)
   * [抵押品](introduction/collateral-debt-position-lisusd/collateral/README.md)
-    * [经典抵押选项](introduction/collateral-debt-position-lisusd/collateral/classic-collateral-options.md)
+    * [经典抵押品选项](introduction/collateral-debt-position-lisusd/collateral/classic-collateral-options.md)
     * [Lista 创新区](introduction/collateral-debt-position-lisusd/collateral/lista-innovation-zone.md)
     * [贷款清算](introduction/collateral-debt-position-lisusd/collateral/loan-liquidation.md)
   * [lisUSD](introduction/collateral-debt-position-lisusd/lisusd/README.md)
@@ -32,7 +32,7 @@
   * [预言机](introduction/lista-lending/oracle.md)
   * [闪电贷](introduction/lista-lending/flash-loan.md)
   * [用户流程](introduction/lista-lending/user-flow.md)
-* [币安 Launchpool: clisBNB](introduction/binance-launchpool-clisbnb/README.md)
+* [Binance Launchpool: clisBNB](introduction/binance-launchpool-clisbnb/README.md)
   * [用 slisBNB 铸造 clisBNB](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [在 Lista 借贷上铸造 clisBNB](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
 * [BNB 验证器: Lista DAO](introduction/bnb-validator-lista-dao.md)
@@ -66,13 +66,13 @@
   * [借用 lisUSD](user-guide/collateral-debt-position/borrow-lisusd.md)
   * [偿还 lisUSD](user-guide/collateral-debt-position/repay-lisusd.md)
   * [提取抵押品](user-guide/collateral-debt-position/withdraw-collateral.md)
-  * [将 clisBNB 委托给您的币安 web3 MPC 钱包](user-guide/collateral-debt-position/delegating-clisbnb-to-your-binance-web3-mpc-wallet.md)
+  * [将 clisBNB 委托给您的 Binance web3 MPC 钱包](user-guide/collateral-debt-position/delegating-clisbnb-to-your-binance-web3-mpc-wallet.md)
 * [流动性质押 - slisBNB](user-guide/liquid-staking-slisbnb/README.md)
   * [如何兑换 slisBNB](user-guide/liquid-staking-slisbnb/how-to-swap-for-slisbnb.md)
   * [铸造 slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
-  * [从 slisBNB 兑换 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
+  * [从 slisBNB 赎回 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
   * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
-* [使用币安钱包](user-guide/using-binance-web3-wallet/README.md)
+* [使用 Binance 钱包](user-guide/using-binance-web3-wallet/README.md)
   * [将 BNB 流动性质押为 slisBNB](user-guide/using-binance-web3-wallet/liquid-staking-bnb-into-slisbnb.md)
   * [获取 lisUSD](user-guide/using-binance-web3-wallet/obtaining-lisusd.md)
   * [在 APX Finance 上交易](user-guide/using-binance-web3-wallet/trading-on-apx-finance.md)
@@ -95,10 +95,11 @@
 
 * [审计报告](security/audit-reports.md)
 * [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
+* [Lista 借贷风险基金](security/lista-lending-risk-fund.md)
 
-## 开发者
+## 面向开发者
 
-* [概览](for-developer/overview.md)
+* [概述](for-developer/overview.md)
 * [LISTA 治理](for-developer/lista-governance/README.md)
   * [智能合约](for-developer/lista-governance/smart-contract.md)
 * [抵押债务头寸](for-developer/collateral-debt-position/README.md)
