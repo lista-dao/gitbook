@@ -116,14 +116,6 @@ class RetrievalService {
       "secure",
       "multi-signature",
       "multisig",
-      "time lock",
-      "timelock",
-      "oracle",
-      "price feed",
-      "liquidation",
-      "slashing",
-      "contract security",
-      "smart contract security",
     ];
 
     const questionLower = question.toLowerCase();
