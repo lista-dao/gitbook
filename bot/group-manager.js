@@ -6,7 +6,7 @@ class GroupManager {
   // 检查是否为允许的聊天（白名单功能）
   isAllowedChat(chatId, chatType) {
     if (chatType === "private") {
-      return true;
+      return false;
     }
 
     // 如果没有设置群组白名单，默认允许所有群组

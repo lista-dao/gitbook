@@ -1,6 +1,7 @@
 const { Telegraf } = require("telegraf");
 const { Pinecone } = require("@pinecone-database/pinecone");
 const winston = require("winston");
+const express = require("express");
 const simpleRateLimiter = require("./simple-rate-limiter");
 const SmartProcessor = require("./smart-processor");
 const RetrievalService = require("./retrieval-service");
@@ -24,10 +25,6 @@ const logger = winston.createLogger({
       format: winston.format.combine(
         winston.format.colorize(),
         winston.format.simple()
-        // winston.format.prettyPrint({
-        //   depth: 4,
-        //   colorize: true,
-        // })
       ),
     }),
   ],
@@ -39,12 +36,15 @@ class GitBookRAGBot {
     this.pinecone = null;
     this.index = null;
     this.botInfo = null;
+    this.httpServer = null;
+    this.app = express();
 
     this.config = {
       indexName: process.env.PINECONE_INDEX_NAME || "gitbook-rag",
       similarityThreshold: 0.6,
       maxResults: 8,
       openaiApiUrl: "https://api.openai.com/v1/chat/completions",
+      healthPort: 3000,
     };
 
     // 初始化服務模塊
@@ -132,7 +132,6 @@ class GitBookRAGBot {
     this.bot.on("text", async (ctx) => {
       const question = ctx.message.text;
       const userId = ctx.from.id;
-      const username = ctx.from.username || ctx.from.first_name;
       const chatType = ctx.chat.type;
       const chatId = ctx.chat.id;
 
@@ -247,15 +246,15 @@ class GitBookRAGBot {
     }
   }
 
-  // 啟動 Bot（生產模式 - 支持 PM2）
+  // 啟動 Bot
   async startPolling() {
     try {
       await this.initialize();
       this.setupBot();
+      this.setupHealthCheck();
       await this.bot.launch();
       logger.info("Bot 啟動成功（輪詢模式）");
 
-      // PM2 信號處理
       this.setupProcessSignals();
 
       logger.info("Bot 初始化完成，等待消息...");
@@ -265,7 +264,6 @@ class GitBookRAGBot {
     }
   }
 
-  // 設置進程信號處理（PM2 支持）
   setupProcessSignals() {
     const gracefulShutdown = async (signal) => {
       logger.info(`收到 ${signal} 信號，開始關閉...`);
@@ -274,6 +272,11 @@ class GitBookRAGBot {
         if (this.bot) {
           await this.bot.stop(signal);
           logger.info("Telegram Bot 已停止");
+        }
+
+        if (this.httpServer) {
+          this.httpServer.close();
+          logger.info("Health check server 已停止");
         }
 
         // 等待正在處理的請求完成
@@ -286,14 +289,9 @@ class GitBookRAGBot {
       }
     };
 
-    // PM2 信號處理
+    // 信號處理
     process.once("SIGINT", () => gracefulShutdown("SIGINT"));
     process.once("SIGTERM", () => gracefulShutdown("SIGTERM"));
-    process.on("message", (msg) => {
-      if (msg === "shutdown") {
-        gracefulShutdown("PM2_SHUTDOWN");
-      }
-    });
 
     // 未捕獲異常處理
     process.on("uncaughtException", (error) => {
@@ -304,6 +302,24 @@ class GitBookRAGBot {
     process.on("unhandledRejection", (reason, promise) => {
       logger.error("未處理的 Promise 拒絕:", { reason, promise });
       gracefulShutdown("UNHANDLED_REJECTION");
+    });
+  }
+
+  setupHealthCheck() {
+    this.app.get("/health", (req, res) => {
+      const healthStatus = {
+        status: "ok",
+        timestamp: new Date().toISOString(),
+        bot: this.botInfo ? "connected" : "disconnected",
+        pinecone: this.pinecone ? "connected" : "disconnected",
+      };
+      res.status(200).json(healthStatus);
+    });
+
+    this.httpServer = this.app.listen(this.config.healthPort, () => {
+      logger.info(
+        `Health check server running on port ${this.config.healthPort}`
+      );
     });
   }
 }
