@@ -95,6 +95,7 @@
 
 * [Audit Reports](security/audit-reports.md)
 * [Bug Bounty (Immunefi)](security/bug-bounty-immunefi.md)
+* [Lista Lending Risk Fund](security/lista-lending-risk-fund.md)
 
 ## FOR DEVELOPER
 
