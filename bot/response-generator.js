@@ -127,7 +127,7 @@ class ResponseGenerator {
   buildPrompts(question, context, language) {
     const systemPrompt =
       language === "zh-CN"
-        ? `你是一個專業的技術文檔助手。基於提供的 GitBook 文檔內容，用繁體中文回答用戶問題。
+        ? `你是一個專業的技術文檔助手。基於提供的 GitBook 文檔內容，用簡體中文回答用戶問題。
 
 **重要指示：**
 - **安全相關問題**：當用戶詢問安全措施、審計報告、防護機制時，優先提取並整理所有安全相關信息
@@ -152,7 +152,7 @@ class ResponseGenerator {
   • 📝 數字列表：步驟說明
   • 🎯 表情符號：增加視覺區分
 - **避免複雜表格**：使用簡潔的項目列表代替表格，確保內容在Telegram中正確顯示
-- 如果可能，提供具體的步驟或示例
+- 如果可能，提供具體的步驟或示例 
 - 結構化回答：使用標題、列表、分段`
         : `You are a professional technical documentation assistant. Answer user questions based on the provided GitBook documentation content in English.
 
@@ -196,7 +196,6 @@ ${question}
 **重要提醒：**
 - 只使用上述提供的文檔內容回答
 - 不要添加或推測任何未在文檔中明確提及的信息
-- 如果信息來自多個文件，請明確標註來源
 - 確保所有數據都有明確的文檔依據
 - **對於比較類問題**：從所有相關來源提取和組織信息
 
@@ -212,7 +211,6 @@ ${question}
 **Important Reminder:**
 - Only use the document content provided above to answer
 - Do not add or speculate any information not explicitly mentioned in the documents
-- If information comes from multiple files, please clearly indicate the source
 - Ensure all data has clear document basis
 - **For comparison questions**: Extract and organize information from all relevant sources
 
@@ -226,13 +224,63 @@ Please answer in English, ensuring all relevant data is included:`;
       ...new Set(relevantChunks.map((c) => c.metadata.filename)),
     ];
 
+    const fileDisplayNames = new Map();
+
+    sources.forEach((filename) => {
+      const fileChunks = relevantChunks.filter(
+        (c) => c.metadata.filename === filename
+      );
+
+      let displayName = null;
+
+      const mainTopic = fileChunks.find((c) => c.metadata.main_topic)?.metadata
+        .main_topic;
+      if (mainTopic && mainTopic.trim() && mainTopic !== "README") {
+        displayName = mainTopic.trim();
+      }
+
+      if (!displayName) {
+        const firstHeading = fileChunks.find((c) => c.metadata.heading)
+          ?.metadata.heading;
+        if (firstHeading && firstHeading.trim() && firstHeading !== "README") {
+          displayName = firstHeading.trim();
+        }
+      }
+
+      if (!displayName) {
+        const summary = fileChunks.find((c) => c.metadata.summary)?.metadata
+          .summary;
+        if (summary && summary.trim()) {
+          displayName =
+            summary.substring(0, 30).trim() +
+            (summary.length > 30 ? "..." : "");
+        }
+      }
+
+      if (!displayName) {
+        const pathParts = filename.replace(/\.md$/, "").split("/");
+        const lastPart = pathParts[pathParts.length - 1];
+
+        if (lastPart === "README" && pathParts.length > 1) {
+          displayName = pathParts[pathParts.length - 2];
+        } else {
+          displayName = lastPart;
+        }
+
+        displayName = displayName
+          .replace(/-/g, " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase());
+      }
+
+      fileDisplayNames.set(filename, displayName);
+    });
+
     const sourceLinks = sources
       .filter((filename) => !filename.includes("SUMMARY"))
       .map((filename) => {
-        // 移除 .md 副檔名並轉換路徑為 URL
         const urlPath = filename.replace(/\.md$/, "");
         const url = `https://docs.bsc.lista.org/${urlPath}`;
-        const displayName = filename.replace(/\.md$/, "").split("/").pop();
+        const displayName = fileDisplayNames.get(filename);
         return `[${displayName}](${url.replace("/README", "")})`;
       });
 
