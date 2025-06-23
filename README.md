@@ -21,7 +21,7 @@ layout:
 
 Lista DAO, a decentralized autonomous organization, functions as the leading liquid staking solution for BNB and a Collateralized Debt Position (CDP) protocol where users can borrow our stablecoin, lisUSD, against a variety of collateral options.  Lista DAO is also backed up by Binance Lab, with a strategic investment of 10 Miliion USD.
 
-Since our launch, Lista DAO has achieved several milestones, including our official TGE on Binance(June 20th, 2024) of our governance token, LISTA, key updates such as our AMO, the launch of ListaPie, and our Lista innovation zone. Our strategic partnerships with Etherfi, Renzo Protocol, Stakestone, Bouncebit, Solv Protocol and many others have expanded our ecosystem and brought additional value to our users. By adhering to our core values and continuously innovating, Lista DAO strives to be a leader in the DeFi space, providing users with secure, efficient, and empowering financial solutions.
+Since our launch, Lista DAO has achieved several milestones, including our official TGE on Binance(June 20th, 2024) of our governance token, LISTA, key updates such as our AMO, the launch of ListaPie, and our Lista innovation zone. Our strategic partnerships with different protocols have also expanded our ecosystem and brought additional value to our users. By adhering to our core values and continuously innovating, Lista DAO strives to be a leader in the DeFi space, providing users with secure, efficient, and empowering financial solutions.
 
 ## Mission
 
@@ -29,13 +29,13 @@ Our mission is to drive the evolution of DeFi by tackling key challenges in liqu
 
 ## Vision
 
-Our long-term vision for Lista DAO is to establish it as a cornerstone of the DeFi ecosystem, fostering widespread adoption of our products. We prioritize continuous development, consistently innovating and introducing new features and services to meet the evolving needs of our users. Transparency is foundational to our operations, ensuring that all processes and decisions are transparent and accessible to the community. Lista DAO upholds the highest security standards, implementing comprehensive measures and conducting regular audits to uphold the integrity and safety of our platform and user funds. For more detailed information, you can view our audits here \[insert hyperlink].
+Our long-term vision for Lista DAO is to establish it as a cornerstone of the DeFi ecosystem, fostering widespread adoption of our products. We prioritize continuous development, consistently innovating and introducing new features and services to meet the evolving needs of our users. Transparency is foundational to our operations, ensuring that all processes and decisions are transparent and accessible to the community. Lista DAO upholds the highest security standards, implementing comprehensive measures and conducting regular audits to uphold the integrity and safety of our platform and user funds. For more detailed information, you can view our audits [here](security/audit-reports.md).
 
 ## Core features
 
 ### Collateral Debt Position (CDP)
 
-Modeled after MakerDAO, our CDP system allows users to lock a variety of collateral and mint stablecoins (lisUSD) against it, providing a secure way to leverage assets.&#x20;
+Modelled after MakerDAO, our CDP system allows users to lock a variety of collateral and mint stablecoins (lisUSD) against it, providing a secure way to leverage assets.&#x20;
 
 ### Liquid staking solution
 
