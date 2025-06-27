@@ -10,7 +10,7 @@ const ResponseGenerator = require("./response-generator");
 const GroupManager = require("./group-manager");
 require("dotenv").config();
 
-// 配置日誌
+// 配置日志
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.combine(
@@ -47,7 +47,7 @@ class GitBookRAGBot {
       healthPort: 3000,
     };
 
-    // 初始化服務模塊
+    // 初始化服务模块
     this.smartProcessor = new SmartProcessor(this.config);
     this.retrievalService = null;
     this.languageService = null;
@@ -57,20 +57,20 @@ class GitBookRAGBot {
 
   async initialize() {
     try {
-      logger.info("開始初始化 RAG Bot...");
+      logger.info("开始初始化 RAG Bot...");
 
       // 初始化 Bot
       this.bot = new Telegraf(process.env.BOT_TOKEN);
 
-      // 獲取bot信息
+      // 获取bot信息
       this.botInfo = await this.bot.telegram.getMe();
-      logger.info("Bot信息獲取成功", {
+      logger.info("Bot信息获取成功", {
         id: this.botInfo.id,
         username: this.botInfo.username,
         first_name: this.botInfo.first_name,
       });
 
-      // 初始化其他組件
+      // 初始化其他组件
       await this.initializePinecone();
       await this.initializeEmbedder();
       this.initializeServices();
@@ -85,7 +85,7 @@ class GitBookRAGBot {
   async initializePinecone() {
     try {
       if (!process.env.PINECONE_API_KEY) {
-        throw new Error("PINECONE_API_KEY 環境變量未設置");
+        throw new Error("PINECONE_API_KEY 环境变量未设置");
       }
 
       this.pinecone = new Pinecone({
@@ -104,7 +104,7 @@ class GitBookRAGBot {
 
   async initializeEmbedder() {
     try {
-      // 測試 Pinecone Inference API 連接
+      // 测试 Pinecone Inference API 连接
       await this.pinecone.inference.embed("multilingual-e5-large", ["test"], {
         inputType: "query",
       });
@@ -116,7 +116,7 @@ class GitBookRAGBot {
   }
 
   initializeServices() {
-    // 初始化各個服務模塊
+    // 初始化各个服务模块
     this.retrievalService = new RetrievalService(
       this.index,
       this.smartProcessor
@@ -125,7 +125,7 @@ class GitBookRAGBot {
     this.responseGenerator = new ResponseGenerator(this.config);
     this.groupManager = new GroupManager(this.botInfo);
 
-    logger.info("所有服務模塊初始化完成");
+    logger.info("所有服务模块初始化完成");
   }
 
   setupBot() {
@@ -135,38 +135,38 @@ class GitBookRAGBot {
       const chatType = ctx.chat.type;
       const chatId = ctx.chat.id;
 
-      // 檢查群組白名單
+      // 检查群组白名单
       if (!this.groupManager.isAllowedChat(chatId, chatType)) {
-        logger.info(`拒絕未授權群組的請求`, { chatId, chatType });
+        logger.info(`拒绝未授权群组的请求`, { chatId, chatType });
         return;
       }
 
-      // 檢查是否需要響應
+      // 检查是否需要响应
       const shouldRespond = this.groupManager.shouldRespondToMessage(ctx);
       if (!shouldRespond) {
-        return; // 在群組中未被@，不響應
+        return; // 在群组中未被@，不响应
       }
 
-      // 清理問題文本（移除@bot的部分）
+      // 清理问题文本（移除@bot的部分）
       const cleanQuestion = this.groupManager.cleanQuestion(question);
 
       if (!cleanQuestion) {
-        return; // 如果清理後沒有內容，不響應
+        return; // 如果清理后没有内容，不响应
       }
 
-      logger.info(`收到問題: ${cleanQuestion}`, { userId, chatType });
+      logger.info(`收到问题: ${cleanQuestion}`, { userId, chatType });
 
       try {
-        // 檢測語言並顯示對應的加載消息
+        // 检测语言并显示对应的加载消息
         const detectedLang = this.languageService.detectLanguage(cleanQuestion);
         const loadingMessage =
           detectedLang === "zh-CN"
-            ? "🤔 正在搜索相關內容..."
+            ? "🤔 正在搜索相关内容..."
             : "🤔 Searching relevant content...";
 
         const thinkingMsg = await ctx.reply(loadingMessage);
 
-        // 處理問題（包含速率限制檢查）
+        // 处理问题（包含速率限制检查）
         const userInfo = {
           id: userId,
           username: ctx.from.username,
@@ -174,7 +174,7 @@ class GitBookRAGBot {
         };
         const answer = await this.processQuestion(cleanQuestion, userInfo);
 
-        // 刪除思考消息並發送答案
+        // 删除思考消息并发送答案
         await ctx.deleteMessage(thinkingMsg.message_id);
         await ctx.reply(answer, {
           parse_mode: "Markdown",
@@ -183,11 +183,11 @@ class GitBookRAGBot {
 
         logger.info(`回答完成`, { userId, answerLength: answer.length });
       } catch (error) {
-        logger.error(`處理問題失敗: ${error.message}`, { userId });
+        logger.error(`处理问题失败: ${error.message}`, { userId });
 
         const errorMessage =
           this.languageService.detectLanguage(cleanQuestion) === "zh-CN"
-            ? "❌ 抱歉，處理問題時出現錯誤，請稍後再試。"
+            ? "❌ 抱歉，处理问题时出现错误，请稍后再试。"
             : "❌ Sorry, an error occurred while processing your question. Please try again later.";
 
         await ctx.reply(errorMessage, {
@@ -197,7 +197,7 @@ class GitBookRAGBot {
     });
 
     this.bot.catch((err, ctx) => {
-      logger.error("Bot 錯誤:", err);
+      logger.error("Bot 错误:", err);
       if (ctx && ctx.reply) {
         ctx.reply("❌ System Error.");
       }
@@ -207,14 +207,14 @@ class GitBookRAGBot {
   async processQuestion(question, userInfo) {
     try {
       const detectedLang = this.languageService.detectLanguage(question);
-      logger.info(`檢測到語言: ${detectedLang}`);
+      logger.info(`检测到语言: ${detectedLang}`);
 
       let searchQuestion = question;
       if (detectedLang === "zh-CN") {
         searchQuestion = await this.languageService.translateToEnglish(
           question
         );
-        logger.info(`翻譯結果: ${searchQuestion}`);
+        logger.info(`翻译结果: ${searchQuestion}`);
       }
 
       const questionEmbedding = await this.smartProcessor.generateEmbedding(
@@ -241,32 +241,32 @@ class GitBookRAGBot {
 
       return answer;
     } catch (error) {
-      logger.error("處理問題時出錯:", error);
+      logger.error("处理问题时出错:", error);
       throw error;
     }
   }
 
-  // 啟動 Bot
+  // 启动 Bot
   async startPolling() {
     try {
       await this.initialize();
       this.setupBot();
       this.setupHealthCheck();
       await this.bot.launch();
-      logger.info("Bot 啟動成功（輪詢模式）");
+      logger.info("Bot 启动成功（轮询模式）");
 
       this.setupProcessSignals();
 
       logger.info("Bot 初始化完成，等待消息...");
     } catch (error) {
-      logger.error("Bot 啟動失敗:", error);
+      logger.error("Bot 启动失败:", error);
       process.exit(1);
     }
   }
 
   setupProcessSignals() {
     const gracefulShutdown = async (signal) => {
-      logger.info(`收到 ${signal} 信號，開始關閉...`);
+      logger.info(`收到 ${signal} 信号，开始关闭...`);
 
       try {
         if (this.bot) {
@@ -279,28 +279,28 @@ class GitBookRAGBot {
           logger.info("Health check server 已停止");
         }
 
-        // 等待正在處理的請求完成
+        // 等待正在处理的请求完成
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         process.exit(0);
       } catch (error) {
-        logger.error("關閉過程中出錯:", error);
+        logger.error("关闭过程中出错:", error);
         process.exit(1);
       }
     };
 
-    // 信號處理
+    // 信号处理
     process.once("SIGINT", () => gracefulShutdown("SIGINT"));
     process.once("SIGTERM", () => gracefulShutdown("SIGTERM"));
 
-    // 未捕獲異常處理
+    // 未捕获异常处理
     process.on("uncaughtException", (error) => {
-      logger.error("未捕獲的異常:", error);
+      logger.error("未捕获的异常:", error);
       gracefulShutdown("UNCAUGHT_EXCEPTION");
     });
 
     process.on("unhandledRejection", (reason, promise) => {
-      logger.error("未處理的 Promise 拒絕:", { reason, promise });
+      logger.error("未处理的 Promise 拒绝:", { reason, promise });
       gracefulShutdown("UNHANDLED_REJECTION");
     });
   }

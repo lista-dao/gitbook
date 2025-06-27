@@ -28,7 +28,7 @@ class ResponseGenerator {
   async generateAnswer(question, relevantChunks, language) {
     try {
       if (!process.env.OPENAI_API_KEY) {
-        throw new Error("OPENAI_API_KEY 環境變量未設置");
+        throw new Error("OPENAI_API_KEY 环境变量未设置");
       }
 
       const maxChunks = 6;
@@ -40,7 +40,7 @@ class ResponseGenerator {
 
       let context = "";
 
-      // 直接組合最相關的chunks
+      // 直接组合最相关的chunks
       selectedChunks.forEach((chunk, index) => {
         const content =
           chunk.metadata.chunk_content || chunk.metadata.content || "";
@@ -49,7 +49,7 @@ class ResponseGenerator {
         const filename = chunk.metadata.filename;
         const score = (chunk.score * 100).toFixed(1);
 
-        context += `**來源 ${index + 1}：${filename}** (相似度 ${score}%)\n`;
+        context += `**来源 ${index + 1}：${filename}** (相似度 ${score}%)\n`;
         context += content.trim() + "\n\n";
 
         if (index < selectedChunks.length - 1) {
@@ -57,7 +57,7 @@ class ResponseGenerator {
         }
       });
 
-      // 如果超過長度限制，智能截斷
+      // 如果超过长度限制，智能截断
       if (context.length > maxContextLength) {
         const truncatePoint = maxContextLength - 100;
         context =
@@ -65,7 +65,7 @@ class ResponseGenerator {
           "\n\n...[内容已截断，保留最相关信息]";
       }
 
-      logger.info("檢索策略GPT上下文:", {
+      logger.info("检索策略GPT上下文:", {
         originalChunks: relevantChunks.length,
         selectedChunks: selectedChunks.length,
         contextLength: context.length,
@@ -127,33 +127,33 @@ class ResponseGenerator {
   buildPrompts(question, context, language) {
     const systemPrompt =
       language === "zh-CN"
-        ? `你是一個專業的技術文檔助手。基於提供的 GitBook 文檔內容，用簡體中文回答用戶問題。
+        ? `你是一个专业的技术文档助手。基于提供的 GitBook 文档内容，用简体中文回答用户问题。
 
 **重要指示：**
-- **安全相關問題**：當用戶詢問安全措施、審計報告、防護機制時，優先提取並整理所有安全相關信息
-- **優先處理表格數據**：如果文檔中包含表格，這通常是最重要的信息，必須完整提取
-- **比較類問題**：當用戶詢問兩個或多個系統的區別時，確保從所有相關文檔中提取信息並進行對比
-- **代幣相關問題**：當用戶詢問代幣分配、排放、比例時，重點查找並引用所有相關的百分比數據
-- **完整性要求**：確保回答涵蓋文檔中的所有相關數據，不遺漏任何重要信息
+- **安全相关问题**：当用户询问安全措施、审计报告、防护机制时，优先提取并整理所有安全相关信息
+- **优先处理表格数据**：如果文档中包含表格，这通常是最重要的信息，必须完整提取
+- **比较类问题**：当用户询问两个或多个系统的区别时，确保从所有相关文档中提取信息并进行对比
+- **代币相关问题**：当用户询问代币分配、排放、比例时，重点查找并引用所有相关的百分比数据
+- **完整性要求**：确保回答涵盖文档中的所有相关数据，不遗漏任何重要信息
 
 要求：
-- 直接回答問題，基於提供的上下文
-- 保持專業和準確
-- 如果上下文不足以回答問題，請說明
-- **特別注意：如果文檔中包含表格數據，務必完整提取和使用**
-- **安全問題處理**：對於安全相關詢問，即使文檔只有鏈接列表，也要將其整理成有意義的安全措施概述
-- **表格數據處理**：避免使用複雜表格格式，改用簡潔的列表形式展示數據，確保在Telegram中正確顯示
-- 使用 Telegram 專用 Markdown 格式提升閱讀性：
-  • **粗體**：重要概念、標題
-  • _斜體_：強調重點
-  • \`代碼\`：技術術語、參數、指令
-  • \`\`\`代碼塊\`\`\`：多行代碼或配置
-  • 🔸 項目符號：列舉要點
-  • 📝 數字列表：步驟說明
-  • 🎯 表情符號：增加視覺區分
-- **避免複雜表格**：使用簡潔的項目列表代替表格，確保內容在Telegram中正確顯示
-- 如果可能，提供具體的步驟或示例 
-- 結構化回答：使用標題、列表、分段`
+- 直接回答问题，基于提供的上下文
+- 保持专业和准确
+- 如果上下文不足以回答问题，请说明
+- **特别注意：如果文档中包含表格数据，务必完整提取和使用**
+- **安全问题处理**：对于安全相关询问，即使文档只有链接列表，也要将其整理成有意义的安全措施概述
+- **表格数据处理**：避免使用复杂表格格式，改用简洁的列表形式展示数据，确保在Telegram中正确显示
+- 使用 Telegram 专用 Markdown 格式提升阅读性：
+  • **粗体**：重要概念、标题
+  • _斜体_：强调重点
+  • \`代码\`：技术术语、参数、指令
+  • \`\`\`代码块\`\`\`：多行代码或配置
+  • 🔸 项目符号：列举要点
+  • 📝 数字列表：步骤说明
+  • 🎯 表情符号：增加视觉区分
+- **避免复杂表格**：使用简洁的项目列表代替表格，确保内容在Telegram中正确显示
+- 如果可能，提供具体的步骤或示例 
+- 结构化回答：使用标题、列表、分段`
         : `You are a professional technical documentation assistant. Answer user questions based on the provided GitBook documentation content in English.
 
 **Important Instructions:**
@@ -185,21 +185,21 @@ Requirements:
 
     const userPrompt =
       language === "zh-CN"
-        ? `基於以下文檔內容回答問題。**如果文檔中有表格或列表，請完整引用所有數據**：
+        ? `基于以下文档内容回答问题。**如果文档中有表格或列表，请完整引用所有数据**：
 
 **上下文：**
 ${context}
 
-**問題：**
+**问题：**
 ${question}
 
 **重要提醒：**
-- 只使用上述提供的文檔內容回答
-- 不要添加或推測任何未在文檔中明確提及的信息
-- 確保所有數據都有明確的文檔依據
-- **對於比較類問題**：從所有相關來源提取和組織信息
+- 只使用上述提供的文档内容回答
+- 不要添加或推测任何未在文档中明确提及的信息
+- 确保所有数据都有明确的文档依据
+- **对于比较类问题**：从所有相关来源提取和组织信息
 
-請用繁體中文回答，確保包含所有相關數據：`
+请用简体中文回答，确保包含所有相关数据：`
         : `Answer the question based on the following documentation. **If there are tables or lists in the document, please quote all data completely**:
 
 **Context:**

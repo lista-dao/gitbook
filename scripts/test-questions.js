@@ -24,8 +24,8 @@ async function testQuestionsList() {
       //   "lista 代幣排放比例為何",
       //   "what are the differences between lista lending and cdp?",
       //   "lista DAO 采取了哪些具体的安全措施来保护用户在 Lista Lending 平台上存入的资产？请详细说明智能合约审计、多重签名机制或其它相关防护措施。",
-      //   " lista lending的清算機制是什麼",
-      "explain how the liquidation mechanism for lista lending work",
+      " lista lending的清算機制是什麼",
+      //   "explain how the liquidation mechanism for lista lending work",
     ];
 
     const userInfo = { id: 123456, username: "test", first_name: "Test" };
