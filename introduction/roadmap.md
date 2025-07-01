@@ -26,7 +26,7 @@ Enhancements to slisBNB will focus on optimizing node operations, decentralizing
 
 ### Lista 3.0: Expanding the BNBFi Ecosystem <a href="#eda7" id="eda7"></a>
 
-The BNBFi ecosystem (clisBNB) is set to experience significant growth in 2025 as Lista DAO expands its cross-chain integrations. By partnering with protocols such as StakeStone and Solv, Lista DAO will onboard staked assets from other blockchains, including Ethereum, into BNB. This initiative will unlock opportunities for users to participate in programs like Launchpool, Megadrop, and Hodler Airdrop, offering competitive yields exceeding 30% APR.
+The BNBFi ecosystem (slisBNBx) is set to experience significant growth in 2025 as Lista DAO expands its cross-chain integrations. By partnering with protocols such as StakeStone and Solv, Lista DAO will onboard staked assets from other blockchains, including Ethereum, into BNB. This initiative will unlock opportunities for users to participate in programs like Launchpool, Megadrop, and Hodler Airdrop, offering competitive yields exceeding 30% APR.
 
 To further enhance the ecosystem, Lista DAO will introduce cross-chain vault products designed to capture incentives and airdrops across multiple networks. Additionally, a referral system will be launched to engage influencers and KOLs, driving user growth and accelerating adoption.
 
