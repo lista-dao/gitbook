@@ -1,12 +1,12 @@
-# Minting clisBNB with slisBNB
+# Minting slisBNBx with slisBNB
 
 ## How Minting Works <a href="#e2fa" id="e2fa"></a>
 
-The slisBNB to clisBNB minting function is designed to be straightforward while prioritizing efficiency and fairness.
+The slisBNB to slisBNBx minting function is designed to be straightforward while prioritizing efficiency and fairness.
 
 ## Minting Ratio <a href="#id-63a1" id="id-63a1"></a>
 
-When users deposit their slisBNB into the Collateralized Debt Position (CDP) to mint clisBNB, they will receive **clisBNB at a ratio of 1:0.9709**. For example, if you deposit 1 slisBNB into the CDP, you will mint 0.9709 clisBNB.
+When users deposit their slisBNB into the Collateralized Debt Position (CDP) to mint slisBNBx, they will receive **slisBNBx at a ratio of 1:0.9709**. For example, if you deposit 1 slisBNB into the CDP, you will mint 0.9709 slisBNBx.
 
 ## Benefits <a href="#cdca" id="cdca"></a>
 
@@ -18,4 +18,4 @@ This dual functionality significantly boosts the rewards and capital efficiency 
 
 ### 2. Simplified User Experience <a href="#id-1a7b" id="id-1a7b"></a>
 
-The process of minting clisBNB from slisBNB is designed to be seamless and efficient, providing users with a straightforward way to unlock additional liquidity while supporting the ecosystem.
+The process of minting slisBNBx from slisBNB is designed to be seamless and efficient, providing users with a straightforward way to unlock additional liquidity while supporting the ecosystem.
