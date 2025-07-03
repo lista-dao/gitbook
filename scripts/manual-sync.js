@@ -110,7 +110,7 @@ class ManualSyncer {
 
       if (markdownFiles.length === 0) {
         logger.info("to-sync文件夹中没有找到markdown文件");
-        return { total: 0, successful: 0, failed: 0 };
+        return { total: 0, successful: 0, failed: 0, failedFiles: [] };
       }
 
       logger.info(`找到 ${markdownFiles.length} 个待同步的文件`);
@@ -126,13 +126,20 @@ class ManualSyncer {
 
           const count = await this.syncFile(filePath);
 
-          // 同步成功，删除源文件（因为已复制到 doc/manual）
-          await fs.unlink(filePath);
-
-          successful++;
-          logger.info(
-            `✅ ${filename} 同步成功，已移除源文件 (${count} 个向量)`
-          );
+          // 只有真正生成了向量才认为同步成功
+          if (count > 0) {
+            // 同步成功，删除源文件（因为已复制到 doc/manual）
+            await fs.unlink(filePath);
+            successful++;
+            logger.info(
+              `✅ ${filename} 同步成功，已移除源文件 (${count} 个向量)`
+            );
+          } else {
+            // 没有生成向量，保留源文件
+            failed++;
+            failedFiles.push({ filename, error: "没有生成任何有效的文本块" });
+            logger.warn(`⚠️ ${filename} 没有生成向量，保留源文件`);
+          }
         } catch (error) {
           failed++;
           failedFiles.push({ filename, error: error.message });
@@ -179,6 +186,11 @@ class ManualSyncer {
       const content = await fs.readFile(filePath, "utf8");
       const filename = path.basename(filePath);
 
+      // 先复制到手动目录作为备份
+      const targetPath = path.join(this.config.manualDir, filename);
+      await fs.copyFile(filePath, targetPath);
+      logger.info(`文件 ${filename} 已备份到 doc/manual/`);
+
       // 先清理该文件的旧向量
       await this.cleanupFileVectors(filename);
 
@@ -195,10 +207,6 @@ class ManualSyncer {
 
       // 存储到 Pinecone
       const uploadedCount = await this.storeChunks(chunks, filename);
-
-      // 复制到手动目录
-      const targetPath = path.join(this.config.manualDir, filename);
-      await fs.copyFile(filePath, targetPath);
 
       logger.info(
         `文件 ${filename} 同步完成，生成 ${chunks.length} 个文本块，上传 ${uploadedCount} 个向量`
@@ -584,6 +592,187 @@ class ManualSyncer {
       return [];
     }
   }
+
+  /**
+   * 测试metadata解析，不上传到Pinecone
+   */
+  async testMetadata(filePath) {
+    try {
+      logger.info(`测试文件metadata解析: ${filePath}`);
+
+      // 检查文件是否存在
+      try {
+        await fs.access(filePath);
+      } catch (error) {
+        throw new Error(`文件不存在: ${filePath}`);
+      }
+
+      const content = await fs.readFile(filePath, "utf8");
+      const filename = path.basename(filePath);
+
+      // 提取基本信息
+      console.log("\n" + "=".repeat(60));
+      console.log(`📄 文件: ${filename}`);
+      console.log(`📝 内容长度: ${content.length} 字符`);
+      console.log(`🌐 检测语言: ${this.detectLanguage(content)}`);
+
+      // 测试Medium/外部内容metadata提取
+      const mediumMetadata = this.extractMediumMetadata(content);
+      console.log("\n🔍 外部内容metadata:");
+      console.log(JSON.stringify(mediumMetadata, null, 2));
+
+      // 测试智能metadata提取（不调用LLM，只显示基本信息）
+      console.log("\n🧠 智能metadata预览:");
+      console.log(
+        "- 基本概念检测:",
+        this.smartProcessor.extractBasicConcepts ? "✅" : "❌"
+      );
+      console.log("- 语言检测:", this.detectLanguage(content));
+      console.log("- 包含代码:", /```/.test(content) ? "是" : "否");
+      console.log("- 包含链接:", /\[.*\]\(.*\)/.test(content) ? "是" : "否");
+      console.log("- 包含表格:", /\|.*\|/.test(content) ? "是" : "否");
+
+      // 解析并显示chunks预览
+      const chunks = this.parseAndChunkContent(content, filename);
+      console.log(`\n📊 内容分块: ${chunks.length} 个块`);
+
+      chunks.forEach((chunk, index) => {
+        console.log(`\n--- 块 ${index + 1} ---`);
+        console.log(`标题: ${chunk.heading || "(无标题)"}`);
+        console.log(`长度: ${chunk.content.length} 字符`);
+        console.log(`预览: ${chunk.content.substring(0, 100)}...`);
+      });
+
+      // 显示最终会生成的metadata结构
+      const sampleChunk = chunks[0];
+      if (sampleChunk) {
+        const finalMetadata = {
+          lang: this.detectLanguage(sampleChunk.content),
+          filename: filename,
+          filepath: `manual/${filename}`,
+          pair_id: `manual_${filename
+            .replace(/[\/\\]/g, "_")
+            .replace(/\.md$/, "")}_${sampleChunk.index}`,
+          content: sampleChunk.content,
+          chunk_content: sampleChunk.content,
+          heading: sampleChunk.heading,
+          chunk_index: sampleChunk.index,
+          source_type: "manual",
+          ...mediumMetadata,
+          has_code: /```/.test(sampleChunk.content),
+          has_links: /\[.*\]\(.*\)/.test(sampleChunk.content),
+          is_external_content: [
+            "medium_article",
+            "twitter_post",
+            "linkedin_post",
+            "substack_article",
+            "mirror_post",
+            "web_article",
+          ].includes(mediumMetadata?.content_type),
+        };
+
+        console.log("\n📋 最终metadata结构（示例）:");
+        console.log(JSON.stringify(finalMetadata, null, 2));
+      }
+
+      console.log("\n" + "=".repeat(60));
+      console.log("✅ Metadata解析测试完成！");
+
+      return {
+        filename,
+        contentLength: content.length,
+        language: this.detectLanguage(content),
+        chunkCount: chunks.length,
+        mediumMetadata,
+        sampleMetadata: sampleChunk
+          ? {
+              lang: this.detectLanguage(sampleChunk.content),
+              filename: filename,
+              filepath: `manual/${filename}`,
+              source_type: "manual",
+              ...mediumMetadata,
+              has_code: /```/.test(sampleChunk.content),
+              has_links: /\[.*\]\(.*\)/.test(sampleChunk.content),
+              is_external_content: [
+                "medium_article",
+                "twitter_post",
+                "linkedin_post",
+                "substack_article",
+                "mirror_post",
+                "web_article",
+              ].includes(mediumMetadata?.content_type),
+            }
+          : null,
+      };
+    } catch (error) {
+      logger.error(`测试文件 ${filePath} metadata失败:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * 批量测试to-sync文件夹中的所有文件metadata
+   */
+  async testToSyncMetadata() {
+    try {
+      logger.info("开始批量测试to-sync文件夹metadata");
+
+      const files = await fs.readdir(this.config.toSyncDir);
+      const markdownFiles = files.filter((file) => file.endsWith(".md"));
+
+      if (markdownFiles.length === 0) {
+        console.log("❌ to-sync文件夹中没有找到markdown文件");
+        return [];
+      }
+
+      console.log(`📁 找到 ${markdownFiles.length} 个待测试的文件\n`);
+
+      const results = [];
+
+      for (const filename of markdownFiles) {
+        const filePath = path.join(this.config.toSyncDir, filename);
+        try {
+          const result = await this.testMetadata(filePath);
+          results.push({ success: true, filename, result });
+        } catch (error) {
+          console.log(`❌ ${filename} 测试失败: ${error.message}`);
+          results.push({ success: false, filename, error: error.message });
+        }
+      }
+
+      // 汇总报告
+      const successful = results.filter((r) => r.success);
+      const failed = results.filter((r) => !r.success);
+
+      console.log("\n" + "=".repeat(80));
+      console.log("📊 测试汇总报告");
+      console.log(`✅ 成功: ${successful.length} 个文件`);
+      console.log(`❌ 失败: ${failed.length} 个文件`);
+
+      if (successful.length > 0) {
+        console.log("\n📈 成功的文件统计:");
+        successful.forEach(({ filename, result }) => {
+          console.log(
+            `  - ${filename}: ${result.chunkCount} 块, ${result.language}, ${
+              result.mediumMetadata?.content_type || "无外部类型"
+            }`
+          );
+        });
+      }
+
+      if (failed.length > 0) {
+        console.log("\n💥 失败的文件:");
+        failed.forEach(({ filename, error }) => {
+          console.log(`  - ${filename}: ${error}`);
+        });
+      }
+
+      return results;
+    } catch (error) {
+      logger.error("批量测试to-sync文件夹metadata失败:", error);
+      throw error;
+    }
+  }
 }
 
 async function main() {
@@ -597,13 +786,20 @@ async function main() {
   node scripts/manual-sync.js --dir <目录路径>         # 同步目录中的所有 .md 文件
   node scripts/manual-sync.js --list-synced          # 列出已同步的文件
   node scripts/manual-sync.js --list-pending         # 列出待同步的文件
+  
+测试模式（推荐先运行）:
+  node scripts/manual-sync.js --test <文件路径>        # 测试单个文件的metadata解析
+  node scripts/manual-sync.js --test-all             # 测试to-sync文件夹中所有文件
 
 工作流模式（推荐）:
   1. 将md文件放入 to-sync/ 文件夹
-  2. 运行: npm run manual-sync:workflow
-  3. 同步成功的文件会存储到 doc/manual/ 并从 to-sync/ 移除
+  2. 先运行: node scripts/manual-sync.js --test-all （验证metadata）
+  3. 确认无误后运行: npm run manual-sync:workflow
+  4. 同步成功的文件会存储到 doc/manual/ 并从 to-sync/ 移除
 
 示例:
+  node scripts/manual-sync.js --test-all
+  node scripts/manual-sync.js --test article.md
   node scripts/manual-sync.js --workflow
   node scripts/manual-sync.js article.md
   node scripts/manual-sync.js --dir ./articles
@@ -615,14 +811,29 @@ async function main() {
   const syncer = new ManualSyncer();
 
   try {
-    await syncer.initialize();
+    // 测试模式不需要连接Pinecone
+    if (args[0] === "--test" || args[0] === "--test-all") {
+      // 只初始化基本配置，不连接Pinecone
+      await fs.mkdir(syncer.config.manualDir, { recursive: true });
+      await fs.mkdir(syncer.config.toSyncDir, { recursive: true });
+    } else {
+      await syncer.initialize();
+    }
 
-    if (args[0] === "--workflow") {
+    if (args[0] === "--test-all") {
+      await syncer.testToSyncMetadata();
+    } else if (args[0] === "--test") {
+      if (args.length < 2) {
+        logger.error("请指定要测试的文件路径");
+        process.exit(1);
+      }
+      await syncer.testMetadata(args[1]);
+    } else if (args[0] === "--workflow") {
       const result = await syncer.processToSyncFolder();
       logger.info(
         `🎉 工作流完成！总计: ${result.total}, 成功: ${result.successful}, 失败: ${result.failed}`
       );
-      if (result.failedFiles.length > 0) {
+      if (result.failedFiles && result.failedFiles.length > 0) {
         logger.error("失败的文件详情:", result.failedFiles);
       }
     } else if (args[0] === "--list-synced") {

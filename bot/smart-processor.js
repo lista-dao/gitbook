@@ -307,7 +307,7 @@ ${content}
       has_lists: /^[\s]*[-*+]\s/m.test(content),
 
       heading_count: (content.match(/^#+\s/gm) || []).length,
-      main_topic: this.extractMainTopic(content),
+      main_topic: this.extractMainTopic(content, filename),
 
       concepts: this.extractBasicConcepts(content),
 
@@ -384,14 +384,20 @@ ${content}
     return [...new Set(addresses)];
   }
 
-  extractMainTopic(content) {
+  extractMainTopic(content, filename) {
     const firstHeading = content.match(/^#\s+(.+)$/m);
     if (firstHeading) return firstHeading[1].trim();
 
     const secondHeading = content.match(/^##\s+(.+)$/m);
     if (secondHeading) return secondHeading[1].trim();
 
-    return require("path").basename(require("path").basename(filename, ".md"));
+    if (filename) {
+      return require("path").basename(
+        require("path").basename(filename, ".md")
+      );
+    }
+
+    return "untitled";
   }
 
   buildSmartFilters(question) {

@@ -278,9 +278,30 @@ Please answer in English, ensuring all relevant data is included:`;
     const sourceLinks = sources
       .filter((filename) => !filename.includes("SUMMARY"))
       .map((filename) => {
+        const displayName = fileDisplayNames.get(filename);
+
+        // 检查是否为外部来源
+        const fileChunks = relevantChunks.filter(
+          (c) => c.metadata.filename === filename
+        );
+        const isExternalContent = fileChunks.some(
+          (chunk) =>
+            chunk.metadata.is_external_content || chunk.metadata.source_url
+        );
+
+        if (isExternalContent) {
+          // 使用原始的 source_url
+          const sourceUrl = fileChunks.find(
+            (chunk) => chunk.metadata.source_url
+          )?.metadata.source_url;
+          if (sourceUrl) {
+            return `[${displayName}](${sourceUrl})`;
+          }
+        }
+
+        // 内部文档使用原有逻辑
         const urlPath = filename.replace(/\.md$/, "");
         const url = `https://docs.bsc.lista.org/${urlPath}`;
-        const displayName = fileDisplayNames.get(filename);
         return `[${displayName}](${url.replace("/README", "")})`;
       });
 
