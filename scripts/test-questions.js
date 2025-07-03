@@ -15,17 +15,26 @@ async function testQuestionsList() {
     bot.botInfo = { id: 12345, username: "test_bot", first_name: "Test Bot" };
     bot.initializeServices();
 
-    // 你的问题列表
+    // 针对Medium文章的测试问题
     const questions = [
-      //   "what is the interest rate model for lista lending?",
-      //   "How can I access lista lending",
-      //   "what is clisBNB?",
-      //   "LISTA's token distribution",
-      //   "lista 代幣排放比例為何",
-      //   "what are the differences between lista lending and cdp?",
-      //   "lista DAO 采取了哪些具体的安全措施来保护用户在 Lista Lending 平台上存入的资产？请详细说明智能合约审计、多重签名机制或其它相关防护措施。",
-      " lista lending的清算機制是什麼",
-      //   "explain how the liquidation mechanism for lista lending work",
+      // 测试 clisBNB/slisBNBx 分类
+      "What is clisBNB and how can I mint it using slisBNB?",
+      "How to delegate clisBNB to Binance Web3 MPC wallet for Launchpool?",
+      "What are the benefits of using clisBNB for Binance Launchpool?",
+
+      // 测试 veLISTA 分类
+      "How does veLISTA governance voting work on Lista DAO?",
+      "What is the veLISTA borrow rebate mechanism and how is it calculated?",
+      "How can I participate in gauge voting with veLISTA?",
+      "What are the protocol fees that veLISTA holders receive?",
+
+      // 测试原有分类不受影响
+      "What is the Lista Lending Alpha Zone and how does the whitelist system work?",
+      "How does Lista DAO's multi-oracle system work for price feeds?",
+
+      // 边界情况测试
+      "How to mint clisBNB on Lista Lending platform?", // 应该检测为 clisBNB
+      "What is the difference between slisBNB and clisBNB?", // 可能是比较查询
     ];
 
     const userInfo = { id: 123456, username: "test", first_name: "Test" };
@@ -69,4 +78,59 @@ async function testQuestionsList() {
   }
 }
 
+async function checkMediumFiles() {
+  console.log("🔍 检查Pinecone中的Medium文章...\n");
+
+  const bot = new GitBookRAGBot();
+
+  try {
+    await bot.initializePinecone();
+
+    // 检查所有可能的Medium文章文件名（不带路径）
+    const mediumFiles = [
+      "product-update-lista-lending-alpha-zone-powering-t.md",
+      "product-update-mint-clisbnb-in-lista-lending.md",
+      "product-update-unlocking-velista-utility-introduci.md",
+      "product-update-mint-clisbnb-with-bnb-slisbnb-lp-to.md",
+      "product-update-lista-lending-vault-manager-gui.md",
+      "product-update-introducing-lista-daos-liquidation-.md",
+      "product-guide-lista-lending.md",
+      "introducing-lista-lending-lista-daos-next-gen-lend.md",
+      "securing-the-future-an-in-depth-look-at-lista-daos.md",
+    ];
+
+    console.log("找到的Medium文章：");
+
+    for (const filename of mediumFiles) {
+      try {
+        const result = await bot.index.query({
+          vector: new Array(1024).fill(0),
+          filter: { filename: filename },
+          topK: 1,
+          includeMetadata: true,
+        });
+
+        if (result.matches && result.matches.length > 0) {
+          console.log(`✅ ${filename}`);
+          console.log(
+            `   - 源URL: ${result.matches[0].metadata.source_url || "N/A"}`
+          );
+          console.log(
+            `   - 是否外部内容: ${
+              result.matches[0].metadata.is_external_content || "N/A"
+            }`
+          );
+        } else {
+          console.log(`❌ ${filename} - 未找到`);
+        }
+      } catch (error) {
+        console.log(`❌ ${filename} - 错误: ${error.message}`);
+      }
+    }
+  } catch (error) {
+    console.error("初始化失败:", error);
+  }
+}
+
 testQuestionsList().catch(console.error);
+// checkMediumFiles().catch(console.error);

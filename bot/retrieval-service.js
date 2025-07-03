@@ -51,6 +51,8 @@ class RetrievalService {
       const isComparisonQuery = this.detectComparisonQuery(question);
       const isLendingQuery = this.detectLendingQuery(question);
       const isCDPQuery = this.detectCDPQuery(question);
+      const isClisBNBQuery = this.detectClisBNBQuery(question);
+      const isVeListaQuery = this.detectVeListaQuery(question);
 
       logger.info("檢索結果:", {
         totalResults: results.length,
@@ -62,6 +64,10 @@ class RetrievalService {
           ? "lending"
           : isCDPQuery
           ? "cdp"
+          : isClisBNBQuery
+          ? "clisbnb"
+          : isVeListaQuery
+          ? "velista"
           : "regular",
       });
 
@@ -87,6 +93,14 @@ class RetrievalService {
 
       if (isCDPQuery) {
         return await this.handleCDPQuery(results, embedding, question);
+      }
+
+      if (isClisBNBQuery) {
+        return await this.handleClisBNBQuery(results, embedding, question);
+      }
+
+      if (isVeListaQuery) {
+        return await this.handleVeListaQuery(results, embedding, question);
       }
 
       return await this.handleUnifiedQuery(results, embedding, {
@@ -156,6 +170,13 @@ class RetrievalService {
   detectLendingQuery(question) {
     const questionLower = question.toLowerCase();
 
+    if (
+      this.detectClisBNBQuery(question) ||
+      this.detectVeListaQuery(question)
+    ) {
+      return false;
+    }
+
     // 明確的 Lista Lending 關鍵詞
     const explicitLendingKeywords = [
       "lista lending",
@@ -206,8 +227,14 @@ class RetrievalService {
   detectCDPQuery(question) {
     const questionLower = question.toLowerCase();
 
-    // 如果是比較查詢，不要識別為 CDP 查詢
     if (this.detectComparisonQuery(question)) {
+      return false;
+    }
+
+    if (
+      this.detectClisBNBQuery(question) ||
+      this.detectVeListaQuery(question)
+    ) {
       return false;
     }
 
@@ -216,7 +243,6 @@ class RetrievalService {
       "collateral debt position",
       "lisusd",
       "slisbnb",
-      "clisbnb",
       "bnb validator",
       "liquid staking",
       "staking",
@@ -232,6 +258,55 @@ class RetrievalService {
     );
   }
 
+  detectClisBNBQuery(question) {
+    const questionLower = question.toLowerCase();
+
+    const clisBNBKeywords = [
+      "clisbnb",
+      "slisbnbx",
+      "binance launchpool",
+      "launchpool",
+    ];
+
+    return clisBNBKeywords.some((keyword) =>
+      questionLower.includes(keyword.toLowerCase())
+    );
+  }
+
+  detectVeListaQuery(question) {
+    const questionLower = question.toLowerCase();
+
+    const veListaKeywords = [
+      "velista",
+      "governance",
+      "voting",
+      "vote",
+      "proposal",
+      "snapshot",
+      "lock lista",
+      "locking lista",
+      "unlock lista",
+      "early unlock",
+      "auto lock",
+      "auto-lock",
+      "gauge voting",
+      "gauge",
+      "bribe market",
+      "bribe",
+      "emission voting",
+      "protocol fees",
+      "revenue distribution",
+      "rebate",
+      "borrow rebate",
+      "auto compound",
+      "auto-compound",
+    ];
+
+    return veListaKeywords.some((keyword) =>
+      questionLower.includes(keyword.toLowerCase())
+    );
+  }
+
   async handleSecurityQuery(results, embedding, question) {
     logger.info("檢測到安全相關問題，使用專門的安全文檔檢索策略");
 
@@ -239,6 +314,7 @@ class RetrievalService {
     const securityFilenames = [
       "security/audit-reports.md",
       "security/bug-bounty-immunefi.md",
+      "securing-the-future-an-in-depth-look-at-lista-daos.md",
     ];
 
     const allChunks = [];
@@ -333,6 +409,8 @@ class RetrievalService {
       "introduction/lista-lending/interest-rate-model-irm.md",
       "introduction/lista-lending/fees.md",
       "introduction/lista-lending/flash-loan.md",
+      "introducing-lista-lending-lista-daos-next-gen-lend.md",
+      "product-guide-lista-lending.md",
     ];
 
     const allChunks = [];
@@ -415,6 +493,12 @@ class RetrievalService {
       "introduction/lista-lending/flash-loan.md",
       "introduction/lista-lending/vaults/README.md",
       "introduction/lista-lending/vaults/how-to-create-a-vault.md",
+      "introducing-lista-lending-lista-daos-next-gen-lend.md",
+      "product-guide-lista-lending.md",
+      "product-update-lista-lending-vault-manager-gui.md",
+      "product-update-lista-lending-alpha-zone-powering-t.md",
+      "product-update-introducing-lista-daos-liquidation-.md",
+      "product-update-mint-clisbnb-in-lista-lending.md",
     ];
 
     const allChunks = [];
@@ -479,6 +563,7 @@ class RetrievalService {
       "introduction/liquid-staking-slisbnb/README.md",
       "introduction/liquid-staking-slisbnb/about-slisbnb.md",
       "introduction/liquid-staking-slisbnb/technical-guide.md",
+      "product-update-unlocking-velista-utility-introduci.md",
     ];
 
     const allChunks = [];
@@ -512,6 +597,150 @@ class RetrievalService {
       return await this.handleUnifiedQuery(embedding, null, {
         useBroadSearch: true,
         queryType: "cdp",
+        question,
+      });
+    }
+
+    return this.deduplicateAndSort(allChunks);
+  }
+
+  async handleClisBNBQuery(results, embedding, question) {
+    logger.info(
+      "檢測到 clisBNB/slisBNBx 相關問題，使用專門的 clisBNB 檢索策略"
+    );
+
+    // 專門搜索 clisBNB/slisBNBx 相關文檔
+    const clisBNBFilenames = [
+      // 开发者文档
+      "for-developer/clisbnb/README.md",
+      "for-developer/clisbnb/smart-contract.md",
+      // 介绍文档
+      "introduction/binance-launchpool-clisbnb/README.md",
+      "introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md",
+      "introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md",
+      // 用户指南
+      "user-guide/collateral-debt-position/delegating-clisbnb-to-your-binance-web3-mpc-wallet.md",
+      // Medium文章（不带路径前缀）
+      "product-update-mint-clisbnb-in-lista-lending.md",
+      "product-update-mint-clisbnb-with-bnb-slisbnb-lp-to.md",
+    ];
+
+    const allChunks = [];
+
+    // 獲取 clisBNB 相關文檔
+    for (const filename of clisBNBFilenames) {
+      try {
+        const clisBNBQuery = await this.index.query({
+          vector: embedding,
+          filter: { filename: filename },
+          topK: 30,
+          includeMetadata: true,
+        });
+
+        if (clisBNBQuery.matches && clisBNBQuery.matches.length > 0) {
+          const clisBNBChunks = clisBNBQuery.matches.sort(
+            (a, b) =>
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+          );
+          allChunks.push(...clisBNBChunks);
+          logger.info(
+            `clisBNB查詢 ${filename}: 找到 ${clisBNBChunks.length} 個chunks`
+          );
+        }
+      } catch (error) {
+        logger.warn(`clisBNB查詢 ${filename} 失敗: ${error.message}`);
+      }
+    }
+
+    // 如果專門查詢沒找到足夠內容，進行更廣泛的檢索
+    if (allChunks.length < 3) {
+      logger.info("專門 clisBNB 查詢結果不足，進行廣泛檢索");
+      return await this.handleUnifiedQuery(embedding, null, {
+        useBroadSearch: true,
+        queryType: "clisbnb",
+        question,
+      });
+    }
+
+    return this.deduplicateAndSort(allChunks);
+  }
+
+  async handleVeListaQuery(results, embedding, question) {
+    logger.info("檢測到 veLISTA 相關問題，使用專門的 veLISTA 檢索策略");
+
+    // 專門搜索 veLISTA 相關文檔
+    const veListaFilenames = [
+      // LISTA 治理文档
+      "governance/lista/README.md",
+      "governance/lista/lista-distribution.md",
+      // veLISTA 核心文档
+      "governance/velista/README.md",
+      "governance/velista/velista-summary.md",
+      "governance/velista/lista-dao-unlocking-velista-utility.md",
+      "governance/velista/velista-locking-mechanics.md",
+      "governance/velista/protocol-fees.md",
+      "governance/velista/revenue-cost.md",
+      "governance/velista/analytics.md",
+      // 治理相关
+      "governance/velista/governance/README.md",
+      "governance/velista/governance/governance-proposal-template.md",
+      // 排放和投票
+      "governance/velista/velista-emissions/README.md",
+      "governance/velista/velista-emissions/lp-pools.md",
+      "governance/velista/gauge-voting-for-velista.md",
+      "governance/velista/velista-bribe-market.md",
+      // 自动功能
+      "governance/velista/auto-compounding.md",
+      "governance/velista/permanent-locking-of-lista-lip-016.md",
+      // 用户指南
+      "user-guide/lista-velista/README.md",
+      "user-guide/lista-velista/lock-lista.md",
+      "user-guide/lista-velista/extend-lista-lock.md",
+      "user-guide/lista-velista/auto-lock.md",
+      "user-guide/lista-velista/unlock-lista.md",
+      "user-guide/lista-velista/claim-rewards.md",
+      "user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md",
+      "user-guide/lista-velista/gauge-voting.md",
+      // 开发者文档
+      "for-developer/lista-governance/README.md",
+      "for-developer/lista-governance/smart-contract.md",
+      // Medium文章（不带路径前缀）
+      "product-update-unlocking-velista-utility-introduci.md",
+    ];
+
+    const allChunks = [];
+
+    // 獲取 veLISTA 相關文檔
+    for (const filename of veListaFilenames) {
+      try {
+        const veListaQuery = await this.index.query({
+          vector: embedding,
+          filter: { filename: filename },
+          topK: 30,
+          includeMetadata: true,
+        });
+
+        if (veListaQuery.matches && veListaQuery.matches.length > 0) {
+          const veListaChunks = veListaQuery.matches.sort(
+            (a, b) =>
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+          );
+          allChunks.push(...veListaChunks);
+          logger.info(
+            `veLISTA查詢 ${filename}: 找到 ${veListaChunks.length} 個chunks`
+          );
+        }
+      } catch (error) {
+        logger.warn(`veLISTA查詢 ${filename} 失敗: ${error.message}`);
+      }
+    }
+
+    // 如果專門查詢沒找到足夠內容，進行更廣泛的檢索
+    if (allChunks.length < 3) {
+      logger.info("專門 veLISTA 查詢結果不足，進行廣泛檢索");
+      return await this.handleUnifiedQuery(embedding, null, {
+        useBroadSearch: true,
+        queryType: "velista",
         question,
       });
     }
