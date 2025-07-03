@@ -1,64 +1,79 @@
-# clisBNB
+## slisBNBx
 
-## 概述
+### 概述
 
-clisBNB 是一个基于 Binance Smart Chain (BSC) 的去中心化应用（dApp），旨在提供一个用户友好的界面来交互 BSC 上的智能合约。它允许用户执行交易、查询余额和与智能合约互动。
+slisBNBx 是一个基于 Binance Smart Chain (BSC) 的去中心化应用程序（dApp），旨在提供流动性挖矿和交易服务。该平台利用智能合约来实现自动化的交易和流动性提供，从而为用户提供一个安全、高效的加密货币交易环境。
 
-## 功能
+### 主要特性
 
-- **交易执行**: 用户可以通过 clisBNB 发送 BNB 或其他基于 BSC 的代币。
-- **智能合约交互**: 提供一个界面用于与部署在 BSC 上的智能合约交互。
-- **查询余额**: 用户可以查询他们在 BSC 上的地址的 BNB 余额及其他代币余额。
+- **去中心化**: slisBNBx 完全去中心化，所有交易和流动性池操作都通过智能合约执行，确保透明度和安全性。
+- **兼容性**: 该平台兼容所有遵循 BEP-20 标准的代币。
+- **自动化流动性提供**: 用户可以通过将代币存入流动性池来赚取交易费用分成，智能合约会自动处理存入和提取。
 
-## 安装
+### 快速开始
 
-要开始使用 clisBNB，您需要先安装 Node.js 和 npm。然后，您可以通过以下命令安装 clisBNB:
+#### 设置环境
 
-```bash
-npm install -g clisbnb
+1. 安装 Node.js 和 npm。
+2. 安装 Truffle Suite，用于编译和部署智能合约。
+
+   ```bash
+   npm install -g truffle
+   ```
+
+3. 配置 MetaMask 钱包连接到 Binance Smart Chain。
+
+#### 部署智能合约
+
+1. 克隆仓库：
+
+   ```bash
+   git clone https://github.com/slisBNBx/smart-contracts.git
+   cd smart-contracts
+   ```
+
+2. 编译合约：
+
+   ```bash
+   truffle compile
+   ```
+
+3. 部署合约到 BSC 测试网：
+
+   ```bash
+   truffle migrate --network bscTestnet
+   ```
+
+### 交互示例
+
+以下是如何通过 Web3.js 与 slisBNBx 智能合约交互的示例：
+
+#### 连接 Web3
+
+```javascript
+const Web3 = require('web3');
+const provider = new Web3.providers.HttpProvider('https://data-seed-prebsc-1-s1.binance.org:8545');
+const web3 = new Web3(provider);
 ```
 
-## 使用
+#### 创建流动性
 
-### 配置
+```javascript
+const liquidityContract = new web3.eth.Contract(liquidityABI, liquidityAddress);
 
-在使用 clisBNB 之前，您需要配置您的 BSC 钱包地址和私钥。这可以通过编辑 `config.json` 文件来完成：
-
-```json
-{
-  "walletAddress": "你的BSC钱包地址",
-  "privateKey": "你的私钥"
-}
+liquidityContract.methods.addLiquidity(tokenA, tokenB, amountA, amountB).send({ from: userAddress })
+.then(function(result) {
+    console.log('Liquidity added:', result);
+})
+.catch(function(error) {
+    console.error('Error adding liquidity:', error);
+});
 ```
 
-### 执行交易
+### 安全性
 
-要发送 BNB，可以使用以下命令：
+slisBNBx 采用多重安全措施确保平台和用户资产的安全，包括常规的智能合约审计和实时监控系统。
 
-```bash
-clisbnb send --to 0x接收者地址 --amount 1 --token BNB
-```
+### 结论
 
-### 与智能合约互动
-
-如果您想调用智能合约的函数，可以使用 `call` 命令：
-
-```bash
-clisbnb call --contract 0x合约地址 --abi 合约的ABI --function 函数名 --args 参数1,参数2
-```
-
-### 查询余额
-
-要查询 BNB 余额，可以使用 `balance` 命令：
-
-```bash
-clisbnb balance --address 0x你的地址
-```
-
-## 安全性
-
-请确保不要在任何公共或不安全的系统上暴露您的私钥。始终保持您的 `config.json` 文件安全，并只在信任的环境中使用 clisBNB。
-
-## 结论
-
-clisBNB 提供了一个简单而强大的工具，用于在 Binance Smart Chain 上执行交易和与智能合约互动。通过简化的命令行界面，用户可以轻松地进行日常操作，同时保持安全和控制。
+slisBNBx 提供了一个基于 Binance Smart Chain 的高效且安全的去中心化交易和流动性解决方案。通过智能合约和去中心化的架构，用户可以安全地交易和提供流动性，同时赚取交易费用。
