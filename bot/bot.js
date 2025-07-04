@@ -47,7 +47,7 @@ class GitBookRAGBot {
       healthPort: 3000,
     };
 
-    this.moderatorIds = ["790810748"];
+    this.moderatorIds = [790810748];
 
     this.smartProcessor = new SmartProcessor(this.config);
     this.retrievalService = null;
@@ -192,18 +192,23 @@ class GitBookRAGBot {
               ? "📝 管理员请审核上述回答："
               : "📝 Moderators, please review the above response:";
 
+          const correctText =
+            detectedLang === "zh-CN" ? "✅ 正确" : "✅ Correct";
+          const incorrectText =
+            detectedLang === "zh-CN" ? "❌ 错误" : "❌ Incorrect";
+
           await ctx.reply(moderationText, {
             reply_to_message_id: replyMsg.message_id,
             reply_markup: {
               inline_keyboard: [
                 [
                   {
-                    text: "✅ 正确 | Correct",
-                    callback_data: `approve_${replyMsg.message_id}_${userId}`,
+                    text: correctText,
+                    callback_data: `approve_${replyMsg.message_id}_${userId}_${detectedLang}`,
                   },
                   {
-                    text: "❌ 错误 | Incorrect",
-                    callback_data: `reject_${replyMsg.message_id}_${userId}`,
+                    text: incorrectText,
+                    callback_data: `reject_${replyMsg.message_id}_${userId}_${detectedLang}`,
                   },
                 ],
               ],
@@ -312,17 +317,27 @@ class GitBookRAGBot {
     const moderatorId = ctx.from.id;
     const moderatorName = ctx.from.first_name || ctx.from.username || "Unknown";
 
-    // 检查操作者是否是审批员
-    if (!this.moderatorIds.includes(moderatorId)) {
-      await ctx.answerCbQuery("⚠️ 您没有权限进行此操作");
+    // 解析回调数据: approve_messageId_userId_language 或 reject_messageId_userId_language
+    const [action, messageId, originalUserId, language] =
+      callbackData.split("_");
+
+    // 使用默认语言作为fallback
+    const lang = language || "en";
+
+    if (!action || !messageId || !originalUserId) {
+      const errorMsg =
+        lang === "zh-CN" ? "❌ 无效的操作数据" : "❌ Invalid operation data";
+      await ctx.answerCbQuery(errorMsg);
       return;
     }
 
-    // 解析回调数据: approve_messageId_userId 或 reject_messageId_userId
-    const [action, messageId, originalUserId] = callbackData.split("_");
-
-    if (!action || !messageId || !originalUserId) {
-      await ctx.answerCbQuery("❌ 无效的操作数据");
+    // 检查操作者是否是审批员
+    if (!this.moderatorIds.includes(moderatorId)) {
+      const noPermissionMsg =
+        lang === "zh-CN"
+          ? "⚠️ 您没有权限进行此操作"
+          : "⚠️ You don't have permission to perform this action";
+      await ctx.answerCbQuery(noPermissionMsg);
       return;
     }
 
@@ -339,29 +354,43 @@ class GitBookRAGBot {
     let alertText = "";
 
     if (action === "approve") {
-      responseText = `✅ **已审核通过**\n👤 审核员：${moderatorName}\n🕐 时间：${timestamp}`;
-      alertText = "✅ 已标记为正确回答";
+      if (lang === "zh-CN") {
+        responseText = `✅ **已审核通过**\n👤 审核员：${moderatorName}\n🕐 时间：${timestamp}`;
+        alertText = "✅ 已标记为正确回答";
+      } else {
+        responseText = `✅ **Review Approved**\n👤 Moderator: ${moderatorName}\n🕐 Time: ${timestamp}`;
+        alertText = "✅ Marked as correct answer";
+      }
 
       logger.info("回答审核通过", {
         moderatorId,
         moderatorName,
         messageId,
         originalUserId,
+        language: lang,
         timestamp,
       });
     } else if (action === "reject") {
-      responseText = `❌ **回答需要修正**\n👤 审核员：${moderatorName}\n🕐 时间：${timestamp}\n\n⚠️ 此回答可能存在错误，请谨慎参考或寻求进一步确认。`;
-      alertText = "❌ 已标记为错误回答";
+      if (lang === "zh-CN") {
+        responseText = `❌ **回答需要修正**\n👤 审核员：${moderatorName}\n🕐 时间：${timestamp}\n\n⚠️ 此回答可能存在错误，请谨慎参考或寻求进一步确认。`;
+        alertText = "❌ 已标记为错误回答";
+      } else {
+        responseText = `❌ **Answer Needs Correction**\n👤 Moderator: ${moderatorName}\n🕐 Time: ${timestamp}\n\n⚠️ This answer may contain errors. Please use with caution or seek further confirmation.`;
+        alertText = "❌ Marked as incorrect answer";
+      }
 
       logger.info("回答审核拒绝", {
         moderatorId,
         moderatorName,
         messageId,
         originalUserId,
+        language: lang,
         timestamp,
       });
     } else {
-      await ctx.answerCbQuery("❌ 未知操作");
+      const errorMsg =
+        lang === "zh-CN" ? "❌ 未知操作" : "❌ Unknown operation";
+      await ctx.answerCbQuery(errorMsg);
       return;
     }
 

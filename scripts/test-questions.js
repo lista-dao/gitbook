@@ -16,7 +16,10 @@ async function testQuestionsList() {
     bot.initializeServices();
 
     // 测试改进后的来源链接显示和警语功能
-    const questions = ["What are Lista DAO's security measures?"];
+    const questions = [
+      "What are Lista DAO's security measures?",
+      "Lista DAO的安全措施有哪些？",
+    ];
 
     const userInfo = { id: 123456, username: "test", first_name: "Test" };
 
