@@ -3,8 +3,6 @@
 const { GitBookRAGBot } = require("../bot/bot");
 
 async function testQuestionsList() {
-  console.log("🎯 测试问题列表...\n");
-
   const bot = new GitBookRAGBot();
 
   try {
@@ -22,6 +20,10 @@ async function testQuestionsList() {
     ];
 
     const userInfo = { id: 123456, username: "test", first_name: "Test" };
+
+    console.log("🎯 测试问题列表...");
+    console.log(`📋 错误转发群组ID: ${bot.errorForwardGroupId || "未配置"}`);
+    console.log("");
 
     for (let i = 0; i < questions.length; i++) {
       const question = questions[i];

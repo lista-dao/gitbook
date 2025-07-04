@@ -49,6 +49,8 @@ class GitBookRAGBot {
 
     this.moderatorIds = [790810748];
 
+    this.errorForwardGroupId = -4703057738;
+
     this.smartProcessor = new SmartProcessor(this.config);
     this.retrievalService = null;
     this.languageService = null;
@@ -379,6 +381,8 @@ class GitBookRAGBot {
         alertText = "❌ Marked as incorrect answer";
       }
 
+      await this.forwardErrorToGroup(ctx, messageId, moderatorName, lang);
+
       logger.info("回答审核拒绝", {
         moderatorId,
         moderatorName,
@@ -488,6 +492,81 @@ class GitBookRAGBot {
         `Health check server running on port ${this.config.healthPort}`
       );
     });
+  }
+
+  async forwardErrorToGroup(ctx, messageId, moderatorName, lang) {
+    // 检查是否配置了转发群组ID
+    if (!this.errorForwardGroupId) {
+      logger.info("未配置错误转发群组ID，跳过转发");
+      return;
+    }
+
+    try {
+      const chatId = ctx.chat.id;
+      const timestamp = new Date().toLocaleString("zh-CN", {
+        timeZone: "Asia/Shanghai",
+      });
+
+      const forwardedMessage = await ctx.telegram.forwardMessage(
+        this.errorForwardGroupId,
+        chatId,
+        parseInt(messageId)
+      );
+
+      // 发送错误标记通知
+      const errorNotification =
+        lang === "zh-CN"
+          ? `🚨 **错误回答警报**\n\n👤 **审核员：** ${moderatorName}\n🕐 **时间：** ${timestamp}\n📍 **来源：** ${
+              ctx.chat.title || "Private Chat"
+            }\n\n⚠️ 上述回答已被审核员标记为**错误信息**，请相关人员及时审查并提供正确答案。`
+          : `🚨 **Incorrect Answer Alert**\n\n👤 **Moderator:** ${moderatorName}\n🕐 **Time:** ${timestamp}\n📍 **Source:** ${
+              ctx.chat.title || "Private Chat"
+            }\n\n⚠️ The above answer has been flagged as **incorrect** by a moderator. Please review and provide accurate information.`;
+
+      await ctx.telegram.sendMessage(
+        this.errorForwardGroupId,
+        errorNotification,
+        {
+          parse_mode: "Markdown",
+          reply_to_message_id: forwardedMessage.message_id,
+        }
+      );
+
+      logger.info("错误回答转发成功", {
+        groupId: this.errorForwardGroupId,
+        messageId,
+        moderator: moderatorName,
+        sourceChat: ctx.chat.title || "Private",
+      });
+    } catch (error) {
+      logger.error("转发错误回答失败:", error);
+
+      // 如果转发失败，尝试发送简化的错误报告
+      try {
+        const fallbackMsg =
+          lang === "zh-CN"
+            ? `🚨 **错误回答报告**\n👤 审核员：${moderatorName}\n🕐 时间：${new Date().toLocaleString(
+                "zh-CN",
+                { timeZone: "Asia/Shanghai" }
+              )}\n📍 来源：${
+                ctx.chat.title || "Private Chat"
+              }\n💬 消息ID：${messageId}\n\n⚠️ 有一条回答被标记为错误，但转发失败。请手动检查。`
+            : `🚨 **Incorrect Answer Report**\n👤 Moderator: ${moderatorName}\n🕐 Time: ${new Date().toLocaleString(
+                "en-US",
+                { timeZone: "Asia/Shanghai" }
+              )}\n📍 Source: ${
+                ctx.chat.title || "Private Chat"
+              }\n💬 Message ID: ${messageId}\n\n⚠️ An answer was flagged as incorrect but forwarding failed. Please check manually.`;
+
+        await ctx.telegram.sendMessage(this.errorForwardGroupId, fallbackMsg, {
+          parse_mode: "Markdown",
+        });
+
+        logger.info("发送错误报告成功（转发失败后的备选方案）");
+      } catch (fallbackError) {
+        logger.error("发送错误报告也失败了:", fallbackError);
+      }
+    }
   }
 }
 

@@ -18,8 +18,17 @@ OPENAI_API_KEY=your_openai_api_key
 # Example: MODERATOR_IDS=123456789,987654321,555666777
 MODERATOR_IDS=
 
+# Error Forward Group (Optional)
+# Group chat ID where incorrect answers will be forwarded for review
+# Get this by adding the bot to the target group and using the group chat ID
+# Example: ERROR_FORWARD_GROUP_ID=-1001234567890
+ERROR_FORWARD_GROUP_ID=
+
 # Group Whitelist (Optional)
 # Add allowed group chat IDs if needed
+
+# New variables
+PINECONE_INFERENCE_API=true
 ```
 
 ## Features
@@ -61,9 +70,18 @@ The bot includes a built-in moderation system where designated moderators can re
 
 - After each bot response, moderators will see review buttons
 - **✅ Correct**: Marks the response as approved
-- **❌ Incorrect**: Marks the response as needing correction
+- **❌ Incorrect**: Marks the response as needing correction and forwards to error review group
 - Only configured moderator IDs can use these buttons
 - All moderation actions are logged with timestamp and moderator info
+
+#### Error Forwarding
+
+When a moderator marks an answer as incorrect:
+
+- The incorrect answer is automatically forwarded to a designated review group
+- A notification message includes moderator info, timestamp, and source chat
+- If forwarding fails, a fallback error report is sent instead
+- Configure the target group using `ERROR_FORWARD_GROUP_ID` environment variable
 
 ### 5. Response Disclaimer
 
