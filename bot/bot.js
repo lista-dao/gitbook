@@ -47,7 +47,8 @@ class GitBookRAGBot {
       healthPort: 3000,
     };
 
-    // 初始化服务模块
+    this.moderatorIds = ["790810748"];
+
     this.smartProcessor = new SmartProcessor(this.config);
     this.retrievalService = null;
     this.languageService = null;
@@ -176,10 +177,39 @@ class GitBookRAGBot {
 
         // 删除思考消息并发送答案
         await ctx.deleteMessage(thinkingMsg.message_id);
-        await ctx.reply(answer, {
+
+        // 发送回答
+        const replyMsg = await ctx.reply(answer, {
           parse_mode: "Markdown",
           reply_to_message_id: ctx.message.message_id,
         });
+
+        // 检查是否需要添加审批按钮
+        const shouldShowModeration = this.shouldShowModerationButtons(ctx);
+        if (shouldShowModeration) {
+          const moderationText =
+            detectedLang === "zh-CN"
+              ? "📝 管理员请审核上述回答："
+              : "📝 Moderators, please review the above response:";
+
+          await ctx.reply(moderationText, {
+            reply_to_message_id: replyMsg.message_id,
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "✅ 正确 | Correct",
+                    callback_data: `approve_${replyMsg.message_id}_${userId}`,
+                  },
+                  {
+                    text: "❌ 错误 | Incorrect",
+                    callback_data: `reject_${replyMsg.message_id}_${userId}`,
+                  },
+                ],
+              ],
+            },
+          });
+        }
 
         logger.info(`回答完成`, { userId, answerLength: answer.length });
       } catch (error) {
@@ -193,6 +223,16 @@ class GitBookRAGBot {
         await ctx.reply(errorMessage, {
           reply_to_message_id: ctx.message.message_id,
         });
+      }
+    });
+
+    // 处理inline keyboard回调
+    this.bot.on("callback_query", async (ctx) => {
+      try {
+        await this.handleModerationCallback(ctx);
+      } catch (error) {
+        logger.error("处理审批回调失败:", error);
+        await ctx.answerCbQuery("操作失败，请重试");
       }
     });
 
@@ -244,6 +284,104 @@ class GitBookRAGBot {
       logger.error("处理问题时出错:", error);
       throw error;
     }
+  }
+
+  // 检查是否需要显示审批按钮
+  shouldShowModerationButtons(ctx) {
+    // 如果没有配置审批员，不显示按钮
+    if (this.moderatorIds.length === 0) {
+      return false;
+    }
+
+    const chatType = ctx.chat.type;
+    const chatId = ctx.chat.id;
+
+    // 在私聊中，检查当前用户是否是审批员
+    if (chatType === "private") {
+      return this.moderatorIds.includes(ctx.from.id);
+    }
+
+    // 在群组中，检查是否有审批员在群组中（这里简化处理，总是显示）
+    // 实际使用中可以通过getChatAdministrators检查具体成员
+    return true;
+  }
+
+  // 处理审批回调
+  async handleModerationCallback(ctx) {
+    const callbackData = ctx.callbackQuery.data;
+    const moderatorId = ctx.from.id;
+    const moderatorName = ctx.from.first_name || ctx.from.username || "Unknown";
+
+    // 检查操作者是否是审批员
+    if (!this.moderatorIds.includes(moderatorId)) {
+      await ctx.answerCbQuery("⚠️ 您没有权限进行此操作");
+      return;
+    }
+
+    // 解析回调数据: approve_messageId_userId 或 reject_messageId_userId
+    const [action, messageId, originalUserId] = callbackData.split("_");
+
+    if (!action || !messageId || !originalUserId) {
+      await ctx.answerCbQuery("❌ 无效的操作数据");
+      return;
+    }
+
+    const timestamp = new Date().toLocaleString("zh-CN", {
+      timeZone: "Asia/Shanghai",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    let responseText = "";
+    let alertText = "";
+
+    if (action === "approve") {
+      responseText = `✅ **已审核通过**\n👤 审核员：${moderatorName}\n🕐 时间：${timestamp}`;
+      alertText = "✅ 已标记为正确回答";
+
+      logger.info("回答审核通过", {
+        moderatorId,
+        moderatorName,
+        messageId,
+        originalUserId,
+        timestamp,
+      });
+    } else if (action === "reject") {
+      responseText = `❌ **回答需要修正**\n👤 审核员：${moderatorName}\n🕐 时间：${timestamp}\n\n⚠️ 此回答可能存在错误，请谨慎参考或寻求进一步确认。`;
+      alertText = "❌ 已标记为错误回答";
+
+      logger.info("回答审核拒绝", {
+        moderatorId,
+        moderatorName,
+        messageId,
+        originalUserId,
+        timestamp,
+      });
+    } else {
+      await ctx.answerCbQuery("❌ 未知操作");
+      return;
+    }
+
+    // 编辑原消息，移除按钮并显示审核结果
+    try {
+      await ctx.editMessageText(responseText, {
+        parse_mode: "Markdown",
+        reply_markup: { inline_keyboard: [] }, // 移除按钮
+      });
+    } catch (error) {
+      // 如果编辑失败（比如消息太旧），发送新消息
+      logger.warn("编辑审核消息失败，发送新消息:", error.message);
+      await ctx.reply(responseText, {
+        parse_mode: "Markdown",
+        reply_to_message_id: parseInt(messageId),
+      });
+    }
+
+    // 回应callback query
+    await ctx.answerCbQuery(alertText);
   }
 
   // 启动 Bot

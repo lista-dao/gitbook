@@ -15,8 +15,8 @@ async function testQuestionsList() {
     bot.botInfo = { id: 12345, username: "test_bot", first_name: "Test Bot" };
     bot.initializeServices();
 
-    // 测试改进后的来源链接显示
-    const questions = ["How to mint clisBNB with LP tokens on ThenaFi?"];
+    // 测试改进后的来源链接显示和警语功能
+    const questions = ["What are Lista DAO's security measures?"];
 
     const userInfo = { id: 123456, username: "test", first_name: "Test" };
 

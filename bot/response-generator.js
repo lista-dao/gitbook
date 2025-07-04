@@ -387,7 +387,13 @@ Please answer in English, ensuring all relevant data is included:`;
         ? `\n\n📚 **参考来源：** ${sourceLinks.join(", ")}`
         : `\n\n📚 **Sources:** ${sourceLinks.join(", ")}`;
 
-    return sourceText;
+    // 添加警语
+    const disclaimer =
+      language === "zh-CN"
+        ? `\n\n⚠️ **免责声明：** 以上回答由AI机器人提供，仅供参考。如有疑问或需要确认，请联系管理员。`
+        : `\n\n⚠️ **Disclaimer:** The above response is provided by an AI bot for reference only. Please contact moderators if you have questions or need confirmation.`;
+
+    return sourceText + disclaimer;
   }
 }
 
