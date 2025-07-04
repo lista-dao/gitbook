@@ -15,27 +15,8 @@ async function testQuestionsList() {
     bot.botInfo = { id: 12345, username: "test_bot", first_name: "Test Bot" };
     bot.initializeServices();
 
-    // 针对Medium文章的测试问题
-    const questions = [
-      // 测试 clisBNB/slisBNBx 分类
-      "What is clisBNB and how can I mint it using slisBNB?",
-      "How to delegate clisBNB to Binance Web3 MPC wallet for Launchpool?",
-      "What are the benefits of using clisBNB for Binance Launchpool?",
-
-      // 测试 veLISTA 分类
-      "How does veLISTA governance voting work on Lista DAO?",
-      "What is the veLISTA borrow rebate mechanism and how is it calculated?",
-      "How can I participate in gauge voting with veLISTA?",
-      "What are the protocol fees that veLISTA holders receive?",
-
-      // 测试原有分类不受影响
-      "What is the Lista Lending Alpha Zone and how does the whitelist system work?",
-      "How does Lista DAO's multi-oracle system work for price feeds?",
-
-      // 边界情况测试
-      "How to mint clisBNB on Lista Lending platform?", // 应该检测为 clisBNB
-      "What is the difference between slisBNB and clisBNB?", // 可能是比较查询
-    ];
+    // 测试改进后的来源链接显示
+    const questions = ["How to mint clisBNB with LP tokens on ThenaFi?"];
 
     const userInfo = { id: 123456, username: "test", first_name: "Test" };
 

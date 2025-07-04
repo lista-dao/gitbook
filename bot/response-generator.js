@@ -220,62 +220,139 @@ Please answer in English, ensuring all relevant data is included:`;
   }
 
   buildSourceLinks(relevantChunks, language) {
-    const sources = [
-      ...new Set(relevantChunks.map((c) => c.metadata.filename)),
-    ];
+    const fileScores = new Map();
+    const fileChunksMap = new Map();
+
+    relevantChunks.forEach((chunk) => {
+      const filename = chunk.metadata.filename;
+      if (!fileChunksMap.has(filename)) {
+        fileChunksMap.set(filename, []);
+      }
+      fileChunksMap.get(filename).push(chunk);
+    });
+
+    fileChunksMap.forEach((chunks, filename) => {
+      const avgScore =
+        chunks.reduce((sum, chunk) => sum + chunk.score, 0) / chunks.length;
+      fileScores.set(filename, avgScore);
+    });
+
+    const topFiles = [...fileScores.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6)
+      .map(([filename]) => filename);
 
     const fileDisplayNames = new Map();
 
-    sources.forEach((filename) => {
+    topFiles.forEach((filename) => {
       const fileChunks = relevantChunks.filter(
         (c) => c.metadata.filename === filename
       );
 
       let displayName = null;
 
-      const mainTopic = fileChunks.find((c) => c.metadata.main_topic)?.metadata
-        .main_topic;
-      if (mainTopic && mainTopic.trim() && mainTopic !== "README") {
-        displayName = mainTopic.trim();
-      }
+      const isExternalContent = fileChunks.some(
+        (chunk) =>
+          chunk.metadata.is_external_content || chunk.metadata.source_url
+      );
 
-      if (!displayName) {
-        const firstHeading = fileChunks.find((c) => c.metadata.heading)
-          ?.metadata.heading;
-        if (firstHeading && firstHeading.trim() && firstHeading !== "README") {
-          displayName = firstHeading.trim();
+      if (isExternalContent) {
+        for (const chunk of fileChunks) {
+          const content =
+            chunk.metadata.chunk_content || chunk.metadata.content || "";
+
+          const lines = content.split("\n");
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (
+              trimmed.startsWith("# ") &&
+              !trimmed.startsWith("## ") &&
+              trimmed.length > 10
+            ) {
+              const title = trimmed.substring(2).trim();
+              if (
+                title &&
+                !title.includes("\\") &&
+                !title.startsWith("1.") &&
+                !title.startsWith("2.")
+              ) {
+                displayName = title;
+                break;
+              }
+            }
+          }
+
+          if (!displayName) {
+            for (let i = 0; i < lines.length - 1; i++) {
+              const currentLine = lines[i].trim();
+              const nextLine = lines[i + 1].trim();
+
+              if (
+                currentLine &&
+                nextLine &&
+                /^=+$/.test(nextLine) &&
+                currentLine.length > 10
+              ) {
+                displayName = currentLine;
+                break;
+              }
+            }
+          }
+
+          if (displayName) break;
         }
       }
 
       if (!displayName) {
-        const summary = fileChunks.find((c) => c.metadata.summary)?.metadata
-          .summary;
-        if (summary && summary.trim()) {
-          displayName =
-            summary.substring(0, 30).trim() +
-            (summary.length > 30 ? "..." : "");
-        }
-      }
-
-      if (!displayName) {
-        const pathParts = filename.replace(/\.md$/, "").split("/");
-        const lastPart = pathParts[pathParts.length - 1];
-
-        if (lastPart === "README" && pathParts.length > 1) {
-          displayName = pathParts[pathParts.length - 2];
-        } else {
-          displayName = lastPart;
+        const mainTopic = fileChunks.find((c) => c.metadata.main_topic)
+          ?.metadata.main_topic;
+        if (mainTopic && mainTopic.trim() && mainTopic !== "README") {
+          displayName = mainTopic.trim();
         }
 
-        displayName = displayName
-          .replace(/-/g, " ")
-          .replace(/\b\w/g, (char) => char.toUpperCase());
+        if (!displayName) {
+          const firstHeading = fileChunks.find((c) => c.metadata.heading)
+            ?.metadata.heading;
+          if (
+            firstHeading &&
+            firstHeading.trim() &&
+            firstHeading !== "README"
+          ) {
+            displayName = firstHeading.trim();
+          }
+        }
+
+        if (!displayName) {
+          const summary = fileChunks.find((c) => c.metadata.summary)?.metadata
+            .summary;
+          if (summary && summary.trim()) {
+            displayName =
+              summary.substring(0, 30).trim() +
+              (summary.length > 30 ? "..." : "");
+          }
+        }
+
+        if (!displayName) {
+          const pathParts = filename.replace(/\.md$/, "").split("/");
+          const lastPart = pathParts[pathParts.length - 1];
+
+          if (lastPart === "README" && pathParts.length > 1) {
+            displayName = pathParts[pathParts.length - 2];
+          } else {
+            displayName = lastPart;
+          }
+
+          displayName = displayName
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (char) => char.toUpperCase());
+        }
       }
 
       fileDisplayNames.set(filename, displayName);
     });
 
-    const sourceLinks = sources
+    const sourceLinks = topFiles
       .filter((filename) => !filename.includes("SUMMARY"))
       .map((filename) => {
         const displayName = fileDisplayNames.get(filename);
