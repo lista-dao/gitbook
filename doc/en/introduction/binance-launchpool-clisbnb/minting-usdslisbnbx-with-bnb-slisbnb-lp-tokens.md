@@ -1,8 +1,6 @@
 # Minting $slisBNBx with BNB/slisBNB LP Tokens
 
-Users can nw mint $slisBNBx by staking BNB/slisBNB LP tokens.
-
-
+Users can now mint $slisBNBx by staking BNB/slisBNB LP tokens.
 
 Here’s what this feature enables:
 

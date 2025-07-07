@@ -23,10 +23,9 @@
   * [Technical Guide](introduction/liquid-staking-slisbnb/technical-guide.md)
 * [Lista Lending](introduction/lista-lending/README.md)
   * [Vaults](introduction/lista-lending/vaults/README.md)
-    * [How to create a vault: Lista Lending vault GUI)](introduction/lista-lending/vaults/how-to-create-a-vault-lista-lending-vault-gui.md)
-    * [How to create a vault: Manually](introduction/lista-lending/vaults/how-to-create-a-vault.md)
-  * [Markets](introduction/lista-lending/markets/README.md)
-    * [How to create a Market](introduction/lista-lending/markets/how-to-create-a-market.md)
+    * [Lista Alpha Zone](introduction/lista-lending/vaults/lista-alpha-zone.md)
+    * [Loop BNB vault](introduction/lista-lending/vaults/loop-bnb-vault.md)
+  * [Markets](introduction/lista-lending/markets.md)
   * [Borrowers & Suppliers](introduction/lista-lending/borrowers-and-suppliers.md)
   * [Interest Rate Model (IRM)](introduction/lista-lending/interest-rate-model-irm.md)
   * [Fees](introduction/lista-lending/fees.md)
@@ -88,12 +87,12 @@
   * [Claim Rewards](user-guide/lista-velista/claim-rewards.md)
   * [Staking external LP tokens on Lista DAO](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
   * [Gauge Voting](user-guide/lista-velista/gauge-voting.md)
-* [Create Vault on Lista Lending](user-guide/create-vault-on-lista-lending/README.md)
-  * [Lista Lending Contracts](user-guide/create-vault-on-lista-lending/lista-lending-contracts.md)
+* [How to create a vault: Lista Lending vault GUI)](user-guide/how-to-create-a-vault-lista-lending-vault-gui.md)
 
 ***
 
-* [Create Markets on Lista Lending](create-markets-on-lista-lending.md)
+* [How to create a vault: Manually](how-to-create-a-vault.md)
+* [How to create a Market on Lista Lending](how-to-create-a-market.md)
 
 ## Security
 
