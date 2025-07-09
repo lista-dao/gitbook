@@ -199,6 +199,10 @@ class GitBookRAGBot {
           const incorrectText =
             detectedLang === "zh-CN" ? "❌ 错误" : "❌ Incorrect";
 
+          // 在callback_data中包含用户消息ID和bot回答消息ID
+          const userMsgId = ctx.message.message_id;
+          const botMsgId = replyMsg.message_id;
+
           await ctx.reply(moderationText, {
             reply_to_message_id: replyMsg.message_id,
             reply_markup: {
@@ -206,11 +210,11 @@ class GitBookRAGBot {
                 [
                   {
                     text: correctText,
-                    callback_data: `approve_${replyMsg.message_id}_${userId}_${detectedLang}`,
+                    callback_data: `approve_${botMsgId}_${userMsgId}_${userId}_${detectedLang}`,
                   },
                   {
                     text: incorrectText,
-                    callback_data: `reject_${replyMsg.message_id}_${userId}_${detectedLang}`,
+                    callback_data: `reject_${botMsgId}_${userMsgId}_${userId}_${detectedLang}`,
                   },
                 ],
               ],
@@ -319,14 +323,13 @@ class GitBookRAGBot {
     const moderatorId = ctx.from.id;
     const moderatorName = ctx.from.first_name || ctx.from.username || "Unknown";
 
-    // 解析回调数据: approve_messageId_userId_language 或 reject_messageId_userId_language
-    const [action, messageId, originalUserId, language] =
+    const [action, botMessageId, userMessageId, originalUserId, language] =
       callbackData.split("_");
 
     // 使用默认语言作为fallback
     const lang = language || "en";
 
-    if (!action || !messageId || !originalUserId) {
+    if (!action || !botMessageId || !userMessageId || !originalUserId) {
       const errorMsg =
         lang === "zh-CN" ? "❌ 无效的操作数据" : "❌ Invalid operation data";
       await ctx.answerCbQuery(errorMsg);
@@ -367,7 +370,8 @@ class GitBookRAGBot {
       logger.info("回答审核通过", {
         moderatorId,
         moderatorName,
-        messageId,
+        botMessageId,
+        userMessageId,
         originalUserId,
         language: lang,
         timestamp,
@@ -381,12 +385,19 @@ class GitBookRAGBot {
         alertText = "❌ Marked as incorrect answer";
       }
 
-      await this.forwardErrorToGroup(ctx, messageId, moderatorName, lang);
+      await this.forwardErrorToGroup(
+        ctx,
+        botMessageId,
+        userMessageId,
+        moderatorName,
+        lang
+      );
 
       logger.info("回答审核拒绝", {
         moderatorId,
         moderatorName,
-        messageId,
+        botMessageId,
+        userMessageId,
         originalUserId,
         language: lang,
         timestamp,
@@ -409,7 +420,7 @@ class GitBookRAGBot {
       logger.warn("编辑审核消息失败，发送新消息:", error.message);
       await ctx.reply(responseText, {
         parse_mode: "Markdown",
-        reply_to_message_id: parseInt(messageId),
+        reply_to_message_id: parseInt(botMessageId),
       });
     }
 
@@ -494,7 +505,13 @@ class GitBookRAGBot {
     });
   }
 
-  async forwardErrorToGroup(ctx, messageId, moderatorName, lang) {
+  async forwardErrorToGroup(
+    ctx,
+    botMessageId,
+    userMessageId,
+    moderatorName,
+    lang
+  ) {
     // 检查是否配置了转发群组ID
     if (!this.errorForwardGroupId) {
       logger.info("未配置错误转发群组ID，跳过转发");
@@ -507,34 +524,57 @@ class GitBookRAGBot {
         timeZone: "Asia/Shanghai",
       });
 
-      const forwardedMessage = await ctx.telegram.forwardMessage(
+      let forwardedUserQuestion = null;
+      try {
+        forwardedUserQuestion = await ctx.telegram.forwardMessage(
+          this.errorForwardGroupId,
+          chatId,
+          parseInt(userMessageId)
+        );
+        logger.info("用户提问转发成功", { userMessageId, chatId });
+      } catch (userForwardError) {
+        logger.warn("转发用户提问失败:", userForwardError.message);
+      }
+
+      // 再转发bot的回答
+      const forwardedBotReply = await ctx.telegram.forwardMessage(
         this.errorForwardGroupId,
         chatId,
-        parseInt(messageId)
+        parseInt(botMessageId)
       );
 
-      // 发送错误标记通知
+      // 发送错误通知
+      const contextInfo = forwardedUserQuestion
+        ? `\n\n💡 **提示：** 上方为用户提问和bot错误回答的完整对话。`
+        : `\n\n⚠️ **注意：** 用户提问转发失败，请查看原群组获取完整问题。`;
+
+      const contextInfoEn = forwardedUserQuestion
+        ? `\n\n💡 **Note:** Above shows the complete Q&A conversation.`
+        : `\n\n⚠️ **Note:** User question forwarding failed, please check original chat.`;
+
       const errorNotification =
         lang === "zh-CN"
           ? `🚨 **错误回答警报**\n\n👤 **审核员：** ${moderatorName}\n🕐 **时间：** ${timestamp}\n📍 **来源：** ${
               ctx.chat.title || "Private Chat"
-            }\n\n⚠️ 上述回答已被审核员标记为**错误信息**，请相关人员及时审查并提供正确答案。`
+            }\n\n⚠️ 上述回答已被审核员标记为**错误信息**，请相关人员及时审查并提供正确答案。${contextInfo}`
           : `🚨 **Incorrect Answer Alert**\n\n👤 **Moderator:** ${moderatorName}\n🕐 **Time:** ${timestamp}\n📍 **Source:** ${
               ctx.chat.title || "Private Chat"
-            }\n\n⚠️ The above answer has been flagged as **incorrect** by a moderator. Please review and provide accurate information.`;
+            }\n\n⚠️ The above answer has been flagged as **incorrect** by a moderator. Please review and provide accurate information.${contextInfoEn}`;
 
       await ctx.telegram.sendMessage(
         this.errorForwardGroupId,
         errorNotification,
         {
           parse_mode: "Markdown",
-          reply_to_message_id: forwardedMessage.message_id,
+          reply_to_message_id: forwardedBotReply.message_id,
         }
       );
 
       logger.info("错误回答转发成功", {
         groupId: this.errorForwardGroupId,
-        messageId,
+        botMessageId,
+        userMessageId,
+        userQuestionForwarded: !!forwardedUserQuestion,
         moderator: moderatorName,
         sourceChat: ctx.chat.title || "Private",
       });
@@ -550,13 +590,13 @@ class GitBookRAGBot {
                 { timeZone: "Asia/Shanghai" }
               )}\n📍 来源：${
                 ctx.chat.title || "Private Chat"
-              }\n💬 消息ID：${messageId}\n\n⚠️ 有一条回答被标记为错误，但转发失败。请手动检查。`
+              }\n\n⚠️ 有一条回答被标记为错误，但转发失败。请手动检查原对话获取用户提问和bot回答的完整内容。`
             : `🚨 **Incorrect Answer Report**\n👤 Moderator: ${moderatorName}\n🕐 Time: ${new Date().toLocaleString(
                 "en-US",
                 { timeZone: "Asia/Shanghai" }
               )}\n📍 Source: ${
                 ctx.chat.title || "Private Chat"
-              }\n💬 Message ID: ${messageId}\n\n⚠️ An answer was flagged as incorrect but forwarding failed. Please check manually.`;
+              }\n\n⚠️ An answer was flagged as incorrect but forwarding failed. Please manually check the original conversation for user question and bot response.`;
 
         await ctx.telegram.sendMessage(this.errorForwardGroupId, fallbackMsg, {
           parse_mode: "Markdown",
