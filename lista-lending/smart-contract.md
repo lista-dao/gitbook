@@ -19,3 +19,5 @@ Lista Lending is a decentralized lending protocol that allows users to borrow an
 | BNBProvider (MEV WBNB Vault)   | 0x501bE17CcA1d8a009753Da271D6714C18c1A35c9 |
 | BNBProvider (Lista WBNB Vault) | 0x367384C54756a25340c63057D87eA22d47Fd5701 |
 | MoolahVaultFactory             | 0x2a0Cb6401FD3c6196750dc6b46702040761D9671 |
+| LendingRewardsDistributorV2    | 0x2993E9eA76f5839A20673e1B3cf6666ab5B3aE76 |
+| RewardsRouter                  | 0xCb571b4ac0dB9c64B9ADdD2e6f3d1c7A84E5bfF4 |
