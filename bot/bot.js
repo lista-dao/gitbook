@@ -46,8 +46,18 @@ class GitBookRAGBot {
       openaiApiUrl: "https://api.openai.com/v1/chat/completions",
       healthPort: 3000,
     };
+    this.moderatorMap = {
+      tyler: 790810748,
+      xuan: 5230857750,
+      datang: 1826422710,
+      余生: 5075951083,
+      TwitteSpace: 5124728862,
+      cooper_17: 327013488,
+      alcatraz_80: 1646283989,
+      IIaKeT: 5027735882,
+    };
 
-    this.moderatorIds = [790810748];
+    this.moderatorIds = Object.values(this.moderatorMap);
 
     this.errorForwardGroupId = -4703057738;
 
