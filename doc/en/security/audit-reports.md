@@ -41,20 +41,13 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 | BNB Liquid Staking                               | [PeckShield-Audit-Report-ListaStakeManager-v1.0.pdf](https://github.com/lista-dao/synclub-contracts/blob/master/audit/PeckShield-Audit-Report-ListaStakeManager-v1.0.pdf)                                               |
 | BNB Liquid Staking                               | [blocksec\_listastakeManager\_v1.0-signed.pdf](https://github.com/lista-dao/synclub-contracts/blob/master/audit/blocksec_listastakeManager_v1.0-signed.pdf)                                                             |
 
-#### 2023
 
-* [slisBNB Peckshield audit report](https://github.com/lista-dao/lista-audit/blob/e834a8a80bd60aab16172ccf5fc5c0e1c87d7a84/Synclub_SnBNB/PeckShield-Audit-Report-SynclubLSD-v1.1.pdf)
-* [slisBNB Slowmist audit report](https://github.com/lista-dao/lista-audit/blob/e834a8a80bd60aab16172ccf5fc5c0e1c87d7a84/Synclub_SnBNB/SlowMist%20Audit%20Report%20-%20Synclub_en-us.pdf)
-* [Helio Peckshield audit report](https://github.com/helio-money/helio-audit/blob/main/PeckShield-Audit-Report-Helio-v2.0-230816.pdf)
-* [Helio Slowmist audit report](https://github.com/helio-money/helio-audit/blob/main/SlowMist%20Audit%20Report%20-%20Helio%20Money23-08.pdf)
-* [Helio Peckshield Audit Report (ETH collateral)](https://github.com/helio-money/helio-audit/blob/main/eth-collateral/PeckShield-Audit-Report-Helio-Ceros-v1.0.pdf)&#x20;
-* [Helio Slowmist Audit Report (ETH collateral)](https://github.com/helio-money/helio-audit/blob/main/eth-collateral/SlowMist%20Audit%20Report%20-%20helio-smart-contracts-eth-collateral.pdf)
 
-#### 2022
+#### 2022 (CDP)
 
-* [Helio Certik audit report](https://github.com/helio-money/helio-smart-contracts/blob/master/audits/Certik_300522.pdf)
-* [Helio PeckShield audit report](https://github.com/helio-money/helio-smart-contracts/blob/master/audits/PeckShield_250522.pdf)
-* [Helio Slowmist audit report](https://github.com/helio-money/helio-smart-contracts/blob/master/audits/SlowMist_100522.pdf)
-* [Helio Slowmist audit report #2](https://github.com/helio-money/helio-smart-contracts/blob/master/audits/SlowMist_240522.pdf)
-* [Helio Veridise audit report](https://drive.google.com/file/d/1R8Pr_ydSvwR7p4lJRPq8htamZ32T1KuT/view)
+* [Veridise\_270622.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Veridise_270622.pdf)
+* [SlowMist\_240522.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/SlowMist_240522.pdf)
+* [SlowMist\_100522.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/SlowMist_100522.pdf)
+* [PeckShield\_250522.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/PeckShield_250522.pdf)
+* [Certik\_300522.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Certik_300522.pdf)
 
