@@ -4,6 +4,8 @@ description: How to borrow lisUSD
 
 # Borrow lisUSD
 
+{% embed url="https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F60fXF9rALi6luWHVkkGg%2Fuploads%2F466BU7CmKB8AkYKhxSX0%2FBorrow%20lisUSD.mp4?alt=media&token=d86114fc-fbd8-4f74-9c92-ea6fec0503b3" %}
+
 {% hint style="info" %}
 **TIP**
 

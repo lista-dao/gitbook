@@ -4,6 +4,8 @@ description: How to repay lisUSD
 
 # Repay lisUSD
 
+{% embed url="https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F60fXF9rALi6luWHVkkGg%2Fuploads%2FvCk6Nl7lY2KBVZIzFgXS%2FRepay%20lisUSD.mp4?alt=media&token=381fa24b-28c9-4e27-9c21-ea81528eddfb" %}
+
 {% hint style="info" %}
 **NOTE**
 
