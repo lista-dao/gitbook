@@ -32,7 +32,25 @@ To further enhance the ecosystem, Lista DAO will introduce cross-chain vault pro
 
 As part of its strategy to lead the DeFi space, Lista DAO will focus on integrating more DeFi primitives into its ecosystem. These “Lego blocks” will feature expanded collateral options, advanced liquid staking solutions, and innovative liquidity mechanisms. By building a modular and interoperable ecosystem, Lista DAO seeks to provide users with greater flexibility while unlocking new opportunities for capital efficiency and optimization.
 
-## 2025 H2 Road Map
+## 2025 H1 [Summary](https://medium.com/listadao/lista-dao-h1-2025-update-pioneering-bnbfi-9d4c70d779c0)
+
+### **1. Major Milestone**:&#x20;
+
+Launched Lista Lending, a decentralized P2P lending protocol, with upgrades like slisBNBx minting, a Vault Manager GUI, Alpha Zone, and Liquidation Zone.
+
+### **2. Ecosystem Expansion**
+
+Collaborated with USD1 to integrate stablecoin use cases into Lista DAO’s DeFi protocols, enhancing liquidity and utility.
+
+### **3. Strategic Integration**&#x20;
+
+Partnered with strategic partners such as World Liberty Finance, Pendle Finance, etc to enhance yield opportunities.
+
+### **4. Innovative Utility**
+
+Introduced lisUSD borrow rebates for veLISTA holders, reducing borrowing costs and boosting capital efficiency.
+
+## 2025 H2 [Roadmap](https://medium.com/listadao/lista-dao-2025-h2-roadmap-fc63d701f059)
 
 ### **1. USD1 Hub Leadership**
 
