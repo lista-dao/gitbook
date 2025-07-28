@@ -6,6 +6,8 @@ description: How to provide collateral
 
 ### 1. Connect your wallet[​](https://helio.money/docs/get-started/provide-bnb#1-connect-your-wallet) <a href="#id-1-connect-your-wallet" id="id-1-connect-your-wallet"></a>
 
+[https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F60fXF9rALi6luWHVkkGg%2Fuploads%2FQqOlYh6nF6efbEpkTtMu%2FProvide%20collateral.mp4?alt=media\&token=c121023d-f2a8-4acb-bf30-8c5d5b1c0142](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F60fXF9rALi6luWHVkkGg%2Fuploads%2FQqOlYh6nF6efbEpkTtMu%2FProvide%20collateral.mp4?alt=media\&token=c121023d-f2a8-4acb-bf30-8c5d5b1c0142)
+
 {% hint style="info" %}
 **NOTE**
 
