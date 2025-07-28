@@ -31,3 +31,30 @@ The BNBFi ecosystem (slisBNBx) is set to experience significant growth in 2025 a
 To further enhance the ecosystem, Lista DAO will introduce cross-chain vault products designed to capture incentives and airdrops across multiple networks. Additionally, a referral system will be launched to engage influencers and KOLs, driving user growth and accelerating adoption.
 
 As part of its strategy to lead the DeFi space, Lista DAO will focus on integrating more DeFi primitives into its ecosystem. These “Lego blocks” will feature expanded collateral options, advanced liquid staking solutions, and innovative liquidity mechanisms. By building a modular and interoperable ecosystem, Lista DAO seeks to provide users with greater flexibility while unlocking new opportunities for capital efficiency and optimization.
+
+## 2025 H2 Road Map
+
+### **1. USD1 Hub Leadership**
+
+Build Lista into the largest on-chain hub for USD1, with more than $70M currently in Lista Lending, targeting an increase in TVL to over 100M and a competitive Supply APY through expanded integrations and yield optimization.
+
+### **2. Lista CDP for PancakeSwap**
+
+Launch in Q3 to enable PancakeSwap LP positions as collateral for lisUSD minting, boosting capital efficiency.
+
+### **3. RWA Yield-Bearing Stablecoin**&#x20;
+
+Introduce a USD1-based stablecoin backed by U.S. Treasuries and corporate bonds in Early Q3.
+
+### **4. lisUSD Growth**&#x20;
+
+Increase lisUSD minting volume from 63.2M to 80M (26.6% growth) by year-end through our Yield-bearing stablecoin and LP minting products.
+
+### **5. Fluid-like DEX**
+
+Launch a lending and AMM-integrated DEX in Q4 to convert Lista Lending collaterals into LP positions.
+
+### **6. Fixed-Rate Lending Expansion**
+
+Expand Lista CDP to offer fixed-rate and fixed-term lending products, with timeline to be confirmed.
+
