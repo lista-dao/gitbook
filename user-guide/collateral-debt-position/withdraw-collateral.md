@@ -4,6 +4,8 @@ description: How to withdraw collateral
 
 # Withdraw collateral
 
+{% embed url="https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F60fXF9rALi6luWHVkkGg%2Fuploads%2Fub8H8qdawlnDA1QRNa7y%2FWithdraw%20Collateral.mp4?alt=media&token=c25d60e7-3e67-4f98-8805-310e25e43b58" %}
+
 {% hint style="info" %}
 **Longer vs instant withdrawal**
 
