@@ -64,12 +64,14 @@
 
 ## User Guide
 
-* [Collateral Debt Position](user-guide/collateral-debt-position/README.md)
+* [Collateral Debt Position (lisUSD CDP)](user-guide/collateral-debt-position/README.md)
   * [Provide collateral](user-guide/collateral-debt-position/provide-collateral.md)
   * [Borrow lisUSD](user-guide/collateral-debt-position/borrow-lisusd.md)
   * [Repay lisUSD](user-guide/collateral-debt-position/repay-lisusd.md)
   * [Withdraw collateral](user-guide/collateral-debt-position/withdraw-collateral.md)
   * [Delegating slisBNBx to your Binance web3 MPC Wallet](user-guide/collateral-debt-position/delegating-clisbnb-to-your-binance-web3-mpc-wallet.md)
+  * [Stable Pool (PSM) - USDT Stable Earn](user-guide/collateral-debt-position/stable-pool-psm-usdt-stable-earn.md)
+  * [lisUSD Savings rate (LSR) - lisUSD Saving](user-guide/collateral-debt-position/lisusd-savings-rate-lsr-lisusd-saving.md)
 * [Liquid staking - slisBNB](user-guide/liquid-staking-slisbnb/README.md)
   * [How to swap for slisBNB](user-guide/liquid-staking-slisbnb/how-to-swap-for-slisbnb.md)
   * [Mint slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)

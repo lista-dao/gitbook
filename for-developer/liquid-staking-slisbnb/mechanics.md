@@ -9,7 +9,7 @@ slisBNB is the yield bearing & liquid staking token for Lista. Users can get sli
 
 Here are the functionalities provided by ListaStakeManager:
 
-<figure><img src="../../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Stake BNB
 
@@ -32,9 +32,9 @@ The staked BNB generate rewards from multiple validators, which are then aggrega
 \
 
 
-<figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption><p>Unstaking</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (12) (1).png" alt=""><figcaption><p>Unstaking</p></figcaption></figure>
 
-<figure><img src="../../.gitbook/assets/image (13).png" alt=""><figcaption><p>Withdraw</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (13) (1).png" alt=""><figcaption><p>Withdraw</p></figcaption></figure>
 
 ### Unstaking and Withdraw
 

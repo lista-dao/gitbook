@@ -138,7 +138,7 @@ This process user will only interact with the Jar contract, it is responsible fo
 
 **g. Liquidation**
 
-<figure><img src="../../.gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 The flowchart shows how an auction is being kick started.
 
@@ -181,7 +181,7 @@ Trigger Auction:
 
 **g.2 Buy from Auction**
 
-<figure><img src="../../.gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 The flowchart shows how the user buys collateral from an auction.
 

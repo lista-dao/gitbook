@@ -12,7 +12,7 @@ description: How to redeem BNB from slisBNB
 
 To unstake your BNB, return to the main page, and click on “unstake”
 
-<figure><img src="../../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### **Step 2:** <a href="#ac51" id="ac51"></a>
 
@@ -24,7 +24,7 @@ Note: Users will have to wait a period of 7–15 days before users can withdraw 
 
 Head over to the withdraw section to check the status of your BNB withdrawal.
 
-<figure><img src="../../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### Step 4: <a href="#id-29f4" id="id-29f4"></a>
 

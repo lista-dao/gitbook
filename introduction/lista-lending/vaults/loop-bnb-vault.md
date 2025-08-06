@@ -1,6 +1,6 @@
 # Loop BNB vault
 
-<figure><img src="../../../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 As the demand for looping strategies in BNBFi grows, we’re introducing a dedicated Loop BNB Vault to meet suppliers and borrowers need. This vault is allocated exclusively to the high-demand slisBNB/BNB lending market.
 

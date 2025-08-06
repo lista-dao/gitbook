@@ -33,11 +33,7 @@ Key components include the ListaOFTAdapter, ListaOFT contracts, LayerZero endpoi
 
 **3. Cross-Chain Interaction Flow**
 
-<div data-full-width="true">
-
-<figure><img src="../../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
-
-</div>
+<div data-full-width="true"><figure><img src="../../.gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure></div>
 
 From BSC to Ethereum:
 
