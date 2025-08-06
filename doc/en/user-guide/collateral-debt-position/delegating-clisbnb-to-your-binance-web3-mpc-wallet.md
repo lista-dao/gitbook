@@ -12,7 +12,7 @@ To change the destination address of your slisBNBx. You will have to withdraw yo
 
 2\. Head over to your Lista DAO CDP dashboard by clicking on "Borrow lisUSD" under the Lending section[ here](https://lista.org/cdp/dashboard).
 
-<figure><img src="../../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 3\. Select BNB, and click on “Deposit”.
 

@@ -8,26 +8,26 @@
 
 1. Connect your wallet and head over to the borrow section of our Lista Lending page [here](https://lista.org/lending?tab=borrow).
 
-<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
 2. Select the classic zone, and choose a market that you would like to borrow from. For simplicity sake, we will choose the slisBNB/USD1 market. Click on the selected market.
 
-<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 3. Supply slisBNB collateral, and borrow USD1 by inputing the amount in the respective textbox, and click "Supply & Borrow".&#x20;
 
-<figure><img src="../../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Repay
 
 1. Click on My dashboard to view all your borrowing positions [here](https://lista.org/dashboard).
 
-<figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 2. click  "Repay" on the market you want to repay under the "Borrowed" section
 
-<figure><img src="../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 3. Input the amount to repay, and confirm the transaction.
 
-<figure><img src="../../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
