@@ -34,7 +34,7 @@ The centralized stablecoins acquired via the PSM will play a critical role in ma
 
 Through the use of our PSM module, the stablepool is created under our [Earn](https://lista.org/earn) section here:
 
-<figure><img src="../../../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Users can now deposit their USDT to enjoy a yields coming from LISTA token emission, as well as lisUSD saving rate. Through the PSM, the USDT deposited into the USDT Stablepool will be swapped into lisUSD at a 1:1 ratio and deposited into the lisUSD stable pool.
 
