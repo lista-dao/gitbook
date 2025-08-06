@@ -4,6 +4,8 @@ description: How to mint slisBNB
 
 # Mint slisBNB
 
+{% embed url="https://www.loom.com/share/ad28a69f3d5948a09578e467c08d5d93?sid=c57a9d57-95e8-425e-bccc-e5562245bfce" %}
+
 #### **Step 1:** <a href="#id-63cd" id="id-63cd"></a>
 
 Go to [Lista’s BNB liquid staking page](https://lista.org/liquid-staking/BNB) and connect your wallet.
