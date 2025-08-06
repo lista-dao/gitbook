@@ -75,6 +75,12 @@
   * [Mint slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
   * [Redeem BNB from slisBNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
   * [Bridging slisBNB to Ethereum](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
+* [Lista Lending](user-guide/lista-lending/README.md)
+  * [Borrowing and repaying](user-guide/lista-lending/borrowing-and-repaying.md)
+  * [Lista Lending Earn](user-guide/lista-lending/lista-lending-earn.md)
+  * [How to create a vault: Lista Lending vault GUI)](user-guide/lista-lending/how-to-create-a-vault-lista-lending-vault-gui.md)
+  * [How to create a vault: Manually](user-guide/lista-lending/how-to-create-a-vault.md)
+  * [How to create a Market on Lista Lending](user-guide/lista-lending/how-to-create-a-market.md)
 * [Using Binance Wallet](user-guide/using-binance-web3-wallet/README.md)
   * [Liquid staking BNB into slisBNB](user-guide/using-binance-web3-wallet/liquid-staking-bnb-into-slisbnb.md)
   * [Obtaining lisUSD](user-guide/using-binance-web3-wallet/obtaining-lisusd.md)
@@ -87,12 +93,6 @@
   * [Claim Rewards](user-guide/lista-velista/claim-rewards.md)
   * [Staking external LP tokens on Lista DAO](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
   * [Gauge Voting](user-guide/lista-velista/gauge-voting.md)
-* [How to create a vault: Lista Lending vault GUI)](user-guide/how-to-create-a-vault-lista-lending-vault-gui.md)
-
-***
-
-* [How to create a vault: Manually](how-to-create-a-vault.md)
-* [How to create a Market on Lista Lending](how-to-create-a-market.md)
 
 ## Security
 
