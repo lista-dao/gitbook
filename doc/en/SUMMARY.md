@@ -59,6 +59,7 @@
   * [veLISTA Bribe Market](governance/velista/velista-bribe-market.md)
   * [Auto-Compounding](governance/velista/auto-compounding.md)
   * [Permanent locking of LISTA (LIP-016)](governance/velista/permanent-locking-of-lista-lip-016.md)
+  * [LISTA Deflationary Initiative: 20% Token Burn (LIP-021)](governance/velista/lista-deflationary-initiative-20-token-burn-lip-021.md)
   * [Revenue / Cost](governance/velista/revenue-cost.md)
   * [Analytics](governance/velista/analytics.md)
 
