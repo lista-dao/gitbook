@@ -14,6 +14,8 @@ This strategic move has reduced the total maximum supply from 1 billion to 800 m
 
 * Black Hole Address: [https://bscscan.com/token/0xfceb31a79f71ac9cbdcf853519c1b12d379edc46?a=0x000000000000000000000000000000000000dead](https://bscscan.com/token/0xfceb31a79f71ac9cbdcf853519c1b12d379edc46?a=0x000000000000000000000000000000000000dead)
 
+> _Note\* As of now, Total Freezed LISTA is \~204.41M LISTA, composed of a one-time burn (LIP 021, 200M) permanently removed to reduce supply and increase scarcity, plus previously accumulated protocol freezes (4.41M) based on_ [_LIP 016_](permanent-locking-of-lista-lip-016.md)_. This represents a strategic step to strengthen the token's long-term value and support the DAO ecosystem._
+
 ### Tokenomics After 20% LISTA Burn
 
 <figure><img src="../../.gitbook/assets/image (67).png" alt=""><figcaption></figcaption></figure>
