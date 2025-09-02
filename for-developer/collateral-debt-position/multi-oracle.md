@@ -8,7 +8,7 @@ To mitigate these risks, we have implemented the Resilient Price Oracle, a more 
 
 Moreover, the upgraded oracle infrastructure allows for the real-time addition of new price oracles and offers the flexibility to activate or deactivate oracles for specific tokens as needed.
 
-<figure><img src="../../.gitbook/assets/image (28).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (68).png" alt=""><figcaption></figcaption></figure>
 
 ## Configuration
 
