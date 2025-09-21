@@ -1,4 +1,6 @@
 # Fees
 
 * Managed by Lista DAO and adjustable rate within 0-25%.
-* Fee is mainly from the interest of the loan, the agreement will take a certain percentage of the interest as income.
+* Fees are primarily derived from a percentage of the interest earned on loans.
+*   The current fee is set at 10% of the borrowing interest.
+
