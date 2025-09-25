@@ -28,11 +28,11 @@ Where:
 The function follows these thresholds:
 
 * If x ≤ 10k veLISTA, f(x) = 0 (No rebate)
-* If x ≥ 1000M veLISTA, f(x) ≤ 2.5% (Maximum rebate cap)
+* If x ≥ 1000M veLISTA, f(x) ≤ 1.5% (Maximum rebate cap)
 
 With the threshold being introduced, the function is currently set at the following:
 
-&#x20; f(x) = 0.002171⋅ln(x) - 0.02
+&#x20; f(x) = 0.0013025 \* ln(x) − 0.01199
 
 ## Examples
 
@@ -48,24 +48,24 @@ Weekly rebate: 0 lisUSD
 User B borrows 100,000 lisUSD at a 10% borrow rate.
 
 User B holds 1M veLISTA, applying the function:\
-f(1,000,000) = 0.002171 × ln(1,000,000) - 0.02\
-\= 0.00999347221 x 100%
+f(1,000,000) = 0.0013025 \* ln(1,000,000) - 0.01199\
+\= 0.0060047025 \* 100%
 
-\=0.99%
+\=0.6%
 
-Weekly rebate calculation: (100,000 × 0.99%) / 365 × 7\
-\= 18.986 lisUSD per week
+Weekly rebate calculation: (100,000 × 0.6%) / 365 × 7\
+\= 11.5068 lisUSD per week
 
 ### Example 3: Maximum Rebate Cap Reached
 
 User C borrows 100,000 lisUSD at a 10% borrow rate.\
 User C holds 10B veLISTA, exceeding the 1000M cap.
 
-Rebate rate: 2.5% (Maximum cap applied).
+Rebate rate: 1.5% (Maximum cap applied).
 
 Weekly rebate calculation:\
-(100,000 × 2.5%) / 365 × 7\
-\= 47.945 lisUSD per week
+(100,000 × 1.5%) / 365 × 7\
+\= 28.7671 lisUSD per week
 
 ## User Flow
 
