@@ -2,6 +2,8 @@
 
 Lista Lending is a decentralized lending protocol that allows users to borrow and lend various assets. The following contracts manage the core lending functionality, interest rate models, vault operations, and reward distributions across the protocol.
 
+#### BNB Smart Chain
+
 | Contract                       | Address                                    |
 | ------------------------------ | ------------------------------------------ |
 | Moolah                         | 0x8F73b65B4caAf64FBA2aF91cC5D4a2A1318E5D8C |
@@ -21,3 +23,20 @@ Lista Lending is a decentralized lending protocol that allows users to borrow an
 | MoolahVaultFactory             | 0x2a0Cb6401FD3c6196750dc6b46702040761D9671 |
 | LendingRewardsDistributorV2    | 0x2993E9eA76f5839A20673e1B3cf6666ab5B3aE76 |
 | RewardsRouter                  | 0xCb571b4ac0dB9c64B9ADdD2e6f3d1c7A84E5bfF4 |
+
+#### Ethereum&#x20;
+
+| Contract                   | Address                                    |
+| -------------------------- | ------------------------------------------ |
+| Moolah                     | 0xf820fB4680712CD7263a0D3D024D5b5aEA82Fd70 |
+| MoolahVault(USD1)          | 0x1A9BeE2F5c85F6b4a0221fB1C733246AF5306Ae3 |
+| IRM                        | 0x8b7d334d243b74D63C4b963893267A0F5240F990 |
+| FixedRateIRM               | 0x9A7cA2CfB886132B6024789163e770979E4222e1 |
+| Liquidator                 | 0x5Bf5c3B5f5c29dBC647d2557Cc22B00ED29f301C |
+| PublicLiquidator           | 0x796302e041d1715a8b1f16Fd7d7CBA38bb031DE5 |
+| Manager TimeLock           | 0x375fdA2Bf66f4CE85EAB29AB6407dCd4a4C428BA |
+| Admin TimeLock             | 0xa18ae79AEDA3e711E0CD64cfe1Cd06402d400D61 |
+| LendingFeeRecipient        | 0xd10a024602E042dcb9C19e21682c3b896c8B0d30 |
+| PTLinearDiscountOracle     |                                            |
+| (PT-USDe-27NOV2025 / USD1) | 0xb169d2459F51d02d7fC8A39498ec2801652b594c |
+| ResilientOracle            | 0xA64FE284EB8279B9b63946DD51813b0116099301 |
