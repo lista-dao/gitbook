@@ -39,3 +39,5 @@ Lista Lending is a decentralized lending protocol that allows users to borrow an
 | LendingFeeRecipient                                         | 0xd10a024602E042dcb9C19e21682c3b896c8B0d30 |
 | <p>PTLinearDiscountOracle<br>(PT-USDe-27NOV2025 / USD1)</p> | 0xb169d2459F51d02d7fC8A39498ec2801652b594c |
 | ResilientOracle                                             | 0xA64FE284EB8279B9b63946DD51813b0116099301 |
+| BoundValidator                                              | 0x3127b40bd2E591BFa088CA98b92ED9a41dD370a1 |
+| ETHProvider                                                 | 0xFe34BF713F3C2499026cdFA5af43eb22AA2d1aDb |
