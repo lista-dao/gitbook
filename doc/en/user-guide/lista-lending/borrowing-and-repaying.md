@@ -30,4 +30,4 @@
 
 3. Input the amount to repay, and confirm the transaction.
 
-<figure><img src="../../.gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/cc-2025-11-04-094851.png" alt=""><figcaption></figcaption></figure>
