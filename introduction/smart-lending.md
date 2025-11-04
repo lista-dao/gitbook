@@ -1,3 +1,7 @@
+---
+hidden: true
+---
+
 # Smart Lending
 
 ### Introduction
