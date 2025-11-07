@@ -41,3 +41,19 @@ Lista Lending is a decentralized lending protocol that allows users to borrow an
 | ResilientOracle                                             | 0xA64FE284EB8279B9b63946DD51813b0116099301 |
 | BoundValidator                                              | 0x3127b40bd2E591BFa088CA98b92ED9a41dD370a1 |
 | ETHProvider                                                 | 0xFe34BF713F3C2499026cdFA5af43eb22AA2d1aDb |
+
+Smart Lending
+
+| Contract                                          | Address                                    |
+| ------------------------------------------------- | ------------------------------------------ |
+| StableSwapFactory                                 | 0xDE9c8E1536989d8c3817afDabC37C0fb44cB49b4 |
+| StableSwapPoolInfo                                | 0x73D2623C8497421B55234e6B25fB744625557a1A |
+| <p>StableSwapLPCollateral<br>(slisBNB / BNB)</p>  | 0x719f6445cdAC08B84611D0F19d733F57214bcfee |
+| <p>StableSwapLPCollateral<br>(solvBTC / BTCB)</p> | 0x6f4d7532A402D76F552E1F047Ff7e23bFe1A9f03 |
+| <p>StableSwapPool<br>(slisBNB / BNB)</p>          | 0x3DcEA6AFBA8af84b25F1f8947058AF1ac4c06131 |
+| <p>StableSwapPool<br>(solvBTC / BTCB)</p>         | 0x45409865870f0CBC71c01CC00fF8c0b2DE3EB7D9 |
+| <p>StableSwapLP<br>(slisBNB / BNB)</p>            | 0x1bc8b041c1b89b0109E56f2Eb197B5c09BCC1Cf0 |
+| <p>StableSwapLP<br>(solvBTC / BTCB)</p>           | 0x3F5AF48B4A3Ac89177cA6aFb59E5469F7ef5cE45 |
+| <p>SmartProvider<br>(slisBNB / BNB)</p>           | 0xC3be83DE4b19aFC4F6021Ea5011B75a3542024dE |
+| <p>SmartProvider<br>(solvBTC / BTCB)</p>          | 0xA5F53ca56d87d7d4fEC508665D23f29bfb2749DB |
+
