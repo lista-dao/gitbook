@@ -79,6 +79,7 @@
   * [Mint slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
   * [Redeem BNB from slisBNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
   * [Bridging slisBNB to Ethereum](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
+* [Smart Lending](user-guide/smart-lending.md)
 * [Lista Lending](user-guide/lista-lending/README.md)
   * [Borrowing and repaying](user-guide/lista-lending/borrowing-and-repaying.md)
   * [Lista Lending Earn](user-guide/lista-lending/lista-lending-earn.md)
