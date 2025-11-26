@@ -121,6 +121,8 @@
   * [Smart Contract](for-developer/liquid-staking-slisbnb/smart-contract.md)
 * [slisBNBx](for-developer/clisbnb/README.md)
   * [Smart Contract](for-developer/clisbnb/smart-contract.md)
+* [RWA](for-developer/rwa/README.md)
+  * [Smart Contract](for-developer/rwa/smart-contract.md)
 
 ***
 
