@@ -1,4 +1,4 @@
-# How to create a vault
+# How to create a vault: Manually
 
 Lista Lending enables permissionless creation of lending vaults on BNB Chain, allowing curators to deploy custom liquidity pools that optimize yield and manage risk. A Lista Vault accepts a single loan asset (e.g., lisUSD) and allocates deposits across multiple Lista markets. This guide walks you through the process of deploying and configuring a vault, empowering you to curate lending opportunities within Lista DAO’s ecosystem.
 
@@ -123,8 +123,7 @@ Parameters:
 * `oracle (address)`: Price oracle for the market.
 * `irm (address)`: Interest rate model.
 * `lltv (uint256)`: Loan-to-value threshold.
-* `newSupplyCap (uint256)`: Maximum deposit cap for the specified market.\
-
+* `newSupplyCap (uint256)`: Maximum deposit cap for the specified market.<br>
 
 Note: These parameters should match the configuration used when the market was created.
 
@@ -142,8 +141,7 @@ Role: `ALLOCATOR`\
 Method: `updateWithdrawQueue`\
 Parameter:
 
-* `indexes (uint256[])`: Array of indexes that reorders the existing withdraw queue.\
-
+* `indexes (uint256[])`: Array of indexes that reorders the existing withdraw queue.<br>
 
 Note: The indexes refer to positions in the current withdraw queue.
 

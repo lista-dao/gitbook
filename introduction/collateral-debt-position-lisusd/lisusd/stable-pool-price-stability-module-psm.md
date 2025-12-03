@@ -38,4 +38,4 @@ Through the use of our PSM module, the stablepool is created under our [Earn](ht
 
 Users can now deposit their USDT to enjoy a yields coming from LISTA token emission, as well as lisUSD saving rate. Through the PSM, the USDT deposited into the USDT Stablepool will be swapped into lisUSD at a 1:1 ratio and deposited into the lisUSD stable pool.
 
-More information on lisUSD saving rate (LSR) can be found [here](lisusd-saving-rate-lsr.md) in the next section.\
+More information on lisUSD saving rate (LSR) can be found [here](lisusd-saving-rate-lsr.md) in the next section.<br>

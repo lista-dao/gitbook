@@ -1,12 +1,10 @@
 # Mechanics
 
-In the Lista mechanism, users can earn rewards by strategically utilizing their assets, which may include BNB, ETH, slisBNB, wBETH, and BTCB. The process begins with users depositing these assets into the Interaction (CDP) module, where they are used as collateral to borrow LisUSD.\
-
+In the Lista mechanism, users can earn rewards by strategically utilizing their assets, which may include BNB, ETH, slisBNB, wBETH, and BTCB. The process begins with users depositing these assets into the Interaction (CDP) module, where they are used as collateral to borrow LisUSD.<br>
 
 In addition to depositing assets and borrowing LisUSD, users can earn rewards by staking LisUSD and BNB within the Lista ecosystem. By participating in these staking activities, they accrue interest and additional rewards, significantly enhancing their overall earnings.
 
-\
-
+<br>
 
 ### Fees
 
@@ -17,15 +15,13 @@ In addition to depositing assets and borrowing LisUSD, users can earn rewards by
 
 Collateral ratio is a percentage of the user's collateral value that determines the maximum borrowing limit for the user; it is calculated as follows: (total amount of lisUSD minted / total value of the collateral \* 100). Different assets will have different collateral ratios, depending on asset volatility. Collateral ratio is used as a liquidation bar to decide when a liquidation event should happen.
 
-\
-
+<br>
 
 ### CDP Module
 
 The following sections will introduce the functions of the CDP Module one by one, explaining how users can borrow LisUSD by providing collateral and the interactions between different involved contracts.
 
-\
-
+<br>
 
 **a. Deposit Collateral**
 
@@ -36,13 +32,11 @@ The following sections will introduce the functions of the CDP Module one by one
 3. GemJoin: receives the collateral from Interaction.
 4. Vat: The Vat contract, which is the core of the CDP engine. It records the user’s collateral information and ensures that the collateral enters the system.
 
-\
-
+<br>
 
 This process ensures that the user’s collateral is securely deposited and recorded within the CDP Module, allowing them to proceed with borrowing LisUSD against their collateral.
 
-\
-
+<br>
 
 **b. Borrow LisUSD**
 
@@ -54,13 +48,11 @@ This process ensures that the user’s collateral is securely deposited and reco
 4. HayJoin: Interaction calls the \`exit()\` to mint the specified amount of LisUSD and sends it to the user.
 5. ListaDistributor: Interaction calls ListaDistributor contract’s snapshot method to record user’s debt value against the collateral for calculating and distributing future rewards to the user.
 
-\
-
+<br>
 
 This sequence ensures that the user's debt is accurately recorded, the borrowed LisUSD is successfully minted and transferred to the user, and interest payments are made according to the fixed rate determined by Lista governance.
 
-\
-
+<br>
 
 **c. Payback LisUSD**
 
@@ -72,16 +64,13 @@ This sequence ensures that the user's debt is accurately recorded, the borrowed 
 4. HayJoin: Interaction calls the \`join()\` method, which burns LisUSD from the user’s account
 5. ListaDistributor: Interaction calls ListaDistributor contract’s snapshot method to record user’s debt value against the collateral for calculating and distributing future rewards to the user.
 
-\
-
+<br>
 
 This process ensures that the user’s debt is accurately reduced or cleared, and the corresponding amount of LisUSD is burned, effectively removing it from circulation.
 
-\
+<br>
 
-
-**d. Withdraw Collateral**\
-
+**d. Withdraw Collateral**<br>
 
 <figure><img src="../../.gitbook/assets/image (38).png" alt=""><figcaption></figcaption></figure>
 
@@ -90,13 +79,11 @@ This process ensures that the user’s debt is accurately reduced or cleared, an
 3. GemJoin: Interaction calls the \`exit()\` method, which transfers the specified amount of collateral from GemJoin back to the user.
 4. Vat: It records the user's collateral information, updating the system to reflect that the collateral has left the system
 
-\
-
+<br>
 
 This process ensures that the user's collateral is accurately withdrawn and returned, while the system records the change in collateral status.
 
-\
-
+<br>
 
 **e. Stake LisUSD**
 
@@ -104,8 +91,7 @@ This process ensures that the user's collateral is accurately withdrawn and retu
 
 <figure><img src="../../.gitbook/assets/image (34).png" alt=""><figcaption></figcaption></figure>
 
-\
-
+<br>
 
 1. User Initiates Staking: The user calls the \`join()\` method to stake a specified amount of LisUSD. This amount of LisUSD is then transferred to the Jar contract.
 2. Jar: The Jar contract records the following information:
@@ -114,8 +100,7 @@ This process ensures that the user's collateral is accurately withdrawn and retu
    3. The time when the user staked the LisUSD.
 3. ListaDistributor: ListaDistributor takes a snapshot of the user’s balance from the Jar. it will be used for calculating and distributing future rewards to the user.
 
-\
-
+<br>
 
 **f. Unstake LisUSD**
 
@@ -128,13 +113,11 @@ This process ensures that the user's collateral is accurately withdrawn and retu
    3. A record of the withdrawal is saved.
 3. ListaDistributor: The ListaDistributor takes a snapshot of the user’s balance and records the user's staked LisUSD balance for future reward calculations.
 
-\
-
+<br>
 
 This process user will only interact with the Jar contract, it is responsible for managing and distributing interest to the participants of who stakes LisUSD.
 
-\
-
+<br>
 
 **g. Liquidation**
 
@@ -176,8 +159,7 @@ Trigger Auction:
 
 * Somebody triggers the auction and gets a tip + chip as a reward (details described later).
 
-\
-
+<br>
 
 **g.2 Buy from Auction**
 
@@ -185,8 +167,7 @@ Trigger Auction:
 
 The flowchart shows how the user buys collateral from an auction.
 
-\
-
+<br>
 
 Example:
 
@@ -205,8 +186,7 @@ Conditions to Pause Auction:
   * Cusp (% of price drop; 40% start auction price, fixed by Lista governance)
 * Once either requirement is met, the auction will be restarted.
 
-\
-
+<br>
 
 **g.3 Restart Auction**
 

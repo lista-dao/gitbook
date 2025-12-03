@@ -1,10 +1,6 @@
 # Overview
 
-<div align="center" data-full-width="true">
-
-<figure><img src="../.gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure>
-
-</div>
+<div align="center" data-full-width="true"><figure><img src="../.gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure></div>
 
 ### Lista Mechanism: Earning Rewards through Strategic Asset Utilization
 
@@ -35,4 +31,4 @@ In the Lista mechanism, users can strategically utilize their assets—such as B
 
 
 
-\
+<br>

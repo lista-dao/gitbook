@@ -40,4 +40,4 @@ Once you have the LP tokens, the next step is to stake them on Lista DAO:
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:1400/0*qaW8PyFYmFuqXW-W" alt="" height="361" width="700"><figcaption></figcaption></figure>
 
-\
+<br>

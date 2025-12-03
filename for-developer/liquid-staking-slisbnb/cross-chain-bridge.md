@@ -28,8 +28,7 @@ Key components include the ListaOFTAdapter, ListaOFT contracts, LayerZero endpoi
     * Transaction Execution: Commits the verification results from the DVN and executes the lzReceive() method to process the transaction on the destination chain.
 
 \
-\
-
+<br>
 
 **3. Cross-Chain Interaction Flow**
 

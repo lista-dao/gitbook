@@ -45,4 +45,4 @@ Technically, you can also swap assets via Smart Lending by depositing just one a
 When you take out a loan on your collateral, please pay close attention to price fluctuations because whenever your LTV is below a certain threshold, Lista’s liquidation process will be triggered and a portion of your collateral will be sold to cover your loan. Refer to our [liquidation documentation](https://docs.bsc.lista.org/introduction/lista-lending/liquidation) for more information.
 
 \
-\
+<br>

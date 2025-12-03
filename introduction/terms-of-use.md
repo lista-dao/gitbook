@@ -76,14 +76,12 @@ You must not, in connection with your use of the Interface:
 * Transact in securities, commodities futures, leveraged commodities trading, binary options, real estate, equipment leases, debt financings, equity financings, or similar transactions if not in full compliance with all relevant laws.
 * Engage in token-based or other financings of a business, enterprise, DAO, software project, or other initiative, including ICOs, DAICOs, IEOs, or other token fundraising events.
 * Violate any law concerning the integrity of trading markets, including tactics such as spoofing or wash trading.\
-  \
-
+  <br>
 * Circumvent any sanctions or export controls targeting the user or their country/territory.
 * Infringe any intellectual property rights or interfere with the IP address of a device used to access the Interface.
 * Transmit, exchange, or otherwise interact with proceeds of criminal or fraudulent activity.
 * Contribute to or facilitate any of the foregoing activities.\
-  \
-
+  <br>
 
 #### 7. Additional User Declarations
 
@@ -95,8 +93,7 @@ By using the Interface, you further acknowledge and agree that:
 * No fiduciary duty is owed to you by the Interface maintainers;
 * You are solely responsible for any damages arising from your use of the Interface;
 * The Interface does not provide investment, legal, or financial advice.\
-  \
-
+  <br>
 
 #### 8. Risks & Disclaimers
 
@@ -135,4 +132,4 @@ These Terms, including any incorporated policies, constitute the entire agreemen
 
 These Terms, including the Privacy Policy, constitute your entire representation, consent, and agreement with respect to the subject matter, including the Interface. These Terms, including the Privacy Policy, and any disclosure and disclaimers incorporated by reference supersede all prior Terms, written or oral understandings, communications, and other agreements relating to the subject matter of the Terms.
 
-By accessing or using the Lista DAO Interface, you confirm your acceptance of these Terms.\
+By accessing or using the Lista DAO Interface, you confirm your acceptance of these Terms.<br>

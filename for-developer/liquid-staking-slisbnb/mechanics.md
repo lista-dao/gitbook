@@ -4,8 +4,7 @@
 
 slisBNB is the yield bearing & liquid staking token for Lista. Users can get slisBNB by staking their BNB through ListaStakeManager smart contract which handles the BNB liquid staking on BSC.
 
-\
-
+<br>
 
 Here are the functionalities provided by ListaStakeManager:
 
@@ -15,22 +14,19 @@ Here are the functionalities provided by ListaStakeManager:
 
 Users can stake BNB through ListaStakeManager. In return, they receive a corresponding amount of slisBNB as the liquid staking token (LST), representing their staked assets
 
-\
-
+<br>
 
 ### Minting LST
 
 Upon staking, ListaStakeManager mints slisBNB. slisBNB can be freely traded, transferred, or used in DeFi applications, providing users with liquidity while their original assets remain staked.
 
-\
-
+<br>
 
 ### Earning Rewards from Multiple Validators
 
 The staked BNB generate rewards from multiple validators, which are then aggregated and distributed proportionally to LST holders. This ensures that users benefit from the performance of various validators, potentially increasing the overall yield.
 
-\
-
+<br>
 
 <figure><img src="../../.gitbook/assets/image (12) (1).png" alt=""><figcaption><p>Unstaking</p></figcaption></figure>
 

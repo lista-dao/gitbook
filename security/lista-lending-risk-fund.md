@@ -43,4 +43,4 @@ The Risk Fund is centrally managed by the Lista DAO Foundation to ensure transpa
 * Disbursement Process: Upon confirmation of an exploit, the Lista DAO core team will assess the scope of losses, verify affected users, and execute repayments from the fund. The process prioritizes speed and fairness, with clear communication to the community.
 * Fund Security: The fund’s assets are held in secure, multi-signature wallets managed by the Lista DAO Foundation, with strict access controls to prevent unauthorized use.
 
-\
+<br>
