@@ -40,4 +40,4 @@ The Lender (supplier) deposits a certain amount of assets into the vault or mark
 
 The Lender can withdraw the deposited assets and interest at any time (subject to market liquidity).
 
-\
+<br>

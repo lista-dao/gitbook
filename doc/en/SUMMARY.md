@@ -21,7 +21,7 @@
   * [About slisBNB](introduction/liquid-staking-slisbnb/about-slisbnb.md)
   * [Rewards and Fees](introduction/liquid-staking-slisbnb/rewards-and-fees.md)
   * [Technical Guide](introduction/liquid-staking-slisbnb/technical-guide.md)
-* [Smart Lending](introduction/smart-lending.md)
+* [Smart Lending & Swap](introduction/smart-lending-and-swap.md)
 * [RWA Markets](introduction/rwa-markets.md)
 * [Lista Lending](introduction/lista-lending/README.md)
   * [Vaults](introduction/lista-lending/vaults/README.md)

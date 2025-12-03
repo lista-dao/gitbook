@@ -24,4 +24,4 @@ By default, Auto-Compounding is enabled for all users. However, users can easily
 
 Every Tuesday, Lista DAO will automatically process the auto-compounding of rewards. The system prioritizes larger rewards first, ensuring that all eligible rewards are locked into veLISTA for maximum compounding growth.
 
-\
+<br>

@@ -7,7 +7,7 @@ To incentivize user participation in liquidity pools and borrowing/staking lisUS
 
 ## Rewards breakdown
 
-To recap, according to our [tokenomics](broken-reference), 40% of LISTA's remaining supply will be channeled towards community incentives. The emission percentages are allocated towards various pools and programs, which includes 3 different categories:
+To recap, according to our [tokenomics](/broken/pages/Kygi1hlJ1is0NtHq9Ch0#community-40.00), 40% of LISTA's remaining supply will be channeled towards community incentives. The emission percentages are allocated towards various pools and programs, which includes 3 different categories:
 
 1. Referral program (5%)
 2. LP pools (33%)
