@@ -1,6 +1,6 @@
 # 目录
 
-## 简介
+## 引言
 
 * [概览](README.md)
 * [使用条款](introduction/terms-of-use.md)
@@ -21,8 +21,8 @@
   * [关于 slisBNB](introduction/liquid-staking-slisbnb/about-slisbnb.md)
   * [奖励与费用](introduction/liquid-staking-slisbnb/rewards-and-fees.md)
   * [技术指南](introduction/liquid-staking-slisbnb/technical-guide.md)
-* [智能借贷与交换](introduction/smart-lending-and-swap.md)
-* [实物资产市场](introduction/rwa-markets.md)
+* [智能借贷与交换](introduction/smart-lending.md)
+* [RWA 市场](introduction/rwa-markets.md)
 * [Lista 借贷](introduction/lista-lending/README.md)
   * [金库](introduction/lista-lending/vaults/README.md)
     * [Lista Alpha 区](introduction/lista-lending/vaults/lista-alpha-zone.md)
@@ -30,7 +30,7 @@
   * [市场](introduction/lista-lending/markets.md)
   * [借款人与供应商](introduction/lista-lending/borrowers-and-suppliers.md)
   * [利率模型 (IRM)](introduction/lista-lending/interest-rate-model-irm.md)
-  * [固定利率与定期贷款](introduction/lista-lending/fixed-rate-and-term-loans.md)
+  * [固定利率与期限贷款](introduction/lista-lending/fixed-rate-and-term-loans.md)
   * [费用](introduction/lista-lending/fees.md)
   * [清算](introduction/lista-lending/liquidation/README.md)
     * [清算区](introduction/lista-lending/liquidation/liquidation-zone.md)
@@ -41,7 +41,7 @@
   * [用 slisBNB 铸造 slisBNBx](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [在 Lista 借贷上铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
   * [用 BNB/slisBNB LP 代币铸造 $slisBNBx](introduction/binance-launchpool-clisbnb/minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens.md)
-* [BNB 验证器：Lista DAO](introduction/bnb-validator-lista-dao.md)
+* [BNB 验证器: Lista DAO](introduction/bnb-validator-lista-dao.md)
 * [路线图](introduction/roadmap.md)
 * [常见问题解答](introduction/faq.md)
 
@@ -51,16 +51,16 @@
   * [LISTA 分配](governance/lista/lista-distribution.md)
 * [veLISTA](governance/velista/README.md)
   * [veLISTA 概述](governance/velista/velista-summary.md)
-  * [Lista DAO：解锁 veLISTA 功能](governance/velista/lista-dao-unlocking-velista-utility.md)
+  * [Lista DAO: 解锁 veLISTA 功能](governance/velista/lista-dao-unlocking-velista-utility.md)
   * [veLISTA 锁定机制](governance/velista/velista-locking-mechanics.md)
   * [治理](governance/velista/governance/README.md)
     * [治理提案模板](governance/velista/governance/governance-proposal-template.md)
   * [协议费用](governance/velista/protocol-fees.md)
   * [veLISTA 发行](governance/velista/velista-emissions/README.md)
     * [LP 池](governance/velista/velista-emissions/lp-pools.md)
-  * [veLISTA 表决](governance/velista/gauge-voting-for-velista.md)
+  * [veLISTA 投票](governance/velista/gauge-voting-for-velista.md)
   * [veLISTA 贿赂市场](governance/velista/velista-bribe-market.md)
-  * [自动复利](governance/velista/auto-compounding.md)
+  * [自动复合](governance/velista/auto-compounding.md)
   * [LISTA 永久锁定 (LIP-016)](governance/velista/permanent-locking-of-lista-lip-016.md)
   * [LISTA 通缩倡议：20% 代币销毁 (LIP-021)](governance/velista/lista-deflationary-initiative-20-token-burn-lip-021.md)
   * [收入 / 成本](governance/velista/revenue-cost.md)
@@ -83,8 +83,8 @@
   * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
 * [智能借贷](user-guide/smart-lending.md)
 * [Lista 借贷](user-guide/lista-lending/README.md)
-  * [借款与还款](user-guide/lista-lending/borrowing-and-repaying.md)
-  * [Lista 借贷收益](user-guide/lista-lending/lista-lending-earn.md)
+  * [借款和还款](user-guide/lista-lending/borrowing-and-repaying.md)
+  * [Lista 借贷赚取](user-guide/lista-lending/lista-lending-earn.md)
   * [如何创建金库：Lista 借贷金库 GUI](user-guide/lista-lending/how-to-create-a-vault-lista-lending-vault-gui.md)
   * [如何手动创建金库](user-guide/lista-lending/how-to-create-a-vault.md)
   * [如何在 Lista 借贷上创建市场](user-guide/lista-lending/how-to-create-a-market.md)
@@ -99,7 +99,7 @@
   * [解锁 LISTA](user-guide/lista-velista/unlock-lista.md)
   * [领取奖励](user-guide/lista-velista/claim-rewards.md)
   * [在 Lista DAO 上质押外部 LP 代币](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
-  * [表决](user-guide/lista-velista/gauge-voting.md)
+  * [投票](user-guide/lista-velista/gauge-voting.md)
 
 ## 安全
 
@@ -134,7 +134,7 @@
 ## 合作伙伴关系
 
 * [品牌套件](partnerships/brand-kit.md)
-* [我们的频道](partnerships/our-channels.md)
+* [我们的渠道](partnerships/our-channels.md)
 
 ## 免责声明
 
