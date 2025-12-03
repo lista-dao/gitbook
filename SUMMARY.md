@@ -30,6 +30,7 @@
   * [Markets](introduction/lista-lending/markets.md)
   * [Borrowers & Suppliers](introduction/lista-lending/borrowers-and-suppliers.md)
   * [Interest Rate Model (IRM)](introduction/lista-lending/interest-rate-model-irm.md)
+  * [Fixed Rate & Term Loans](introduction/lista-lending/fixed-rate-and-term-loans.md)
   * [Fees](introduction/lista-lending/fees.md)
   * [Liquidation](introduction/lista-lending/liquidation/README.md)
     * [Liquidation Zone](introduction/lista-lending/liquidation/liquidation-zone.md)
