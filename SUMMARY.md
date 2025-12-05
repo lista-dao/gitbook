@@ -41,6 +41,7 @@
   * [Minting slisBNBx with slisBNB](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [Mint slisBNBx on Lista Lending](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
   * [Minting $slisBNBx with BNB/slisBNB LP Tokens](introduction/binance-launchpool-clisbnb/minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens.md)
+  * [Mint slisBNBx with Smart Lending LP Tokens](introduction/binance-launchpool-clisbnb/mint-slisbnbx-with-smart-lending-lp-tokens.md)
 * [BNB Validator: Lista DAO](introduction/bnb-validator-lista-dao.md)
 * [Roadmap](introduction/roadmap.md)
 * [FAQ](introduction/faq.md)
