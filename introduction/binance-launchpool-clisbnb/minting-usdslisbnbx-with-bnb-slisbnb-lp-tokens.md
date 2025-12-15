@@ -18,7 +18,7 @@ Here’s what this feature enables:
 
 **2. Stake LP Tokens on Lista DAO to Mint $**&#x73;lisBNBx:
 
-* Head to Lista DAO’s platform at[ lista.org](https://lista.org/) and navigate to the “My slisBNB LP” section
+* Head to Lista DAO’s platform at[ lista.org](https://lista.org?utm_source=gitbook&utm_medium=article&utm_campaign=minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens) and navigate to the “My slisBNB LP” section
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:1400/0*uQzD8FX2HUhJhfAR" alt="" height="223" width="700"><figcaption></figcaption></figure>
 

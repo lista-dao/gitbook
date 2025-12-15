@@ -4,7 +4,7 @@
 
 Before getting started, you’ll need to acquire the necessary LP tokens. This can be done by adding liquidity on platforms like PancakeSwap. You can do this directly on Lista DAO by following these steps.
 
-1. Head over to Lista DAO’s rewards [section](https://lista.org/rewards), and click on “external” here
+1. Head over to Lista DAO’s rewards [section](https://lista.org/rewards?utm_source=gitbook&utm_medium=article&utm_campaign=staking-external-lp-tokens-on-lista-dao), and click on “external” here
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:1400/0*m0NtCYzJ0iVifpkm" alt="" height="486" width="700"><figcaption></figcaption></figure>
 

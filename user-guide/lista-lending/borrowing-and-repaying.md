@@ -6,7 +6,7 @@
 
 ## Borrow
 
-1. Connect your wallet and head over to the borrow section of our Lista Lending page [here](https://lista.org/lending?tab=borrow).
+1. Connect your wallet and head over to the borrow section of our Lista Lending page [here](https://lista.org/lending?tab=borrow&utm_source=gitbook&utm_medium=article&utm_campaign=borrowing-and-repaying).
 
 <figure><img src="../../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
@@ -20,7 +20,7 @@
 
 ## Repay
 
-1. Click on My dashboard to view all your borrowing positions [here](https://lista.org/dashboard).
+1. Click on My dashboard to view all your borrowing positions [here](https://lista.org/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=borrowing-and-repaying).
 
 <figure><img src="../../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 

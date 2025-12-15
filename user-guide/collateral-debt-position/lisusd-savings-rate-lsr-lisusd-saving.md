@@ -1,6 +1,6 @@
 # lisUSD Savings rate (LSR) - lisUSD Saving
 
-1. Head over to lisUSD Savings under the "Earn" section [here](https://lista.org/earn/stake/lisUSD).
+1. Head over to lisUSD Savings under the "Earn" section [here](https://lista.org/earn/stake/lisUSD?utm_source=gitbook&utm_medium=article&utm_campaign=lisusd-savings-rate-lsr-lisusd-saving).
 
 <figure><img src="../../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 

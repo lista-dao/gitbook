@@ -4,7 +4,7 @@ Bridging slisBNB between BSC and Ethereum does not warrant any bridging fees. Us
 
 ### Bridging slisBNB between BSC and Ethereum:
 
-1. Head over to [Lista.org](https://lista.org/), connect your wallet, and head over to the liquid staking section.
+1. Head over to [Lista.org](https://lista.org?utm_source=gitbook&utm_medium=article&utm_campaign=bridging-slisbnb-to-ethereum), connect your wallet, and head over to the liquid staking section.
 2. Once you are at the liquid staking page, click “Go to Bridge” at the bottom.
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:1400/0*fMP4h2_33jz_MqeW" alt="" height="504" width="700"><figcaption></figcaption></figure>

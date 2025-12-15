@@ -8,4 +8,4 @@ The Loop BNB Vault allows suppliers to earn higher APRs, while borrowers gain gr
 
 Our classic BNB vault is still accessible for users who want to diversify as it offers broad exposure across multiple markets. This targeted approach ensures that both specialized and diversified users can optimize their DeFi experience as BNBFi continues to evolve.
 
-Deposit in the Loop BNB Vault [here](https://lista.org/lending/vault/0xab251dc87dc313649d024bd69b34c8e7690ce1fc#vault).
+Deposit in the Loop BNB Vault [here](https://lista.org/lending/vault/0xab251dc87dc313649d024bd69b34c8e7690ce1fc#vault?utm_source=gitbook&utm_medium=article&utm_campaign=loop-bnb-vault).

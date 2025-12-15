@@ -17,7 +17,7 @@ Participation in the Alpha Zone Vaults is currently whitelist-only, ensuring a c
 
 **2. Deposit and Borrow (Once Whitelisted)**:
 
-* Once approved, navigate to the Alpha Zone Vaults on[ lista.org](https://lista.org/) under the “Lending” section.
+* Once approved, navigate to the Alpha Zone Vaults on[ lista.org](https://lista.org?utm_source=gitbook&utm_medium=article&utm_campaign=lista-alpha-zone) under the “Lending” section.
 * Deposit your Alpha tokens into the vault.
 * Borrow assets like lisUSD against your collateral to execute your DeFi strategies, with repayments and withdrawals unrestricted for flexibility.
 
@@ -27,4 +27,4 @@ The Alpha Zone Vaults transform the hype around Binance Alpha tokens into action
 
 By providing a controlled environment (whitelisting), we’re ensuring users can confidently engage with these emerging assets while mitigating risks.
 
-Check out Lista Alpha zone [here](https://lista.org/lending#alpha).
+Check out Lista Alpha zone [here](https://lista.org/lending#alpha?utm_source=gitbook&utm_medium=article&utm_campaign=lista-alpha-zone).

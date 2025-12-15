@@ -6,7 +6,7 @@ Currently, some users may experience problems when depositing slisBNB as collate
 
 <figure><img src="../../.gitbook/assets/image (69).png" alt=""><figcaption></figcaption></figure>
 
-To resolve this issue, click on “Manage slisBNBx” at the bottom or visit [this page](https://lista.org/lending/delegate):
+To resolve this issue, click on “Manage slisBNBx” at the bottom or visit [this page](https://lista.org/lending/delegate?utm_source=gitbook&utm_medium=article&utm_campaign=mint-slisbnbx-with-smart-lending-lp-tokens):
 
 <figure><img src="../../.gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
 

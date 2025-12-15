@@ -7,7 +7,7 @@ Following [LIP-001](https://snapshot.org/#/listavote.eth/proposal/0x415d54c2b9c8
 
 Here is how they can claim their LISTA rewards:
 
-1. Head over to the rewards section on Lista DAO [here](https://lista.org/rewards):
+1. Head over to the rewards section on Lista DAO [here](https://lista.org/rewards?utm_source=gitbook&utm_medium=article&utm_campaign=claim-rewards):
 
 <figure><img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXemxcZYmcUv3aIQ0acJw3-W86J1VW3kBd4_qIPJ6GB-gCDXoekf7A_boOjCiKlaR7ZfR7RYg5EoAcfjpybO6HNABkkmUhukaCvObBSflu43VA02iVU8vEyXQdIOiCR17ubZLFf-6S4RyCjJfExfUyU8-Z2E?key=I9PhIveewXW6geOxMvM3tQ" alt=""><figcaption></figcaption></figure>
 

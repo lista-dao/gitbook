@@ -6,7 +6,7 @@ Here is how you can do it:
 
 {% embed url="https://www.loom.com/share/210bd3a6377e445fa1c3d85701af2dce?sid=9c33d62a-b348-42ef-b0ca-66201ded3754" %}
 
-1. Head over to Lista DAO’s locking page [here](https://lista.org/lock), and connect your wallet to Lista DAO’s DApp.
+1. Head over to Lista DAO’s locking page [here](https://lista.org/lock?utm_source=gitbook&utm_medium=article&utm_campaign=auto-lock), and connect your wallet to Lista DAO’s DApp.
 2. Under the "Your Lock" section, simply turn on the “Auto lock” function on the top right hand corner by clicking on it.&#x20;
 
 <figure><img src="../../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>

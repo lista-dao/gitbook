@@ -26,7 +26,7 @@ The minimum deposit transaction is 0.1 for BNB deposits.
 The maximum total borrow limit for lisUSD is currently set at 69,000,000 lisUSD tokens.
 {% endhint %}
 
-1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard).&#x20;
+1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=provide-collateral).&#x20;
 
 <figure><img src="../../.gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
 

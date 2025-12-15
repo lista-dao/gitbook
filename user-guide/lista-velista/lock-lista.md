@@ -4,7 +4,7 @@
 
 {% embed url="https://www.loom.com/share/01f63aaceea44353994659b8f219ba47?sid=4d13d604-07b9-4d8d-886a-7095d7a0ab55" %}
 
-1. Head over to website [here](https://lista.org/), and connect your wallet to Lista DAO’s DApp.
+1. Head over to website [here](https://lista.org?utm_source=gitbook&utm_medium=article&utm_campaign=lock-lista), and connect your wallet to Lista DAO’s DApp.
 2. At the top of the webpage, click on “veLISTA” and click on "Lock veLISTA"
 
 <figure><img src="../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
