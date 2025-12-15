@@ -17,7 +17,7 @@ Your loan cannot go under 15 lisUSD, so you can either choose to repay it to the
 
 To repay back your lisUSD loan:
 
-1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard).
+1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=repay-lisusd).
 
 <figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
 

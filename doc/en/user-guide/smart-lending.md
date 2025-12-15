@@ -1,6 +1,6 @@
 # Smart Lending
 
-Take our slisBNB/BNB vault for example and assume we are borrowing USD1. Select ‘Smart Lending Zone’ under ‘Lending’ on the top navigation bar. Or, on [Lista’s Lending page](https://lista.org/lending/borrow?onlySmartLending=1), toggle ‘Smart Lending’ and select [this vault](https://lista.org/lending/smart-market/bsc/0x9ae45397a8063220d4cdb41ad9268d4c173dd18ca778171e9dee0644dfbe4cbd?tab=market).
+Take our slisBNB/BNB vault for example and assume we are borrowing USD1. Select ‘Smart Lending Zone’ under ‘Lending’ on the top navigation bar. Or, on [Lista’s Lending page](https://lista.org/lending/borrow?onlySmartLending=1&utm_source=gitbook&utm_medium=article&utm_campaign=smart-lending), toggle ‘Smart Lending’ and select [this vault](https://lista.org/lending/smart-market/bsc/0x9ae45397a8063220d4cdb41ad9268d4c173dd18ca778171e9dee0644dfbe4cbd?tab=market&utm_source=gitbook&utm_medium=article&utm_campaign=smart-lending).
 
 <figure><img src="../.gitbook/assets/Smart Lending.png" alt=""><figcaption></figcaption></figure>
 

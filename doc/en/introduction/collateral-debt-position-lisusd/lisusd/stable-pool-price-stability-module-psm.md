@@ -32,7 +32,7 @@ The centralized stablecoins acquired via the PSM will play a critical role in ma
 
 ## lisUSD Stablepool
 
-Through the use of our PSM module, the stablepool is created under our [Earn](https://lista.org/earn) section here:
+Through the use of our PSM module, the stablepool is created under our [Earn](https://lista.org/earn?utm_source=gitbook&utm_medium=article&utm_campaign=stable-pool-price-stability-module-psm) section here:
 
 <figure><img src="../../../.gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 

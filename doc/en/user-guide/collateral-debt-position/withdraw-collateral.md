@@ -25,7 +25,7 @@ The minimum amount to withdraw is 0.1 BNB.
 
 To withdraw your collateral:
 
-1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard).
+1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=withdraw-collateral).
 
 <figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
 

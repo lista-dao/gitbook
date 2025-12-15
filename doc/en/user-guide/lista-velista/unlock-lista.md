@@ -8,7 +8,7 @@ Here’s how you can do it:
 
 {% embed url="https://www.loom.com/share/e962c9e1bc8d49b68470c388104ab048?sid=301a6a71-4264-44f2-9b00-ad053c22c3eb" %}
 
-1. Head over to Lista DAO’s locking page [here](https://lista.org/lock), and connect your wallet to Lista DAO’s DApp.
+1. Head over to Lista DAO’s locking page [here](https://lista.org/lock?utm_source=gitbook&utm_medium=article&utm_campaign=unlock-lista), and connect your wallet to Lista DAO’s DApp.
 2. Under "your lock", click on “Unlock”.
 
 <div align="left"><figure><img src="../../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure></div>

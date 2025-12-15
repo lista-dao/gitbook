@@ -11,7 +11,7 @@ Below is a table of all eligible pools that users can provide liquidity into to 
 
 ## LP pool reward Conditions
 
-In order to be eligible for LISTA rewards under the LP pools' category, users have to stake their LP tokens on Lista DAO under our [rewards](https://lista.org/rewards) section.
+In order to be eligible for LISTA rewards under the LP pools' category, users have to stake their LP tokens on Lista DAO under our [rewards](https://lista.org/rewards?utm_source=gitbook&utm_medium=article&utm_campaign=lp-pools) section.
 
 Additionally, certain conditions will have to be met for different type of LPs.
 
@@ -25,7 +25,7 @@ lisUSD borrowers are also eligible for LISTA rewards. The rewards allocated to e
 
 **Rules and conditions:**
 
-1. Users have to borrow lisUSD on Lista DAO's [platform](https://lista.org/cdp/loans).
+1. Users have to borrow lisUSD on Lista DAO's [platform](https://lista.org/cdp/loans?utm_source=gitbook&utm_medium=article&utm_campaign=lp-pools).
 2. Rewards are given out every 1 second the moment lisUSD tokens are borrowed out on Lista DAO's platform.
 
 ### 2. lisUSD single staking pool
@@ -34,7 +34,7 @@ Users who stake their lisUSD on Lista DAO's single staking pool will also be eli
 
 **Rules and conditions:**
 
-1. Users have to single stake lisUSD on Lista DAO's [platform](https://lista.org/cdp/earn).
+1. Users have to single stake lisUSD on Lista DAO's [platform](https://lista.org/cdp/earn?utm_source=gitbook&utm_medium=article&utm_campaign=lp-pools).
 2. Rewards are given out every 1 second the moment lisUSD tokens has been staked on Lista DAO's lisUSD single staking pool.
 
 ## External LPs
@@ -54,7 +54,7 @@ Lista DAO supports a variety of LP tokens from popular DeFi protocols, allowing 
 
 **rules and conditions:**
 
-1. **Staking on Lista DAO**: Users can stake their PancakeSwap lisUSD/USDT Stable LP tokens directly on Lista DAO by following[ this link](https://lista.org/rewards).
+1. **Staking on Lista DAO**: Users can stake their PancakeSwap lisUSD/USDT Stable LP tokens directly on Lista DAO by following[ this link](https://lista.org/rewards?utm_source=gitbook&utm_medium=article&utm_campaign=lp-pools).
 2. **Restaking on External Platforms**: Lista DAO restakes the staked LP tokens into external platforms, such as PancakeSwap farming, where additional rewards are generated. For PancakeSwap, users can view the farming details[ here](https://pancakeswap.finance/farms).
 3. **Real-Time APR Display**: Users can track both the LP Emission APR and the LP Restake APR in real time. The total APR is a combination of the rewards from Lista DAO emissions and those earned from the external platform’s farm rewards.
 4. Every **Wednesday at 0:00 UTC**, the weekly emission rate for each pool highlighted below will be updated. This ensures that users receive real-time token emissions as they stake LP tokens or borrow/stake lisUSD. The emission schedule is fully transparent, and users can track their updated rewards each week.

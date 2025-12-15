@@ -10,7 +10,7 @@ To change the destination address of your slisBNBx. You will have to withdraw yo
 
 1\. Connect your hot wallet to Lista DAO on Binance Smart chain.
 
-2\. Head over to your Lista DAO CDP dashboard by clicking on "Borrow lisUSD" under the Lending section[ here](https://lista.org/cdp/dashboard).
+2\. Head over to your Lista DAO CDP dashboard by clicking on "Borrow lisUSD" under the Lending section[ here](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=delegating-clisbnb-to-your-binance-web3-mpc-wallet).
 
 <figure><img src="../../.gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 

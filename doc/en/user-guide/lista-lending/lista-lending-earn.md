@@ -2,7 +2,7 @@
 
 {% embed url="https://www.loom.com/share/bd0a7948601945c191c7792fab0cbbb9?sid=c78dc44f-9565-4ed0-ab37-29cf191d63e0" %}
 
-1. Head over to Lista Lending's Earn page [here](https://lista.org/lending?tab=earn).
+1. Head over to Lista Lending's Earn page [here](https://lista.org/lending?tab=earn&utm_source=gitbook&utm_medium=article&utm_campaign=lista-lending-earn).
 
 <figure><img src="../../.gitbook/assets/image (62).png" alt=""><figcaption></figcaption></figure>
 
@@ -19,6 +19,6 @@
 
 <figure><img src="../../.gitbook/assets/image (65).png" alt=""><figcaption></figcaption></figure>
 
-6. Check and monitor your positions in your dashboard [here](https://lista.org/dashboard).
+6. Check and monitor your positions in your dashboard [here](https://lista.org/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=lista-lending-earn).
 
 <figure><img src="../../.gitbook/assets/image (66).png" alt=""><figcaption></figcaption></figure>
