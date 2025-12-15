@@ -2,9 +2,9 @@
 
 ## 第1步：获取LP代币 <a href="#ace8" id="ace8"></a>
 
-在开始之前，您需要获取必要的LP代币。这可以通过在像PancakeSwap这样的平台上添加流动性来完成。您可以直接在Lista DAO上按照以下步骤操作。
+在开始之前，您需要获取必要的LP代币。这可以通过在平台如PancakeSwap上添加流动性来完成。您可以直接在Lista DAO上按照以下步骤操作。
 
-1. 访问Lista DAO的奖励[部分](https://lista.org/rewards)，并点击这里的“外部”
+1. 访问Lista DAO的奖励[部分](https://lista.org/rewards?utm_source=gitbook&utm_medium=article&utm_campaign=staking-external-lp-tokens-on-lista-dao)，然后点击这里的“外部”
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:1400/0*m0NtCYzJ0iVifpkm" alt="" height="486" width="700"><figcaption></figcaption></figure>
 
@@ -16,7 +16,7 @@
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:1400/0*FNYTtW8iBV4Isog3" alt="" height="704" width="700"><figcaption></figcaption></figure>
 
-4\. 输入您想要为之提供流动性的lisUSD和USDT的数量，点击“添加”，然后点击确认交易。
+4\. 输入您想要为之提供流动性的lisUSD和USDT的数量，点击“添加”，然后确认交易。
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:1400/0*cn6DH4n0U94cn8cs" alt="" height="472" width="700"><figcaption></figcaption></figure>
 
@@ -26,7 +26,7 @@
 
 ## 第2步：在Lista DAO上质押LP代币 <a href="#dba5" id="dba5"></a>
 
-一旦您拥有了LP代币，下一步是在Lista DAO上质押它们：
+一旦您拥有了LP代币，下一步就是在Lista DAO上质押它们：
 
 1. **返回Lista DAO的奖励部分**，并点击Pancakeswap lisUSD/USDT LP池。
 

@@ -16,14 +16,14 @@ description: 如何提取抵押品
 
 BNB的提取需要7至15天，而提取BNB LSTs（例如 slisBNB）则是即时的。
 
-slisBNB 是一个带有利息的BNB质押资产，您可以选择将其在主要的DEX上兑换为BNB，或持有并继续获得在slisBNB中累积的BNB质押奖励。持有时间越长，将BNB LSTs兑换为BNB时获得的BNB就越多。
+slisBNB 是一种带息的BNB质押资产，您可以选择将其在主要的DEXs上兑换为BNB，或持有并继续获得随时间累积在slisBNB中的BNB质押奖励。持有时间越长，兑换BNB LSTs为BNB时获得的BNB就越多。
 
-最低提取金额为0.1 BNB。
+提取的最小金额为0.1 BNB。
 {% endhint %}
 
 要提取您的抵押品：
 
-1. 访问您的Lista DAO CDP仪表板[这里](https://lista.org/cdp/dashboard)。
+1. 访问您的Lista DAO CDP仪表板 [这里](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=withdraw-collateral)。
 
 <figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
 

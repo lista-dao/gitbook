@@ -4,21 +4,32 @@ description: 如何偿还 lisUSD
 
 # 偿还 lisUSD
 
+{% embed url="https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F60fXF9rALi6luWHVkkGg%2Fuploads%2FvCk6Nl7lY2KBVZIzFgXS%2FRepay%20lisUSD.mp4?alt=media&token=381fa24b-28c9-4e27-9c21-ea81528eddfb" %}
+
 {% hint style="info" %}
 **注意**
 
-**批准**交易并不意味着偿还已经完成。
+**Approve** 交易并不意味着还款完成。
 
-您的贷款不能低于15 lisUSD，因此您可以选择将其偿还至剩余的15 lisUSD，或者全部偿还。
+\
+您的贷款不能低于 15 lisUSD，因此您可以选择将其偿还至剩余的 15 lisUSD 或全部偿还。
 {% endhint %}
 
 要偿还您的 lisUSD 贷款：
 
-1. 在[借款页面](https://helio.money/app/loans/)，点击 **My Borrowed Funds** 下的 **Repay**。
-2. 在下一页，输入您打算偿还的 lisUSD 数量，然后点击 **Approve**。
-3. 在 MetaMask 中确认此操作。
-4. 批准完成后，点击 **Proceed** 提交偿还交易。
-5. 交易完成后，点击 **Okay** 跳转至借款页面，查看未偿还的贷款是否已偿还。
+1. 访问您的 Lista DAO CDP 仪表板 [这里](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=repay-lisusd)。
+
+<figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
+
+2. 选择您想要偿还 lisUSD 的抵押品类型，然后点击“Repay”。
+3. 输入您想要偿还的 lisUSD 数量，然后点击“Repay”。
+
+<figure><img src="../../.gitbook/assets/image (54).png" alt=""><figcaption></figcaption></figure>
+
+4. 在 MetaMask 中确认操作。
+5. 交易完成后，点击 **Okay**，您就完成了。
+
+<figure><img src="../../.gitbook/assets/image (55).png" alt=""><figcaption></figcaption></figure>
 
 [\
 ](https://docs.bsc.lista.org/get-started/boost-vault-lisusd)
