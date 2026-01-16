@@ -37,7 +37,7 @@
   * [预言机](introduction/lista-lending/oracle.md)
   * [闪电贷](introduction/lista-lending/flash-loan.md)
   * [用户流程](introduction/lista-lending/user-flow.md)
-  * [第三方金库的独立性与责任](yin-yan/lista-lending/di-san-fang-jin-ku-de-du-li-xing-yu-ze-ren.md)
+  * [第三方金库的独立性与责任](yin-yan/lista-lending/third-party-vault-risk-management.md)
 * [Binance Launchpool: slisBNBx](introduction/binance-launchpool-clisbnb/README.md)
   * [用 slisBNB 铸造 slisBNBx](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [在 Lista 借贷上铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
