@@ -37,6 +37,7 @@
   * [Oracle](introduction/lista-lending/oracle.md)
   * [Flash Loan](introduction/lista-lending/flash-loan.md)
   * [User Flow](introduction/lista-lending/user-flow.md)
+  * [Third-Party Vault Risk Management](introduction/lista-lending/third-party-vault-risk-management.md)
 * [Binance Launchpool: slisBNBx](introduction/binance-launchpool-clisbnb/README.md)
   * [Minting slisBNBx with slisBNB](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [Mint slisBNBx on Lista Lending](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
