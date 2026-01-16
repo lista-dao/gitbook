@@ -1,4 +1,4 @@
-# LISTA 通缩倡议：20% 代币销毁（LIP-021）
+# LISTA 通缩倡议：20% 代币销毁 (LIP-021)
 
 随着 [LIP-021](https://snapshot.box/#/s:listavote.eth/proposal/0xdb92580e04ca8d688404a689a99579294715bd9ab858cc9b7ba637599720a6ff) 的成功实施，Lista DAO 永久销毁了 2 亿 LISTA 代币，占最大供应量的 20%。
 
@@ -17,5 +17,3 @@
 > _注\* 目前，总冻结的 LISTA 约为 204.41M LISTA，包括一次性销毁（LIP 021，200M）永久移除以减少供应并增加稀缺性，加上之前基于_ [_LIP 016_](permanent-locking-of-lista-lip-016.md) _累积的协议冻结（4.41M）。这代表了加强代币长期价值并支持 DAO 生态系统的战略步骤。_
 
 ### 20% LISTA 销毁后的代币经济学
-
-<figure><img src="../../.gitbook/assets/image (67).png" alt=""><figcaption></figcaption></figure>

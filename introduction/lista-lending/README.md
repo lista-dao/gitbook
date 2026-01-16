@@ -1,6 +1,4 @@
-# Lista Lending
-
-<figure><img src="../../.gitbook/assets/image (61).png" alt=""><figcaption></figcaption></figure>
+# Lista 借贷
 
 Lista Lending 是一个完全去中心化且无需许可的 P2P 借贷协议，专为 BNB Chain 设计，打破传统大型借贷池的限制，培养更包容和强大的生态系统。
 

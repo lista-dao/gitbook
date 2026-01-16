@@ -32,9 +32,7 @@ B) 在启动前，将预先铸造500万lisUSD并存入PSM合约。
 
 ## lisUSD稳定池
 
-通过使用我们的PSM模块，在我们的[赚取](https://lista.org/earn?utm_source=gitbook&utm_medium=article&utm_campaign=stable-pool-price-stability-module-psm)部分创建了稳定池：
-
-<figure><img src="../../../.gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+通过使用我们的PSM模块，在我们的[赚取](https://lista.org/earn?utm_source=gitbook\&utm_medium=article\&utm_campaign=stable-pool-price-stability-module-psm)部分创建了稳定池：
 
 用户现在可以存入他们的USDT，享受来自LISTA代币发行以及lisUSD储蓄率的收益。通过PSM，存入USDT稳定池的USDT将以1:1的比例换成lisUSD，并存入lisUSD稳定池。
 

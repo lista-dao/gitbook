@@ -17,19 +17,10 @@ description: 如何偿还 lisUSD
 
 要偿还您的 lisUSD 贷款：
 
-1. 访问您的 Lista DAO CDP 仪表板 [这里](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=repay-lisusd)。
-
-<figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
-
+1. 访问您的 Lista DAO CDP 仪表板 [这里](https://lista.org/cdp/dashboard?utm_source=gitbook\&utm_medium=article\&utm_campaign=repay-lisusd)。
 2. 选择您想要偿还 lisUSD 的抵押品类型，然后点击“Repay”。
 3. 输入您想要偿还的 lisUSD 数量，然后点击“Repay”。
-
-<figure><img src="../../.gitbook/assets/image (54).png" alt=""><figcaption></figcaption></figure>
-
 4. 在 MetaMask 中确认操作。
 5. 交易完成后，点击 **Okay**，您就完成了。
 
-<figure><img src="../../.gitbook/assets/image (55).png" alt=""><figcaption></figcaption></figure>
-
-[\
-](https://docs.bsc.lista.org/get-started/boost-vault-lisusd)
+[<br>](https://docs.bsc.lista.org/get-started/boost-vault-lisusd)

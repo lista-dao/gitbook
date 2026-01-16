@@ -1,4 +1,4 @@
-# 将slisBNBx委托给您的币安Web3 MPC钱包
+# 将 slisBNBx 委托给您的 Binance web3 MPC 钱包
 
 需要注意的是，**slisBNBx的委托发生在用户将BNB作为抵押金存入Lista DAO时**。一旦您的BNB被存入，用户获得的slisBNBx将被固定到那个特定的地址，并且它将不可交易。
 
@@ -10,9 +10,7 @@
 
 1\. 将您的热钱包连接到币安智能链上的Lista DAO。
 
-2\. 通过点击“借入lisUSD”进入您的Lista DAO CDP仪表板，位于借贷部分[这里](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=delegating-clisbnb-to-your-binance-web3-mpc-wallet)。
-
-<figure><img src="../../.gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
+2\. 通过点击“借入lisUSD”进入您的Lista DAO CDP仪表板，位于借贷部分[这里](https://lista.org/cdp/dashboard?utm_source=gitbook\&utm_medium=article\&utm_campaign=delegating-clisbnb-to-your-binance-web3-mpc-wallet)。
 
 3\. 选择BNB，然后点击“存入”。
 

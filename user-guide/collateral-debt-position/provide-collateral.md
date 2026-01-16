@@ -26,19 +26,10 @@ BNB 存款的最低交易额为 0.1。
 lisUSD 的最大总借款限额目前设定为 69,000,000 lisUSD 代币。
 {% endhint %}
 
-1. 前往您的 Lista DAO CDP 仪表板 [这里](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=provide-collateral)。
-
-<figure><img src="../../.gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
-
+1. 前往您的 Lista DAO CDP 仪表板 [这里](https://lista.org/cdp/dashboard?utm_source=gitbook\&utm_medium=article\&utm_campaign=provide-collateral)。
 2. 选择您想要存入的抵押品类型，并点击“存款”。
-
-<figure><img src="../../.gitbook/assets/image (50).png" alt=""><figcaption></figcaption></figure>
-
 3. 输入您想要存入的抵押品数量，并点击存款。
-
-<figure><img src="../../.gitbook/assets/image (51).png" alt=""><figcaption></figcaption></figure>
-
-3. 在 MetaMask 中确认交易。
+4. 在 MetaMask 中确认交易。
 
 <figure><img src="https://docs.bsc.lista.org/~gitbook/image?url=https%3A%2F%2F1284749027-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeuAQJMk753IWaCTi0zzi%252Fuploads%252FnFK5RKwNZLwBZPyflzVH%252FMetaMask1.png%3Falt%3Dmedia%26token%3Dbc35c421-3e4d-43eb-82c8-3d7a7f7a55b8&#x26;width=768&#x26;dpr=4&#x26;quality=100&#x26;sign=e974844c&#x26;sv=1" alt=""><figcaption></figcaption></figure>
 

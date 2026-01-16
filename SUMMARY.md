@@ -1,4 +1,4 @@
-# 目录
+# Table of contents
 
 ## 引言
 
@@ -27,7 +27,7 @@
   * [金库](introduction/lista-lending/vaults/README.md)
     * [Lista Alpha 区](introduction/lista-lending/vaults/lista-alpha-zone.md)
     * [Loop BNB 金库](introduction/lista-lending/vaults/loop-bnb-vault.md)
-  * [市场](introduction/lista-lending/markets.md)
+  * [市场](yin-yan/lista-lending/shi-chang.md)
   * [借款人与供应商](introduction/lista-lending/borrowers-and-suppliers.md)
   * [利率模型 (IRM)](introduction/lista-lending/interest-rate-model-irm.md)
   * [固定利率与期限贷款](introduction/lista-lending/fixed-rate-and-term-loans.md)
@@ -37,6 +37,7 @@
   * [预言机](introduction/lista-lending/oracle.md)
   * [闪电贷](introduction/lista-lending/flash-loan.md)
   * [用户流程](introduction/lista-lending/user-flow.md)
+  * [第三方金库的独立性与责任](yin-yan/lista-lending/di-san-fang-jin-ku-de-du-li-xing-yu-ze-ren.md)
 * [Binance Launchpool: slisBNBx](introduction/binance-launchpool-clisbnb/README.md)
   * [用 slisBNB 铸造 slisBNBx](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [在 Lista 借贷上铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
@@ -82,10 +83,10 @@
   * [从 slisBNB 兑换 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
   * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
 * [智能借贷](user-guide/smart-lending.md)
-* [Lista 借贷](user-guide/lista-lending/README.md)
+* [Lista 借贷](yong-hu-zhi-nan/lista-jie-dai/README.md)
   * [借款和还款](user-guide/lista-lending/borrowing-and-repaying.md)
   * [Lista 借贷赚取](user-guide/lista-lending/lista-lending-earn.md)
-  * [如何创建金库：Lista 借贷金库 GUI](user-guide/lista-lending/how-to-create-a-vault-lista-lending-vault-gui.md)
+  * [如何创建金库：Lista 借贷金库 GUI](yong-hu-zhi-nan/lista-jie-dai/ru-he-chuang-jian-jin-ku-lista-jie-dai-jin-ku-gui.md)
   * [如何手动创建金库](user-guide/lista-lending/how-to-create-a-vault.md)
   * [如何在 Lista 借贷上创建市场](user-guide/lista-lending/how-to-create-a-market.md)
 * [使用 Binance 钱包](user-guide/using-binance-web3-wallet/README.md)
@@ -128,7 +129,7 @@
 
 ***
 
-* [Lista 借贷](lista-lending/README.md)
+* [Lista 借贷](lista-jie-dai/README.md)
   * [智能合约](lista-lending/smart-contract.md)
 
 ## 合作伙伴关系
