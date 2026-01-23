@@ -49,6 +49,8 @@ class RetrievalService {
 
       const isSecurityQuery = this.detectSecurityQuery(question);
       const isComparisonQuery = this.detectComparisonQuery(question);
+      const isSmartLendingQuery = this.detectSmartLendingQuery(question);
+      const isRWAQuery = this.detectRWAQuery(question);
       const isLendingQuery = this.detectLendingQuery(question);
       const isCDPQuery = this.detectCDPQuery(question);
       const isClisBNBQuery = this.detectClisBNBQuery(question);
@@ -60,6 +62,10 @@ class RetrievalService {
           ? "security"
           : isComparisonQuery
           ? "comparison"
+          : isSmartLendingQuery
+          ? "smart-lending"
+          : isRWAQuery
+          ? "rwa"
           : isLendingQuery
           ? "lending"
           : isCDPQuery
@@ -85,6 +91,14 @@ class RetrievalService {
 
       if (isComparisonQuery) {
         return await this.handleComparisonQuery(results, embedding);
+      }
+
+      if (isSmartLendingQuery) {
+        return await this.handleSmartLendingQuery(results, embedding, question);
+      }
+
+      if (isRWAQuery) {
+        return await this.handleRWAQuery(results, embedding, question);
       }
 
       if (isLendingQuery) {
@@ -167,10 +181,57 @@ class RetrievalService {
     return hasComparisonWords || hasMultipleSystems;
   }
 
+  detectSmartLendingQuery(question) {
+    const questionLower = question.toLowerCase();
+
+    const smartLendingKeywords = [
+      "smart lending",
+      "smart-lending",
+      "smartlending",
+      "dex lp",
+      "liquidity pool",
+      "lp token",
+      "impermanent loss",
+      "fixed ratio",
+      "custom ratio",
+      "smart swap",
+      "smart-swap",
+    ];
+
+    return smartLendingKeywords.some((keyword) =>
+      questionLower.includes(keyword.toLowerCase())
+    );
+  }
+
+  detectRWAQuery(question) {
+    const questionLower = question.toLowerCase();
+
+    const rwaKeywords = [
+      "rwa",
+      "real-world asset",
+      "real world asset",
+      "rwamarket",
+      "rwa market",
+      "treasury",
+      "treasury fund",
+      "janus henderson",
+      "anemoy",
+      "usdt.treasury",
+      "usdt.aaa",
+    ];
+
+    return rwaKeywords.some((keyword) =>
+      questionLower.includes(keyword.toLowerCase())
+    );
+  }
+
   detectLendingQuery(question) {
     const questionLower = question.toLowerCase();
 
+    // 排除 Smart Lending 和 RWA
     if (
+      this.detectSmartLendingQuery(question) ||
+      this.detectRWAQuery(question) ||
       this.detectClisBNBQuery(question) ||
       this.detectVeListaQuery(question)
     ) {
@@ -534,6 +595,114 @@ class RetrievalService {
       return await this.handleUnifiedQuery(embedding, null, {
         useBroadSearch: true,
         queryType: "lending",
+        question,
+      });
+    }
+
+    return this.deduplicateAndSort(allChunks);
+  }
+
+  async handleSmartLendingQuery(results, embedding, question) {
+    logger.info(
+      "檢測到 Smart Lending 相關問題，使用專門的 Smart Lending 檢索策略"
+    );
+
+    // 專門搜索 Smart Lending 相關文檔
+    const smartLendingFilenames = [
+      "introduction/smart-lending.md",
+      "introduction/smart-lending-and-swap.md",
+      "user-guide/smart-lending.md",
+      // Manual 文档
+      "ListaDAO Smart Lending A Hands-on Tutorial.md",
+      "ListaDAO's Smart Lending A Hands-on Tutorial.md",
+      "The Ultimate Guide to Lista Smart Swap.md",
+      "Everything You Need to Know About Liquidation on Lista Smart Lending.md",
+    ];
+
+    const allChunks = [];
+
+    // 獲取 Smart Lending 相關文檔
+    for (const filename of smartLendingFilenames) {
+      try {
+        const smartLendingQuery = await this.index.query({
+          vector: embedding,
+          filter: { filename: filename },
+          topK: 30,
+          includeMetadata: true,
+        });
+
+        if (smartLendingQuery.matches && smartLendingQuery.matches.length > 0) {
+          const smartLendingChunks = smartLendingQuery.matches.sort(
+            (a, b) =>
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+          );
+          allChunks.push(...smartLendingChunks);
+          logger.info(
+            `Smart Lending查詢 ${filename}: 找到 ${smartLendingChunks.length} 個chunks`
+          );
+        }
+      } catch (error) {
+        logger.warn(`Smart Lending查詢 ${filename} 失敗: ${error.message}`);
+      }
+    }
+
+    // 如果專門查詢沒找到足夠內容，進行更廣泛的檢索
+    if (allChunks.length < 3) {
+      logger.info("專門 Smart Lending 查詢結果不足，進行廣泛檢索");
+      return await this.handleUnifiedQuery(embedding, null, {
+        useBroadSearch: true,
+        queryType: "smart-lending",
+        question,
+      });
+    }
+
+    return this.deduplicateAndSort(allChunks);
+  }
+
+  async handleRWAQuery(results, embedding, question) {
+    logger.info("檢測到 RWA 相關問題，使用專門的 RWA 檢索策略");
+
+    // 專門搜索 RWA 相關文檔
+    const rwaFilenames = [
+      // 核心文档
+      "introduction/rwa-markets.md",
+      "for-developer/rwa/README.md",
+      "for-developer/rwa/smart-contract.md",
+    ];
+
+    const allChunks = [];
+
+    // 獲取 RWA 相關文檔
+    for (const filename of rwaFilenames) {
+      try {
+        const rwaQuery = await this.index.query({
+          vector: embedding,
+          filter: { filename: filename },
+          topK: 30,
+          includeMetadata: true,
+        });
+
+        if (rwaQuery.matches && rwaQuery.matches.length > 0) {
+          const rwaChunks = rwaQuery.matches.sort(
+            (a, b) =>
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+          );
+          allChunks.push(...rwaChunks);
+          logger.info(
+            `RWA查詢 ${filename}: 找到 ${rwaChunks.length} 個chunks`
+          );
+        }
+      } catch (error) {
+        logger.warn(`RWA查詢 ${filename} 失敗: ${error.message}`);
+      }
+    }
+
+    // 如果專門查詢沒找到足夠內容，進行更廣泛的檢索
+    if (allChunks.length < 3) {
+      logger.info("專門 RWA 查詢結果不足，進行廣泛檢索");
+      return await this.handleUnifiedQuery(embedding, null, {
+        useBroadSearch: true,
+        queryType: "rwa",
         question,
       });
     }
