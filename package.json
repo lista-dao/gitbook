@@ -7,7 +7,6 @@
     "setup": "node scripts/setup-pinecone.js",
     "init": "node scripts/init.js",
     "sync": "node scripts/sync.js",
-    "manual-sync": "node scripts/manual-sync.js",
     "manual-sync:workflow": "node scripts/manual-sync.js --workflow",
     "manual-sync:test-all": "node scripts/manual-sync.js --test-all",
     "manual-sync:list": "node scripts/manual-sync.js --list-synced",

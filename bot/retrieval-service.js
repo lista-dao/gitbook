@@ -5,7 +5,7 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    winston.format.prettyPrint()
+    winston.format.prettyPrint(),
   ),
   defaultMeta: { service: "retrieval-service" },
   transports: [
@@ -13,7 +13,7 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple()
+        winston.format.simple(),
         // winston.format.prettyPrint({
         //   depth: 4,
         //   colorize: true,
@@ -44,7 +44,7 @@ class RetrievalService {
       });
 
       const results = (query.matches || []).filter(
-        (chunk) => chunk.score >= 0.5
+        (chunk) => chunk.score >= 0.5,
       );
 
       const isSecurityQuery = this.detectSecurityQuery(question);
@@ -61,26 +61,26 @@ class RetrievalService {
         queryType: isSecurityQuery
           ? "security"
           : isComparisonQuery
-          ? "comparison"
-          : isSmartLendingQuery
-          ? "smart-lending"
-          : isRWAQuery
-          ? "rwa"
-          : isLendingQuery
-          ? "lending"
-          : isCDPQuery
-          ? "cdp"
-          : isClisBNBQuery
-          ? "clisbnb"
-          : isVeListaQuery
-          ? "velista"
-          : "regular",
+            ? "comparison"
+            : isSmartLendingQuery
+              ? "smart-lending"
+              : isRWAQuery
+                ? "rwa"
+                : isLendingQuery
+                  ? "lending"
+                  : isCDPQuery
+                    ? "cdp"
+                    : isClisBNBQuery
+                      ? "clisbnb"
+                      : isVeListaQuery
+                        ? "velista"
+                        : "regular",
       });
 
       if (results.length === 0) {
         logger.info(`未找到相似度大於 0.5 的文檔塊`);
         const fallbackResults = (query.matches || []).filter(
-          (chunk) => chunk.score >= 0.3
+          (chunk) => chunk.score >= 0.3,
         );
         return fallbackResults;
       }
@@ -148,7 +148,7 @@ class RetrievalService {
 
     const questionLower = question.toLowerCase();
     return securityKeywords.some((keyword) =>
-      questionLower.includes(keyword.toLowerCase())
+      questionLower.includes(keyword.toLowerCase()),
     );
   }
 
@@ -169,7 +169,7 @@ class RetrievalService {
 
     const questionLower = question.toLowerCase();
     const hasComparisonWords = comparisonKeywords.some((keyword) =>
-      questionLower.includes(keyword.toLowerCase())
+      questionLower.includes(keyword.toLowerCase()),
     );
 
     // 检查是否同时提到多个系统 - 排除安全问题
@@ -199,7 +199,7 @@ class RetrievalService {
     ];
 
     return smartLendingKeywords.some((keyword) =>
-      questionLower.includes(keyword.toLowerCase())
+      questionLower.includes(keyword.toLowerCase()),
     );
   }
 
@@ -221,7 +221,7 @@ class RetrievalService {
     ];
 
     return rwaKeywords.some((keyword) =>
-      questionLower.includes(keyword.toLowerCase())
+      questionLower.includes(keyword.toLowerCase()),
     );
   }
 
@@ -252,7 +252,7 @@ class RetrievalService {
 
     if (
       explicitLendingKeywords.some((keyword) =>
-        questionLower.includes(keyword.toLowerCase())
+        questionLower.includes(keyword.toLowerCase()),
       )
     ) {
       return true;
@@ -266,7 +266,7 @@ class RetrievalService {
     ];
     if (
       cdpKeywords.some((keyword) =>
-        questionLower.includes(keyword.toLowerCase())
+        questionLower.includes(keyword.toLowerCase()),
       )
     ) {
       return false;
@@ -281,7 +281,7 @@ class RetrievalService {
     ];
 
     return generalLendingKeywords.some((keyword) =>
-      questionLower.includes(keyword.toLowerCase())
+      questionLower.includes(keyword.toLowerCase()),
     );
   }
 
@@ -315,22 +315,29 @@ class RetrievalService {
     ];
 
     return cdpKeywords.some((keyword) =>
-      questionLower.includes(keyword.toLowerCase())
+      questionLower.includes(keyword.toLowerCase()),
     );
   }
 
+  // Covers both legacy name (clisBNB) and new name (slisBNBx)
   detectClisBNBQuery(question) {
     const questionLower = question.toLowerCase();
 
     const clisBNBKeywords = [
       "clisbnb",
       "slisbnbx",
+      "slisbnb x",
+      "pt-clisbnb",
+      "yt-clisbnb",
+      "pt-slisbnbx",
+      "yt-slisbnbx",
       "binance launchpool",
       "launchpool",
+      "megadrop",
     ];
 
     return clisBNBKeywords.some((keyword) =>
-      questionLower.includes(keyword.toLowerCase())
+      questionLower.includes(keyword.toLowerCase()),
     );
   }
 
@@ -364,7 +371,7 @@ class RetrievalService {
     ];
 
     return veListaKeywords.some((keyword) =>
-      questionLower.includes(keyword.toLowerCase())
+      questionLower.includes(keyword.toLowerCase()),
     );
   }
 
@@ -393,11 +400,11 @@ class RetrievalService {
         if (securityQuery.matches && securityQuery.matches.length > 0) {
           const securityChunks = securityQuery.matches.sort(
             (a, b) =>
-              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
           allChunks.push(...securityChunks);
           logger.info(
-            `安全查詢 ${filename}: 找到 ${securityChunks.length} 個chunks`
+            `安全查詢 ${filename}: 找到 ${securityChunks.length} 個chunks`,
           );
         }
       } catch (error) {
@@ -456,6 +463,7 @@ class RetrievalService {
       "user-guide/collateral-debt-position/README.md",
       "introduction/collateral-debt-position-lisusd/collateral/README.md",
       "introduction/collateral-debt-position-lisusd/lisusd/README.md",
+      "What makes Lista and lisUSD different.md",
     ];
 
     // 專門搜索Lending相關文檔
@@ -472,6 +480,7 @@ class RetrievalService {
       "introduction/lista-lending/flash-loan.md",
       "introducing-lista-lending-lista-daos-next-gen-lend.md",
       "product-guide-lista-lending.md",
+      "What makes Lista and lisUSD different.md",
     ];
 
     const allChunks = [];
@@ -489,7 +498,7 @@ class RetrievalService {
         if (cdpQuery.matches && cdpQuery.matches.length > 0) {
           const cdpChunks = cdpQuery.matches.sort(
             (a, b) =>
-              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
           allChunks.push(...cdpChunks);
           logger.info(`CDP查詢 ${filename}: 找到 ${cdpChunks.length} 個chunks`);
@@ -512,11 +521,11 @@ class RetrievalService {
         if (lendingQuery.matches && lendingQuery.matches.length > 0) {
           const lendingChunks = lendingQuery.matches.sort(
             (a, b) =>
-              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
           allChunks.push(...lendingChunks);
           logger.info(
-            `Lending查詢 ${filename}: 找到 ${lendingChunks.length} 個chunks`
+            `Lending查詢 ${filename}: 找到 ${lendingChunks.length} 個chunks`,
           );
         }
       } catch (error) {
@@ -560,6 +569,10 @@ class RetrievalService {
       "product-update-lista-lending-alpha-zone-powering-t.md",
       "product-update-introducing-lista-daos-liquidation-.md",
       "product-update-mint-clisbnb-in-lista-lending.md",
+      "Guide Running Lista's Liquidation bot.md",
+      "Product Guide Borrowing USD1 on Lista Lending.md",
+      "Product Guide Lista Lending.md",
+      "Product Update Lista Lending Vault Manager GUI.md",
     ];
 
     const allChunks = [];
@@ -577,11 +590,11 @@ class RetrievalService {
         if (lendingQuery.matches && lendingQuery.matches.length > 0) {
           const lendingChunks = lendingQuery.matches.sort(
             (a, b) =>
-              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
           allChunks.push(...lendingChunks);
           logger.info(
-            `Lending查詢 ${filename}: 找到 ${lendingChunks.length} 個chunks`
+            `Lending查詢 ${filename}: 找到 ${lendingChunks.length} 個chunks`,
           );
         }
       } catch (error) {
@@ -604,7 +617,7 @@ class RetrievalService {
 
   async handleSmartLendingQuery(results, embedding, question) {
     logger.info(
-      "檢測到 Smart Lending 相關問題，使用專門的 Smart Lending 檢索策略"
+      "檢測到 Smart Lending 相關問題，使用專門的 Smart Lending 檢索策略",
     );
 
     // 專門搜索 Smart Lending 相關文檔
@@ -617,6 +630,7 @@ class RetrievalService {
       "ListaDAO's Smart Lending A Hands-on Tutorial.md",
       "The Ultimate Guide to Lista Smart Swap.md",
       "Everything You Need to Know About Liquidation on Lista Smart Lending.md",
+      "Product Guide LP Farming with lisUSD:USD1 on Lista DAO.md",
     ];
 
     const allChunks = [];
@@ -634,11 +648,11 @@ class RetrievalService {
         if (smartLendingQuery.matches && smartLendingQuery.matches.length > 0) {
           const smartLendingChunks = smartLendingQuery.matches.sort(
             (a, b) =>
-              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
           allChunks.push(...smartLendingChunks);
           logger.info(
-            `Smart Lending查詢 ${filename}: 找到 ${smartLendingChunks.length} 個chunks`
+            `Smart Lending查詢 ${filename}: 找到 ${smartLendingChunks.length} 個chunks`,
           );
         }
       } catch (error) {
@@ -685,12 +699,10 @@ class RetrievalService {
         if (rwaQuery.matches && rwaQuery.matches.length > 0) {
           const rwaChunks = rwaQuery.matches.sort(
             (a, b) =>
-              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
           allChunks.push(...rwaChunks);
-          logger.info(
-            `RWA查詢 ${filename}: 找到 ${rwaChunks.length} 個chunks`
-          );
+          logger.info(`RWA查詢 ${filename}: 找到 ${rwaChunks.length} 個chunks`);
         }
       } catch (error) {
         logger.warn(`RWA查詢 ${filename} 失敗: ${error.message}`);
@@ -713,7 +725,7 @@ class RetrievalService {
   async handleCDPQuery(results, embedding, question) {
     logger.info("檢測到 CDP 相關問題，使用專門的 CDP 檢索策略");
 
-    // 專門搜索 CDP 相關文檔
+    // 專門搜索 CDP 相關文檔 (and comparison: Lista vs lisUSD)
     const cdpFilenames = [
       "introduction/collateral-debt-position-lisusd/README.md",
       "introduction/collateral-debt-position-lisusd/collateral/README.md",
@@ -733,6 +745,7 @@ class RetrievalService {
       "introduction/liquid-staking-slisbnb/about-slisbnb.md",
       "introduction/liquid-staking-slisbnb/technical-guide.md",
       "product-update-unlocking-velista-utility-introduci.md",
+      "Product Guide Looping strategies with lisUSD.md",
     ];
 
     const allChunks = [];
@@ -750,7 +763,7 @@ class RetrievalService {
         if (cdpQuery.matches && cdpQuery.matches.length > 0) {
           const cdpChunks = cdpQuery.matches.sort(
             (a, b) =>
-              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
           allChunks.push(...cdpChunks);
           logger.info(`CDP查詢 ${filename}: 找到 ${cdpChunks.length} 個chunks`);
@@ -775,7 +788,7 @@ class RetrievalService {
 
   async handleClisBNBQuery(results, embedding, question) {
     logger.info(
-      "檢測到 clisBNB/slisBNBx 相關問題，使用專門的 clisBNB 檢索策略"
+      "檢測到 clisBNB/slisBNBx 相關問題，使用專門的 clisBNB 檢索策略",
     );
 
     // 專門搜索 clisBNB/slisBNBx 相關文檔
@@ -792,6 +805,12 @@ class RetrievalService {
       // Medium文章（不带路径前缀）
       "product-update-mint-clisbnb-in-lista-lending.md",
       "product-update-mint-clisbnb-with-bnb-slisbnb-lp-to.md",
+      "Pendle Finance Lista DAO Unlocking New Yield Opportunities with clisBNB.md",
+      "Product Guide delegating clisBNB.md",
+      "Product Guide Earn Binance Launchpool Rewards with USD1 on Lista DAO.md",
+      "Product Guide Maximizing Yield with lisUSD and pt-clisBNB.md",
+      "Product Guide Participate in Binance Launchpool using slisBNB.md",
+      "Product Guide Participate in Binance Launchpool using slisBNB (step-by-step).md",
     ];
 
     const allChunks = [];
@@ -809,11 +828,11 @@ class RetrievalService {
         if (clisBNBQuery.matches && clisBNBQuery.matches.length > 0) {
           const clisBNBChunks = clisBNBQuery.matches.sort(
             (a, b) =>
-              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
           allChunks.push(...clisBNBChunks);
           logger.info(
-            `clisBNB查詢 ${filename}: 找到 ${clisBNBChunks.length} 個chunks`
+            `clisBNB查詢 ${filename}: 找到 ${clisBNBChunks.length} 個chunks`,
           );
         }
       } catch (error) {
@@ -892,11 +911,11 @@ class RetrievalService {
         if (veListaQuery.matches && veListaQuery.matches.length > 0) {
           const veListaChunks = veListaQuery.matches.sort(
             (a, b) =>
-              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+              (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
           allChunks.push(...veListaChunks);
           logger.info(
-            `veLISTA查詢 ${filename}: 找到 ${veListaChunks.length} 個chunks`
+            `veLISTA查詢 ${filename}: 找到 ${veListaChunks.length} 個chunks`,
           );
         }
       } catch (error) {
@@ -939,12 +958,12 @@ class RetrievalService {
       const thresholds = [0.3, 0.2];
       for (const threshold of thresholds) {
         const filteredResults = (broadQuery.matches || []).filter(
-          (chunk) => chunk.score >= threshold
+          (chunk) => chunk.score >= threshold,
         );
 
         if (filteredResults.length > 0) {
           logger.info(
-            `廣泛檢索找到 ${filteredResults.length} 個結果 (閾值 ${threshold})`
+            `廣泛檢索找到 ${filteredResults.length} 個結果 (閾值 ${threshold})`,
           );
           results = filteredResults;
           break;
@@ -974,7 +993,7 @@ class RetrievalService {
 
     for (const filename of candidateFiles) {
       const fileChunks = results.filter(
-        (r) => r.metadata.filename === filename
+        (r) => r.metadata.filename === filename,
       );
       const avgScore =
         fileChunks.reduce((sum, chunk) => sum + chunk.score, 0) /
@@ -1010,7 +1029,7 @@ class RetrievalService {
     }
 
     logger.info(
-      `选择最佳文件: ${bestFile} (综合分数: ${(bestScore * 100).toFixed(1)}%)`
+      `选择最佳文件: ${bestFile} (综合分数: ${(bestScore * 100).toFixed(1)}%)`,
     );
 
     // 如果沒有找到最佳文件或 embedding 為空，直接返回現有結果
@@ -1020,7 +1039,7 @@ class RetrievalService {
     }
 
     const bestFileChunks = results.filter(
-      (r) => r.metadata.filename === bestFile
+      (r) => r.metadata.filename === bestFile,
     );
     const avgSimilarity =
       bestFileChunks.reduce((sum, chunk) => sum + chunk.score, 0) /
@@ -1035,7 +1054,7 @@ class RetrievalService {
       });
 
       const allChunks = fileQuery.matches.sort(
-        (a, b) => (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+        (a, b) => (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
       );
 
       logger.info(`使用單一文件 ${bestFile} 的 ${allChunks.length} 個文檔塊`);
@@ -1054,14 +1073,14 @@ class RetrievalService {
       });
 
       const fileChunks = fileQuery.matches.sort(
-        (a, b) => (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0)
+        (a, b) => (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
       );
 
       allChunks.push(...fileChunks);
     }
 
     logger.info(
-      `檢索到 ${relevantFiles.length} 個相關文件，共 ${allChunks.length} 個文檔塊 (${queryType})`
+      `檢索到 ${relevantFiles.length} 個相關文件，共 ${allChunks.length} 個文檔塊 (${queryType})`,
     );
     return allChunks;
   }
@@ -1095,14 +1114,14 @@ class RetrievalService {
     });
 
     const sortedChunks = uniqueChunks.sort(
-      (a, b) => (b.score || 0) - (a.score || 0)
+      (a, b) => (b.score || 0) - (a.score || 0),
     );
 
     logger.info(`比較查詢: 檢索到 ${sortedChunks.length} 個去重文檔塊`);
     logger.info("涉及的文件:", {
       files: [...new Set(sortedChunks.map((c) => c.metadata.filename))].slice(
         0,
-        10
+        10,
       ),
     });
 
