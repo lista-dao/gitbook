@@ -7,7 +7,7 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    winston.format.prettyPrint()
+    winston.format.prettyPrint(),
   ),
   defaultMeta: { service: "language-service" },
   transports: [
@@ -15,7 +15,7 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple()
+        winston.format.simple(),
       ),
     }),
   ],
@@ -78,7 +78,7 @@ class LanguageService {
             "Content-Type": "application/json",
           },
           timeout: 10000, // 10秒超时
-        }
+        },
       );
 
       const translatedQuestion =
@@ -88,6 +88,57 @@ class LanguageService {
       logger.error("翻译失败:", error);
       // 翻译失败时返回原文
       return chineseQuestion;
+    }
+  }
+
+  /**
+   * Combine original question (from user A) + further info (from user B's reply) into one question.
+   * Uses OpenAI to formulate a clear combined question when OPENAI_API_KEY is set.
+   */
+  async combineQuestionWithContext(originalQuestion, furtherInfo) {
+    if (!furtherInfo || !furtherInfo.trim()) {
+      return originalQuestion;
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      return `${originalQuestion}. ${furtherInfo}`.trim();
+    }
+
+    try {
+      const response = await axios.post(
+        this.config.openaiApiUrl,
+        {
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content: `You are a query formatter. Given an original question and a follow-up context from another user, output a single clear question that combines both. Output ONLY the combined question, no explanation, no prefix. Keep it concise and in the same language as the original.`,
+            },
+            {
+              role: "user",
+              content: `Original question: ${originalQuestion}\n\nFollow-up context: ${furtherInfo}\n\nCombined question:`,
+            },
+          ],
+          temperature: 0.2,
+          max_tokens: 150,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          timeout: 10000,
+        },
+      );
+
+      const combined = response.data.choices[0].message.content.trim();
+      return combined || `${originalQuestion}. ${furtherInfo}`.trim();
+    } catch (error) {
+      logger.warn(
+        "AI combine question failed, using concatenation:",
+        error.message,
+      );
+      return `${originalQuestion}. ${furtherInfo}`.trim();
     }
   }
 

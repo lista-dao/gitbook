@@ -16,7 +16,7 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    winston.format.prettyPrint()
+    winston.format.prettyPrint(),
   ),
   defaultMeta: { service: "telegram-bot" },
   transports: [
@@ -24,7 +24,7 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple()
+        winston.format.simple(),
       ),
     }),
   ],
@@ -132,7 +132,7 @@ class GitBookRAGBot {
     // 初始化各个服务模块
     this.retrievalService = new RetrievalService(
       this.index,
-      this.smartProcessor
+      this.smartProcessor,
     );
     this.languageService = new LanguageService(this.config);
     this.responseGenerator = new ResponseGenerator(this.config);
@@ -161,7 +161,30 @@ class GitBookRAGBot {
       }
 
       // 清理问题文本（移除@bot的部分）
-      const cleanQuestion = this.groupManager.cleanQuestion(question);
+      let cleanQuestion = this.groupManager.cleanQuestion(question);
+
+      // Tag-reply: B 回覆 A 的消息并 @bot，结合 A 的问题 + B 的补充再回答
+      const replyTo = ctx.message.reply_to_message;
+      const isReplyToUser =
+        replyTo &&
+        replyTo.from &&
+        replyTo.from.id !== this.botInfo.id &&
+        replyTo.text;
+
+      if (isReplyToUser) {
+        const originalQuestion =
+          this.groupManager.cleanQuestion(replyTo.text) || replyTo.text.trim();
+        const furtherInfo = cleanQuestion;
+        cleanQuestion = await this.languageService.combineQuestionWithContext(
+          originalQuestion,
+          furtherInfo,
+        );
+        logger.info(`Tag-reply 合併問題`, {
+          original: originalQuestion.slice(0, 80),
+          further: furtherInfo.slice(0, 80),
+          combined: cleanQuestion.slice(0, 120),
+        });
+      }
 
       if (!cleanQuestion) {
         return; // 如果清理后没有内容，不响应
@@ -272,20 +295,19 @@ class GitBookRAGBot {
 
       let searchQuestion = question;
       if (detectedLang === "zh-CN") {
-        searchQuestion = await this.languageService.translateToEnglish(
-          question
-        );
+        searchQuestion =
+          await this.languageService.translateToEnglish(question);
         logger.info(`翻译结果: ${searchQuestion}`);
       }
 
       const questionEmbedding = await this.smartProcessor.generateEmbedding(
         searchQuestion,
-        "passage"
+        "passage",
       );
 
       const relevantChunks = await this.retrievalService.retrieveRelevantChunks(
         questionEmbedding,
-        searchQuestion
+        searchQuestion,
       );
 
       if (relevantChunks.length === 0) {
@@ -295,7 +317,7 @@ class GitBookRAGBot {
       const answer = await this.responseGenerator.generateAnswer(
         question,
         relevantChunks,
-        detectedLang
+        detectedLang,
       );
 
       simpleRateLimiter.logUsage(userInfo.id, question, 0);
@@ -400,7 +422,7 @@ class GitBookRAGBot {
         botMessageId,
         userMessageId,
         moderatorName,
-        lang
+        lang,
       );
 
       logger.info("回答审核拒绝", {
@@ -510,7 +532,7 @@ class GitBookRAGBot {
 
     this.httpServer = this.app.listen(this.config.healthPort, () => {
       logger.info(
-        `Health check server running on port ${this.config.healthPort}`
+        `Health check server running on port ${this.config.healthPort}`,
       );
     });
   }
@@ -520,7 +542,7 @@ class GitBookRAGBot {
     botMessageId,
     userMessageId,
     moderatorName,
-    lang
+    lang,
   ) {
     // 检查是否配置了转发群组ID
     if (!this.errorForwardGroupId) {
@@ -539,7 +561,7 @@ class GitBookRAGBot {
         forwardedUserQuestion = await ctx.telegram.forwardMessage(
           this.errorForwardGroupId,
           chatId,
-          parseInt(userMessageId)
+          parseInt(userMessageId),
         );
         logger.info("用户提问转发成功", { userMessageId, chatId });
       } catch (userForwardError) {
@@ -550,7 +572,7 @@ class GitBookRAGBot {
       const forwardedBotReply = await ctx.telegram.forwardMessage(
         this.errorForwardGroupId,
         chatId,
-        parseInt(botMessageId)
+        parseInt(botMessageId),
       );
 
       // 发送错误通知
@@ -577,7 +599,7 @@ class GitBookRAGBot {
         {
           parse_mode: "Markdown",
           reply_to_message_id: forwardedBotReply.message_id,
-        }
+        },
       );
 
       logger.info("错误回答转发成功", {
@@ -597,13 +619,13 @@ class GitBookRAGBot {
           lang === "zh-CN"
             ? `🚨 **错误回答报告**\n👤 审核员：${moderatorName}\n🕐 时间：${new Date().toLocaleString(
                 "zh-CN",
-                { timeZone: "Asia/Shanghai" }
+                { timeZone: "Asia/Shanghai" },
               )}\n📍 来源：${
                 ctx.chat.title || "Private Chat"
               }\n\n⚠️ 有一条回答被标记为错误，但转发失败。请手动检查原对话获取用户提问和bot回答的完整内容。`
             : `🚨 **Incorrect Answer Report**\n👤 Moderator: ${moderatorName}\n🕐 Time: ${new Date().toLocaleString(
                 "en-US",
-                { timeZone: "Asia/Shanghai" }
+                { timeZone: "Asia/Shanghai" },
               )}\n📍 Source: ${
                 ctx.chat.title || "Private Chat"
               }\n\n⚠️ An answer was flagged as incorrect but forwarding failed. Please manually check the original conversation for user question and bot response.`;
