@@ -43,80 +43,38 @@ class RetrievalService {
         includeMetadata: true,
       });
 
-      const results = (query.matches || []).filter(
-        (chunk) => chunk.score >= 0.5,
-      );
+      let results = (query.matches || []).filter((chunk) => chunk.score >= 0.5);
 
-      const isSecurityQuery = this.detectSecurityQuery(question);
-      const isComparisonQuery = this.detectComparisonQuery(question);
-      const isSmartLendingQuery = this.detectSmartLendingQuery(question);
-      const isRWAQuery = this.detectRWAQuery(question);
-      const isLendingQuery = this.detectLendingQuery(question);
-      const isCDPQuery = this.detectCDPQuery(question);
-      const isClisBNBQuery = this.detectClisBNBQuery(question);
-      const isVeListaQuery = this.detectVeListaQuery(question);
-
-      logger.info("檢索結果:", {
-        totalResults: results.length,
-        queryType: isSecurityQuery
-          ? "security"
-          : isComparisonQuery
-            ? "comparison"
-            : isSmartLendingQuery
-              ? "smart-lending"
-              : isRWAQuery
-                ? "rwa"
-                : isLendingQuery
-                  ? "lending"
-                  : isCDPQuery
-                    ? "cdp"
-                    : isClisBNBQuery
-                      ? "clisbnb"
-                      : isVeListaQuery
-                        ? "velista"
-                        : "regular",
-      });
+      const queryTypeConfig = [
+        [this.detectSecurityQuery(question), "security", "handleSecurityQuery"],
+        [
+          this.detectComparisonQuery(question),
+          "comparison",
+          "handleComparisonQuery",
+        ],
+        [
+          this.detectSmartLendingQuery(question),
+          "smart-lending",
+          "handleSmartLendingQuery",
+        ],
+        [this.detectRWAQuery(question), "rwa", "handleRWAQuery"],
+        [this.detectLendingQuery(question), "lending", "handleLendingQuery"],
+        [this.detectCDPQuery(question), "cdp", "handleCDPQuery"],
+        [this.detectClisBNBQuery(question), "clisbnb", "handleClisBNBQuery"],
+        [this.detectVeListaQuery(question), "velista", "handleVeListaQuery"],
+      ];
+      const matched = queryTypeConfig.find(([ok]) => ok);
+      const queryType = matched ? matched[1] : "regular";
+      logger.info("檢索結果:", { totalResults: results.length, queryType });
 
       if (results.length === 0) {
         logger.info(`未找到相似度大於 0.5 的文檔塊`);
-        const fallbackResults = (query.matches || []).filter(
-          (chunk) => chunk.score >= 0.3,
-        );
-        return fallbackResults;
+        results = (query.matches || []).filter((chunk) => chunk.score >= 0.3);
       }
 
-      if (isSecurityQuery) {
-        return await this.handleSecurityQuery(results, embedding, question);
+      if (matched) {
+        return await this[matched[2]](results, embedding, question);
       }
-
-      if (isComparisonQuery) {
-        return await this.handleComparisonQuery(results, embedding);
-      }
-
-      if (isSmartLendingQuery) {
-        return await this.handleSmartLendingQuery(results, embedding, question);
-      }
-
-      if (isRWAQuery) {
-        return await this.handleRWAQuery(results, embedding, question);
-      }
-
-      if (isLendingQuery) {
-        return await this.handleLendingQuery(results, embedding, question);
-      }
-
-      if (isCDPQuery) {
-        return await this.handleCDPQuery(results, embedding, question);
-      }
-
-      if (isClisBNBQuery) {
-        return await this.handleClisBNBQuery(results, embedding, question);
-      }
-
-      if (isVeListaQuery) {
-        return await this.handleVeListaQuery(results, embedding, question);
-      }
-
       return await this.handleUnifiedQuery(results, embedding, {
         queryType: "regular",
       });
@@ -204,13 +162,11 @@ class RetrievalService {
   }
 
   detectRWAQuery(question) {
-    const questionLower = question.toLowerCase();
-
-    const rwaKeywords = [
+    const q = question.toLowerCase();
+    const keywords = [
       "rwa",
       "real-world asset",
       "real world asset",
-      "rwamarket",
       "rwa market",
       "treasury",
       "treasury fund",
@@ -219,10 +175,7 @@ class RetrievalService {
       "usdt.treasury",
       "usdt.aaa",
     ];
-
-    return rwaKeywords.some((keyword) =>
-      questionLower.includes(keyword.toLowerCase()),
-    );
+    return keywords.some((k) => q.includes(k.toLowerCase()));
   }
 
   detectLendingQuery(question) {
@@ -676,49 +629,42 @@ class RetrievalService {
   async handleRWAQuery(results, embedding, question) {
     logger.info("檢測到 RWA 相關問題，使用專門的 RWA 檢索策略");
 
-    // 專門搜索 RWA 相關文檔
     const rwaFilenames = [
-      // 核心文档
       "introduction/rwa-markets.md",
       "for-developer/rwa/README.md",
       "for-developer/rwa/smart-contract.md",
+      "2025-12-26_Lista-DAO-2025-Annual-Report-3e4ff3f5a085.md",
     ];
 
     const allChunks = [];
-
-    // 獲取 RWA 相關文檔
     for (const filename of rwaFilenames) {
       try {
         const rwaQuery = await this.index.query({
           vector: embedding,
-          filter: { filename: filename },
+          filter: { filename },
           topK: 30,
           includeMetadata: true,
         });
-
-        if (rwaQuery.matches && rwaQuery.matches.length > 0) {
-          const rwaChunks = rwaQuery.matches.sort(
+        if (rwaQuery.matches?.length) {
+          const sorted = rwaQuery.matches.sort(
             (a, b) =>
               (a.metadata.chunk_index || 0) - (b.metadata.chunk_index || 0),
           );
-          allChunks.push(...rwaChunks);
-          logger.info(`RWA查詢 ${filename}: 找到 ${rwaChunks.length} 個chunks`);
+          allChunks.push(...sorted);
+          logger.info(`RWA查詢 ${filename}: 找到 ${sorted.length} 個chunks`);
         }
-      } catch (error) {
-        logger.warn(`RWA查詢 ${filename} 失敗: ${error.message}`);
+      } catch (e) {
+        logger.warn(`RWA查詢 ${filename} 失敗: ${e.message}`);
       }
     }
 
-    // 如果專門查詢沒找到足夠內容，進行更廣泛的檢索
     if (allChunks.length < 3) {
-      logger.info("專門 RWA 查詢結果不足，進行廣泛檢索");
       return await this.handleUnifiedQuery(embedding, null, {
         useBroadSearch: true,
         queryType: "rwa",
         question,
       });
     }
-
     return this.deduplicateAndSort(allChunks);
   }
 
