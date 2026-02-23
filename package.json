@@ -22,7 +22,9 @@
     "pm2:status": "pm2 status",
     "pm2:delete": "pm2 delete gitbook-rag-bot",
     "pm2:save": "pm2 save",
-    "pm2:startup": "pm2 startup"
+    "pm2:startup": "pm2 startup",
+    "test": "node scripts/test-questions.js",
+    "test:quiet": "node scripts/test-questions.js --quiet"
   },
   "dependencies": {
     "@pinecone-database/pinecone": "^6.1.0",

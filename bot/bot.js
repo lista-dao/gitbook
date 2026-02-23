@@ -314,10 +314,13 @@ class GitBookRAGBot {
         return this.languageService.getNoResultsMessage(detectedLang);
       }
 
+      const comparisonMeta =
+        this.retrievalService.lastComparisonMeta || undefined;
       const answer = await this.responseGenerator.generateAnswer(
         question,
         relevantChunks,
         detectedLang,
+        comparisonMeta,
       );
 
       simpleRateLimiter.logUsage(userInfo.id, question, 0);

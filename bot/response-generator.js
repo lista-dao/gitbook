@@ -1,12 +1,13 @@
 const axios = require("axios");
 const winston = require("winston");
+const { TOPIC_CONFIG } = require("../config/retrieval-topics");
 
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    winston.format.prettyPrint()
+    winston.format.prettyPrint(),
   ),
   defaultMeta: { service: "response-generator" },
   transports: [
@@ -14,7 +15,7 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple()
+        winston.format.simple(),
       ),
     }),
   ],
@@ -25,22 +26,42 @@ class ResponseGenerator {
     this.config = config;
   }
 
-  async generateAnswer(question, relevantChunks, language) {
+  async generateAnswer(question, relevantChunks, language, comparisonMeta) {
     try {
       if (!process.env.OPENAI_API_KEY) {
         throw new Error("OPENAI_API_KEY 环境变量未设置");
       }
 
-      const maxChunks = 6;
       const maxContextLength = 20000;
+      const isComparison =
+        comparisonMeta?.matchedTopics?.length >= 2 &&
+        relevantChunks.length > 20;
+      const maxChunks = isComparison ? 10 : 6;
 
-      const selectedChunks = relevantChunks
-        .sort((a, b) => b.score - a.score)
-        .slice(0, maxChunks);
+      let selectedChunks;
+      if (isComparison) {
+        const filenameToTopic = {};
+        for (const [topic, cfg] of Object.entries(TOPIC_CONFIG)) {
+          (cfg.filenames || []).forEach((f) => (filenameToTopic[f] = topic));
+        }
+        const byTopic = {};
+        for (const chunk of relevantChunks.sort((a, b) => b.score - a.score)) {
+          const topic = filenameToTopic[chunk.metadata?.filename] || "_other";
+          if (!byTopic[topic]) byTopic[topic] = [];
+          if (byTopic[topic].length < 4) byTopic[topic].push(chunk);
+        }
+        selectedChunks = Object.values(byTopic)
+          .flat()
+          .sort((a, b) => b.score - a.score)
+          .slice(0, maxChunks);
+      } else {
+        selectedChunks = relevantChunks
+          .sort((a, b) => b.score - a.score)
+          .slice(0, maxChunks);
+      }
 
       let context = "";
 
-      // 直接组合最相关的chunks
       selectedChunks.forEach((chunk, index) => {
         const content =
           chunk.metadata.chunk_content || chunk.metadata.content || "";
@@ -86,7 +107,8 @@ class ResponseGenerator {
       const { systemPrompt, userPrompt } = this.buildPrompts(
         question,
         context,
-        language
+        language,
+        comparisonMeta,
       );
 
       const response = await axios.post(
@@ -106,7 +128,7 @@ class ResponseGenerator {
             "Content-Type": "application/json",
           },
           timeout: 30000,
-        }
+        },
       );
 
       const answer = response.data.choices[0].message.content;
@@ -124,7 +146,16 @@ class ResponseGenerator {
     }
   }
 
-  buildPrompts(question, context, language) {
+  buildPrompts(question, context, language, comparisonMeta) {
+    const labels =
+      comparisonMeta?.matchedTopicLabels || comparisonMeta?.matchedTopics || [];
+    const partialCoverageNote =
+      comparisonMeta?.isPartial && labels.length > 0
+        ? language === "zh-CN"
+          ? `\n- **比较题部分覆盖**：用户可能问了多个产品/主题的对比，但当前文档仅涵盖：${labels.join("、")}。请基于现有文档回答，并明确说明「目前沒有其他相關主題的文檔信息」或类似表述，避免臆测未提供的内容。`
+          : `\n- **Partial comparison coverage**: We only have documentation for: ${labels.join(", ")}. Answer based on available docs and clearly state that we do not have documentation for other mentioned topics.`
+        : "";
+
     const systemPrompt =
       language === "zh-CN"
         ? `你是一个专业的技术文档助手。基于提供的 GitBook 文档内容，用简体中文回答用户问题。
@@ -132,7 +163,7 @@ class ResponseGenerator {
 **重要指示：**
 - **安全相关问题**：当用户询问安全措施、审计报告、防护机制时，优先提取并整理所有安全相关信息
 - **优先处理表格数据**：如果文档中包含表格，这通常是最重要的信息，必须完整提取
-- **比较类问题**：当用户询问两个或多个系统的区别时，确保从所有相关文档中提取信息并进行对比
+- **比较类问题**：当用户询问两个或多个系统的区别时，确保从所有相关文档中提取信息并进行对比${partialCoverageNote}
 - **代币相关问题**：当用户询问代币分配、排放、比例时，重点查找并引用所有相关的百分比数据
 - **完整性要求**：确保回答涵盖文档中的所有相关数据，不遗漏任何重要信息
 
@@ -160,7 +191,7 @@ class ResponseGenerator {
 - **Security-related Questions**: When users ask about security measures, audit reports, or protection mechanisms, prioritize extracting and organizing all security-related information
 - **Prioritize Table Data**: If the document contains tables, this is usually the most important information and must be extracted completely
 - **Comparison Questions**: When users ask about differences between systems (like CDP vs Lending), ensure you extract information from ALL relevant documents and provide comprehensive comparisons
-- **Token-related Questions**: When users ask about token allocation, emissions, or ratios, focus on finding and quoting all relevant percentage data
+- **Token-related Questions**: When users ask about token allocation, emissions, or ratios, focus on finding and quoting all relevant percentage data${partialCoverageNote}
 - **Completeness Requirement**: Ensure that the answer covers all relevant data in the document, without missing any important information
 
 Requirements:
@@ -246,14 +277,14 @@ Please answer in English, ensuring all relevant data is included:`;
 
     topFiles.forEach((filename) => {
       const fileChunks = relevantChunks.filter(
-        (c) => c.metadata.filename === filename
+        (c) => c.metadata.filename === filename,
       );
 
       let displayName = null;
 
       const isExternalContent = fileChunks.some(
         (chunk) =>
-          chunk.metadata.is_external_content || chunk.metadata.source_url
+          chunk.metadata.is_external_content || chunk.metadata.source_url,
       );
 
       if (isExternalContent) {
@@ -359,27 +390,34 @@ Please answer in English, ensuring all relevant data is included:`;
 
         // 检查是否为外部来源
         const fileChunks = relevantChunks.filter(
-          (c) => c.metadata.filename === filename
+          (c) => c.metadata.filename === filename,
         );
         const isExternalContent = fileChunks.some(
           (chunk) =>
-            chunk.metadata.is_external_content || chunk.metadata.source_url
+            chunk.metadata.is_external_content || chunk.metadata.source_url,
         );
 
         if (isExternalContent) {
           // 使用原始的 source_url
           const sourceUrl = fileChunks.find(
-            (chunk) => chunk.metadata.source_url
+            (chunk) => chunk.metadata.source_url,
           )?.metadata.source_url;
           if (sourceUrl) {
             return `[${displayName}](${sourceUrl})`;
           }
         }
 
-        // 内部文档使用原有逻辑
+        // 内部文档：path 做 encode 避免空格等字符在 Telegram 裡斷開連結
         const urlPath = filename.replace(/\.md$/, "");
-        const url = `https://docs.bsc.lista.org/${urlPath}`;
-        return `[${displayName}](${url.replace("/README", "")})`;
+        const pathEncoded = urlPath
+          .split("/")
+          .map((s) => encodeURIComponent(s))
+          .join("/");
+        const url = `https://docs.bsc.lista.org/${pathEncoded}`.replace(
+          "/README",
+          "",
+        );
+        return `[${displayName}](${url})`;
       });
 
     const sourceText =
