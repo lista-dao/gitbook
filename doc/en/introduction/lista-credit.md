@@ -14,7 +14,7 @@ Depending on its credit level, a wallet address can get up to a $50 credit limit
 
 Blacklisted addresses will be restricted on Lista Credit. The only way to lift this restriction is to repay all its loan plus fees in full. When a blacklisted address repays all its loans and fees, it will be released from the blacklist with half its previous credit. Two weeks later, its credit level will be fully reinstated.
 
-Currently, Lista is giving away 1,000 $LISTA every day and 10,000 $LISTA every week to all credit loan repayers. These $LISTAs will be distributed with our weekly emission.
+Every day, Lista will pick 1 Daily Lucky Star that repaid its Credit loans of at least 15 $U (plus interest) to receive 1,000 $LISTA. Every week, Lista will also pick 1 Weekly Grand Prize that repaid its Credit loans to receive 10,000 $LISTA. Candidates must not have any outstanding Credit loans at the time of our picking.
 
 ### Lending
 
