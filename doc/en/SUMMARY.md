@@ -23,6 +23,7 @@
   * [Technical Guide](introduction/liquid-staking-slisbnb/technical-guide.md)
 * [Smart Lending & Swap](introduction/smart-lending.md)
 * [RWA Markets](introduction/rwa-markets.md)
+* [Lista Credit](introduction/lista-credit.md)
 * [Lista Lending](introduction/lista-lending/README.md)
   * [Vaults](introduction/lista-lending/vaults/README.md)
     * [Lista Alpha Zone](introduction/lista-lending/vaults/lista-alpha-zone.md)
