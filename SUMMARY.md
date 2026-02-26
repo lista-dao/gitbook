@@ -1,10 +1,10 @@
-# Table of contents
+# 目录
 
 ## 引言
 
 * [概览](README.md)
 * [使用条款](introduction/terms-of-use.md)
-* [抵押债务位置 - lisUSD](introduction/collateral-debt-position-lisusd/README.md)
+* [抵押债务头寸 - lisUSD](introduction/collateral-debt-position-lisusd/README.md)
   * [抵押品](introduction/collateral-debt-position-lisusd/collateral/README.md)
     * [经典抵押选项](introduction/collateral-debt-position-lisusd/collateral/classic-collateral-options.md)
     * [Lista 创新区](introduction/collateral-debt-position-lisusd/collateral/lista-innovation-zone.md)
@@ -23,11 +23,12 @@
   * [技术指南](introduction/liquid-staking-slisbnb/technical-guide.md)
 * [智能借贷与交换](introduction/smart-lending.md)
 * [RWA 市场](introduction/rwa-markets.md)
+* [Lista 信贷](introduction/lista-credit.md)
 * [Lista 借贷](introduction/lista-lending/README.md)
   * [金库](introduction/lista-lending/vaults/README.md)
     * [Lista Alpha 区](introduction/lista-lending/vaults/lista-alpha-zone.md)
     * [Loop BNB 金库](introduction/lista-lending/vaults/loop-bnb-vault.md)
-  * [市场](yin-yan/lista-lending/shi-chang.md)
+  * [市场](introduction/lista-lending/markets.md)
   * [借款人与供应商](introduction/lista-lending/borrowers-and-suppliers.md)
   * [利率模型 (IRM)](introduction/lista-lending/interest-rate-model-irm.md)
   * [固定利率与期限贷款](introduction/lista-lending/fixed-rate-and-term-loans.md)
@@ -37,11 +38,12 @@
   * [预言机](introduction/lista-lending/oracle.md)
   * [闪电贷](introduction/lista-lending/flash-loan.md)
   * [用户流程](introduction/lista-lending/user-flow.md)
-  * [第三方金库的独立性与责任](yin-yan/lista-lending/third-party-vault-risk-management.md)
+  * [第三方金库风险管理](introduction/lista-lending/third-party-vault-risk-management.md)
 * [Binance Launchpool: slisBNBx](introduction/binance-launchpool-clisbnb/README.md)
   * [用 slisBNB 铸造 slisBNBx](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [在 Lista 借贷上铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
   * [用 BNB/slisBNB LP 代币铸造 $slisBNBx](introduction/binance-launchpool-clisbnb/minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens.md)
+  * [用智能借贷 LP 代币铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-slisbnbx-with-smart-lending-lp-tokens.md)
 * [BNB 验证器: Lista DAO](introduction/bnb-validator-lista-dao.md)
 * [路线图](introduction/roadmap.md)
 * [常见问题解答](introduction/faq.md)
@@ -61,7 +63,7 @@
     * [LP 池](governance/velista/velista-emissions/lp-pools.md)
   * [veLISTA 投票](governance/velista/gauge-voting-for-velista.md)
   * [veLISTA 贿赂市场](governance/velista/velista-bribe-market.md)
-  * [自动复合](governance/velista/auto-compounding.md)
+  * [自动复利](governance/velista/auto-compounding.md)
   * [LISTA 永久锁定 (LIP-016)](governance/velista/permanent-locking-of-lista-lip-016.md)
   * [LISTA 通缩倡议：20% 代币销毁 (LIP-021)](governance/velista/lista-deflationary-initiative-20-token-burn-lip-021.md)
   * [收入 / 成本](governance/velista/revenue-cost.md)
@@ -69,7 +71,7 @@
 
 ## 用户指南
 
-* [抵押债务位置 (lisUSD CDP)](user-guide/collateral-debt-position/README.md)
+* [抵押债务头寸 (lisUSD CDP)](user-guide/collateral-debt-position/README.md)
   * [提供抵押品](user-guide/collateral-debt-position/provide-collateral.md)
   * [借用 lisUSD](user-guide/collateral-debt-position/borrow-lisusd.md)
   * [偿还 lisUSD](user-guide/collateral-debt-position/repay-lisusd.md)
@@ -83,10 +85,10 @@
   * [从 slisBNB 兑换 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
   * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
 * [智能借贷](user-guide/smart-lending.md)
-* [Lista 借贷](yong-hu-zhi-nan/lista-jie-dai/README.md)
+* [Lista 借贷](user-guide/lista-lending/README.md)
   * [借款和还款](user-guide/lista-lending/borrowing-and-repaying.md)
-  * [Lista 借贷赚取](user-guide/lista-lending/lista-lending-earn.md)
-  * [如何创建金库：Lista 借贷金库 GUI](yong-hu-zhi-nan/lista-jie-dai/ru-he-chuang-jian-jin-ku-lista-jie-dai-jin-ku-gui.md)
+  * [Lista 借贷收益](user-guide/lista-lending/lista-lending-earn.md)
+  * [如何创建金库：Lista 借贷金库 GUI](user-guide/lista-lending/how-to-create-a-vault-lista-lending-vault-gui.md)
   * [如何手动创建金库](user-guide/lista-lending/how-to-create-a-vault.md)
   * [如何在 Lista 借贷上创建市场](user-guide/lista-lending/how-to-create-a-market.md)
 * [使用 Binance 钱包](user-guide/using-binance-web3-wallet/README.md)
@@ -100,12 +102,12 @@
   * [解锁 LISTA](user-guide/lista-velista/unlock-lista.md)
   * [领取奖励](user-guide/lista-velista/claim-rewards.md)
   * [在 Lista DAO 上质押外部 LP 代币](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
-  * [投票](user-guide/lista-velista/gauge-voting.md)
+  * [Gauge 投票](user-guide/lista-velista/gauge-voting.md)
 
 ## 安全
 
 * [审计报告](security/audit-reports.md)
-* [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
+* [Bug 赏金 (Immunefi)](security/bug-bounty-immunefi.md)
 * [Lista 借贷风险基金](security/lista-lending-risk-fund.md)
 
 ## 开发者
@@ -113,7 +115,7 @@
 * [概览](for-developer/overview.md)
 * [LISTA 治理](for-developer/lista-governance/README.md)
   * [智能合约](for-developer/lista-governance/smart-contract.md)
-* [抵押债务位置](for-developer/collateral-debt-position/README.md)
+* [抵押债务头寸](for-developer/collateral-debt-position/README.md)
   * [机制](for-developer/collateral-debt-position/mechanics.md)
   * [闪电贷](for-developer/collateral-debt-position/flash-loan.md)
   * [多预言机](for-developer/collateral-debt-position/multi-oracle.md)
@@ -129,7 +131,7 @@
 
 ***
 
-* [Lista 借贷](lista-jie-dai/README.md)
+* [Lista 借贷](lista-lending/README.md)
   * [智能合约](lista-lending/smart-contract.md)
 
 ## 合作伙伴关系
