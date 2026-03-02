@@ -44,7 +44,7 @@
   * [在 Lista 借贷上铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
   * [用 BNB/slisBNB LP 代币铸造 $slisBNBx](introduction/binance-launchpool-clisbnb/minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens.md)
   * [用智能借贷 LP 代币铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-slisbnbx-with-smart-lending-lp-tokens.md)
-* [BNB 验证器: Lista DAO](introduction/bnb-validator-lista-dao.md)
+* [BNB 验证人: Lista DAO](introduction/bnb-validator-lista-dao.md)
 * [路线图](introduction/roadmap.md)
 * [常见问题解答](introduction/faq.md)
 
@@ -61,7 +61,7 @@
   * [协议费用](governance/velista/protocol-fees.md)
   * [veLISTA 发行](governance/velista/velista-emissions/README.md)
     * [LP 池](governance/velista/velista-emissions/lp-pools.md)
-  * [veLISTA 投票](governance/velista/gauge-voting-for-velista.md)
+  * [veLISTA 表决](governance/velista/gauge-voting-for-velista.md)
   * [veLISTA 贿赂市场](governance/velista/velista-bribe-market.md)
   * [自动复利](governance/velista/auto-compounding.md)
   * [LISTA 永久锁定 (LIP-016)](governance/velista/permanent-locking-of-lista-lip-016.md)
@@ -86,7 +86,7 @@
   * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
 * [智能借贷](user-guide/smart-lending.md)
 * [Lista 借贷](user-guide/lista-lending/README.md)
-  * [借款和还款](user-guide/lista-lending/borrowing-and-repaying.md)
+  * [借款与还款](user-guide/lista-lending/borrowing-and-repaying.md)
   * [Lista 借贷收益](user-guide/lista-lending/lista-lending-earn.md)
   * [如何创建金库：Lista 借贷金库 GUI](user-guide/lista-lending/how-to-create-a-vault-lista-lending-vault-gui.md)
   * [如何手动创建金库](user-guide/lista-lending/how-to-create-a-vault.md)
@@ -102,15 +102,15 @@
   * [解锁 LISTA](user-guide/lista-velista/unlock-lista.md)
   * [领取奖励](user-guide/lista-velista/claim-rewards.md)
   * [在 Lista DAO 上质押外部 LP 代币](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
-  * [Gauge 投票](user-guide/lista-velista/gauge-voting.md)
+  * [表决](user-guide/lista-velista/gauge-voting.md)
 
 ## 安全
 
 * [审计报告](security/audit-reports.md)
-* [Bug 赏金 (Immunefi)](security/bug-bounty-immunefi.md)
+* [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
 * [Lista 借贷风险基金](security/lista-lending-risk-fund.md)
 
-## 开发者
+## 开发者专区
 
 * [概览](for-developer/overview.md)
 * [LISTA 治理](for-developer/lista-governance/README.md)
@@ -126,18 +126,16 @@
   * [智能合约](for-developer/liquid-staking-slisbnb/smart-contract.md)
 * [slisBNBx](for-developer/clisbnb/README.md)
   * [智能合约](for-developer/clisbnb/smart-contract.md)
+* [Lista 借贷](for-developer/lista-lending/README.md)
+  * [智能合约](for-developer/lista-lending/smart-contract.md)
 * [RWA](for-developer/rwa/README.md)
   * [智能合约](for-developer/rwa/smart-contract.md)
-
-***
-
-* [Lista 借贷](lista-lending/README.md)
-  * [智能合约](lista-lending/smart-contract.md)
+* [信用贷款](for-developer/credit-loans.md)
 
 ## 合作伙伴关系
 
 * [品牌套件](partnerships/brand-kit.md)
-* [我们的渠道](partnerships/our-channels.md)
+* [我们的频道](partnerships/our-channels.md)
 
 ## 免责声明
 
