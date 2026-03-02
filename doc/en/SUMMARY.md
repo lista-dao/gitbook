@@ -126,13 +126,11 @@
   * [Smart Contract](for-developer/liquid-staking-slisbnb/smart-contract.md)
 * [slisBNBx](for-developer/clisbnb/README.md)
   * [Smart Contract](for-developer/clisbnb/smart-contract.md)
+* [Lista Lending](for-developer/lista-lending/README.md)
+  * [Smart Contract](for-developer/lista-lending/smart-contract.md)
 * [RWA](for-developer/rwa/README.md)
   * [Smart Contract](for-developer/rwa/smart-contract.md)
-
-***
-
-* [Lista Lending](lista-lending/README.md)
-  * [Smart Contract](lista-lending/smart-contract.md)
+* [Credit loans](for-developer/credit-loans.md)
 
 ## Partnerships
 
