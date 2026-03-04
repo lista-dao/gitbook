@@ -36,7 +36,8 @@ class ResponseGenerator {
       const isComparison =
         comparisonMeta?.matchedTopics?.length >= 2 &&
         relevantChunks.length > 20;
-      const maxChunks = isComparison ? 10 : 6;
+      const maxChunks = 15;
+      const maxChunksPerFile = 3;
 
       let selectedChunks;
       if (isComparison) {
@@ -55,9 +56,15 @@ class ResponseGenerator {
           .sort((a, b) => b.score - a.score)
           .slice(0, maxChunks);
       } else {
-        selectedChunks = relevantChunks
-          .sort((a, b) => b.score - a.score)
-          .slice(0, maxChunks);
+        const fileCount = new Map();
+        selectedChunks = [];
+        for (const chunk of relevantChunks.sort((a, b) => b.score - a.score)) {
+          const f = chunk.metadata?.filename || "";
+          if ((fileCount.get(f) || 0) >= maxChunksPerFile) continue;
+          selectedChunks.push(chunk);
+          fileCount.set(f, (fileCount.get(f) || 0) + 1);
+          if (selectedChunks.length >= maxChunks) break;
+        }
       }
 
       let context = "";
@@ -86,6 +93,16 @@ class ResponseGenerator {
           "\n\n...[内容已截断，保留最相关信息]";
       }
 
+      const selectedFileChunks = {};
+      selectedChunks.forEach((c) => {
+        const f = c.metadata?.filename || "";
+        if (!selectedFileChunks[f])
+          selectedFileChunks[f] = { indices: [], scores: [] };
+        selectedFileChunks[f].indices.push(c.metadata?.chunk_index ?? "?");
+        selectedFileChunks[f].scores.push(
+          ((c.score || 0) * 100).toFixed(1) + "%",
+        );
+      });
       logger.info("检索策略GPT上下文:", {
         originalChunks: relevantChunks.length,
         selectedChunks: selectedChunks.length,
@@ -102,6 +119,10 @@ class ResponseGenerator {
         filesInvolved: [
           ...new Set(selectedChunks.map((c) => c.metadata.filename)),
         ].length,
+        selectedFiles: [
+          ...new Set(selectedChunks.map((c) => c.metadata.filename)),
+        ],
+        selectedFileChunks,
       });
 
       const { systemPrompt, userPrompt } = this.buildPrompts(
@@ -166,6 +187,9 @@ class ResponseGenerator {
 - **比较类问题**：当用户询问两个或多个系统的区别时，确保从所有相关文档中提取信息并进行对比${partialCoverageNote}
 - **代币相关问题**：当用户询问代币分配、排放、比例时，重点查找并引用所有相关的百分比数据
 - **完整性要求**：确保回答涵盖文档中的所有相关数据，不遗漏任何重要信息
+- **概念對應**：用戶問的是哪個具體概念（例如 slisBNBx），就只依據文檔中明確討論該概念的內容作答；若某段只提到相關但不同的概念（例如 slisBNB），不要當成對前者的回答
+- **clisBNB ＝ slisBNBx**：文檔中 **clisBNB**（或 $clisBNB）已更名為 **slisBNBx**，屬同一產品。若上下文出現「mint clisBNB」「stake LP 鑄造 clisBNB」等，回答 slisBNBx 時須正確識別並列為取得方式之一
+- **「如何獲得／取得 X」**：回答時請依上下文**逐一涵蓋文檔中提到的所有取得方式或途徑**，不要只寫其中一部分；僅將**直接取得 X 的途徑**列為編號要點，文檔中的「選項」（如指定鑄造地址、委託到其他錢包）作為該途徑的補充說明，勿單獨列為一點；編號列表**只**放「直接得到 X 的做法」，不要把「可選設定」或「取出／銷毀規則」當成其中一點
 
 要求：
 - 直接回答问题，基于提供的上下文
@@ -193,6 +217,10 @@ class ResponseGenerator {
 - **Comparison Questions**: When users ask about differences between systems (like CDP vs Lending), ensure you extract information from ALL relevant documents and provide comprehensive comparisons
 - **Token-related Questions**: When users ask about token allocation, emissions, or ratios, focus on finding and quoting all relevant percentage data${partialCoverageNote}
 - **Completeness Requirement**: Ensure that the answer covers all relevant data in the document, without missing any important information
+- **Match the concept asked**: Answer only using passages that explicitly discuss the specific concept the user asked about (e.g. slisBNBx). Do not use content that only mentions a related but different concept (e.g. slisBNB) as the answer for the former
+- **clisBNB = slisBNBx**: In the docs, **clisBNB** (or $clisBNB) was renamed to **slisBNBx**; they refer to the same product. When you see "mint clisBNB", "stake LP to mint clisBNB", etc., treat it as slisBNBx and include that path when answering how to obtain slisBNBx
+
+- **"How to obtain/get X"**: When answering, cover **all** methods or paths mentioned in the provided context; do not mention only a subset. List only **direct ways to obtain X** as numbered points; treat options (e.g. delegate to another address) as sub-notes under the relevant way, not as a separate numbered step. The numbered list must **only** contain actions that directly yield X—do not include optional settings or withdrawal/destruction rules as separate points
 
 Requirements:
 - Answer directly based on the provided context

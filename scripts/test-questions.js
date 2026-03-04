@@ -9,18 +9,19 @@ const { GitBookRAGBot } = require("../bot/bot");
 
 // 要測試的問題列表，直接改這裡後執行 npm test 或 npm run test:debug
 const questList = [
-  "RWA 是什麼",
-  "什麼是 CDP",
-  "Lista DAO 的安全措施有哪些",
-  "Lista Lending 怎麼借錢",
-  "lending 跟 smart lending 的區別",
-  "CDP 和 Lending 有什麼不同",
-  "clisBNB 是什麼",
-  "veLISTA 怎麼用",
-  "Smart Lending 怎麼用",
-  "Lista 有做過審計嗎",
-  "How does gauge voting work for veLISTA",
-  "CDP vs Smart Lending 差在哪",
+  "要怎么获得 slisBNBx 呀",
+  //   "RWA 是什麼",
+  //   "什麼是 CDP",
+  //   "Lista DAO 的安全措施有哪些",
+  //   "Lista Lending 怎麼借錢",
+  //   "lending 跟 smart lending 的區別",
+  //   "CDP 和 Lending 有什麼不同",
+  //   "clisBNB 是什麼",
+  //   "veLISTA 怎麼用",
+  //   "Smart Lending 怎麼用",
+  //   "Lista 有做過審計嗎",
+  //   "How does gauge voting work for veLISTA",
+  //   "CDP vs Smart Lending 差在哪",
 ];
 
 const SEP = "─".repeat(60);
