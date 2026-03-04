@@ -6,15 +6,6 @@ Smart Lending is Lista’s next generation lending solution where collaterals ar
 
 Traditionally, DEXs often suffer from risks like impermanent loss. Smart Lending addresses this by limiting withdrawals with imbalanced collateral ratio, maintaining pool stability.
 
-Available Smart Lending markets at launch:
-
-| Vault Market | Collateral Assets | Borrowable Assets |
-| ------------ | ----------------- | ----------------- |
-| USD1         | BTCB & solvBTC    | USD1              |
-| BNB          | BTCB & solvBTC    | BNB               |
-| USD1         | slisBNB & BNB     | USD1              |
-| BNB          | slisBNB & BNB     | BNB               |
-
 ### How It Works
 
 #### Deposit & Borrow

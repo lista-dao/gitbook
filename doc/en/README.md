@@ -19,6 +19,14 @@ Our long-term vision for Lista DAO is to establish it as a cornerstone of the De
 
 ## Core features
 
+### Lending
+
+Launched in April 2025, [Lista Lending](https://lista.org/lending/borrow?utm_source=medium\&utm_medium=text\&utm_campaign=year_report) grew into one of the largest lending markets on BNB Chain within six months. With dozens of markets and lending vaults available, Lista Lending offers first-party vaults that maximize your assets efficiency on the BNB Chain while allowing permissionless vault creation via its smart contracts from third parties. The latest chapter in Lista Lending is Lista Credit, .
+
+### Smart Lending & Swap
+
+Smart Lending is Lista’s next generation lending solution where collaterals are deposited into liquidity pools at Lista’s DEX, Smart Swap. This opens up an entirely new income stream - trading fees. If you deposit BNB/slisBNB into Smart Lending as liquid provision, you will be able to borrow USD1 or BNB against it, while earning trading fees from BNB/slisBNB trading activities on Smart Swap at the same time.
+
 ### Collateral Debt Position (CDP)
 
 Modelled after MakerDAO, our CDP system allows users to lock a variety of collateral and mint stablecoins (lisUSD) against it, providing a secure way to leverage assets.&#x20;
