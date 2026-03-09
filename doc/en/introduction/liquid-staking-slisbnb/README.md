@@ -2,11 +2,13 @@
 
 ## What is liquid staking?
 
-Liquid staking tokens represent a user's staked assets on a blockchain network. These tokens allow users to participate in Proof-of-Stake (PoS) networks without sacrificing liquidity.&#x20;
+Liquid staking is the act of staking your crypto assets on Proof-of-Stake (PoS) blockchains while retaining liquidity access. Typically, this is done by receiving a liquid staking token (LST) minted by the staking protocol.
 
-Traditionally, when a user stake their cryptocurrency in a PoS network, the assets are locked up for a certain period and cannot be used. Liquid staking introduces a tokenized version of these staked assets that users can trade, sell, or use in decentralized finance (DeFi) applications while they're still staked.&#x20;
+Traditionally, when a user stake their cryptocurrency in a PoS network, the assets are locked up for a certain period and cannot be unstaked or transferred. Liquid staking introduces a tokenized version of these staked assets that can be traded, sold, or used in decentralized finance (DeFi) applications while they're still staked.&#x20;
 
 These liquid staking tokens are usually issued at a 1:1 ratio to the staked assets and earn rewards in the same way as the original staked assets. Therefore, they allow users to simultaneously secure the network, earn staking rewards, and have the flexibility to participate in other parts of the crypto economy.
+
+slisBNB is Lista DAO's LST for staking BNB and the key to unlock the entire Lista ecosystem.
 
 ## Benefits of Liquid staking
 

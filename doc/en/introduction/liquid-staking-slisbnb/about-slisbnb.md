@@ -4,14 +4,13 @@ slisBNB is the native yield bearing and liquid staking token for BNB, built on L
 
 slisBNB currently holds the highest Total Value Locked (TVL) among liquid staking tokens for BNB in the market, and it is live on both BNB Smart Chain, and Ethereum network.
 
-## Partnerships and integrations
+## Use Cases
 
-To enhance the utility of slisBNB, we have integrated it into multiple other DeFi protocols.
+Holding slisBNB gives you access to:
 
-Firstly, users can deposit slisBNB as a form of collateral on Lista DAO's platform to borrow lisUSD.
+* **Borrowing**: Depositing slisBNB on Lista allows you to borrow BNB, lisUSD, and many other assets. Your collateral - slisBNB - will keep earning staking rewards while you can use the borrowed assets for other purposes.
+* **Trading/Liquidity Provision**: Most LSTs can be traded on decentralized exchanges (DEXs). You get access to liquidity any time you want without the unstaking process that usually takes days. You can also deposit your LSTs into liquidity pools for these DEXs to earn trading fees. At Smart Lending, slisBNB can be used both as collateral and liquidity provision, earning two income streams at the same time.
+* **Instant Staking/Unstaking**: Since LSTs can be traded, anyone can swap their BNB for slisBNB to instantly stake their BNB, or the other way around for instant unstaking. This skips the unstaking period but may cost you slightly more than the usual process.
+* **Binance Launchpool Rewards**: Depositing slisBNB into Lista Lending or Collateral Debt Positions (CDP), providing BNB/slisBNB liquidity on Lista Smart Lending or ThenaFi will allow you to mint slisBNBx, a non-transferable token that grants you access to Binance Launchpool airdrops.
 
-Secondly, the integration with [Tranchess’s](https://tranchess.com/) architecture introduces four new derivatives of slisBNB, each serving a unique purpose within the ecosystem. These derivatives offer a wide range of investment opportunities tailored to different risk appetites and strategies.
-
-Additionally, we have several slisBNB liquidity pools available on DEXes like [Thena](https://thena.fi/) Finance and [PancakeSwap](https://pancakeswap.finance/), where users can easily swap into other assets.
-
-Last but not least, through the integration with [Karak](https://karak.network/), a universal staking layer, slisBNB gains the ability to be restaked. This feature allows slisBNB to secure diverse trust networks and applications beyond the BNB Smart Chain, significantly expanding its usability and utility.
+Lista will continue to add more utility to slisBNB and provide more options for slisBNB holders.
