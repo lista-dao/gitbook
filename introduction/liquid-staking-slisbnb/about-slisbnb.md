@@ -1,17 +1,16 @@
-# 关于 slisBNB
+# 关于slisBNB
 
-**slisBNB** 是基于 **Lista DAO** 构建的 BNB 原生收益型及流动质押代币。slisBNB 随着 BNB 的质押年化收益率（APR）而增值，使用户在被动赚取质押奖励的同时，能够在不同的 DeFi 平台上自由赚取额外收益。
+slisBNB是基于Lista DAO构建的BNB的原生产生收益和流动性质押代币。slisBNB按照BNB的质押年化收益率（APR）增值，使用户在不同的DeFi平台上赚取额外收益的同时，还能被动地获得质押奖励。
 
-目前，slisBNB 在市场上所有针对 BNB 的流动质押代币中拥有最高的总锁定价值（TVL），并且已在 **BNB Smart Chain** 和 **Ethereum** 网络上线。
+slisBNB目前在市场上是BNB流动性质押代币中锁定总价值（TVL）最高的，它已在BNB智能链和以太坊网络上线。
 
-#### 合作伙伴与集成
+## 使用案例
 
-为了提升 **slisBNB** 的实用性，我们已将其集成到多个其他 DeFi 协议中。
+持有slisBNB可以让你：
 
-首先，用户可以在 **Lista DAO** 平台上将 **slisBNB** 作为抵押品存入，以借入 **lisUSD**。
+* **借贷**：在Lista上存入slisBNB可以借出BNB、lisUSD以及许多其他资产。你的抵押品 - slisBNB - 将继续获得质押奖励，同时你可以将借出的资产用于其他目的。
+* **交易/提供流动性**：大多数LST可以在去中心化交易所（DEXs）上交易。你可以随时获取流动性，无需经历通常需要几天的解质押过程。你还可以将你的LST存入这些DEX的流动性池中，以赚取交易费。在Smart Lending中，slisBNB既可以用作抵押品也可以用于提供流动性，同时赚取两种收入。
+* **即时质押/解质押**：由于LST可以交易，任何人都可以将他们的BNB换成slisBNB来即时质押他们的BNB，或者反过来进行即时解质押。这跳过了解质押期，但可能比通常的过程稍微贵一些。
+* **币安Launchpool奖励**：将slisBNB存入Lista Lending或抵押债务头寸（CDP），在Lista Smart Lending或ThenaFi上提供BNB/slisBNB流动性，将允许你铸造slisBNBx，这是一个不可转让的代币，它让你能够获得币安Launchpool空投。
 
-其次，与 **Tranchess** 架构的集成引入了四种 **slisBNB** 的新衍生品，每种衍生品在生态系统中承担独特的功能。这些衍生品为不同风险偏好和策略的投资者提供了广泛的投资机会。
-
-此外，我们在 **Thena Finance** 和 **PancakeSwap** 等去中心化交易所（DEX）上提供了多个 **slisBNB** 流动性池，用户可以轻松地将其交换为其他资产。
-
-最后，通过与通用质押层 **Karak** 的集成，**slisBNB** 获得了重新质押的能力。此功能使 **slisBNB** 能够在 **BNB Smart Chain** 之外的多样化信任网络和应用中得到安全保障，显著扩展了其可用性和实用性。
+Lista将继续为slisBNB增加更多实用性，并为slisBNB持有者提供更多选择。
