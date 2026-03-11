@@ -42,7 +42,31 @@ Lista Lending is a decentralized lending protocol that allows users to borrow an
 | BoundValidator                                              | 0x3127b40bd2E591BFa088CA98b92ED9a41dD370a1 |
 | ETHProvider                                                 | 0xFe34BF713F3C2499026cdFA5af43eb22AA2d1aDb |
 
-Smart Lending
+### Lending Brokers (BSC)
+
+| LendingBroker (WBNB/LisUSD)                    | WBNB/LisUSD                    | 86%   | 100k | 0x2a679d85b2c64c6e72dc6d98c63f4ddbdae44dda0be4f93a87391192023f733b | 0x6BAF9648cffB7C9c4cB7275000a27b9a7dBD59Bc |
+| ---------------------------------------------- | ------------------------------ | ----- | ---- | ------------------------------------------------------------------ | ------------------------------------------ |
+| LendingBroker (slisBNB/LisUSD)                 | slisBNB/LisUSD                 | 86%   | 100k | 0x078d06a2c852f94c05f291b7288e5120d104ef0e9aa27632df4cb0b6f03cefdc | 0x0cffd57f93190892ac2dB8A01596304268Bc2014 |
+| LendingBroker (BTCB/LisUSD)                    | BTCB/LisUSD                    | 86%   | 100k | 0xab3827ad876b82fb5af9af8bf3f0bbc8a01e8602389053a71513db72c5f129f7 | 0x30DDB3A48863E4897AaCDD5D202E23270d75BaE1 |
+| LendingBroker (PT-sUSDe 09APR2026 Plasma/USD1) | PT-sUSDe 09APR2026 Plasma/USD1 | 94.5% | 10M  | 0xc1264ae84203b5660478bba5cfe15d9f579aa98402fb073bff65c31040f12f1a | 0xf7c4701e90867f33745F73d5edF2143f0DE03f9d |
+| LendingBroker (PT-sUSDe 09APR2026 Plasma/U)    | PT-sUSDe 09APR2026 Plasma/U    | 94.5% | 5M   | 0x1fed91636b77dab38fd796e21580718aa51e8cf89e442a0268de786adc544596 | 0xFA25B61ac2c31E82DDE626EE2704700646a2C6E3 |
+| LendingBroker (PT-sUSDe 09APR2026 Plasma/USDT) | PT-sUSDe 09APR2026 Plasma/USDT | 94.5% | 1M   | 0xca1432913a86b41eb10c66de79fe390b877c811a113755e9efb10f38de862450 | 0xa26488154D61f8977153915510564ce47a5072dD |
+
+
+
+| Contract Name                  | Address                                    |
+| ------------------------------ | ------------------------------------------ |
+| BrokerInterestRelayer (lisUSD) | 0xcb2590F10728e3ffc725d7ECf88EcFd0d92c9d6a |
+| BrokerInterestRelayer (USD1)   | 0x35720fcA79F33E3817479E0c6abFaD38ea1a9DaC |
+| BrokerInterestRelayer (U)      | 0x9348923C2f0AD218A8736Ab28cfAe7D93027E73f |
+| BrokerInterestRelayer (USDT)   | 0x2A119f506ce71cF427D5ae88540fAec580840587 |
+| Rate Calculator                | 0xF81A3067ACF683B7f2f40a22bCF17c8310be2330 |
+| BrokerLiquidator               | 0x3AA647a1e902833b61E503DbBFbc58992daa4868 |
+| LisUSD Vault                   | 0xE03D86e5Baa3509AC4A059A41737bAa8169B6529 |
+
+
+
+### Smart Lending
 
 | Contract                                          | Address                                    |
 | ------------------------------------------------- | ------------------------------------------ |
