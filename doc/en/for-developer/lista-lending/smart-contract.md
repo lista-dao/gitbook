@@ -44,8 +44,9 @@ Lista Lending is a decentralized lending protocol that allows users to borrow an
 
 ### Lending Brokers (BSC)
 
-| LendingBroker (WBNB/LisUSD)                    | WBNB/LisUSD                    | 86%   | 100k | 0x2a679d85b2c64c6e72dc6d98c63f4ddbdae44dda0be4f93a87391192023f733b | 0x6BAF9648cffB7C9c4cB7275000a27b9a7dBD59Bc |
+| Contract                                       | Broker                         | LLTV  | Cap  | Market Id                                                          | Address                                    |
 | ---------------------------------------------- | ------------------------------ | ----- | ---- | ------------------------------------------------------------------ | ------------------------------------------ |
+| LendingBroker (WBNB/LisUSD)                    | WBNB/LisUSD                    | 86%   | 100k | 0x2a679d85b2c64c6e72dc6d98c63f4ddbdae44dda0be4f93a87391192023f733b | 0x6BAF9648cffB7C9c4cB7275000a27b9a7dBD59Bc |
 | LendingBroker (slisBNB/LisUSD)                 | slisBNB/LisUSD                 | 86%   | 100k | 0x078d06a2c852f94c05f291b7288e5120d104ef0e9aa27632df4cb0b6f03cefdc | 0x0cffd57f93190892ac2dB8A01596304268Bc2014 |
 | LendingBroker (BTCB/LisUSD)                    | BTCB/LisUSD                    | 86%   | 100k | 0xab3827ad876b82fb5af9af8bf3f0bbc8a01e8602389053a71513db72c5f129f7 | 0x30DDB3A48863E4897AaCDD5D202E23270d75BaE1 |
 | LendingBroker (PT-sUSDe 09APR2026 Plasma/USD1) | PT-sUSDe 09APR2026 Plasma/USD1 | 94.5% | 10M  | 0xc1264ae84203b5660478bba5cfe15d9f579aa98402fb073bff65c31040f12f1a | 0xf7c4701e90867f33745F73d5edF2143f0DE03f9d |
@@ -54,7 +55,7 @@ Lista Lending is a decentralized lending protocol that allows users to borrow an
 
 
 
-| Contract Name                  | Address                                    |
+| Contract                       | Address                                    |
 | ------------------------------ | ------------------------------------------ |
 | BrokerInterestRelayer (lisUSD) | 0xcb2590F10728e3ffc725d7ECf88EcFd0d92c9d6a |
 | BrokerInterestRelayer (USD1)   | 0x35720fcA79F33E3817479E0c6abFaD38ea1a9DaC |
