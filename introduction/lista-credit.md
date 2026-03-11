@@ -10,7 +10,7 @@ Every month, Lista will reassess all eligible wallet addresses and give them a n
 
 ### Borrowing & Repaying
 
-Depending on its credit level, a wallet address can get up to a $50 credit limit. Lista does not charge interest for Credit borrowing but the moment a loan is taken, a fixed origination fee (3%) will be charged. Loan plus its origination fee must be repaid within 14 days. Overdue loans have 3 more days to be repaid. If not, a fixed fine (3%) will be charged and the corresponding wallet address will be blacklisted.
+Depending on its credit level, a wallet address can get up to a 50 $U ($50) credit limit. Lista does not charge interest for Credit borrowing but the moment a loan is taken, a fixed origination fee (3%) will be charged. Credit loans plus their origination fees must be repaid within 14 days. Overdue loans will get an extension of 3 days. If it is still not fully repaid after the extension, a fixed fine (3%) will be charged and the corresponding wallet address will be blacklisted.
 
 Blacklisted addresses will be restricted on Lista Credit. The only way to lift this restriction is to repay all its loan plus fees in full. When a blacklisted address repays all its loans and fees, it will be released from the blacklist with half its previous credit. Two weeks later, its credit level will be fully reinstated.
 
