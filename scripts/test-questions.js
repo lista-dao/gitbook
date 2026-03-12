@@ -6,23 +6,7 @@
 require("dotenv").config();
 const fs = require("fs").promises;
 const { GitBookRAGBot } = require("../bot/bot");
-
-// 要測試的問題列表，直接改這裡後執行 npm test 或 npm run test:debug
-const questList = [
-  "要怎么获得 slisBNBx 呀",
-  //   "RWA 是什麼",
-  //   "什麼是 CDP",
-  //   "Lista DAO 的安全措施有哪些",
-  //   "Lista Lending 怎麼借錢",
-  //   "lending 跟 smart lending 的區別",
-  //   "CDP 和 Lending 有什麼不同",
-  //   "clisBNB 是什麼",
-  //   "veLISTA 怎麼用",
-  //   "Smart Lending 怎麼用",
-  //   "Lista 有做過審計嗎",
-  //   "How does gauge voting work for veLISTA",
-  //   "CDP vs Smart Lending 差在哪",
-];
+const { questList } = require("./test-questions.data");
 
 const SEP = "─".repeat(60);
 const SEP2 = "═".repeat(60);
@@ -39,11 +23,54 @@ function formatChunkSummary(chunks) {
   return { count: chunks.length, files, topScores };
 }
 
-async function runOne(bot, question, index, total, quiet) {
+function normalizeText(text) {
+  return (text || "").toLowerCase();
+}
+
+function evaluateAnswer(answer, checks) {
+  if (!checks) return { checked: false, pass: true };
+
+  const normalized = normalizeText(answer);
+  const mustInclude = checks.mustInclude || [];
+  const mustIncludeAny = checks.mustIncludeAny || [];
+  const mustNotInclude = checks.mustNotInclude || [];
+
+  const missingRequired = mustInclude.filter(
+    (token) => !normalized.includes(normalizeText(token)),
+  );
+  const missingAnyGroups = mustIncludeAny.filter(
+    (group) =>
+      !group.some((token) => normalized.includes(normalizeText(token))),
+  );
+  const forbiddenMatched = mustNotInclude.filter((token) =>
+    normalized.includes(normalizeText(token)),
+  );
+
+  const pass =
+    missingRequired.length === 0 &&
+    missingAnyGroups.length === 0 &&
+    forbiddenMatched.length === 0;
+
+  return {
+    checked: true,
+    pass,
+    missingRequired,
+    missingAnyGroups,
+    forbiddenMatched,
+  };
+}
+
+async function runOne(bot, questionItem, index, total, quiet) {
+  const question =
+    typeof questionItem === "string" ? questionItem : questionItem.question;
+  const topic = typeof questionItem === "string" ? "" : questionItem.topic || "";
+  const checks = typeof questionItem === "string" ? null : questionItem.checks;
+
   const start = Date.now();
   if (!quiet) {
     console.log(`\n${SEP2}`);
     console.log(`【問題 ${index}/${total}】 ${question}`);
+    if (topic) console.log(`  Topic: ${topic}`);
     console.log(SEP);
   }
 
@@ -94,11 +121,39 @@ async function runOne(bot, question, index, total, quiet) {
       if (!quiet) console.log(`\n【回答】\n${answer}`);
     }
 
+    const evaluation = evaluateAnswer(answer, checks);
+    if (evaluation.checked && !quiet) {
+      if (evaluation.pass) {
+        console.log(`\n  檢查: ✅ PASS`);
+      } else {
+        console.log(`\n  檢查: ❌ FAIL`);
+        if (evaluation.missingRequired.length) {
+          console.log(`    缺少關鍵字: ${evaluation.missingRequired.join(", ")}`);
+        }
+        if (evaluation.missingAnyGroups.length) {
+          const groups = evaluation.missingAnyGroups
+            .map((g) => `[${g.join(" / ")}]`)
+            .join(", ");
+          console.log(`    缺少任一組關鍵字: ${groups}`);
+        }
+        if (evaluation.forbiddenMatched.length) {
+          console.log(`    命中禁用關鍵字: ${evaluation.forbiddenMatched.join(", ")}`);
+        }
+      }
+    }
+
     const elapsed = Date.now() - start;
     if (!quiet)
       console.log(`\n  耗時: ${elapsed}ms | 回答長度: ${answer.length}`);
-    else console.log(`[${index}/${total}] ${elapsed}ms | ${answer.length}字`);
-    return { ok: true, answer, elapsed };
+    else {
+      const checkSummary = evaluation.checked
+        ? evaluation.pass
+          ? " | ✅"
+          : " | ❌"
+        : "";
+      console.log(`[${index}/${total}] ${elapsed}ms | ${answer.length}字${checkSummary}`);
+    }
+    return { ok: true, answer, elapsed, evaluation };
   } catch (err) {
     if (!quiet) console.error(`  ❌ 錯誤: ${err.message}`);
     else console.log(`[${index}/${total}] ❌ ${err.message}`);
@@ -173,8 +228,19 @@ async function main() {
 
   if (!quiet) console.log(`\n🎯 除錯測試：共 ${questions.length} 題\n`);
 
+  const results = [];
   for (let i = 0; i < questions.length; i++) {
-    await runOne(bot, questions[i], i + 1, questions.length, quiet);
+    results.push(await runOne(bot, questions[i], i + 1, questions.length, quiet));
+  }
+
+  const checked = results.filter((r) => r?.evaluation?.checked);
+  if (checked.length > 0) {
+    const passed = checked.filter((r) => r.evaluation.pass).length;
+    const failed = checked.length - passed;
+    console.log(`\n✅ 測試檢查總結: ${passed}/${checked.length} 通過, ${failed} 失敗`);
+    if (failed > 0) {
+      process.exitCode = 1;
+    }
   }
 
   if (!quiet) console.log(`\n${SEP2}\n🎯 結束\n`);

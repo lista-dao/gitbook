@@ -43,7 +43,7 @@ Starting your liquid staking journey is as easy as it gets. Follow [our guide on
 
 slisBNB is the key to the entire Lista ecosystem:
 
-*   **Borrowing**: Depositing slisBNB on Lista allows you to borrow BNB, lisUSD, and many other assets. Your collateral will generate interest for you while you can use the borrowed assets for other purposes. Or, you can just deposit your slisBNB without taking a loan and enjoy enhanced yield on your LST.
+*   **Borrowing**: Depositing slisBNB on Lista allows you to borrow BNB, lisUSD, and many other assets. Your collateral will keep earning staking rewards while you can use the borrowed assets for other purposes.
 *   **Trading/Liquidity Provision**: Most LSTs can be traded on decentralized exchanges (DEXs). You get access to liquidity any time you want without the unstaking process that usually takes days. You can also deposit your LSTs into liquidity pools for these DEXs to earn trading fees. At Smart Lending, slisBNB can be used both as collateral and liquidity provision, earning two income streams at the same time.
 *   **Instant Staking/Unstaking**: Since LSTs can be traded, anyone can swap their BNB for slisBNB to instantly stake their BNB, or the other way around for instant unstaking. This skips the unstaking period but may cost you slightly more than the usual process.
 *   **Binance Launchpool Rewards**: Depositing slisBNB into Lista Lending or Collateral Debt Positions (CDP) and providing BNB/slisBNB liquidity on Lista Smart Lending or ThenaFi will allow you to mint slisBNBx, a non-transferable token that grants you access to Binance Launchpool airdrops.

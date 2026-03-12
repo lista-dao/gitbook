@@ -13,11 +13,11 @@ Lista DAO operates a sophisticated liquidation system designed to maintain the s
 
 ### About Liquidation
 
-Liquidation is the process of selling a certain amount of assets in exchange for liquidity. When a position’s loan-to-value (LTV) ratio falls below a certain threshold — typically due to price fluctuations in the collateral and/or increasing debt from accumulated interest — the position becomes eligible for (forced) liquidation.
+Liquidation is the process of selling a certain amount of assets in exchange for liquidity. When a position’s loan-to-value (LTV) ratio rises above a certain threshold — typically due to price fluctuations in the collateral and/or increasing debt from accumulated interest — the position becomes eligible for (forced) liquidation.
 
 ### How Liquidation Works on Lista Smart Lending
 
-For every vault, Lista will actively monitor the price of its collateral by calculating its value every 5 minutes or every 1% in price movement. Whenever a position’s LTV falls below the liquidation loan-to-value (LLTV) ratio, Lista’s smart contract will take over a portion of the position and try to liquidate it.
+For every vault, Lista will actively monitor the price of its collateral by calculating its value every 5 minutes or every 1% in price movement. Whenever a position’s LTV rises above the liquidation loan-to-value (LLTV) ratio, Lista’s smart contract will take over a portion of the position and try to liquidate it.
 
 In Smart Lending, collateral assets are also deposited into a liquidity pool on Lista’s decentralized exchange. Thus, when a liquidation is triggered, a certain portion of its corresponding LP will be withdrawn from the pool. Then, one collateral asset with the lower price will be swapped into the other and, eventually, swapped into the loan asset to repay the loan.
 

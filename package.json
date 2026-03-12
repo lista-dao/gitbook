@@ -24,7 +24,8 @@
     "pm2:save": "pm2 save",
     "pm2:startup": "pm2 startup",
     "test": "node scripts/test-questions.js",
-    "test:quiet": "node scripts/test-questions.js --quiet"
+    "test:quiet": "node scripts/test-questions.js --quiet",
+    "validate:topics": "node scripts/validate-topics.js"
   },
   "dependencies": {
     "@pinecone-database/pinecone": "^6.1.0",
