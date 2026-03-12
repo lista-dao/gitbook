@@ -125,8 +125,13 @@
   * [Cross-Chain Bridge](for-developer/liquid-staking-slisbnb/cross-chain-bridge.md)
   * [Smart Contract](for-developer/liquid-staking-slisbnb/smart-contract.md)
 * [slisBNBx](for-developer/clisbnb/README.md)
+  * [Token Lifecycle](for-developer/clisbnb/token-lifecycle.md)
+  * [Minting Ratio Logic](for-developer/clisbnb/minting-ratio-logic.md)
+  * [Delegation](for-developer/clisbnb/delegation.md)
   * [Smart Contract](for-developer/clisbnb/smart-contract.md)
 * [Lista Lending](for-developer/lista-lending/README.md)
+  * [Protocol Extensions](for-developer/lista-lending/protocol-extensions.md)
+  * [Integration Patterns](for-developer/lista-lending/integration-patterns.md)
   * [Smart Contract](for-developer/lista-lending/smart-contract.md)
 * [Lista Platform Services](for-developer/services/README.md)
   * [Position Data Maintenance](for-developer/services/position-data-maintenance.md)
@@ -138,8 +143,13 @@
     * [Market](for-developer/services/lending-api/market.md)
     * [Position, Liquidation, Emission](for-developer/services/lending-api/position-liquidation-emission.md)
 * [RWA](for-developer/rwa/README.md)
+  * [User Operations](for-developer/rwa/user-operations.md)
+  * [Bot Operations](for-developer/rwa/bot-operations.md)
   * [Smart Contract](for-developer/rwa/smart-contract.md)
-* [Credit loans](for-developer/credit-loans.md)
+* [Credit Loans](for-developer/credit-loans/README.md)
+  * [Loan Lifecycle](for-developer/credit-loans/loan-lifecycle.md)
+  * [Bad Debt Handling](for-developer/credit-loans/bad-debt-handling.md)
+  * [Smart Contract](for-developer/credit-loans/smart-contract.md)
 
 ## Partnerships
 
