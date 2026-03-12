@@ -60,6 +60,18 @@ jobs:
         run: |
           echo "開始同步 ${{ github.ref_name }} 分支"
           node scripts/sync.js
+
+      - name: Validate topic paths
+        run: node scripts/validate-topics.js
+
+      - name: Detect unclassified topic files
+        env:
+          TOPIC_CLASSIFICATION_STRICT: "true"
+        run: |
+          node scripts/check-topic-classification.js 2>&1 | tee /tmp/topic-classification.log
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🧭 Topic 分類檢查" >> $GITHUB_STEP_SUMMARY
+          cat /tmp/topic-classification.log >> $GITHUB_STEP_SUMMARY
           
 
       - name: Check for changes
