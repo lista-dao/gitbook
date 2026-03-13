@@ -8,7 +8,7 @@ Lista Lending’s core revolves around a vault-based system, pooling liquidity a
 
 ## Key Concepts
 
-### Collateralization
+### Collateral
 
 Borrowers must deposit supported crypto assets as collateral into a market of their choosing to unlock a borrowing capacity proportional to the collateral’s value from the market.
 
