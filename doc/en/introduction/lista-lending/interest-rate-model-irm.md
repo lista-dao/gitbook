@@ -6,6 +6,8 @@ At Lista Lending, interest rate is determined by our Interest Rate Model (IRM) b
 
 Unlike traditional lending protocols with static rates or single-pool designs, Lista Lending applies the IRM across multiple markets within each vault, offering curators flexibility to refine strategies while ensuring competitive rates for borrowers and lenders.
 
+Lista's IRM adjusts borrow rate based on utilization rate progressively instead of immediately. This avoids drastic fluctuations of interest rates and other risks associated with it while maintaining its influence over the market. Borrowers will have to pay higher interest at higher utilization rate, but not enough to cause unexpected liquidations due to sudden interest rate spikes. Lenders will still be able to receive a higher interest rate over time instead of a few short upturns here and there.
+
 #### How It works
 
 Lista's IRM powers the entire Lista Lending by dictating the instantaneous borrow rate based on the utilization rate. It targets a 90% utilization rate to balance efficiency and liquidity. This IRM operates through two complementary mechanisms:
@@ -21,6 +23,8 @@ When the utilization rate goes below 90%, the borrow rate will go down linearly 
 
 2. **Adaptive Mechanism**\
    This mechanism shifts the entire interest curve by adjusting $$r_{90\%}$$ over time based on the current utilization rate $$u$$:
+
+&#x20;$$u  = \frac{Total Borrowed Asset}{Total Supplied Asset} \times\ 100\%$$
 
 * When $$u > 90\%$$: Increase $$r_{90\%}$$ and shift the curve upward to encourage repayments.
 * When $$u < 90\%$$: Decrease $$r_{90\%}$$ and shift the curve downward to incentivize borrowing.
@@ -48,7 +52,7 @@ The Annualized Percentage Yield (APY) standardizes interest rates over a year, a
 * Borrow APY: The annualized cost borrowers pay, derived from our IRM’s instantaneous rate. It reflects the yearly expense of borrowing from a vault’s market.
 * Supply APY: The annualized return lenders earn, computed as a weighted average across all markets a vault allocates to, adjusted for utilization and fees.
 
-**Borrow APY Calculation**\
+**Borrow APY**\
 The Borrow APY compounds the per-second borrow rate over a year:
 
 $$borrow APY= e^{borrowRate \times sedondsPerYear} - 1$$
@@ -58,18 +62,18 @@ Where:
 * borrowRate: The rate set by the IRM for a specific market.
 * secondsPerYear: 31,536,000 (seconds in a year).
 
-**Supply APY Calculation**\
+**Supply APY**\
 The Supply APY is a vault-level weighted average, combining each market’s APY with its allocation proportion:
 
 1. Weights: Retrieve the vault’s liquidity distribution from its Withdrawal Queue (e.g., 50% slisBNB/BNB, 30% USD1/BNB).
 2. Calculate each market’s supply APY:\
-   $$supplyAPY = borrowAPY \times utilizationRate \times (1 - fee)$$
+   $$supplyAPY = borrowAPY \times u \times (1 - fee)$$
 3. Weighted Average:\
    $$vaultsupplyAPY= \sum supplyAPY \times\ market Weight$$
 
 Where:
 
-* $$utilizationRate = \frac{Total Borrowed Asset}{Total Supplied Asset} \times\ 100\%$$
+* $$u$$ is the current utilization rate: $$u  = \frac{Total Borrowed Asset}{Total Supplied Asset} \times\ 100\%$$
 * Fee Includes protocol fees (0-25%, set by Lista DAO) and vault fees (up to 50%, set by curators); currently defaults to 0% unless specified.
 
 **Integration with Vaults**
