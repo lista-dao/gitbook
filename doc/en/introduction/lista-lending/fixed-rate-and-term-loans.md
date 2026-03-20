@@ -1,6 +1,6 @@
 # Fixed Rate & Term Loans
 
-There are 2 interest rate options to choose from when borrowing at Lista: flexible and fixed.
+There are 2 interest rate and term options to choose from when borrowing at Lista: flexible and fixed.
 
 Flexible interest rate works just like other lending products at Lista DAO where borrowers can borrow and repay their loans any time and the interest rate fluctuates depending on the utilization rate, as dictated by our [Interest Rate Model](https://docs.bsc.lista.org/introduction/lista-lending/interest-rate-model-irm).
 
@@ -25,5 +25,3 @@ This means Alice will be paying a 2.74 lisUSD interest, 1.48 lisUSD penalty, and
 Thus, at any time during the term, the minimum amount for loan repayment must be greater than the interest accrued and the penalty because the interest and penalty must be repaid first.
 
 When its term expires, the fixed term loan will turn into a flexible loan.
-
-<br>
