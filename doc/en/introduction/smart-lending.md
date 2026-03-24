@@ -32,7 +32,7 @@ Sometimes, liquidity positions can not be fully withdrawn (leaving < $0.01 in th
 
 Just like other products on Lista Lending, Smart Lending loans face the risk of liquidation. Whenever the loan to value ratio (LTV) goes above a certain threshold, Lista will take over the position and start the liquidation process. The corresponding amount of collateral will be withdrawn from the pool and swapped into other assets to cover the loan.
 
-Please refer to our [liquidation documentation](https://docs.bsc.lista.org/introduction/lista-lending/liquidation) and [this article](https://medium.com/@ListaDAO/everything-you-need-to-know-about-liquidation-on-lista-smart-lending-dbb339994f30) for more details.
+Please refer to our [liquidation documentation](https://docs.bsc.lista.org/introduction/lista-lending/liquidation) and [this article](https://blog.lista.org/everything-you-need-to-know-about-liquidation-on-lista-smart-lending) for more details.
 
 ## Smart Swap
 

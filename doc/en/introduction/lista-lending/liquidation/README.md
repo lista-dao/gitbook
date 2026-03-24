@@ -1,144 +1,92 @@
 # Liquidation
 
-Liquidation in Lista Lending is a vital risk management tool that safeguards lenders’ capital by ensuring borrowers maintain sufficient collateralization. Mirroring Morpho’s design, Lista Lending implements two liquidation approaches on BNB Chain:
+Liquidation at Lista Lending is a vital risk management tool that safeguards lenders’ capital by ensuring borrowers maintain sufficient collateralization. This mechanism enables full or partial liquidation of a borrower’s position when their Loan-To-Value (LTV) exceeds the market’s Liquidation Loan-To-Value (LLTV) threshold, ensuring market stability while supporting its vault-centric, permissionless lending model.
 
-* Standard Liquidation: A core protocol feature enabling full or partial liquidation of a borrower’s position when their Loan-To-Value (LTV) exceeds the market’s Liquidation Loan-To-Value (LLTV) threshold.
-* Pre-Liquidation: An optional, opt-in mechanism via an external contract, allowing smaller, incremental liquidations before reaching the standard threshold, providing borrowers with a safety buffer.
+### Understanding Loan-To-Value (LTV) Ratio
 
-Integrated into Lista Lending’s upgradeable vault system, these mechanisms ensure market stability while supporting its vault-centric, permissionless lending model.
-
-#### Understanding Loan-To-Value (LTV)
-
-The Loan-To-Value (LTV) ratio is a critical metric assessing a position’s risk by comparing debt to collateral value.
+The Loan-To-Value (LTV) ratio is the ratio between the value of your loan and your collateral. It is a critical metric assessing a position’s risk by comparing debt to collateral value.
 
 **How to Calculate LTV**
 
-The LTV is calculated as:\
-LTV = (Borrowed Amount × Oracle Price) / (Collateral Amount × Oracle Price Scale)
+$$
+LTV = \frac{Loan\ Asset\ Amount}{Collateral\ Asset\ Amount\times \frac{Oracle\ Price}{Oracle\ Price\ Scale}}\times100\%
+$$
 
 Where:
 
-* Borrowed Amount: The total borrowed assets (e.g., lisUSD).
-* Oracle Price: The price from the market’s oracle (e.g., Chainlink).
-* Collateral Amount: The supplied collateral (e.g., pt-clisBNB).
-* Oracle Price Scale: 1e36 (standard scaling factor).
+Oracle Price is represented in the ratio between the prices of collateral asset and loan asset.
 
-#### Standard Liquidation
+Oracle Price Scale is $$10^{36}$$ and is used for price normalization.
 
-Standard liquidation is Lista Lending’s primary defense against borrower defaults, embedded in the protocol’s core contracts.
+Example:
 
-**When Is a Position Liquidatable?**
+At Lista's BNB/USDT market, if you deposit 1 BNB and borrow out 500 USDT.
 
-A position becomes liquidatable when LTV > LLTV
+At a certain time, the price of BNB/USDT Lista fetches from the oracles is $$8\times10^{38}$$. Divide this number by $$10^{36}$$, we will get the normalized price of BNB: 800 USDT.
 
-This occurs due to:
+Then the LTV of this loan is $$\frac{500}{800}\times 100\% = 62.5\%$$
 
-* A drop in collateral value (e.g., pt-clisBNB price falls).
+### Standard Liquidation
+
+Standard liquidation is Lista Lending’s primary defense against borrower defaults, embedded in the protocol’s core contracts. Each market comes with its own liquidation loan-to-value (LLTV) ratio, an arbitraty number used as trigger for liquidation.
+
+#### **When Is a Position Liquidatable?**
+
+A position becomes liquidatable when its LTV exceeds the LLTV of its corresponding market.
+
+This may occurs due to:
+
+* A drop in collateral value (e.g., BTCB price falls).
 * An increase in debt from accrued interest.
 * A combination of both.
 
-Example:
+#### **How Liquidation Works**
 
-* Collateral: $100 (pt-clisBNB).
-* LLTV: 80%.
-* Safe: Borrowed value ≤ $80 (LTV ≤ 80%).
-* Liquidatable: Borrowed value > $80 (LTV > 80%).
+When a liquidation is triggered, any external party can repay part or all of the borrower’s debt and become the liquidator, receiving collateral of equivalent value plus a bonus determined by the Liquidation Incentive Factor (LIF).
 
-**How Standard Liquidation Works**
+LIF varies from market to market and is determined by a market's LLTV:
 
-When triggered, any external party (liquidator) can repay part or all of the borrower’s debt, receiving collateral plus a bonus determined by the Liquidation Incentive Factor (LIF).
-
-**Liquidation Incentive Factor (LIF)**
-
-The LIF sets the bonus:\
-LIF = min(M, (1/β × LLTV + (1 - β)))
+$$
+LIF=min(M,\ \frac{1}{\beta\times LLTV+(1-\beta)})
+$$
 
 Where:
 
-* β: 0.3 (constant).
-* M: 1.15 (cap).
-* For LLTV = 80%, LIF ≈ 1.06 (6% bonus); initial default set at 1.048 (4.8%) per Lista DAO.
+* $$\beta$$ is a constant, 0.3.
+* $$M$$ is the maximum incentive factor, 1.15.
 
-All LIF value goes to the liquidator; Lista Lending takes no fee.
+When a market has an LLTV of 80%, LIF ≈ 1.06 (6% bonus). Currently, Lista DAO sets a minimum LIF of 1.048.
 
-**Standard Liquidation Step-by-Step**
+To incentivize timely liquidation, all LIF bonus goes to the liquidator; Lista charges no fee.
 
-Initial Position:
+#### **A Step-by-Step Example**
 
-* Borrower deposits $100 pt-clisBNB, borrows $70 lisUSD (LLTV = 80%).
-* Interest accrues, raising debt to $80.0001.
-* LTV = 80.0001% > 80% → Liquidatable.
+Let's say you deposited 100 USDT and borrowed out 91.5 USD1. This market has an LLTV of 91.5%.
 
-Liquidation Process:
+Your LTV is $$91.5/100 = 91.5\%$$, so the moment interest starts accruing, your LTV will exceed the LLTV. A liquidation will be triggered and a liquidator will step in to repay the debt. (This is also why we do not recommend borrowing close to LLTV)
 
-* Liquidator repays $80.0001 lisUSD.
-* LIF = 1.048 (4.8% bonus, per section 2.6.3).
-* Seized collateral: $80.0001 × 1.048 = $83.84 pt-clisBNB.
+Now, a liquidator can either repay this loan in part or in full and receive some of the collateral plus bonus determined by the LIF. With an LLTV of 91.5%, the LIF for this market is:
 
-After Liquidation:
+$$
+LIF=min(M,\ \frac{1}{\beta\times 0.915+(1-\beta)})=1.026
+$$
 
-* Borrower: Debt cleared, retains $16.16 pt-clisBNB.
-* Liquidator: Spent $80.0001, received $83.84; profit = $3.84 minus gas fees.
+This is smaller than the minimum LIF, 1.048 so $$LIF=1.048$$.
 
-**Key Features**
+This means a certain amount of collateral will be seized:
 
-* Liquidation Amount: Up to 100% of debt in one transaction.
-* Trigger: LTV > LLTV.
-* Incentive: Fixed LIF based on LLTV (e.g., 4.8%).
-* Borrower Impact: Potential full liquidation.
-* Implementation: Core contract feature.
+$$
+Seized\ Collateral\ Value = Outstanding\ Loan\ Value\times LIF
+$$
 
-​​Pre-Liquidation
+The outstanding loan is 91.5 USD1 (plus a minuscule amount of interest). If the oracle dictates 1 USD1 = 1 USDT, then the amount of collateral seized will be:
 
-Pre-liquidation is an optional, opt-in mechanism offering a buffer before standard liquidation.
+$$
+91.5\times LIF = 91.5\times 1.048 = 95.892\ USDT
+$$
 
-**What Is Pre-Liquidation?**
+If the loan is repaid in full, which means the liquidator pays 91.5 USD1 plus a minuscule amount of interest, they will then receive slightly more than 95.892 USDT. Their profit is: $$95.892\ USDT-91.5\ USD1\approx$4.392$$ minus gas fees.
 
-Pre-liquidation enables partial position closure when LTV exceeds a predefined Pre-Liquidation Loan-To-Value (preLLTV) but remains below LLTV, reducing risk incrementally.
+#### Smart Lending Liquidation
 
-Example:
-
-* Collateral: $100 pt-clisBNB.
-* LLTV: 80%, preLLTV: 75%.
-* Safe: LTV ≤ 75%.
-* Pre-Liquidatable: 75% < LTV < 80%.
-* Fully Liquidatable: LTV > 80%.
-
-**Pre-Liquidation Parameters**
-
-* preLLTV: Threshold for pre-liquidation (e.g., 75%).
-* Pre-Liquidation Close Factors (preLCF₁ & preLCF₂): Max debt repayable, scaling linearly:\
-  preLCF = \[(LLTV - LTV)/(LLTV - preLLTV)] × preLCF₁ + \[(LTV - preLLTV)/(LLTV - preLLTV)] × preLCF₂
-* Pre-Liquidation Incentive Factors (preLIF₁ & preLIF₂): Bonus scaling between preLIF₁ and preLIF₂ based on LTV.
-* Pre-Liquidation Oracle: Assesses pre-liquidation eligibility (may match market oracle).
-
-**Pre-Liquidation Step-by-Step**
-
-Initial Position:
-
-* Borrower deposits $100 pt-clisBNB, borrows $75 lisUSD (LLTV = 85%, preLLTV = 79%).
-* Collateral drops, LTV rises to 80%.
-* 79% < LTV (80%) < 85% → Pre-Liquidatable.
-
-Pre-Liquidation Process:
-
-* Pre-liquidator repays 50% of $80 debt ($40), assuming preLCF = 50%.
-* preLIF = 1.03 (e.g., lower than standard 1.05 for 85% LLTV).
-* Seized collateral: $40 × 1.03 = $41.2.
-
-After Pre-Liquidation:
-
-* Borrower: $40 debt remains, $58.8 pt-clisBNB left; new LTV = 68%.
-* Pre-liquidator: Profit = $1.2 minus fees.
-
-**Key Features**
-
-* Trigger Zone: preLLTV ≤ LTV < LLTV.
-* Closure: Limited by preLCF (e.g., <50%).
-* Incentive: Dynamic preLIF, typically lower than LIF.
-* Borrower Impact: Incremental deleveraging.
-* Implementation: Opt-in via external PreLiquidation contract.
-
-<figure><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXfw7LhV7AYhZG2s24VFx3fd3tp8iHXGYudKOGLFgk1kXU-9M-jfEn9sfp14FdNt6p40Zp_zNmZyw5fiIOEL7jVHhxqytOaIgGpNUxS6sJOXemm2Sixx8H_zaEDc6x2q9A2bvzs?key=ZbB0Bdp_i9xaaxZIxmtWD2y_" alt=""><figcaption></figcaption></figure>
-
-<br>
+Liquidation at Smart Lending works similarly but the value of collateral is calculated slightly differently. Refer to [this article](https://blog.lista.org/everything-you-need-to-know-about-liquidation-on-lista-smart-lending) for more details.
