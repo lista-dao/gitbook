@@ -47,8 +47,8 @@ class GitBookRAGBot {
       healthPort: 3000,
     };
     this.moderatorMap = {
-      tyler: 790810748,
-      xuan: 5230857750,
+      //   tyler: 790810748,
+      tyler: 8626871165,
       datang: 1826422710,
       余生: 5075951083,
       TwitteSpace: 5124728862,
@@ -157,6 +157,7 @@ class GitBookRAGBot {
       // 检查是否需要响应
       const shouldRespond = this.groupManager.shouldRespondToMessage(ctx);
       if (!shouldRespond) {
+        logger.info(`群組訊息未 @bot，不響應`, { chatId, chatType });
         return; // 在群组中未被@，不响应
       }
 
