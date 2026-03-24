@@ -23,7 +23,7 @@
   * [技术指南](introduction/liquid-staking-slisbnb/technical-guide.md)
 * [智能借贷与交换](introduction/smart-lending.md)
 * [RWA 市场](introduction/rwa-markets.md)
-* [Lista 信贷](introduction/lista-credit.md)
+* [Lista 信用](introduction/lista-credit.md)
 * [Lista 借贷](introduction/lista-lending/README.md)
   * [金库](introduction/lista-lending/vaults/README.md)
     * [Lista Alpha 区](introduction/lista-lending/vaults/lista-alpha-zone.md)
@@ -61,7 +61,7 @@
   * [协议费用](governance/velista/protocol-fees.md)
   * [veLISTA 发行](governance/velista/velista-emissions/README.md)
     * [LP 池](governance/velista/velista-emissions/lp-pools.md)
-  * [veLISTA 投票表决](governance/velista/gauge-voting-for-velista.md)
+  * [veLISTA 投票](governance/velista/gauge-voting-for-velista.md)
   * [veLISTA 贿赂市场](governance/velista/velista-bribe-market.md)
   * [自动复合](governance/velista/auto-compounding.md)
   * [LISTA 永久锁定 (LIP-016)](governance/velista/permanent-locking-of-lista-lip-016.md)
@@ -82,7 +82,7 @@
 * [流动性质押 - slisBNB](user-guide/liquid-staking-slisbnb/README.md)
   * [如何兑换 slisBNB](user-guide/liquid-staking-slisbnb/how-to-swap-for-slisbnb.md)
   * [铸造 slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
-  * [从 slisBNB 赎回 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
+  * [从 slisBNB 兑换 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
   * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
 * [智能借贷](user-guide/smart-lending.md)
 * [Lista 借贷](user-guide/lista-lending/README.md)
@@ -102,7 +102,7 @@
   * [解锁 LISTA](user-guide/lista-velista/unlock-lista.md)
   * [领取奖励](user-guide/lista-velista/claim-rewards.md)
   * [在 Lista DAO 上质押外部 LP 代币](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
-  * [表决投票](user-guide/lista-velista/gauge-voting.md)
+  * [投票](user-guide/lista-velista/gauge-voting.md)
 
 ## 安全
 
@@ -110,7 +110,7 @@
 * [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
 * [Lista 借贷风险基金](security/lista-lending-risk-fund.md)
 
-## 开发者专区
+## 开发者
 
 * [概览](for-developer/overview.md)
 * [LISTA 治理](for-developer/lista-governance/README.md)
@@ -126,13 +126,19 @@
   * [智能合约](for-developer/liquid-staking-slisbnb/smart-contract.md)
 * [slisBNBx](for-developer/clisbnb/README.md)
   * [代币生命周期](for-developer/clisbnb/token-lifecycle.md)
-  * [铸造比例逻辑](for-developer/clisbnb/minting-ratio-logic.md)
+  * [铸造比率逻辑](for-developer/clisbnb/minting-ratio-logic.md)
   * [委托](for-developer/clisbnb/delegation.md)
   * [智能合约](for-developer/clisbnb/smart-contract.md)
 * [Lista 借贷](for-developer/lista-lending/README.md)
   * [协议扩展](for-developer/lista-lending/protocol-extensions.md)
   * [集成模式](for-developer/lista-lending/integration-patterns.md)
   * [智能合约](for-developer/lista-lending/smart-contract.md)
+    * [BSC 核心](for-developer/lista-lending/smart-contract-bsc-core.md)
+    * [BSC 借贷代理](for-developer/lista-lending/smart-contract-bsc-brokers.md)
+    * [BSC 智能借贷](for-developer/lista-lending/smart-contract-bsc-smart-lending.md)
+    * [BSC 预言机](for-developer/lista-lending/smart-contract-bsc-oracles.md)
+    * [BSC 信用](for-developer/lista-lending/smart-contract-bsc-credit.md)
+    * [以太坊](for-developer/lista-lending/smart-contract-ethereum.md)
 * [Lista 平台服务](for-developer/services/README.md)
   * [位置数据维护](for-developer/services/position-data-maintenance.md)
   * [清算逻辑 (服务)](for-developer/services/liquidation-logic.md)
@@ -141,14 +147,14 @@
     * [总览](for-developer/services/lending-api/overall.md)
     * [金库](for-developer/services/lending-api/vault.md)
     * [市场](for-developer/services/lending-api/market.md)
-    * [位置、清算、发行](for-developer/services/lending-api/position-liquidation-emission.md)
+    * [位置、清算、排放](for-developer/services/lending-api/position-liquidation-emission.md)
 * [RWA](for-developer/rwa/README.md)
   * [用户操作](for-developer/rwa/user-operations.md)
   * [机器人操作](for-developer/rwa/bot-operations.md)
   * [智能合约](for-developer/rwa/smart-contract.md)
 * [信用贷款](for-developer/credit-loans/README.md)
   * [贷款生命周期](for-developer/credit-loans/loan-lifecycle.md)
-  * [不良债务处理](for-developer/credit-loans/bad-debt-handling.md)
+  * [坏账处理](for-developer/credit-loans/bad-debt-handling.md)
   * [智能合约](for-developer/credit-loans/smart-contract.md)
 
 ## 合作伙伴关系
