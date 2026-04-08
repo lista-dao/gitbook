@@ -1,3 +1,7 @@
+---
+hidden: true
+---
+
 # veLISTA
 
 ## Understanding veLISTA & veToken model <a href="#id-91ff" id="id-91ff"></a>
