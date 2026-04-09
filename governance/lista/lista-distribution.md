@@ -1,5 +1,7 @@
 # LISTA distribution
 
+Note: this page explains LISTA's tokenomics at launch. For the latest tokenomics, refer to [this page](./).
+
 ## Circulating supply at launch&#x20;
 
 Circulating supply refers to the total amount of LISTA tokens that are freely available for trading, without any specific transfer restrictions.&#x20;
