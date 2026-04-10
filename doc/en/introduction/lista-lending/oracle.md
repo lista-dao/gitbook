@@ -2,18 +2,18 @@
 
 ### What is an Oracle?
 
-Oracles are smart contracts that provide external data, particularly price information, to blockchain applications. In lending protocols like Lista Lending, oracles should provide price data with 8 decimal places of precision. For example, if the price of 1 BTC is 80,000, it would return 80,000 \* 100,000,000 = 8,000,000,000,000.
+An oracle is a smart contract that provides external data, particularly price information, to blockchain applications. For lending protocols like Lista Lending, most oracles are providing price data with 8 decimal places of precision. For example, if the price of 1 BTC is 80,000, it would return 80,000 \* 100,000,000 = 8,000,000,000,000.
 
 ### Oracles in Lending Markets
 
-Traditional lending protocols rely on oracles to:
+Lending markets rely on oracles to:
 
-* Determine the value of collateral assets
+* Determine the value of collateral and loan assets
 * Calculate borrowing capacity
 * Trigger liquidations when positions become undercollateralized
 * Enable accurate interest rate calculations
 
-### Oracle Implementation in Lista Lending
+### Oracles at Lista Lending
 
 All oracles used in Lista Lending markets implement the IOracle interface, which has a single, standardized function:
 
@@ -43,7 +43,7 @@ Various oracle implementations can be used with Lista Lending markets:
 
 ### Oracle Selection by Market Curators
 
-Market curators (not Lista Lending) are responsible for selecting and implementing appropriate oracles for their markets. Each Lista Lending market specifies its oracle in the market parameters:
+Market curators (not Lista) are responsible for selecting and implementing appropriate oracles for their markets. Each Lista Lending market specifies its oracle in the market parameters:
 
 CollateralAsset/LoanAsset (LLTV%, OracleAddress, IRMAddress)
 
@@ -61,9 +61,5 @@ The immutable nature of Lista Lending Markets means oracle selection is a perman
 
 Some community members contributed to adapters that could be plugged into oracles.
 
-* Morpho Association nor author of the repository cannot be held responsible for any losses or damages that may result from the use of this information.
+* Lista nor author of the repository cannot be held responsible for any losses or damages that may result from the use of this information.
 * Users are advised to conduct their own research and exercise caution when applying any strategies or methods described herein.
-
-\
-\
-<br>
