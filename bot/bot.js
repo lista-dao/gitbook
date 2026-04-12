@@ -59,7 +59,7 @@ class GitBookRAGBot {
 
     this.moderatorIds = Object.values(this.moderatorMap);
 
-    this.errorForwardGroupId = -4703057738;
+    this.errorForwardGroupId = -5277845191;
 
     this.smartProcessor = new SmartProcessor(this.config);
     this.retrievalService = null;
