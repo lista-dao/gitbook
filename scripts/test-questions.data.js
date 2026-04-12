@@ -133,6 +133,26 @@ const questList = [
   // ✅ passed in previous run
   // "Why does Credit Loans need on-chain bad debt write-off, and who bears the loss after write-off?",
 
+  // Risk Fund - should correctly state it only covers Lista's own vaults
+  {
+    topic: "lending",
+    question: "How does Lista risk fund protect lenders during bad debt events?",
+    checks: {
+      mustInclude: ["risk fund"],
+      mustIncludeAny: [["self-operated", "self operated", "self-created", "lista dao's", "lista's own", "lista's vaults", "created by lista", "自有", "not include", "不包含"]],
+      mustNotInclude: ["all vaults are covered", "covers all vaults"],
+    },
+  },
+
+  // Lista Credit - should correctly identify the vault provider
+  {
+    topic: "credit-loans",
+    question: "Who provides the assets in Lista Credit's vault?",
+    checks: {
+      mustIncludeAny: [["lista", "partner", "合作夥伴", "合作伙伴"]],
+    },
+  },
+
   // Backend/service docs coverage sanity checks
   {
     topic: "lending",

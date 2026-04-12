@@ -22,6 +22,7 @@ module.exports = {
     filenames: [
       "security/audit-reports.md",
       "security/bug-bounty-immunefi.md",
+      "security/lista-lending-risk-fund.md",
       "securing-the-future-an-in-depth-look-at-lista-daos.md",
     ],
   },
@@ -93,6 +94,8 @@ module.exports = {
       "flash loan",
       "market",
       "oracle price feed",
+      "lista lending risk fund",
+      "lista risk fund",
     ],
     filenames: [
       "for-developer/lista-lending/README.md",
@@ -121,6 +124,7 @@ module.exports = {
       "introduction/lista-lending/flash-loan.md",
       "introduction/lista-lending/vaults/README.md",
       "introduction/lista-lending/vaults/how-to-create-a-vault.md",
+      "security/lista-lending-risk-fund.md",
       "introducing-lista-lending-lista-daos-next-gen-lend.md",
       "product-guide-lista-lending.md",
       "product-update-lista-lending-vault-manager-gui.md",
