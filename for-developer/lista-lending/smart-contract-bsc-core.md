@@ -20,6 +20,7 @@
 | RevenueCollector               | 0x86E09296aeDA129D3b0b4c134B3202b84Cd8945C |
 | LendingRewardsDistributorV2    | 0x2993E9eA76f5839A20673e1B3cf6666ab5B3aE76 |
 | RewardsRouter                  | 0xCb571b4ac0dB9c64B9ADdD2e6f3d1c7A84E5bfF4 |
+| PositionManager                | 0x8eBFa9e687aF71EC2e87A0380F73b9f57FDf3ec0 |
 
 ### Vaults
 

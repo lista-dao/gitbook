@@ -6,7 +6,7 @@ Lista Lending is a decentralized lending protocol that allows users to borrow an
 
 | Document | Description |
 | -------- | ----------- |
-| [Core Contracts](smart-contract-bsc-core.md) | Moolah, Vaults, Providers, Liquidators, IRM, TimeLock, etc. |
+| [Core Contracts](smart-contract-bsc-core.md) | Moolah, Vaults, Providers, Liquidators, IRM, TimeLock, MoolahVaultManager, MarketFactory, PositionManager, etc. |
 | [Lending Brokers](smart-contract-bsc-brokers.md) | LendingBroker markets, BrokerInterestRelayer, Rate Calculator |
 | [Smart Lending](smart-contract-bsc-smart-lending.md) | StableSwap pools, SmartProvider (LP collateral) |
 | [Oracles](smart-contract-bsc-oracles.md) | PTLinearDiscountOracle variants |
