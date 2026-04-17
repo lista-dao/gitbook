@@ -20,21 +20,22 @@
 | RevenueCollector                 | 0x86E09296aeDA129D3b0b4c134B3202b84Cd8945C |
 | LendingRewardsDistributorV2      | 0x2993E9eA76f5839A20673e1B3cf6666ab5B3aE76 |
 | RewardsRouter                    | 0xCb571b4ac0dB9c64B9ADdD2e6f3d1c7A84E5bfF4 |
+| PositionManager                  | 0x8eBFa9e687aF71EC2e87A0380F73b9f57FDf3ec0 |
 
 ### 金库
 
-| 合约                          | 地址                                        |
-| ----------------------------- | ------------------------------------------ |
-| MoolahVault(WBNB)             | 0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0 |
-| MoolahVault(USD1)             | 0xfa27f172e0b6ebcEF9c51ABf817E2cb142FbE627 |
-| MoolahVault(U)                | 0x9A17Fd5Cb8EFc25d11567e713aE795A89775a759 |
+| 合约                        | 地址                                        |
+| --------------------------- | ------------------------------------------ |
+| MoolahVault(WBNB)           | 0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0 |
+| MoolahVault(USD1)           | 0xfa27f172e0b6ebcEF9c51ABf817E2cb142FbE627 |
+| MoolahVault(U)              | 0x9A17Fd5Cb8EFc25d11567e713aE795A89775a759 |
 
 ### 提供者
 
-| 合约                            | 地址                                        |
-| ------------------------------- | ------------------------------------------ |
-| SlisBNBProvider                 | 0x33f7A980a246f9B8FEA2254E3065576E127D4D5f |
-| SlisBNBxMinter                  | 0x2959c423bfe5Cc6E41516599D982A29C0773F11a |
-| BNBProvider (MEV WBNB Vault)    | 0x501bE17CcA1d8a009753Da271D6714C18c1A35c9 |
-| BNBProvider (Lista WBNB Vault)  | 0x367384C54756a25340c63057D87eA22d47Fd5701 |
-| BNBProvider (Loop WBNB Vault)   | 0x7901Cb0db0db005c44ee5957Fa22D478258ef64E |
+| 合约                              | 地址                                        |
+| --------------------------------- | ------------------------------------------ |
+| SlisBNBProvider                   | 0x33f7A980a246f9B8FEA2254E3065576E127D4D5f |
+| SlisBNBxMinter                    | 0x2959c423bfe5Cc6E41516599D982A29C0773F11a |
+| BNBProvider (MEV WBNB Vault)      | 0x501bE17CcA1d8a009753Da271D6714C18c1A35c9 |
+| BNBProvider (Lista WBNB Vault)    | 0x367384C54756a25340c63057D87eA22d47Fd5701 |
+| BNBProvider (Loop WBNB Vault)     | 0x7901Cb0db0db005c44ee5957Fa22D478258ef64E |

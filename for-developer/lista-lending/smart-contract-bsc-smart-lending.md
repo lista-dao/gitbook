@@ -34,7 +34,7 @@
 | StableSwapLPCollateral            | 0xbBD3e74E69e6BDDDA8e5AAdC1460611A8f7cd05a |
 | SmartProvider                     | 0x9994D77E5cdcAD9f9055b13402A7BF8C24d4C841 |
 
-## USCD / USDT
+## USDC / USDT
 
 | 合约                              | 地址                                      |
 | --------------------------------- | ---------------------------------------- |
