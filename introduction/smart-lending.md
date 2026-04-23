@@ -24,7 +24,7 @@ When a loan is repaid in part or in full, a certain amount of collateral will be
 
 Collateral withdrawal works just like deposit. Under Fixed Ratio mode, the amount of assets withdrawn will be of the same ratio as they are in the pool. Under Custom Ratio mode, Lista will swap one asset into the other to make sure assets are of the custom ratio.
 
-When 'Pro Mode' is toggled on, liquidity positions can be withdrawn as a standalone token. For instance, you can withdraw your slisBNB\&BNB / BNB liquidity position and deposit it into slisBNB\&BNB / USD1 market because the collateral is the same.
+When 'Pro Mode' is toggled on, liquidity positions can be withdrawn as a standalone token. For instance, you can withdraw your slisBNB\&BNB / BNB liquidity position and deposit it into slisBNB\&BNB / USD1 market because the collateral asset is the same: your slisBNB\&BNB liquidity position.
 
 Sometimes, liquidity positions can not be fully withdrawn (leaving < $0.01 in the pool). When this happens, please switch to Fixed Ratio and you will receive your assets in full.
 
