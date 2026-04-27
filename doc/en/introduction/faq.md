@@ -126,7 +126,7 @@ Users can earn with lisUSD in a variety of ways. They can stake their lisUSD on 
 
 Please note that while we strive to maintain price stability, lisUSD may not always be perfectly pegged to the USD, and it can deviate slightly in both directions under stressful market conditions.
 
-### Why can't I withdraw my funds from a vault? <a href="#will-my-position-be-liquidated-on-lista" id="will-my-position-be-liquidated-on-lista"></a>
+### Why can't I withdraw my assets from a vault? <a href="#why-cant-i-withdraw-my-assets-from-a-vault" id="why-cant-i-withdraw-my-assets-from-a-vault"></a>
 
 This is most likely due to its high utilization rate. Assets deposited into a vault will be allocated across several markets as loan assets for borrowers. This is the primary source of revenue for most vaults. The ratio between borrowed out assets and total assets in a vault is utilization rate.
 
