@@ -28,7 +28,7 @@ The staked BNB generate rewards from multiple validators, which are then aggrega
 
 <br>
 
-<figure><img src="../../.gitbook/assets/image (12) (1).png" alt=""><figcaption><p>Unstaking</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (10) (1).png" alt=""><figcaption><p>Unstaking</p></figcaption></figure>
 
 <figure><img src="../../.gitbook/assets/image (13) (1).png" alt=""><figcaption><p>Withdraw</p></figcaption></figure>
 
@@ -36,8 +36,6 @@ The staked BNB generate rewards from multiple validators, which are then aggrega
 
 Users can initiate withdrawal requests to unstake their assets through the smart contract. Upon receiving a withdrawal request, a bot sends a request to unbond BNB from the validators. After the 7-day unbonding period, the slisBNB tokens will be burned, and users can claim the released BNB through the ListaStakeManager.
 
-
-
 ### Rebalance
 
-&#x20;ListaStakeManager allows Bot to periodically rebalance the staked BNB across validators to optimize reliability and reward rates.
+ListaStakeManager allows Bot to periodically rebalance the staked BNB across validators to optimize reliability and reward rates.

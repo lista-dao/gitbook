@@ -5,13 +5,13 @@ coverY: 0
 
 # Overview
 
-Lista DAO, a decentralized autonomous organization, functions as the leading liquid staking solution for BNB and a Collateralized Debt Position (CDP) protocol where users can borrow our stablecoin, lisUSD, against a variety of collateral options.  Lista DAO is also backed up by Binance Lab, with a strategic investment of 10M USD.
+Lista DAO, a decentralized autonomous organization, functions as the leading liquid staking solution for BNB and a Collateralized Debt Position (CDP) protocol where users can borrow our stablecoin, lisUSD, against a variety of collateral options. Lista DAO is also backed up by Binance Lab, with a strategic investment of 10M USD.
 
 Since our launch, Lista DAO has achieved several milestones, including our official TGE on Binance(June 20th, 2024) of our governance token, LISTA, key updates such as our AMO, the launch of ListaPie, and our Lista innovation zone. Our strategic partnerships with different protocols have also expanded our ecosystem and brought additional value to our users. By adhering to our core values and continuously innovating, Lista DAO strives to be a leader in the DeFi space, providing users with secure, efficient, and empowering financial solutions.
 
 ## Mission
 
-Our mission is to drive the evolution of DeFi by tackling key challenges in liquidity provision and delivering premier liquid staking solutions for BNB. Through robust offerings such as liquidity staking and CDP mechanisms, Lista DAO aims to empower users with efficient and secure financial tools.&#x20;
+Our mission is to drive the evolution of DeFi by tackling key challenges in liquidity provision and delivering premier liquid staking solutions for BNB. Through robust offerings such as liquidity staking and CDP mechanisms, Lista DAO aims to empower users with efficient and secure financial tools.
 
 ## Vision
 
@@ -29,7 +29,7 @@ Smart Lending is Lista’s next generation lending solution where collaterals ar
 
 ### Collateral Debt Position (CDP)
 
-Modelled after MakerDAO, our CDP system allows users to lock a variety of collateral and mint stablecoins (lisUSD) against it, providing a secure way to leverage assets.&#x20;
+Modelled after MakerDAO, our CDP system allows users to lock a variety of collateral and mint stablecoins (lisUSD) against it, providing a secure way to leverage assets.
 
 ### Liquid staking solution
 
@@ -37,6 +37,6 @@ Inspired by Lido DAO, our liquidity staking mechanism allows users to stake thei
 
 ## Our tokens
 
-<table data-view="cards"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td><h3>LISTA</h3></td><td>LISTA is our governance token, empowering holders with voting rights and a say in the future direction of the platform. </td><td></td></tr><tr><td><h3>lisUSD</h3></td><td>lisUSD is a stablecoin minted through our CDP mechanism, maintaining a stable value pegged to the US dollar.</td><td></td></tr><tr><td><h3>slisBNB</h3></td><td>slisBNB is Lista DAO’s liquid staking token, representing staked BNB and allowing users to earn rewards while maintaining liquidity. </td><td></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td><h4>LISTA</h4></td><td>LISTA is our governance token, empowering holders with voting rights and a say in the future direction of the platform.</td><td></td></tr><tr><td><h4>lisUSD</h4></td><td>lisUSD is a stablecoin minted through our CDP mechanism, maintaining a stable value pegged to the US dollar.</td><td></td></tr><tr><td><h4>slisBNB</h4></td><td>slisBNB is Lista DAO’s liquid staking token, representing staked BNB and allowing users to earn rewards while maintaining liquidity.</td><td></td></tr></tbody></table>
 
 <br>

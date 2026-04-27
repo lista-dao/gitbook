@@ -52,22 +52,12 @@
 
 * [LISTA](governance/lista/README.md)
   * [LISTA distribution](governance/lista/lista-distribution.md)
-* [veLISTA](governance/velista/README.md)
-  * [veLISTA Summary](governance/velista/velista-summary.md)
-  * [Lista DAO: Unlocking veLISTA Utility](governance/velista/lista-dao-unlocking-velista-utility.md)
-  * [veLISTA Locking mechanics](governance/velista/velista-locking-mechanics.md)
-  * [Governance](governance/velista/governance/README.md)
-    * [Governance proposal template](governance/velista/governance/governance-proposal-template.md)
-  * [Protocol fees](governance/velista/protocol-fees.md)
-  * [veLISTA emissions](governance/velista/velista-emissions/README.md)
-    * [LP pools](governance/velista/velista-emissions/lp-pools.md)
-  * [Gauge Voting for veLISTA](governance/velista/gauge-voting-for-velista.md)
-  * [veLISTA Bribe Market](governance/velista/velista-bribe-market.md)
-  * [Auto-Compounding](governance/velista/auto-compounding.md)
-  * [Permanent locking of LISTA (LIP-016)](governance/velista/permanent-locking-of-lista-lip-016.md)
-  * [LISTA Deflationary Initiative: 20% Token Burn (LIP-021)](governance/velista/lista-deflationary-initiative-20-token-burn-lip-021.md)
-  * [Revenue / Cost](governance/velista/revenue-cost.md)
-  * [Analytics](governance/velista/analytics.md)
+  * [Governance](governance/lista/governance/README.md)
+    * [Governance proposal template](governance/lista/governance/governance-proposal-template.md)
+  * [Permanent locking of LISTA (LIP-016)](governance/lista/permanent-locking-of-lista-lip-016.md)
+  * [LISTA Deflationary Initiative: 20% Token Burn (LIP-021)](governance/lista/lista-deflationary-initiative-20-token-burn-lip-021.md)
+  * [Revenue / Cost](governance/lista/revenue-cost.md)
+  * [Analytics](governance/lista/analytics.md)
 
 ## User Guide
 
@@ -95,14 +85,6 @@
   * [Liquid staking BNB into slisBNB](user-guide/using-binance-web3-wallet/liquid-staking-bnb-into-slisbnb.md)
   * [Obtaining lisUSD](user-guide/using-binance-web3-wallet/obtaining-lisusd.md)
   * [Trading on APX Finance](user-guide/using-binance-web3-wallet/trading-on-apx-finance.md)
-* [LISTA / veLISTA](user-guide/lista-velista/README.md)
-  * [Lock LISTA](user-guide/lista-velista/lock-lista.md)
-  * [Extend LISTA lock](user-guide/lista-velista/extend-lista-lock.md)
-  * [Auto lock](user-guide/lista-velista/auto-lock.md)
-  * [Unlock LISTA](user-guide/lista-velista/unlock-lista.md)
-  * [Claim Rewards](user-guide/lista-velista/claim-rewards.md)
-  * [Staking external LP tokens on Lista DAO](user-guide/lista-velista/staking-external-lp-tokens-on-lista-dao.md)
-  * [Gauge Voting](user-guide/lista-velista/gauge-voting.md)
 
 ## Security
 
