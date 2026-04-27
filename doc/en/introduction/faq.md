@@ -126,6 +126,16 @@ Users can earn with lisUSD in a variety of ways. They can stake their lisUSD on 
 
 Please note that while we strive to maintain price stability, lisUSD may not always be perfectly pegged to the USD, and it can deviate slightly in both directions under stressful market conditions.
 
+### Why can't I withdraw my funds from a vault? <a href="#will-my-position-be-liquidated-on-lista" id="will-my-position-be-liquidated-on-lista"></a>
+
+This is most likely due to its high utilization rate. Assets deposited into a vault will be allocated across several markets as loan assets for borrowers. This is the primary source of revenue for most vaults. The ratio between borrowed out assets and total assets in a vault is utilization rate.
+
+Naturally, when a vault's utilization rate is high, it means most assets have been borrowed out and there isn't much liquidity left in the vault. If a withdrawal is initiated at this utilization rate and the amount requested is more than what's left in the vault, it will be rejected due to a lack of liquidity.
+
+There is no need to worry because in time, borrowers will repay their loans and there will be more liquidity in the vault. Even if someone forgets to repay, their loan will likely be liquidated when the accruing interest pushes its LTV past the LLTV ratio. The liquidated assets will be returned to the vault and there will be more liquidity available.
+
+If a vault's utilization rate is not high (below 90%) but  you still encounter an error when withdrawing, please contact our support at our [Telegram](https://t.me/ListaDAO) or [Discord](https://discord.gg/listadao) community.
+
 ### Will my position be liquidated on Lista DAO? <a href="#will-my-position-be-liquidated-on-lista" id="will-my-position-be-liquidated-on-lista"></a>
 
 Yes, liquidations are a common concept in lending protocols like Lista DAO, and thus, users need to be aware that their loan positions are at risk of being liquidated if they no longer have sufficient collateral to maintain the MCR of the loan.
