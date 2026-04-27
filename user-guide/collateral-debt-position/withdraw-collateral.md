@@ -18,16 +18,14 @@ BNB takes 7–15 days to be withdrawn, while withdrawing BNB LSTs (Eg. slisBNB) 
 
 slisBNB is the interest-bearing BNB staking asset and allows you either exchange it for BNB on major DEXs or hold and keep getting BNB Staking rewards that accumulate in slisBNB over time. The longer you hold, the more BNB you'll get when exchanging BNB LSTs to BNB.
 
-
-
 The minimum amount to withdraw is 0.1 BNB.
 {% endhint %}
 
 To withdraw your collateral:
 
-1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=withdraw-collateral).
+1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard?utm_source=gitbook\&utm_medium=article\&utm_campaign=withdraw-collateral).
 
-<figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (52).png" alt=""><figcaption></figcaption></figure>
 
 2. Select which collateral type you would like to withdraw, and click "Withdraw".
 3. Input the amount of collateral you would like to withdraw, and click "Withdraw".

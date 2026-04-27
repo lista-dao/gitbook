@@ -9,7 +9,7 @@ description: How to repay lisUSD
 {% hint style="info" %}
 **NOTE**
 
-The **Approve** transaction does not mean the repayment is complete.&#x20;
+The **Approve** transaction does not mean the repayment is complete.
 
 \
 Your loan cannot go under 15 lisUSD, so you can either choose to repay it to the remainder of 15 lisUSD or in full.
@@ -17,9 +17,9 @@ Your loan cannot go under 15 lisUSD, so you can either choose to repay it to the
 
 To repay back your lisUSD loan:
 
-1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard?utm_source=gitbook&utm_medium=article&utm_campaign=repay-lisusd).
+1. Head over to your Lista DAO CDP dashboard [here](https://lista.org/cdp/dashboard?utm_source=gitbook\&utm_medium=article\&utm_campaign=repay-lisusd).
 
-<figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (52).png" alt=""><figcaption></figcaption></figure>
 
 2. Select which collateral type you would like to repay your lisUSD against, and click "Repay".
 3. Enter the amount of lisUSD you would like to repay, and click on "Repay"
@@ -31,5 +31,4 @@ To repay back your lisUSD loan:
 
 <figure><img src="../../.gitbook/assets/image (55).png" alt=""><figcaption></figcaption></figure>
 
-[\
-](https://docs.bsc.lista.org/get-started/boost-vault-lisusd)
+[<br>](https://docs.bsc.lista.org/get-started/boost-vault-lisusd)

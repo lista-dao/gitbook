@@ -25,7 +25,7 @@ The following sections will introduce the functions of the CDP Module one by one
 
 **a. Deposit Collateral**
 
-<figure><img src="../../.gitbook/assets/image (42).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (41).png" alt=""><figcaption></figcaption></figure>
 
 1. User Deposits Collateral: The user initiates the deposit process by transferring their collateral to the Interaction contract.
 2. Interaction: It moves the collateral to the GemJoin (like a Treasury).
@@ -44,7 +44,7 @@ This process ensures that the user’s collateral is securely deposited and reco
 
 1. User Initiates Borrowing: The user requests to borrow a specific amount of LisUSD against their deposited collateral by calling borrow().
 2. Interaction: This request is processed by the Interaction, which then communicates with Vat. The user also pays interest during the process, the interest rate is a fixed number set by the Lista governance platform.
-3. Vat: records an increase in the user's debt corresponding to the borrowed LisUSD against the specific collateral.&#x20;
+3. Vat: records an increase in the user's debt corresponding to the borrowed LisUSD against the specific collateral.
 4. HayJoin: Interaction calls the \`exit()\` to mint the specified amount of LisUSD and sends it to the user.
 5. ListaDistributor: Interaction calls ListaDistributor contract’s snapshot method to record user’s debt value against the collateral for calculating and distributing future rewards to the user.
 
@@ -72,7 +72,7 @@ This process ensures that the user’s debt is accurately reduced or cleared, an
 
 **d. Withdraw Collateral**<br>
 
-<figure><img src="../../.gitbook/assets/image (38).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (35).png" alt=""><figcaption></figcaption></figure>
 
 1. User Initiates Withdrawal: The user initiates the withdrawal process by specifying the amount of collateral they wish to withdraw.
 2. Interaction: The withdrawal request is processed by the Interaction contract. Please note that if the user has borrowed LisUSD and has not yet paid it back, the amount of collateral they can withdraw is less than the original deposit amount, as some collateral must remain to secure the outstanding debt.
@@ -86,8 +86,6 @@ This process ensures that the user's collateral is accurately withdrawn and retu
 <br>
 
 **e. Stake LisUSD**
-
-
 
 <figure><img src="../../.gitbook/assets/image (34).png" alt=""><figcaption></figcaption></figure>
 
@@ -104,9 +102,9 @@ This process ensures that the user's collateral is accurately withdrawn and retu
 
 **f. Unstake LisUSD**
 
-<figure><img src="../../.gitbook/assets/image (33).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (31).png" alt=""><figcaption></figcaption></figure>
 
-1. User Initiates Unstaking: The user calls the \`exit()\` method to unstake a specified amount of LisUSD.&#x20;
+1. User Initiates Unstaking: The user calls the \`exit()\` method to unstake a specified amount of LisUSD.
 2. Jar: This amount of LisUSD, plus any rewarded amount, is transferred back to the user. It also records the following information:
    1. The user’s staked LisUSD balance is reduced by the unstaked amount X.
    2. The total staked amount of LisUSD is reduced by the unstaked amount X.
@@ -121,7 +119,7 @@ This process user will only interact with the Jar contract, it is responsible fo
 
 **g. Liquidation**
 
-<figure><img src="../../.gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 The flowchart shows how an auction is being kick started.
 
@@ -176,7 +174,7 @@ Auction Start and Price Decrease:
 * Auction starts, and the price gradually decreases.
 * Liquidator can participate to buy a customized amount of liquidated collateral.
 * Linear decrease of price (subject to disruption by specific conditions):
-  * Formula:  $$f(x) = x * e^{2 pi i \xi x}$$
+  * Formula: $$f(x) = x * e^{2 pi i \xi x}$$
   * Example: 1.836∗((3600-600)/3600)=$1.53
 
 Conditions to Pause Auction:
