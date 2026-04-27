@@ -9,8 +9,7 @@
 |                                | 链接                                                                                                                                             |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Lista 合约地址                 | [https://bscscan.com/address/0xFceB31A79F71AC9CBDCF853519c1b12D379EdC46](https://bscscan.com/address/0xFceB31A79F71AC9CBDCF853519c1b12D379EdC46) |
-| Lista Airdrop 合约地址 | [https://bscscan.com/address/0x2ed866Ca9C33bf695C78af222d61Bd4D9cB558d3](https://bscscan.com/address/0x2ed866Ca9C33bf695C78af222d61Bd4D9cB558d3) |
-| veLista 合约地址       | [https://bscscan.com/address/0xd0C380D31DB43CD291E2bbE2Da2fD6dc877b87b3](https://bscscan.com/address/0xd0C380D31DB43CD291E2bbE2Da2fD6dc877b87b3) |
+| Lista 空投合约地址             | [https://bscscan.com/address/0x2ed866Ca9C33bf695C78af222d61Bd4D9cB558d3](https://bscscan.com/address/0x2ed866Ca9C33bf695C78af222d61Bd4D9cB558d3) |
 
 ### 审计报告 <a href="#audit-reports" id="audit-reports"></a>
 
