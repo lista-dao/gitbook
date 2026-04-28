@@ -87,6 +87,42 @@ $$
 
 If the loan is repaid in full, which means the liquidator pays 91.5 USD1 plus a minuscule amount of interest, they will then receive slightly more than 95.892 USDT. Their profit is: $$95.892\ USDT-91.5\ USD1\approx$4.392$$ minus gas fees.
 
-#### Smart Lending Liquidation
+### Delayed Liquidation
+
+Following the approval of [LIP-024](https://snapshot.org/#/s:listavote.eth/proposal/0x1a15347f6b452049212bdf51ff1a46c0a7edf7ca8efe1004b32c15c2965f0f3b), delayed liquidation is launched for selected markets as the first benefit for LISTA holders.
+
+Normally, when a position’s LTV exceeds its LLTV on Lista, a liquidation will be triggered. With delayed liquidation, eligible borrowers will get a buffer - a higher, new LLTV threshold to protect your positions for 24 hours for selected markets:
+
+| Collateral | Loan   | Original LLTV | New LLTV |
+| ---------- | ------ | ------------- | -------- |
+| BTCB       | U      | 86%           | 92%      |
+| BTCB       | USD1   | 86%           | 92%      |
+| BTCB       | USDT   | 80%           | 92%      |
+| slisBNB    | BNB    | 96.5%         | 97%      |
+| slisBNB    | lisUSD | 85%           | 92%      |
+| slisBNB    | USD1   | 86%           | 92%      |
+| slisBNB    | U      | 86%           | 92%      |
+| slisBNB    | BNB    | 96.5%         | 97%      |
+| USD1       | BNB    | 80%           | 92%      |
+| USD1       | U      | 96.5%         | 97%      |
+| USDT       | BNB    | 85%           | 92%      |
+| ETH        | lisUSD | 80%           | 92%      |
+| wBETH      | lisUSD | 80%           | 92%      |
+
+For these markets, the total size of protected positions depends on the 7-day average LISTA holding:
+
+<table data-header-hidden><thead><tr><th width="92.8984375"></th><th></th><th></th></tr></thead><tbody><tr><td>Tier</td><td>7-day Weighted Average LISTA Holding</td><td>Total Protected Position Size</td></tr><tr><td>1</td><td>≥ 10,000 LISTA</td><td>≤ $10,000</td></tr><tr><td>2</td><td>≥ 50,000 LISTA</td><td>≤ $50,000</td></tr><tr><td>3</td><td>≥ 200,000 LISTA</td><td>≤ $200,000</td></tr><tr><td>4</td><td>≥ 1,000,000 LISTA</td><td>≤ $1,000,000</td></tr><tr><td>5</td><td>≥ 5,000,000 LISTA</td><td>≤ $10,000,000</td></tr><tr><td>6</td><td>≥ 15,000,000 LISTA</td><td>≤ $50,000,000</td></tr></tbody></table>
+
+With delayed liquidation, eligible borrowers' positions will be one of the following statuses:
+
+* **Guarded**: LTV is below the original LLTV. The position is healthy and pre-qualified for protection if the market moves against you.
+* **Protected**: LTV is between the original and the new LLTV. A 24-hour grace period begins. Consider repaying your loan or adding collateral to bring its LTV down.
+* **Out of Guard**: Delayed liquidation is not active either due to insufficient $LISTA holdings or the remaining tier capacity was exhausted when its LTV crossed the original LLTV. A liquidation will be triggered.
+
+Protected positions will get 24 hours to be repaid or added with more collateral to bring its LTV down. If after 24 hours, the LTV is still above the original LLTV threshold, a liquidation will still be triggered as usual.
+
+If a position's LTV crosses the original LLTV, but its size exceeds the remaining tier capacity, a partial or full liquidations will still be triggered. After 1 or more liquidations, if the total size of all positions pending liquidation is below the maximum protected size, these positions will be Protected once again.
+
+### Smart Lending Liquidation
 
 Liquidation at Smart Lending works similarly but the value of collateral is calculated slightly differently. Refer to [this article](https://blog.lista.org/everything-you-need-to-know-about-liquidation-on-lista-smart-lending) for more details.
