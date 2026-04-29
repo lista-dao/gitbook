@@ -20,127 +20,29 @@ slisBNB is the native yield bearing and liquid staking token for BNB, built by L
 
 Collateral is any asset which a borrower must provide to take out a loan, acting as a security for the debt.
 
-### What does collateral ratio mean? <a href="#what-does-collateral-ratio-mean" id="what-does-collateral-ratio-mean"></a>
-
-This is the ratio between the dollar value of the collateral deposited by the borrower and amount of debt borrowed in lisUSD.
-
-The collateral ratio will fluctuate over time as the price of the collateral changes. Borrowers can influence the ratio by adjusting collateral and/or debt — i.e. adding more collateral or paying off some of your debt in lisUSD.
-
-For example: Let’s say the current price of BNB is $2000 and you decide to deposit 1 BNB as collateral. If you borrow 400 lisUSD, then the collateral ratio for your debt position would be 2000:400 = 500%. If you borrowed 1000 lisUSD, then the collateral ratio of your debt position would be 2000:1000 = 200% instead.
-
-### What is the minimum collateral ratio & borrow amount to borrow lisUSD? <a href="#what-is-the-minimum-collateral-ratio-and-borrow-amount-to-borrow-lisusd" id="what-is-the-minimum-collateral-ratio-and-borrow-amount-to-borrow-lisusd"></a>
-
-Currently, Lista DAO offers a range of collateral assets as collateral on BNBchain as you can see below:
-
-#### 1) BNB <a href="#id-1-bnb" id="id-1-bnb"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 120%
-* Minimum Collateral Deposit: 0.1 BNB
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: BNB/slisBNB
-
-#### 2) slisBNB (Lista DAO) <a href="#id-2-slisbnb-listadao" id="id-2-slisbnb-listadao"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 125%
-* Minimum Collateral Deposit: 0.1 slisBNB
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal fee: 0%
-* Withdrawal Options: BNB/slisBNB
-
-#### 3) ETH <a href="#id-3-eth" id="id-3-eth"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 125%
-* Minimum Collateral Deposit: 0.1 ETH
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0.1%
-* Withdrawal Options: ETH/WBETH
-
-#### 4) WBETH (Binance) <a href="#id-3-wbeth-binance" id="id-3-wbeth-binance"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 125%
-* Minimum Collateral Deposit: 0.1 WBETH
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: WBETH
-
-#### 5) BTCB (Binance) <a href="#id-4-btcb-binance" id="id-4-btcb-binance"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 125%
-* Minimum Collateral Deposit: 0.001 BTCB
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: BTCB
-
-#### 6) STONE (StakeStone) <a href="#id-7-stone-stakestone" id="id-7-stone-stakestone"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.1 STONE
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: STONE
-
-#### 7) SolvBTC (Solv Protocol) <a href="#id-8-solvbtc-solv-protocol" id="id-8-solvbtc-solv-protocol"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.001 SolvBTC
-* Borrowing Fee: (dynamic rate, decided by our AMO module)
-* Withdrawal Fee: 0%
-* Withdrawal Options: SolvBTC
-
-#### 8) SolvBTC.BBN (Solv Protocol) <a href="#id-8-solvbtc-solv-protocol" id="id-8-solvbtc-solv-protocol"></a>
-
-Requirements:
-
-* Minimum Borrow: 15 lisUSD
-* Minimum Collateral Ratio: 200%
-* Minimum Collateral Deposit: 0.001 SolvBTC.BBN
-* Borrowing Fee: 7.5%
-* Withdrawal Fee: 0%
-* Withdrawal Options: SolvBTC
-
-### How can users earn on lisUSD? <a href="#how-can-users-earn-on-lisusd" id="how-can-users-earn-on-lisusd"></a>
-
-Users can earn with lisUSD in a variety of ways. They can stake their lisUSD on ListaDAO, which accrues lisUSD rewards. They can provide liquidity for slisBNB and lisUSD in various liquidity pools such as PancakeSwap, Wombat Exchange, ThenaFi, Curve and Uniswap to further earn trading and LP fees.
-
-Please note that while we strive to maintain price stability, lisUSD may not always be perfectly pegged to the USD, and it can deviate slightly in both directions under stressful market conditions.
-
-### Why can't I withdraw my assets from a vault? <a href="#why-cant-i-withdraw-my-assets-from-a-vault" id="why-cant-i-withdraw-my-assets-from-a-vault"></a>
+### Why can't I withdraw my assets from a lending vault? <a href="#why-cant-i-withdraw-my-assets-from-a-vault" id="why-cant-i-withdraw-my-assets-from-a-vault"></a>
 
 This is most likely due to its high utilization rate. Assets deposited into a vault will be allocated across several markets as loan assets for borrowers. This is the primary source of revenue for most vaults. The ratio between borrowed out assets and total assets in a vault is utilization rate.
 
-Naturally, when a vault's utilization rate is high, it means most assets have been borrowed out and there isn't much liquidity left in the vault. If a withdrawal is initiated at this utilization rate and the amount requested is more than what's left in the vault, it will be rejected due to a lack of liquidity.
+Naturally, when a vault's utilization rate is high, it means most assets have been borrowed out and there isn't much liquidity left in the vault. If a withdrawal is initiated and the amount requested is more than what's left in the vault, it will be rejected due to a lack of liquidity.
 
-There is no need to worry because in time, borrowers will repay their loans and there will be more liquidity in the vault. Even if someone forgets to repay, their loan will likely be liquidated when the accruing interest pushes its LTV past the LLTV ratio. The liquidated assets will be returned to the vault and there will be more liquidity available.
+There is no need to worry because in time, more deposits will come and borrowers will repay their loans, and, as a result, there will be more liquidity in the vault. Even if someone forgets to repay, their loan will likely be liquidated when the accruing interest pushes its LTV past the LLTV ratio. The liquidated assets will be returned to the vault and there will be more liquidity available.
 
-If a vault's utilization rate is not high (below 90%) but  you still encounter an error when withdrawing, please contact our support at our [Telegram](https://t.me/ListaDAO) or [Discord](https://discord.gg/listadao) community.
+If a vault's utilization rate is not high (below 90%) but you still encounter an error during withdrawals, please contact our support at our [Telegram](https://t.me/ListaDAO) or [Discord](https://discord.gg/listadao) community.
 
 ### Will my position be liquidated on Lista DAO? <a href="#will-my-position-be-liquidated-on-lista" id="will-my-position-be-liquidated-on-lista"></a>
 
 Yes, liquidations are a common concept in lending protocols like Lista DAO, and thus, users need to be aware that their loan positions are at risk of being liquidated if they no longer have sufficient collateral to maintain the MCR of the loan.
 
 For example, if you are a borrower, and the value of your collateral drops below the MCR of 150%, liquidation will occur. You will still keep your borrowed lisUSD, but your borrowed position will be closed and your collateral will be used to compensate liquidators.
+
+Please read our [liquidation documentation](lista-lending/liquidation/) for more information.
+
+### How can users earn on lisUSD? <a href="#how-can-users-earn-on-lisusd" id="how-can-users-earn-on-lisusd"></a>
+
+Users can earn with lisUSD in a variety of ways. They can stake their lisUSD on ListaDAO, which accrues lisUSD rewards. They can provide liquidity for slisBNB and lisUSD in various liquidity pools such as PancakeSwap, Wombat Exchange, ThenaFi, Curve and Uniswap to further earn trading and LP fees.
+
+Please note that while we strive to maintain price stability, lisUSD may not always be perfectly pegged to the USD, and it can deviate slightly in both directions under stressful market conditions.
 
 ### Are users at risk of losing their funds? <a href="#are-users-at-risk-of-losing-their-funds" id="are-users-at-risk-of-losing-their-funds"></a>
 
