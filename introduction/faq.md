@@ -24,7 +24,7 @@ Collateral is any asset which a borrower must provide to take out a loan, acting
 
 This is most likely due to its high utilization rate. Assets deposited into a vault will be allocated across several markets as loan assets for borrowers. This is the primary source of revenue for most vaults. The ratio between borrowed out assets and total assets in a vault is utilization rate.
 
-Naturally, when a vault's utilization rate is high, it means most assets have been borrowed out and there isn't much liquidity left in the vault. If a withdrawal is initiated and the amount requested is more than what's left in the vault, it will be rejected due to a lack of liquidity.
+Naturally, when a vault's utilization rate is high, it means most assets have been borrowed out and there isn't much liquidity left in the vault. If a withdrawal is initiated and the amount requested is more than what's left in the vault, it will be rejected due to a lack of liquidity. This can be common when a vault is paired with a market whose collateral and loan assets have very different levels of popularity.
 
 There is no need to worry because in time, more deposits will come and borrowers will repay their loans, and, as a result, there will be more liquidity in the vault. Even if someone forgets to repay, their loan will likely be liquidated when the accruing interest pushes its LTV past the LLTV ratio. The liquidated assets will be returned to the vault and there will be more liquidity available.
 
