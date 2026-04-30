@@ -138,6 +138,8 @@
   * [Loan Lifecycle](for-developer/credit-loans/loan-lifecycle.md)
   * [Bad Debt Handling](for-developer/credit-loans/bad-debt-handling.md)
   * [Smart Contract](for-developer/credit-loans/smart-contract.md)
+* [Lista Rights](for-developer/lista-rights/README.md)
+  * [Smart Contract](for-developer/lista-rights/smart-contract.md)
 
 ## Partnerships
 
