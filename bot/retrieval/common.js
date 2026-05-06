@@ -56,92 +56,90 @@ async function queryByFilenames({
   return allChunks;
 }
 
+// Stage 2: regular-path file selection.
+// - Consider up to MAX_CANDIDATE_FILES distinct files from the surviving results
+//   (was 3 — too narrow; multi-faceted queries had relevant files dropped).
+// - Always return top MAX_SELECTED_FILES (was 1 when avgSim ≥ 0.65, else 2).
+// - Reduce tableBonus from 0.3 → 0.05 so it nudges, not dominates: previously a
+//   single table-bearing UI walkthrough always beat richer strategy articles.
+const FILE_SELECTION = {
+  MAX_CANDIDATE_FILES: 5,
+  MAX_SELECTED_FILES: 3,
+  CHUNKS_PER_FILE: 100, // Pinecone topK; downstream RESPONSE_BUDGETS.maxChunksPerFile caps further
+  TABLE_BONUS: 0.05,
+  AVG_SCORE_WEIGHT: 0.7,
+  CONTENT_LEN_WEIGHT: 0.2,
+};
+
+function scoreFile(filename, results) {
+  const fileChunks = results.filter((r) => r.metadata.filename === filename);
+  const avgScore =
+    fileChunks.reduce((sum, c) => sum + c.score, 0) / fileChunks.length;
+  const totalContentLength = fileChunks.reduce((sum, c) => {
+    const content = c.metadata.chunk_content || c.metadata.content || "";
+    return sum + content.length;
+  }, 0);
+  const hasTable = fileChunks.some((c) => {
+    const content = c.metadata.chunk_content || c.metadata.content || "";
+    return (
+      (content.includes("|") && content.includes("|-")) || c.metadata.has_tables
+    );
+  });
+  const normalizedLen = Math.min(totalContentLength / 1000, 1);
+  const composite =
+    avgScore * FILE_SELECTION.AVG_SCORE_WEIGHT +
+    normalizedLen * FILE_SELECTION.CONTENT_LEN_WEIGHT +
+    (hasTable ? FILE_SELECTION.TABLE_BONUS : 0);
+  return { filename, composite, totalContentLength, avgScore };
+}
+
 async function processResults({ index, results, embedding, queryType, logger }) {
   const candidateFiles = [...new Set(results.map((r) => r.metadata.filename))].slice(
     0,
-    3,
+    FILE_SELECTION.MAX_CANDIDATE_FILES,
   );
 
-  let bestFile = null;
-  let bestScore = 0;
-  let bestContentLength = 0;
-
-  for (const filename of candidateFiles) {
-    const fileChunks = results.filter((r) => r.metadata.filename === filename);
-    const avgScore =
-      fileChunks.reduce((sum, chunk) => sum + chunk.score, 0) / fileChunks.length;
-    const totalContentLength = fileChunks.reduce((sum, chunk) => {
-      const content = chunk.metadata.chunk_content || chunk.metadata.content || "";
-      return sum + content.length;
-    }, 0);
-
-    const hasTable = fileChunks.some((chunk) => {
-      const content = chunk.metadata.chunk_content || chunk.metadata.content || "";
-      return (
-        (content.includes("|") && content.includes("|-")) || chunk.metadata.has_tables
-      );
-    });
-
-    const normalizedContentScore = Math.min(totalContentLength / 1000, 1);
-    const tableBonus = hasTable ? 0.3 : 0;
-    const compositeScore = avgScore * 0.6 + normalizedContentScore * 0.2 + tableBonus;
-
-    if (
-      compositeScore > bestScore ||
-      (compositeScore === bestScore && totalContentLength > bestContentLength)
-    ) {
-      bestFile = filename;
-      bestScore = compositeScore;
-      bestContentLength = totalContentLength;
-    }
-  }
-
-  logger.info(
-    `选择最佳文件: ${bestFile} (综合分数: ${(bestScore * 100).toFixed(1)}%)`,
-  );
-
-  if (!bestFile || !embedding) {
-    logger.info(`無最佳文件或嵌入向量，返回現有 ${results.length} 個結果`);
+  if (candidateFiles.length === 0) {
+    logger.info(`無候選文件，返回現有 ${results.length} 個結果`);
     return results;
   }
 
-  const bestFileChunks = results.filter((r) => r.metadata.filename === bestFile);
-  const avgSimilarity =
-    bestFileChunks.reduce((sum, chunk) => sum + chunk.score, 0) /
-    bestFileChunks.length;
+  const scored = candidateFiles
+    .map((filename) => scoreFile(filename, results))
+    .sort(
+      (a, b) =>
+        b.composite - a.composite ||
+        b.totalContentLength - a.totalContentLength,
+    );
 
-  if (avgSimilarity >= 0.65 && bestContentLength > 100) {
-    const fileQuery = await index.query({
-      vector: embedding,
-      filter: { filename: bestFile },
-      topK: 100,
-      includeMetadata: true,
-    });
+  const selected = scored.slice(0, FILE_SELECTION.MAX_SELECTED_FILES);
 
-    const allChunks = sortByChunkIndex(fileQuery.matches);
+  logger.info(`选择前 ${selected.length} 個文件 (queryType=${queryType}):`, {
+    files: selected.map(
+      (s) =>
+        `${s.filename} (composite=${(s.composite * 100).toFixed(1)}%, avg=${(s.avgScore * 100).toFixed(1)}%)`,
+    ),
+  });
 
-    logger.info(`使用單一文件 ${bestFile} 的 ${allChunks.length} 個文檔塊`);
-    return allChunks;
+  if (!embedding) {
+    logger.info(`無嵌入向量，返回現有 ${results.length} 個結果`);
+    return results;
   }
 
-  const relevantFiles = candidateFiles.slice(0, 2);
   const allChunks = [];
-
-  for (const filename of relevantFiles) {
+  for (const { filename } of selected) {
     const fileQuery = await index.query({
       vector: embedding,
       filter: { filename },
-      topK: 100,
+      topK: FILE_SELECTION.CHUNKS_PER_FILE,
       includeMetadata: true,
     });
-
     const fileChunks = sortByChunkIndex(fileQuery.matches);
-
     allChunks.push(...fileChunks);
   }
 
   logger.info(
-    `檢索到 ${relevantFiles.length} 個相關文件，共 ${allChunks.length} 個文檔塊 (${queryType})`,
+    `檢索到 ${selected.length} 個相關文件，共 ${allChunks.length} 個文檔塊 (${queryType})`,
   );
   return allChunks;
 }
