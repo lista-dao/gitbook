@@ -26,8 +26,7 @@
     "test": "node scripts/test-questions.js",
     "test:quiet": "node scripts/test-questions.js --quiet",
     "validate:topics": "node scripts/validate-topics.js",
-    "check:topic-classification": "node scripts/check-topic-classification.js",
-    "backfill:manual-source-urls": "node scripts/backfill-manual-source-urls.js"
+    "check:topic-classification": "node scripts/check-topic-classification.js"
   },
   "dependencies": {
     "@pinecone-database/pinecone": "^6.1.0",
