@@ -473,32 +473,55 @@ ${content}
       ];
     }
 
-    if (
-      ["how", "tutorial", "guide"].some((term) => questionLower.includes(term))
-    ) {
-      if (!baseFilter.$or) baseFilter.$or = [];
-      baseFilter.$or.push({ content_type: { $in: ["tutorial", "guide"] } });
-    }
-
-    if (
-      ["api", "reference", "documentation"].some((term) =>
-        questionLower.includes(term)
-      )
-    ) {
-      if (!baseFilter.$or) baseFilter.$or = [];
-      baseFilter.$or.push({ content_type: { $in: ["reference", "api"] } });
-    }
-
-    if (
-      ["code", "example", "contract"].some((term) =>
-        questionLower.includes(term)
-      )
-    ) {
-      if (!baseFilter.$or) baseFilter.$or = [];
-      baseFilter.$or.push({ has_code: true });
-    }
+    // Query-intent signals (how-to / api / code) are NOT applied here as
+    // hard Pinecone filters anymore — content_type is too sparse/unreliable
+    // to use as a strict include/exclude gate (a single null-typed chunk
+    // gets the whole article filtered out). Use getQueryIntentBoosts() to
+    // apply them as soft re-ranking boosts after retrieval.
 
     return baseFilter;
+  }
+
+  getQueryIntentBoosts(question) {
+    const q = question.toLowerCase();
+    const rules = [];
+
+    if (["how", "tutorial", "guide"].some((t) => q.includes(t))) {
+      rules.push({
+        label: "how-to → guide/tutorial",
+        match: (chunk) =>
+          ["tutorial", "guide"].includes(chunk.metadata?.content_type),
+        boost: 0.05,
+      });
+    }
+    if (["api", "reference", "documentation"].some((t) => q.includes(t))) {
+      rules.push({
+        label: "ref → reference/api",
+        match: (chunk) =>
+          ["reference", "api"].includes(chunk.metadata?.content_type),
+        boost: 0.05,
+      });
+    }
+    if (["code", "example", "contract"].some((t) => q.includes(t))) {
+      rules.push({
+        label: "code → has_code",
+        match: (chunk) => chunk.metadata?.has_code === true,
+        boost: 0.05,
+      });
+    }
+    return rules;
+  }
+
+  applyIntentBoosts(chunks, rules) {
+    if (!rules || rules.length === 0) return chunks;
+    return chunks
+      .map((chunk) => {
+        const total = rules
+          .filter((r) => r.match(chunk))
+          .reduce((sum, r) => sum + r.boost, 0);
+        return total > 0 ? { ...chunk, score: chunk.score + total } : chunk;
+      })
+      .sort((a, b) => b.score - a.score);
   }
 }
 

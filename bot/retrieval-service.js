@@ -95,6 +95,7 @@ class RetrievalService {
       }
 
       const smartFilter = this.smartProcessor.buildSmartFilters(question);
+      const intentBoosts = this.smartProcessor.getQueryIntentBoosts(question);
       const query = await this.index.query({
         vector: embedding,
         filter: smartFilter,
@@ -110,9 +111,14 @@ class RetrievalService {
         results = (query.matches || []).filter((chunk) => chunk.score >= lowThreshold);
       }
 
+      // Apply soft re-rank boosts based on query intent (replaces the old hard
+      // content_type / has_code filters). Threshold gate stays on raw similarity.
+      results = this.smartProcessor.applyIntentBoosts(results, intentBoosts);
+
       logger.info("檢索結果:", {
         totalResults: results.length,
         queryType: "regular",
+        intentBoosts: intentBoosts.map((r) => r.label),
       });
 
       return await this.handleUnifiedQuery(results, embedding, {
