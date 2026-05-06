@@ -124,9 +124,17 @@ function buildSourceLinks(
       const isExternalContent = fileChunks.some(
         (chunk) => chunk.metadata.is_external_content || chunk.metadata.source_url,
       );
+      const sourceType = fileChunks.find((chunk) => chunk.metadata.source_type)
+        ?.metadata.source_type;
 
       if (isExternalContent && externalSourceUrl) {
         return `[${displayName}](${externalSourceUrl})`;
+      }
+
+      // Manual articles without a known source URL would 404 on docs.bsc.lista.org
+      // (they are not part of the published GitBook). Emit title-only to avoid broken links.
+      if (sourceType === "manual") {
+        return displayName;
       }
 
       return `[${displayName}](${toInternalDocLink(filename)})`;
