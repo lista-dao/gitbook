@@ -1,13 +1,13 @@
 # BNB Validator: Lista DAO
 
-Lista DAO is taking significant steps toward becoming a validator node on the Binance Smart Chain (BSC).&#x20;
+Lista DAO is taking significant steps toward becoming a validator node on the Binance Smart Chain (BSC).
 
 Becoming a BSC validator aligns with Lista DAO’s mission of promoting decentralization, increasing network security, and further integrating into the BSC ecosystem. As a validator, Lista DAO will play a critical role in maintaining the blockchain’s operations while earning rewards that will benefit our community.
 
 ## Key Features of Our Application
 
 1. Decentralization Focus: By becoming a validator, Lista DAO strengthens its commitment to decentralization and secure blockchain operations.
-2. Community Benefits: Rewards earned as a validator will be reinvested into the DAO, creating additional value for veLISTA holders and protocol participants.
+2. Community Benefits: Rewards earned as a validator will be reinvested into the DAO, creating additional value for LISTA holders and protocol participants.
 3. Carefully Set Parameters: Commission rates and governance processes have been designed to balance user returns and operational sustainability.
 
 ## What’s next?
