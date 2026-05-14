@@ -26,7 +26,7 @@
 * [智能借贷与交换](introduction/smart-lending.md)
 * [抵押债务位置 - lisUSD](introduction/collateral-debt-position-lisusd/README.md)
   * [抵押品](introduction/collateral-debt-position-lisusd/collateral/README.md)
-    * [经典抵押选项](introduction/collateral-debt-position-lisusd/collateral/classic-collateral-options.md)
+    * [经典抵押品选项](introduction/collateral-debt-position-lisusd/collateral/classic-collateral-options.md)
     * [Lista Innovation Zone](introduction/collateral-debt-position-lisusd/collateral/lista-innovation-zone.md)
     * [贷款清算](introduction/collateral-debt-position-lisusd/collateral/loan-liquidation.md)
   * [lisUSD](introduction/collateral-debt-position-lisusd/lisusd/README.md)
@@ -40,11 +40,11 @@
 * [RWA 市场](introduction/rwa-markets.md)
 * [Lista Credit](introduction/lista-credit.md)
 * [Binance Launchpool: slisBNBx](introduction/binance-launchpool-clisbnb/README.md)
-  * [使用 slisBNB 铸造 slisBNBx](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
+  * [用 slisBNB 铸造 slisBNBx](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [在 Lista Lending 上铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
-  * [使用 BNB/slisBNB LP 代币铸造 $slisBNBx](introduction/binance-launchpool-clisbnb/minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens.md)
-  * [使用 Smart Lending LP 代币铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-slisbnbx-with-smart-lending-lp-tokens.md)
-* [BNB 验证者: Lista DAO](introduction/bnb-validator-lista-dao.md)
+  * [用 BNB/slisBNB LP 代币铸造 $slisBNBx](introduction/binance-launchpool-clisbnb/minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens.md)
+  * [用 Smart Lending LP 代币铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-slisbnbx-with-smart-lending-lp-tokens.md)
+* [BNB 验证器: Lista DAO](introduction/bnb-validator-lista-dao.md)
 * [路线图](introduction/roadmap.md)
 * [常见问题解答](introduction/faq.md)
 
@@ -52,11 +52,12 @@
 
 * [LISTA](governance/lista/README.md)
   * [LISTA 分配](governance/lista/lista-distribution.md)
+  * [LISTA 持有者福利](governance/lista/lista-holder-benefits.md)
   * [治理](governance/lista/governance/README.md)
     * [治理提案模板](governance/lista/governance/governance-proposal-template.md)
   * [LISTA 永久锁定 (LIP-016)](governance/lista/permanent-locking-of-lista-lip-016.md)
   * [LISTA 通缩倡议：20% 代币销毁 (LIP-021)](governance/lista/lista-deflationary-initiative-20-token-burn-lip-021.md)
-  * [收入/成本](governance/lista/revenue-cost.md)
+  * [收入 / 成本](governance/lista/revenue-cost.md)
   * [分析](governance/lista/analytics.md)
 
 ## 用户指南
@@ -64,7 +65,7 @@
 * [抵押债务位置 (lisUSD CDP)](user-guide/collateral-debt-position/README.md)
   * [提供抵押品](user-guide/collateral-debt-position/provide-collateral.md)
   * [借用 lisUSD](user-guide/collateral-debt-position/borrow-lisusd.md)
-  * [还款 lisUSD](user-guide/collateral-debt-position/repay-lisusd.md)
+  * [偿还 lisUSD](user-guide/collateral-debt-position/repay-lisusd.md)
   * [提取抵押品](user-guide/collateral-debt-position/withdraw-collateral.md)
   * [将 slisBNBx 委托给您的 Binance web3 MPC 钱包](user-guide/collateral-debt-position/delegating-clisbnb-to-your-binance-web3-mpc-wallet.md)
   * [稳定池 (PSM) - USDT 稳定收益](user-guide/collateral-debt-position/stable-pool-psm-usdt-stable-earn.md)
@@ -72,7 +73,7 @@
 * [流动性质押 - slisBNB](user-guide/liquid-staking-slisbnb/README.md)
   * [如何兑换 slisBNB](user-guide/liquid-staking-slisbnb/how-to-swap-for-slisbnb.md)
   * [铸造 slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
-  * [从 slisBNB 赎回 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
+  * [从 slisBNB 兑换 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
   * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
 * [智能借贷](user-guide/smart-lending.md)
 * [Lista Lending](user-guide/lista-lending/README.md)
@@ -92,7 +93,7 @@
 * [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
 * [Lista Lending 风险基金](security/lista-lending-risk-fund.md)
 
-## 开发者专区
+## 开发者
 
 * [概览](for-developer/overview.md)
 * [LISTA 治理](for-developer/lista-governance/README.md)
@@ -115,17 +116,17 @@
   * [协议扩展](for-developer/lista-lending/protocol-extensions.md)
   * [集成模式](for-developer/lista-lending/integration-patterns.md)
   * [智能合约](for-developer/lista-lending/smart-contract.md)
-    * [BSC 核心](for-developer/lista-lending/smart-contract-bsc-core.md)
-    * [BSC 借贷经纪人](for-developer/lista-lending/smart-contract-bsc-brokers.md)
-    * [BSC 智能借贷](for-developer/lista-lending/smart-contract-bsc-smart-lending.md)
-    * [BSC 预言机](for-developer/lista-lending/smart-contract-bsc-oracles.md)
-    * [BSC 信用](for-developer/lista-lending/smart-contract-bsc-credit.md)
-    * [以太坊](for-developer/lista-lending/smart-contract-ethereum.md)
-* [Lista 平台服务](for-developer/services/README.md)
+    * [BSC Core](for-developer/lista-lending/smart-contract-bsc-core.md)
+    * [BSC Lending Brokers](for-developer/lista-lending/smart-contract-bsc-brokers.md)
+    * [BSC Smart Lending](for-developer/lista-lending/smart-contract-bsc-smart-lending.md)
+    * [BSC Oracles](for-developer/lista-lending/smart-contract-bsc-oracles.md)
+    * [BSC Credit](for-developer/lista-lending/smart-contract-bsc-credit.md)
+    * [Ethereum](for-developer/lista-lending/smart-contract-ethereum.md)
+* [Lista Platform Services](for-developer/services/README.md)
   * [位置数据维护](for-developer/services/position-data-maintenance.md)
   * [清算逻辑 (服务)](for-developer/services/liquidation-logic.md)
   * [订阅模块](for-developer/services/subscription-module.md)
-  * [Moolah 借贷 API](for-developer/services/lending-api/README.md)
+  * [Moolah Lending API](for-developer/services/lending-api/README.md)
     * [总览](for-developer/services/lending-api/overall.md)
     * [金库](for-developer/services/lending-api/vault.md)
     * [市场](for-developer/services/lending-api/market.md)
@@ -136,15 +137,15 @@
   * [智能合约](for-developer/rwa/smart-contract.md)
 * [信用贷款](for-developer/credit-loans/README.md)
   * [贷款生命周期](for-developer/credit-loans/loan-lifecycle.md)
-  * [坏账处理](for-developer/credit-loans/bad-debt-handling.md)
+  * [不良债务处理](for-developer/credit-loans/bad-debt-handling.md)
   * [智能合约](for-developer/credit-loans/smart-contract.md)
-* [Lista 权利](for-developer/lista-rights/README.md)
+* [Lista Rights](for-developer/lista-rights/README.md)
   * [智能合约](for-developer/lista-rights/smart-contract.md)
 
 ## 合作伙伴关系
 
 * [品牌套件](partnerships/brand-kit.md)
-* [我们的频道](partnerships/our-channels.md)
+* [我们的渠道](partnerships/our-channels.md)
 
 ## 免责声明
 
