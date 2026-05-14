@@ -52,6 +52,7 @@
 
 * [LISTA](governance/lista/README.md)
   * [LISTA distribution](governance/lista/lista-distribution.md)
+  * [LISTA Holder Benefits](governance/lista/lista-holder-benefits.md)
   * [Governance](governance/lista/governance/README.md)
     * [Governance proposal template](governance/lista/governance/governance-proposal-template.md)
   * [Permanent locking of LISTA (LIP-016)](governance/lista/permanent-locking-of-lista-lip-016.md)
