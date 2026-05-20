@@ -61,6 +61,20 @@ jobs:
           echo "開始同步 ${{ github.ref_name }} 分支"
           node scripts/sync.js
 
+      - name: Verify no drift between local docs and origin/${{ github.ref_name }}
+        env:
+          PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+          PINECONE_INDEX_NAME: 'gitbook-rag'
+        run: |
+          # Reconcile in dry-run mode — should report 0 mutations after a healthy sync.
+          # Non-zero means the incremental sync missed something; fix or rerun reconcile.
+          OUTPUT=$(node scripts/reconcile-from-en.js)
+          echo "$OUTPUT"
+          if ! echo "$OUTPUT" | grep -q "Total mutations: 0"; then
+            echo "::error::Drift detected after sync — see output above. Run scripts/reconcile-from-en.js --apply locally and push."
+            exit 1
+          fi
+
       - name: Validate topic paths
         run: node scripts/validate-topics.js
 

@@ -41,6 +41,7 @@ class GitBookRAGSyncer {
       ragBranch: "RAG",
       chunkSize: { min: 200, max: 500 },
       indexName: process.env.PINECONE_INDEX_NAME || "gitbook-rag",
+      stateFile: ".sync-state.json",
     };
 
     this.smartProcessor = new SmartProcessor(this.config);
@@ -62,24 +63,163 @@ class GitBookRAGSyncer {
       await this.initializeEmbedder();
 
       await this.git.checkout(this.config.ragBranch);
+      await this.git.fetch("origin", changedBranch);
 
-      const changedFiles = await this.getChangedMarkdownFiles(changedBranch);
+      const state = await this.readState();
+      const targetSha = (
+        await this.git.revparse([`origin/${changedBranch}`])
+      ).trim();
 
-      if (changedFiles.length === 0) {
-        logger.info("沒有 Markdown 文件變更");
+      if (!state || state.branch !== changedBranch) {
+        throw new Error(
+          `No usable .sync-state.json for branch ${changedBranch}. Run scripts/reconcile-from-en.js --apply first to establish baseline.`
+        );
+      }
+      if (state.lastSyncedSha === targetSha) {
+        logger.info(`已是最新 (${targetSha.slice(0, 7)})，跳過`);
         return;
       }
 
-      logger.info(`檢測到 ${changedFiles.length} 個變更的 Markdown 文件`);
-
-      for (const file of changedFiles) {
-        await this.syncFile(file, changedBranch);
+      const isAncestor = await this.isAncestor(
+        state.lastSyncedSha,
+        targetSha
+      );
+      if (!isAncestor) {
+        throw new Error(
+          `lastSyncedSha ${state.lastSyncedSha} is not an ancestor of origin/${changedBranch} (${targetSha}). History may have been rewritten — run reconcile to recover.`
+        );
       }
 
+      const changes = await this.getChangedMarkdownFilesWithStatus(
+        state.lastSyncedSha,
+        targetSha
+      );
+
+      if (changes.length === 0) {
+        logger.info("沒有 Markdown 文件變更");
+        await this.writeState(changedBranch, targetSha);
+        return;
+      }
+
+      logger.info(
+        `從 ${state.lastSyncedSha.slice(0, 7)} → ${targetSha.slice(
+          0,
+          7
+        )}，檢測到 ${changes.length} 個 Markdown 變更`
+      );
+
+      for (const change of changes) {
+        await this.applyChange(change, changedBranch);
+      }
+
+      await this.writeState(changedBranch, targetSha);
       logger.info("增量同步完成");
     } catch (error) {
       logger.error("同步失敗:", { error: error.message, stack: error.stack });
       throw error;
+    }
+  }
+
+  async readState() {
+    try {
+      const raw = await fs.readFile(this.config.stateFile, "utf8");
+      return JSON.parse(raw);
+    } catch (e) {
+      if (e.code === "ENOENT") return null;
+      logger.warn(`讀取 ${this.config.stateFile} 失敗:`, e.message);
+      return null;
+    }
+  }
+
+  async writeState(branch, sha) {
+    const payload = {
+      branch,
+      lastSyncedSha: sha,
+      updatedAt: new Date().toISOString(),
+    };
+    await fs.writeFile(
+      this.config.stateFile,
+      JSON.stringify(payload, null, 2) + "\n"
+    );
+    logger.info(`狀態已更新: ${branch}@${sha.slice(0, 7)}`);
+  }
+
+  async isAncestor(ancestorSha, descendantSha) {
+    try {
+      await this.git.raw([
+        "merge-base",
+        "--is-ancestor",
+        ancestorSha,
+        descendantSha,
+      ]);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async getChangedMarkdownFilesWithStatus(fromSha, toSha) {
+    try {
+      const raw = await this.git.raw([
+        "diff",
+        "--name-status",
+        "-M",
+        `${fromSha}..${toSha}`,
+      ]);
+      const changes = [];
+      for (const line of raw.split("\n")) {
+        if (!line.trim()) continue;
+        const parts = line.split("\t");
+        const code = parts[0];
+        if (code.startsWith("R")) {
+          const [, oldPath, newPath] = parts;
+          if (!newPath.endsWith(".md") && !oldPath.endsWith(".md")) continue;
+          changes.push({ status: "R", oldPath, newPath });
+        } else if (code === "A" || code === "M" || code === "C") {
+          const filePath = parts[1];
+          if (!filePath.endsWith(".md")) continue;
+          changes.push({ status: code === "C" ? "A" : code, filePath });
+        } else if (code === "D") {
+          const filePath = parts[1];
+          if (!filePath.endsWith(".md")) continue;
+          changes.push({ status: "D", filePath });
+        } else if (code === "T") {
+          const filePath = parts[1];
+          if (!filePath.endsWith(".md")) continue;
+          changes.push({ status: "M", filePath });
+        }
+      }
+      return changes;
+    } catch (error) {
+      logger.error("獲取變更文件失敗:", error);
+      throw error;
+    }
+  }
+
+  async applyChange(change, branch) {
+    if (change.status === "A" || change.status === "M") {
+      logger.info(`[${change.status}] ${change.filePath}`);
+      await this.syncFile(change.filePath, branch);
+    } else if (change.status === "D") {
+      logger.info(`[D] ${change.filePath}`);
+      await this.deleteFile(change.filePath, branch);
+    } else if (change.status === "R") {
+      const oldIsMd = change.oldPath.endsWith(".md");
+      const newIsMd = change.newPath.endsWith(".md");
+      logger.info(`[R] ${change.oldPath} → ${change.newPath}`);
+      if (oldIsMd) await this.deleteFile(change.oldPath, branch);
+      if (newIsMd) await this.syncFile(change.newPath, branch);
+    }
+  }
+
+  async deleteFile(filePath, branch) {
+    await this.cleanupFileVectors(filePath);
+    const localPath = path.join(`doc/${branch}`, filePath);
+    try {
+      await fs.unlink(localPath);
+      logger.info(`已刪除本地文件: ${localPath}`);
+    } catch (e) {
+      if (e.code !== "ENOENT") logger.warn(`刪除 ${localPath} 失敗:`, e.message);
     }
   }
 
@@ -135,26 +275,6 @@ class GitBookRAGSyncer {
     }
   }
 
-  async getChangedMarkdownFiles(branch) {
-    try {
-      await this.git.fetch("origin", branch);
-      const diff = await this.git.diffSummary([
-        `origin/${branch}~1`,
-        `origin/${branch}`,
-      ]);
-
-      const markdownFiles = diff.files
-        .filter((file) => file.file.endsWith(".md"))
-        .map((file) => file.file);
-
-      logger.info(`${branch} 分支變更的 Markdown 文件:`, markdownFiles);
-      return markdownFiles;
-    } catch (error) {
-      logger.error(`獲取 ${branch} 分支變更文件失敗:`, error);
-      return [];
-    }
-  }
-
   async syncFile(filePath, branch) {
     try {
       logger.info(`同步文件: ${filePath} (${branch})`);
@@ -188,23 +308,36 @@ class GitBookRAGSyncer {
     }
   }
 
+  // Deterministic deletion by ID prefix.
+  // Pinecone metadata-filter delete is gated behind enterprise tiers and
+  // a topK-bounded query can leak vectors for files with many chunks,
+  // so we list by ID prefix and page through everything.
+  // Failures throw so callers (sync state advancement) don't proceed on
+  // partial cleanup.
   async cleanupFileVectors(filePath) {
-    try {
-      const queryResponse = await this.index.query({
-        vector: new Array(1024).fill(0),
-        filter: { filename: filePath },
-        topK: 100,
-        includeMetadata: true,
-      });
+    const cleanFilename = filePath
+      .replace(/[\/\\]/g, "_")
+      .replace(/\.md$/, "");
+    const idPrefix = `en_${cleanFilename}_`;
 
-      if (queryResponse.matches && queryResponse.matches.length > 0) {
-        const idsToDelete = queryResponse.matches.map((match) => match.id);
-        await this.index.deleteMany(idsToDelete);
-        logger.info(`清理文件 ${filePath} 的 ${idsToDelete.length} 個舊向量`);
-      }
-    } catch (error) {
-      logger.error(`清理文件 ${filePath} 向量失敗:`, error);
+    const ids = [];
+    let paginationToken;
+    do {
+      const res = await this.index.listPaginated({
+        prefix: idPrefix,
+        ...(paginationToken ? { paginationToken } : {}),
+      });
+      for (const v of res.vectors || []) ids.push(v.id);
+      paginationToken = res.pagination?.next;
+    } while (paginationToken);
+
+    if (ids.length === 0) return;
+
+    const batchSize = 1000;
+    for (let i = 0; i < ids.length; i += batchSize) {
+      await this.index.deleteMany(ids.slice(i, i + batchSize));
     }
+    logger.info(`清理文件 ${filePath} 的 ${ids.length} 個舊向量`);
   }
 
   detectLanguage(text) {
