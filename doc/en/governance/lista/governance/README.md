@@ -6,30 +6,30 @@ Voting empowers the Lista DAO community, allowing members to influence and shape
 
 Explore Lista DAO’s native voting portal on Snapshot [here](https://snapshot.org/#/listavote.eth).
 
-veLISTA holders possess voting rights within Lista’s governance system. As Lista DAO matures, more topics will be added into the scope for governance. The following topics currently falls within the scope of governance:
+LISTA holders possess voting rights within Lista’s governance system. As Lista DAO matures, more topics will be added into the scope for governance. The following topics currently falls within the scope of governance:
 
-1. Modifying fees rate: withdrawal fees, early Unlock fees for veLISTA
+1. Modifying fees rate: withdrawal fees, early Unlock fees for LISTA
 2. Adding of a new collateral
 3. Increase and decrease Collateral Rate and collateral debt cap
-4. Protocol fee sharing for veLISTA holder
+4. Protocol fee sharing for LISTA holder
 5. Voting on the share of LISTA Emission on Liquidity Pool
 
-_Note\* Collateral options  from the Lista Innovation Zone can be removed without requiring a governance vote. This allows us to swiftly and efficiently remove any collateral deemed risky, ensuring the process remains smooth and protects the platform from potential vulnerabilities._&#x20;
+_Note\* Collateral options from the Lista Innovation Zone can be removed without requiring a governance vote. This allows us to swiftly and efficiently remove any collateral deemed risky, ensuring the process remains smooth and protects the platform from potential vulnerabilities._
 
 _Note\*_ &#x54;_&#x6F; ensure the stability and responsiveness of our platform, The core team reserves the right to adjust the borrow rate flexibly in response to significant market fluctuations. This approach allows us to adapt to rapidly changing market conditions without requiring a snapshot proposal. Users can rest assured that any adjustments will be made with careful consideration to maintain balance and align with market realities._
 
-All governance proposals must be voted on by veLISTA holders, while only the Lista DAO Core team can submit proposals. The results of proposals will be implemented by the Lista DAO team.
+All governance proposals must be voted on by LISTA holders, while only the Lista DAO Core team can submit proposals. The results of proposals will be implemented by the Lista DAO team.
 
-Community proposals, posted by the Lista DAO community, are used to propose ideas and express the community’s point of view. The Lista DAO team will incorporate well-supported ideas or designs into Core proposals. Additionally, community members can provide feedback and make suggestions on our Forum, contributing to the ongoing development of the protocol.&#x20;
+Community proposals, posted by the Lista DAO community, are used to propose ideas and express the community’s point of view. The Lista DAO team will incorporate well-supported ideas or designs into Core proposals. Additionally, community members can provide feedback and make suggestions on our Forum, contributing to the ongoing development of the protocol.
 
 ## Voting Threshold
 
 Governance of Lista DAO operates under specific rules & conditions:
 
-1. Voting Eligibility: Users with any amount of veLISTA are entitled to vote on proposals. Their voting power is directly proportional to the amount of veLISTA they hold relative to other veLISTA holders.
+1. Voting Eligibility: Users with any amount of LISTA are entitled to vote on proposals. Their voting power is directly proportional to the amount of LISTA they hold relative to other LISTA holders.
 2. Proposal Submission: Only core team members can submit proposals for voting.
 3. Voting period: Each proposal’s voting period will last for a period of 3 days, before the final results are tallied
-4. Proposal Approval: A proposal is considered approved when it receives support from over 50% of the veLISTA tokens cast in the vote.
+4. Proposal Approval: A proposal is considered approved when it receives support from over 50% of the LISTA tokens cast in the vote.
 5. Implementation: Once a proposal is passed, it will be implemented within 1 to 2 weeks. If there are delays due to special circumstances, the Lista core team will provide an explanation.
 
 ## Veto

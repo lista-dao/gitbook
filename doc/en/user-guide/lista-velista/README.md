@@ -1,7 +1,0 @@
----
-hidden: true
----
-
-# LISTA / veLISTA
-
-##
