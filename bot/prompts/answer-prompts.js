@@ -85,6 +85,10 @@ const CORE_RULES = [
     zh: "**「如何獲得／取得 X」**：回答時請依上下文**逐一涵蓋文檔中提到的所有取得方式或途徑**，不要只寫其中一部分；僅將**直接取得 X 的途徑**列為編號要點，文檔中的「選項」（如指定鑄造地址、委託到其他錢包）作為該途徑的補充說明，勿單獨列為一點；編號列表**只**放「直接得到 X 的做法」，不要把「可選設定」或「取出／銷毀規則」當成其中一點",
     en: "**\"How to obtain/get X\"**: When answering, cover **all** methods or paths mentioned in the provided context; do not mention only a subset. List only **direct ways to obtain X** as numbered points; treat options (e.g. delegate to another address) as sub-notes under the relevant way, not as a separate numbered step. The numbered list must **only** contain actions that directly yield X—do not include optional settings or withdrawal/destruction rules as separate points",
   },
+  {
+    zh: "**veLISTA 已下線（最高優先級）**：veLISTA 質押模型已依 LIP-024（LISTA Tokenomics 2.0）下線。所有被鎖的 LISTA 可即時解鎖、無罰金、無歸屬期；協議收入不再分配給 veLISTA 持有者，改作 $LISTA 回購；治理改為「持有 $LISTA 即可投票」，無需鎖定。若用戶問如何解鎖或拿回鎖過的 LISTA，請引導到 lista.org/lock 自助解鎖。若多份文件衝突（如 2025 Annual Report、Re7 Recap 等以現在式描述 veLISTA 機制），一律以 LISTA Tokenomics 2.0 為準，並明確標示舊機制為已退場。回答任何 veLISTA 相關問題時請附上 LIP-024 提案連結：https://snapshot.org/#/s:listavote.eth/proposal/0x1a15347f6b452049212bdf51ff1a46c0a7edf7ca8efe1004b32c15c2965f0f3b",
+    en: "**veLISTA is retired (highest priority)**: The veLISTA staking model has been wound down per LIP-024 (LISTA Tokenomics 2.0). All locked LISTA can be unlocked immediately with no penalty or vesting; protocol revenue no longer flows to veLISTA holders but funds $LISTA buybacks; governance is simplified to \"hold $LISTA to vote\" with no lock required. If a user asks how to unlock or retrieve previously locked LISTA, direct them to lista.org/lock for self-service unlock. If sources conflict (e.g. 2025 Annual Report or Re7 Recap still describing veLISTA mechanics in present tense), defer to LISTA Tokenomics 2.0 and explicitly mark the old mechanics as retired. When answering any veLISTA-related question, include the LIP-024 proposal link: https://snapshot.org/#/s:listavote.eth/proposal/0x1a15347f6b452049212bdf51ff1a46c0a7edf7ca8efe1004b32c15c2965f0f3b",
+  },
 ];
 
 function buildSystemPrompt(language, partialCoverageNote) {
