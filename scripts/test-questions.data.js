@@ -158,14 +158,85 @@ const questList = [
     topic: "lending",
     question: "Moolah Lending API 的 Base URL 是什麼？",
     checks: {
-      mustIncludeAny: [
-        ["base url"],
-        ["沒有明確", "并没有明确", "does not contain", "cannot provide", "无法提供"],
-      ],
+      mustIncludeAny: [["/api/moolah", "base url", "moolah"]],
     },
   },
   // ✅ passed in previous run
   // "If docs are missing for a asked backend topic, how should the assistant respond?",
+
+  // ── Reconcile regression: 2026-05 doc/en rewire ──
+  // Before this round, the broken sync left governance/velista/* and
+  // user-guide/lista-velista/* paths indexed even though they were
+  // deleted upstream; new services/lending-api/* and governance/lista/
+  // additions were never indexed at all. These questions lock in the fix.
+
+  // veLISTA must be described as retired (Tokenomics 2.0), not active,
+  // and no stale velista path should appear in citations.
+  {
+    topic: "tokenomics",
+    question: "veLISTA 現在還能用嗎？目前狀態是什麼？",
+    checks: {
+      mustIncludeAny: [
+        ["retired", "sunset", "wound down", "tokenomics 2.0", "退休", "下線", "下线", "停止", "終止", "终止"],
+      ],
+      mustNotInclude: ["governance/velista/", "user-guide/lista-velista"],
+    },
+  },
+
+  // Revenue / Cost answers must come from the new governance/lista/
+  // location and reflect current revenue sources (no veLISTA early-unlock fee).
+  {
+    topic: "tokenomics",
+    question: "Lista DAO 目前的主要收入來源有哪些？",
+    checks: {
+      mustInclude: ["lisusd"],
+      mustIncludeAny: [
+        ["borrowing", "borrow", "借貸", "借贷"],
+        ["lst", "slisbnb"],
+      ],
+      mustNotInclude: [
+        "governance/velista/",
+        "velista early unlock fee",
+        "velista holders earn a share",
+      ],
+    },
+  },
+
+  // New file added on en: governance/lista/lista-holder-benefits.md
+  {
+    topic: "tokenomics",
+    question: "LISTA 持有者現在有哪些好處？",
+    checks: {
+      mustIncludeAny: [
+        ["liquidation protection", "delayed liquidation", "延遲清算", "延迟清算", "清算保護", "清算保护"],
+      ],
+    },
+  },
+
+  // bnb-validator-lista-dao.md was rewritten "veLISTA holders" → "LISTA holders".
+  // No mustNotInclude: the prompt rule now mandates explaining the veLISTA →
+  // LISTA transition, so contrastive phrasing like "no longer veLISTA holders"
+  // is correct — the must-include of "lista holder" already ensures the
+  // current beneficiary is named.
+  {
+    topic: "tokenomics",
+    question: "Lista DAO 作為 BNB validator 的收益會分配給誰？",
+    checks: {
+      mustIncludeAny: [["lista holder", "lista 持有", "lista holders"]],
+    },
+  },
+
+  // Lending API docs (for-developer/services/lending-api/*) were never
+  // indexed before this round — verify they are now retrievable.
+  {
+    topic: "lending",
+    question: "Moolah Lending API 取得 market 列表的 endpoint 是什麼？",
+    checks: {
+      mustIncludeAny: [
+        ["/api/moolah/borrow/markets", "borrow/markets", "/api/moolah"],
+      ],
+    },
+  },
 ];
 
 module.exports = { questList };
