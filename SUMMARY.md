@@ -26,7 +26,7 @@
 * [智能借贷与交换](introduction/smart-lending.md)
 * [抵押债务位置 - lisUSD](introduction/collateral-debt-position-lisusd/README.md)
   * [抵押品](introduction/collateral-debt-position-lisusd/collateral/README.md)
-    * [经典抵押品选项](introduction/collateral-debt-position-lisusd/collateral/classic-collateral-options.md)
+    * [经典抵押选项](introduction/collateral-debt-position-lisusd/collateral/classic-collateral-options.md)
     * [Lista Innovation Zone](introduction/collateral-debt-position-lisusd/collateral/lista-innovation-zone.md)
     * [贷款清算](introduction/collateral-debt-position-lisusd/collateral/loan-liquidation.md)
   * [lisUSD](introduction/collateral-debt-position-lisusd/lisusd/README.md)
@@ -40,11 +40,12 @@
 * [RWA 市场](introduction/rwa-markets.md)
 * [Lista Credit](introduction/lista-credit.md)
 * [Binance Launchpool: slisBNBx](introduction/binance-launchpool-clisbnb/README.md)
-  * [用 slisBNB 铸造 slisBNBx](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
+  * [使用 slisBNB 铸造 slisBNBx](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [在 Lista Lending 上铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
-  * [用 BNB/slisBNB LP 代币铸造 $slisBNBx](introduction/binance-launchpool-clisbnb/minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens.md)
-  * [用 Smart Lending LP 代币铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-slisbnbx-with-smart-lending-lp-tokens.md)
+  * [使用 BNB/slisBNB LP 代币铸造 $slisBNBx](introduction/binance-launchpool-clisbnb/minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens.md)
+  * [使用 Smart Lending LP 代币铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-slisbnbx-with-smart-lending-lp-tokens.md)
 * [BNB 验证器: Lista DAO](introduction/bnb-validator-lista-dao.md)
+* [lisASTER](introduction/lisaster.md)
 * [路线图](introduction/roadmap.md)
 * [常见问题解答](introduction/faq.md)
 
@@ -57,7 +58,7 @@
     * [治理提案模板](governance/lista/governance/governance-proposal-template.md)
   * [LISTA 永久锁定 (LIP-016)](governance/lista/permanent-locking-of-lista-lip-016.md)
   * [LISTA 通缩倡议：20% 代币销毁 (LIP-021)](governance/lista/lista-deflationary-initiative-20-token-burn-lip-021.md)
-  * [收入 / 成本](governance/lista/revenue-cost.md)
+  * [收入/成本](governance/lista/revenue-cost.md)
   * [分析](governance/lista/analytics.md)
 
 ## 用户指南
@@ -93,7 +94,7 @@
 * [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
 * [Lista Lending 风险基金](security/lista-lending-risk-fund.md)
 
-## 开发者
+## 开发者专区
 
 * [概览](for-developer/overview.md)
 * [LISTA 治理](for-developer/lista-governance/README.md)
@@ -109,7 +110,7 @@
   * [智能合约](for-developer/liquid-staking-slisbnb/smart-contract.md)
 * [slisBNBx](for-developer/clisbnb/README.md)
   * [代币生命周期](for-developer/clisbnb/token-lifecycle.md)
-  * [铸造比例逻辑](for-developer/clisbnb/minting-ratio-logic.md)
+  * [铸币比率逻辑](for-developer/clisbnb/minting-ratio-logic.md)
   * [委托](for-developer/clisbnb/delegation.md)
   * [智能合约](for-developer/clisbnb/smart-contract.md)
 * [Lista Lending](for-developer/lista-lending/README.md)
@@ -130,14 +131,14 @@
     * [总览](for-developer/services/lending-api/overall.md)
     * [金库](for-developer/services/lending-api/vault.md)
     * [市场](for-developer/services/lending-api/market.md)
-    * [位置、清算、排放](for-developer/services/lending-api/position-liquidation-emission.md)
+    * [位置, 清算, 发射](for-developer/services/lending-api/position-liquidation-emission.md)
 * [RWA](for-developer/rwa/README.md)
   * [用户操作](for-developer/rwa/user-operations.md)
   * [机器人操作](for-developer/rwa/bot-operations.md)
   * [智能合约](for-developer/rwa/smart-contract.md)
 * [信用贷款](for-developer/credit-loans/README.md)
   * [贷款生命周期](for-developer/credit-loans/loan-lifecycle.md)
-  * [不良债务处理](for-developer/credit-loans/bad-debt-handling.md)
+  * [坏账处理](for-developer/credit-loans/bad-debt-handling.md)
   * [智能合约](for-developer/credit-loans/smart-contract.md)
 * [Lista Rights](for-developer/lista-rights/README.md)
   * [智能合约](for-developer/lista-rights/smart-contract.md)
@@ -145,7 +146,7 @@
 ## 合作伙伴关系
 
 * [品牌套件](partnerships/brand-kit.md)
-* [我们的渠道](partnerships/our-channels.md)
+* [我们的频道](partnerships/our-channels.md)
 
 ## 免责声明
 
