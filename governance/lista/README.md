@@ -4,7 +4,7 @@ LISTA is the governance token for Lista DAO. It allows users to participate in p
 
 Similar to lisUSD, LISTA token is a medium of exchange in its own right, which can be swapped or put in a farming pool on a DEX at the user’s discretion, e.g. to maximise their capital efficiency, obtain borrowings, and/or compound their yield.
 
-Following [LIP-021](https://snapshot.org/#/s:listavote.eth/proposal/0xdb92580e04ca8d688404a689a99579294715bd9ab858cc9b7ba637599720a6ff), the total supply of LISTA has been reduced from 1 billion to 800 million. Check us out on CoinMarketCap [here](https://coinmarketcap.com/currencies/lista-dao/).
+Following [LIP-021](https://snapshot.org/#/s:listavote.eth/proposal/0xdb92580e04ca8d688404a689a99579294715bd9ab858cc9b7ba637599720a6ff), 200 million LISTA were permanently locked and the total supply of LISTA has been reduced from 1 billion to 800 million. Check us out on CoinMarketCap [here](https://coinmarketcap.com/currencies/lista-dao/).
 
 With the approval of [LIP-024](https://snapshot.org/#/s:listavote.eth/proposal/0x1a15347f6b452049212bdf51ff1a46c0a7edf7ca8efe1004b32c15c2965f0f3b), a new tokenomics was implemented. This upgrade include:
 

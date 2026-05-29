@@ -1,55 +1,41 @@
 # LISTA distribution
 
-Note: this page explains LISTA's tokenomics at launch. For the latest tokenomics, refer to [this page](./).
+Following [LIP-021](https://snapshot.org/#/s:listavote.eth/proposal/0xdb92580e04ca8d688404a689a99579294715bd9ab858cc9b7ba637599720a6ff), 200 million LISTA were permanently locked and the total supply of LISTA has been reduced from 1 billion to 800 million. The distributions of all LISTA tokens at launch and after this proposal are:
 
-## Circulating supply at launch
+| Allocation           | Percentage at Launch | Percentage Post LIP-021 |
+| -------------------- | -------------------- | ----------------------- |
+| Permanently Locked   | 0.00%                | 20.00%                  |
+| Binance Megadrop     | 10.00%               | 10.00%                  |
+| Airdrop              | 10.00%               | 10.00%                  |
+| Investors & Advisors | 19.00%               | 17.00%                  |
+| Team                 | 3.50%                | 2.50%                   |
+| Community            | 40.00%               | 26.00%                  |
+| DAO Treasury         | 8.00%                | 5.00%                   |
+| Ecosystem            | 9.50%                | 9.50%                   |
 
-Circulating supply refers to the total amount of LISTA tokens that are freely available for trading, without any specific transfer restrictions.
-
-Here are the details of Lista’s circulating supply upon launch:
-
-1. Upon launch, 10% of LISTA’s total token supply allocated towards Binance Megadrop was unlocked.
-2. Upon launch, 8.5% of LISTA’s total token supply allocated towards our Airdrop campaign was unlocked.
-3. Upon launch, 3.5% of LISTA’s total token supply allocated towards ecosystem growth was unlocked.
-4. Upon launch, 1% of LISTA’s total token supply allocated towards investors & advisors was unlocked.
-
-This brings the total circulating supply of LISTA at launch (June 20) to be set at 23%, or 230,000,000 LISTA tokens.
-
-### The table below is a breakdown of LISTA's token distribution.
-
-| Token Name           | Lista                            |
-| -------------------- | -------------------------------- |
-| Binance Megadrop     | 10.00% of the total token supply |
-| Airdrop              | 10.00% of the total token supply |
-| Investors & Advisors | 19.00% of the total token supply |
-| Team                 | 3.50% of the total token supply  |
-| Community            | 40.00% of the total token supply |
-| DAO Treasury         | 8.00% of the total token supply  |
-| Ecosystem            | 9.50% of the total token supply  |
-
-### Binance Megadrop (10.00%)
+### Binance Megadrop
 
 The entirety of the token supply allocated towards Binance Megadrop, will be unlocked on launch.
 
-### Airdrop (10.00%)
+### Airdrop
 
 At Launch, 85% of the tokens allocated to the Lista DAO’s airdrop, equating to 8.5% of the total token supply, will be unlocked.
 
 The remaining 15%, which is 1.5% of LISTA’s total token supply, will be unlocked by Q2 2025.
 
-### Investors & advisors (19.00%)
+### Investors & advisors
 
 1% of the total token supply allocated towards investors & advisors will be unlocked on launch.
 
 The remaining 18% will be locked for a one-year cliff until June 2025. From June 2025 onwards, this portion will be vested and unlocked linearly every quarter over the next two years until March 2027.
 
-### Team (3.50%)
+### Team
 
 100% of the token supply allocated to the Lista DAO team (3.50%) will be locked for a 1 year cliff until June 2025, with the first unlock happening in June 2025.
 
 From June 2025 onwards, the 3.50% token supply allocated towards the Lista DAO team will be vested and unlocked linearly every quarter (3 months) over the next 5 years until March 2029.
 
-### Community (40.00%)
+### Community
 
 Upon launch, the token supply allocated towards community incentives will be channeled towards token emissions to incentivise various DeFi activities on Lista DAO such as LPs rewards, lisUSD single staking pool, etc.
 
@@ -75,13 +61,13 @@ Second Half: The second half of the Lista token emissions (4,886,325.5 LISTA/mon
 
 As of now, the emission rate of LISTA is currently set at **540,00 LISTA/week**. All remaining unissued LISTA tokens will continue to be allocated to community incentives, with future decisions on emission rates determined through DAO voting. As we complete our transition to a DAO, the power to adjust LISTA’s current emission parameters will also progressively shift to veLISTA holders.
 
-### DAO treasury (8.00%)
+### DAO treasury
 
 100% of the token supply allocated towards Lista DAO’s treasury (8.00%) will be locked for a 3 month cliff until September 2024, with the first unlock happening in September 2024.
 
 From September 2024 onwards, the 8.00% token supply allocated towards Lista DAO’s treasury will be vested and unlocked linearly every quarter (3 months) over the next 4 years until June 2028.
 
-### Ecosystem (9.50%)
+### Ecosystem
 
 3.50% of the total token supply allocated towards ecosystem incentives will be unlocked on launch.
 
