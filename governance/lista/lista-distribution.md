@@ -2,16 +2,16 @@
 
 Following [LIP-021](https://snapshot.org/#/s:listavote.eth/proposal/0xdb92580e04ca8d688404a689a99579294715bd9ab858cc9b7ba637599720a6ff), 200 million LISTA were permanently locked and the total supply of LISTA has been reduced from 1 billion to 800 million. The distributions of all LISTA tokens at launch and after this proposal are:
 
-| Allocation           | Percentage at Launch | Percentage Post LIP-021 |
-| -------------------- | -------------------- | ----------------------- |
-| Permanently Locked   | 0.00%                | 20.00%                  |
-| Binance Megadrop     | 10.00%               | 10.00%                  |
-| Airdrop              | 10.00%               | 10.00%                  |
-| Investors & Advisors | 19.00%               | 17.00%                  |
-| Team                 | 3.50%                | 2.50%                   |
-| Community            | 40.00%               | 26.00%                  |
-| DAO Treasury         | 8.00%                | 5.00%                   |
-| Ecosystem            | 9.50%                | 9.50%                   |
+| Allocation             | Percentage at Launch | Percentage Post LIP-021 |
+| ---------------------- | -------------------- | ----------------------- |
+| Permanently Locked     | 0.00%                | 20.00%                  |
+| Binance Megadrop       | 10.00%               | 10.00%                  |
+| Airdrop                | 10.00%               | 10.00%                  |
+| Investors & Advisors   | 19.00%               | 17.00%                  |
+| Team                   | 3.50%                | 2.50%                   |
+| Community              | 40.00%               | 26.00%                  |
+| Reserve (DAO Treasury) | 8.00%                | 5.00%                   |
+| Ecosystem              | 9.50%                | 9.50%                   |
 
 ### Binance Megadrop
 
