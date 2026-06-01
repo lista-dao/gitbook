@@ -1,6 +1,6 @@
 # Lista Credit
 
-Lista Credit offers unsecured, small-amount credit lending. Currently, Lista Credit and its credit system is only open to Binance MPC wallet addresses.
+Lista Credit offers unsecured, small-amount credit lending. Currently, Lista Credit Phase 1 has concluded. Lista team will evaluate all data & insights from Phase 1 and plan for Phase 2, when Credit will be open to more addresses in larger amounts.
 
 ### Credit System
 
