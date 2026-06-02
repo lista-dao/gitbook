@@ -142,6 +142,8 @@
   * [Smart Contract](for-developer/credit-loans/smart-contract.md)
 * [Lista Rights](for-developer/lista-rights/README.md)
   * [Smart Contract](for-developer/lista-rights/smart-contract.md)
+* [lisASTER](for-developer/lisaster/README.md)
+  * [Smart Contract](for-developer/lisaster/smart-contract.md)
 
 ## Partnerships
 
