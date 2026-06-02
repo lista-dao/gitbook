@@ -8,6 +8,22 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 
 | Feature                                          | Report                                                                                                                                                                                                                  |
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Fixed Term | [Bailsec-FixedTerm-20260511.pdf](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260511.pdf) |
+| Position Migrator | [Bailsec-Position-Migrator-20260318.pdf](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-Position-Migrator-20260318.pdf) |
+| Lista Lending Slis BNBx Minter | [Blocksec-ListaLending-SlisBNBxMinter-AuditReport-20251101.pdf](https://github.com/lista-dao/moolah/blob/master/docs/audits/Blocksec-ListaLending-SlisBNBxMinter-AuditReport-20251101.pdf) |
+| Position Migrator | [Cantina-Position-Migrator-20260318.pdf](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina-Position-Migrator-20260318.pdf) |
+| Lista Dao Position Manager | [CertiK-REP-Lista-Dao-PositionManager-20260410.pdf](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-REP-Lista-Dao-PositionManager-20260410.pdf) |
+| Idle Market | [HashDit-Idle-Market-20260526.pdf](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-Idle-Market-20260526.pdf) |
+| Position Manager | [cantina\_PositionManager\_20260410.pdf](https://github.com/lista-dao/moolah/blob/master/docs/audits/cantina_PositionManager_20260410.pdf) |
+| lista dao Slisbnb Provided Voting Incentive | [Bailsec\_lista\_dao\_SlisbnbProvided-VotingIncentive\_final.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/Bailsec_lista_dao_SlisbnbProvided-VotingIncentive_final.pdf) |
+| lista Slisbnb Provided Voting Incentive | [blocksec\_lista\_SlisbnbProvided-VotingIncentive\_v1.0\_signed.pdf](https://github.com/lista-dao/lista-token/blob/master/audits/blocksec_lista_SlisbnbProvided-VotingIncentive_v1.0_signed.pdf) |
+| V3 LP | [Bailsec\_V3\_LP\_20Sept\_2025.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Bailsec_V3_LP_20Sept_2025.pdf) |
+| V3 LP | [BlockSec\_V3\_LP\_04Sept\_2025.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/BlockSec_V3_LP_04Sept_2025.pdf) |
+| V3 LP | [CertiK\_V3\_LP\_04Sept\_2025.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/CertiK_V3_LP_04Sept_2025.pdf) |
+| V3 LP | [SpearBit\_V3\_LP\_01Sept\_2025.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/SpearBit_V3_LP_01Sept_2025.pdf) |
+| Lista DAO Flash Buy | [Supremacy-Audit-Report-ListaDAO\_FlashBuy-v0.1.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Supremacy-Audit-Report-ListaDAO_FlashBuy-v0.1.pdf) |
+| lista flashbuy | [blocksec\_lista\_flashbuy\_v1.0-signed.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/blocksec_lista_flashbuy_v1.0-signed.pdf) |
+| lista emission | [salus\_lista\_emission\_v1.0.pdf](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/salus_lista_emission_v1.0.pdf) |
 | lisAster                                         | [Bailsec-lisAster-Audit-Report.pdf](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-lisAster-Audit-Report.pdf)                                                                         |
 | lisAster                                         | [Sherlock-lisAster-Audit-Report.pdf](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Sherlock-lisAster-Audit-Report.pdf)                                                                       |
 | RWA                                              | [Bailsec-RWA-Audit Report.pdf](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-RWA-Audit%20Report.pdf)                                                                                 |
