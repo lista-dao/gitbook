@@ -70,14 +70,40 @@ function existingIds(doc) {
   return ids;
 }
 
-// Best-effort product label from a filename. The Feature column needs human
-// review; this only gives the maintainer a sensible starting point.
+// Best-effort product label from a filename. The Feature column is a starting
+// point — it is auto-guessed and may need a quick manual tidy.
+//
+// Strategy: tokenize on separators FIRST, drop auditor names / "audit" / "report"
+// / versions / dates as whole tokens (so e.g. "CertiK" or "HashDit" never leak),
+// THEN split the survivors on camelCase so "PositionManager" -> "Position Manager".
 function guessFeature(name) {
-  let s = name.replace(/\.pdf$/i, '').replace(/[_\-]+/g, ' ');
-  const drop =
-    /\b(bailsec|blocksec|cantina|spearbit|openzeppelin|certik|salus|peckshield|supremacy|veridise|slowmist|hashdit|sherlock|audit|reports?|final|signed|v\d+(\.\d+)*|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|\d{1,8})\b/gi;
-  s = s.replace(drop, ' ').replace(/\s+/g, ' ').trim();
-  return s || name.replace(/\.pdf$/i, '');
+  const DROP = new Set([
+    'bailsec', 'blocksec', 'cantina', 'spearbit', 'openzeppelin', 'certik',
+    'salus', 'peckshield', 'supremacy', 'veridise', 'slowmist', 'hashdit',
+    'sherlock', 'audit', 'auditreport', 'report', 'reports', 'final', 'signed', 'rep',
+  ]);
+  const MONTH = /^(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec|january|february|march|april|june|july|august|september|october|november|december)$/i;
+  // date-ish tokens: 20Sept, 04Sept, Jan2026, 12Nov2025
+  const DATEY = /^\d*(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\d*$/i;
+
+  const kept = [];
+  for (const tok of name.replace(/\.pdf$/i, '').split(/[_\-\s]+/)) {
+    if (!tok) continue;
+    const low = tok.toLowerCase();
+    if (DROP.has(low)) continue;
+    if (/^\d+$/.test(tok)) continue; // pure numbers (years, 20260511)
+    if (/^v?\d+(\.\d+)+$/i.test(tok)) continue; // dotted versions: v1.0, 0.1 (V3 kept)
+    if (MONTH.test(tok)) continue;
+    if (/\d/.test(tok) && DATEY.test(tok)) continue; // month+digit date tokens
+    kept.push(tok);
+  }
+
+  const s = kept.join(' ').replace(/([a-z])([A-Z])/g, '$1 $2'); // camelCase split
+  const out = [];
+  for (const w of s.split(/\s+/)) {
+    if (w && (!out.length || out[out.length - 1].toLowerCase() !== w.toLowerCase())) out.push(w);
+  }
+  return out.join(' ').trim() || name.replace(/\.pdf$/i, '');
 }
 
 function mdRow(file) {
