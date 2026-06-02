@@ -1,0 +1,63 @@
+name: Audit Reports Watch
+
+# Weekly check for new third-party audit PDFs in Lista's contract repos.
+# When new reports are found, they are appended to security/audit-reports.md and
+# committed directly to the `en` branch (fully automatic — the Feature column is
+# auto-guessed from the filename).
+#
+# NOTE: scheduled (cron) workflows only run from the repository's DEFAULT branch
+# (main), which is why this file lives on main even though the docs live on en.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # every Monday 06:00 UTC
+  workflow_dispatch: # allow manual runs
+
+concurrency:
+  group: audit-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  check-audits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout en branch
+        uses: actions/checkout@v4
+        with:
+          ref: en
+          fetch-depth: 0
+          # A PAT here lets the push to `en` trigger the downstream sync workflow
+          # (en -> RAG). With the default GITHUB_TOKEN, en is still updated but the
+          # RAG sync only runs on the next manual/other push to en.
+          token: ${{ secrets.AUDIT_SCAN_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Scan contract repos for new audit reports
+        id: scan
+        env:
+          # Optional PAT for higher rate limits / private repos; falls back to GITHUB_TOKEN.
+          GITHUB_TOKEN: ${{ secrets.AUDIT_SCAN_TOKEN || secrets.GITHUB_TOKEN }}
+        run: node utils/check-audit-updates.mjs
+
+      - name: Commit new reports to en
+        if: steps.scan.outputs.has_new == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add security/audit-reports.md
+          git commit -m "chore(audits): add ${{ steps.scan.outputs.count }} new audit report(s)
+
+          Auto-detected by the Audit Reports Watch workflow."
+          git push origin HEAD:en
+
+      - name: Job summary
+        if: always()
+        run: cat audit-sync-summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "Scan did not produce a summary." >> "$GITHUB_STEP_SUMMARY"
