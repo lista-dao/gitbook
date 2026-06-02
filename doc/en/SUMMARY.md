@@ -45,7 +45,7 @@
   * [Minting $slisBNBx with BNB/slisBNB LP Tokens](introduction/binance-launchpool-clisbnb/minting-usdslisbnbx-with-bnb-slisbnb-lp-tokens.md)
   * [Mint slisBNBx with Smart Lending LP Tokens](introduction/binance-launchpool-clisbnb/mint-slisbnbx-with-smart-lending-lp-tokens.md)
 * [BNB Validator: Lista DAO](introduction/bnb-validator-lista-dao.md)
-* [lisASTER](introduction/lisaster.md)
+* [lisAster](introduction/lisaster.md)
 * [Roadmap](introduction/roadmap.md)
 * [FAQ](introduction/faq.md)
 
@@ -142,7 +142,7 @@
   * [Smart Contract](for-developer/credit-loans/smart-contract.md)
 * [Lista Rights](for-developer/lista-rights/README.md)
   * [Smart Contract](for-developer/lista-rights/smart-contract.md)
-* [lisASTER](for-developer/lisaster/README.md)
+* [lisAster](for-developer/lisaster/README.md)
   * [Smart Contract](for-developer/lisaster/smart-contract.md)
 
 ## Partnerships
