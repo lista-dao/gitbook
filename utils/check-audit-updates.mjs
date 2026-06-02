@@ -23,12 +23,19 @@ import { readFileSync, writeFileSync, appendFileSync } from 'node:fs';
 const DOC = 'security/audit-reports.md';
 const MARKER = '2024 - Present'; // table lives right after this line
 
+// Audit folders to watch. To track another repo/folder, add a line here:
+//   { repo: 'lista-dao/<repo>', path: '<dir>', branch: '<branch>' }
+// Only this exact repo+path+branch is scanned — a brand-new repo, a different
+// audit folder, or a non-master branch will NOT be picked up until added here.
+// (Deliberately excluded: lista-smart-contracts_deprecated — duplicates the 2022
+// CDP audits; lista-audit — legacy Helio-era reports in an irregular layout.)
 const SOURCES = [
   { repo: 'lista-dao/moolah', path: 'docs/audits', branch: 'master' },
   { repo: 'lista-dao/lista-token', path: 'audits', branch: 'master' },
   { repo: 'lista-dao/lista-dao-contracts', path: 'audits', branch: 'master' },
   { repo: 'lista-dao/synclub-contracts', path: 'audit', branch: 'master' },
   { repo: 'lista-dao/lista-new-contracts', path: 'docs/audits', branch: 'master' },
+  { repo: 'lista-dao/lista-v3', path: 'audits', branch: 'master' },
 ];
 
 const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
@@ -56,6 +63,7 @@ function detectFirm(name) {
 // Returns 'YYYY-MM' or null (null = couldn't parse → manual fix).
 function parseDate(name) {
   let m;
+  if ((m = name.match(/^(\d{2})(0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])-/))) return `20${m[1]}-${m[2]}`; // 260430- (YYMMDD prefix)
   if ((m = name.match(/(20\d{2})-(\d{2})-\d{2}/))) return `${m[1]}-${m[2]}`; // 2024-07-12
   if ((m = name.match(/(20\d{2})(0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])/))) return `${m[1]}-${m[2]}`; // 20260511
   if ((m = name.match(/(jan|feb|mar|apr|may|jun|jul|aug|sept|sep|oct|nov|dec)[a-z]*[._-]?(20\d{2})/i))) {

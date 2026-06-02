@@ -1,17 +1,19 @@
 # 审计报告
 
-Lista的所有核心智能合约都经过了知名第三方安全公司的严格审计。这些独立评估确保了我们协议的完整性和抵御潜在漏洞的弹性。
+Lista的所有核心智能合约都经过了知名第三方安全公司的严格审计。这些独立评估确保了我们协议的完整性和抵抗潜在漏洞的弹性。
 
 **2024年至今**
 
 | 功能 | 审计 |
 | ------- | ------ |
 | Atlas Oracle Adaptor | [HashDit · 2026-05](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/hashdit_atlasOracleAdaptor_audit_report_final_22_may_2026.pdf) |
-| 固定期限借贷 | [Bailsec · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260511.pdf) · [Cantina · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina_Fixed_Term_and_rate_12Nov2025.pdf) · [Bailsec · 2025-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec__Fixed_Term_and_rate_Oct2025.pdf) |
-| 闲置市场 | [HashDit · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-Idle-Market-20260526.pdf) |
-| 位置管理器 | [CertiK · 2026-04](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-REP-Lista-Dao-PositionManager-20260410.pdf) · [Cantina · 2026-04](https://github.com/lista-dao/moolah/blob/master/docs/audits/cantina_PositionManager_20260410.pdf) |
+| 定期借贷 | [Bailsec · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260511.pdf) · [Cantina · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina_Fixed_Term_and_rate_12Nov2025.pdf) · [Bailsec · 2025-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec__Fixed_Term_and_rate_Oct2025.pdf) |
+| Idle Market | [HashDit · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-Idle-Market-20260526.pdf) |
+| Lista V3 Differential | [Bailsec · 2026-05](https://github.com/lista-dao/lista-v3/blob/master/audits/260515-Bailsec-Lista-V3-Differential-Final-Report.pdf) |
+| Lista V3 | [Cantina · 2026-04](https://github.com/lista-dao/lista-v3/blob/master/audits/260430-Cantina-Lista-V3-Final-Report.pdf) |
+| Position Manager | [CertiK · 2026-04](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-REP-Lista-Dao-PositionManager-20260410.pdf) · [Cantina · 2026-04](https://github.com/lista-dao/moolah/blob/master/docs/audits/cantina_PositionManager_20260410.pdf) |
 | 信用清算 | [Bailsec · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-Credit-Liquidation-20260303.pdf) · [Spearbit · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Spearbit-Credit-Liquidation-20260303.pdf) |
-| 位置迁移器 | [Bailsec · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-Position-Migrator-20260318.pdf) · [Cantina · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina-Position-Migrator-20260318.pdf) |
+| Position Migrator | [Bailsec · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-Position-Migrator-20260318.pdf) · [Cantina · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina-Position-Migrator-20260318.pdf) |
 | 信用贷款 | [Cantina · 2026-02](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina_Credit_loan_04Feb2026.pdf) · [Bailsec · 2026-01](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-Credit-Loan-Jan2026.pdf) |
 | SlisBNBMinter | [Bailsec · 2026-01](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-ListaLending-SlisBNBMinter-20260105.pdf) · [Bailsec · 2026-01](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-ListaLending-SmartPorvider-and-SlisBNBMinter-202601229.pdf) |
 | SlisBNBx Minter | [BlockSec · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Blocksec-ListaLending-SlisBNBxMinter-AuditReport-20251101.pdf) |
