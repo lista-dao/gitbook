@@ -9,3 +9,4 @@ Credit lending related contracts. See [Credit Loans](../credit-loans/README.md) 
 | CreditBrokerInterestRelayer  | 0xBd94C4E931c1a15941B6273A952Af322891adC47 |
 | CreditBrokerInfo             | 0x8E58Eb6Eba37ff00BF920Da0DD7Dd63a6576dD63 |
 | MoolahVault (Credit Vault)   | 0x4E82Fa869F8D05c8F94900d4652Fdb82f3C7A004 |
+| LendingRewardsDistributorV2 (Credit Emission) | 0xC003fb7485ec58a24F26abcAf7646707AbC4886C |
