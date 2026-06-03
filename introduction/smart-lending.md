@@ -38,6 +38,8 @@ Please refer to our [liquidation documentation](https://docs.bsc.lista.org/intro
 
 Smart Swap is a dedicated front end for Lista’s DEX. This DEX is open for Lista users to swap assets, provide liquidity via Smart Lending, and also available as one of the routes in Binance Swap.
 
+Lista has partnered with LI.FI to expand Smart Swap's reach. Now, assets from Ethereum main net, Arbitrum, Polygon, and more chains can be swapped into assets on the Binance Smart Chain.
+
 Smart Swap works just like most other DEXs:
 
 <figure><img src="../.gitbook/assets/Swap.png" alt=""><figcaption></figcaption></figure>
