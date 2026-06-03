@@ -42,3 +42,21 @@
 | StableSwapLP                     | 0xF6136d7e72446C724ecAeef514AE7B2ab4dbb60B |
 | StableSwapLPCollateral           | 0x23BC296d67619eA11C9a8B49B8C396B798AF3330 |
 | SmartProvider                    | 0x5fD3971104cF3bAB1dC89EF904Da26F54f75C06B |
+
+## USD1 / USDT
+
+| Contract                         | Address                                    |
+| -------------------------------- | ------------------------------------------ |
+| StableSwapPool                   | 0x723ccd2FB5897673Ad108706578886baA15d7242 |
+| StableSwapLP                     | 0x639526a3fAdcB1b1b4B9512592E9bcD3b47E9e2B |
+| StableSwapLPCollateral           | 0x091e6Ed7794d74b73081D32cAb59fa47ff15418d |
+| SmartProvider                    | 0x791cd65F2B8cB7cA3a6c1C4D28A0b23D8E566495 |
+
+## lisUSD / USDT
+
+| Contract                         | Address                                    |
+| -------------------------------- | ------------------------------------------ |
+| StableSwapPool                   | 0x8df7891fb2Cb3e98C7AB3cfB4d9A59FbCC63c956 |
+| StableSwapLP                     | 0x05f657273A8bc6612E0f20E1C2E947dFEF9fFcAA |
+| StableSwapLPCollateral           | 0x6c7EbA17dDB5D0435FCFb9053BB3087c1d10beB3 |
+| SmartProvider                    | 0x6A39B04f8a7DB71Cee17f9978004C028bfF2e144 |

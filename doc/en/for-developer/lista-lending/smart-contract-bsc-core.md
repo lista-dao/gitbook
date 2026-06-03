@@ -17,10 +17,14 @@
 | MoolahVaultFactory             | 0x2a0Cb6401FD3c6196750dc6b46702040761D9671 |
 | MoolahVaultManager             | 0x5021319C1B8245e0680F19b7aA84a0F0F3d91AA9 |
 | MarketFactory                  | 0xce26859127d236a61f168d2d0905f77d7E286Ab2 |
-| RevenueCollector               | 0x86E09296aeDA129D3b0b4c134B3202b84Cd8945C |
+| RevenueCollector (DEX fee and liquidation profit) | 0x86E09296aeDA129D3b0b4c134B3202b84Cd8945C |
+| RevenueCollector (receive buyback LISTA)          | 0xD08BE4Fe91E5786CeC1D3Bce58c2A16c3efcA179 |
 | LendingRewardsDistributorV2    | 0x2993E9eA76f5839A20673e1B3cf6666ab5B3aE76 |
 | RewardsRouter                  | 0xCb571b4ac0dB9c64B9ADdD2e6f3d1c7A84E5bfF4 |
 | PositionManager                | 0x8eBFa9e687aF71EC2e87A0380F73b9f57FDf3ec0 |
+| PositionMigrator               | 0x2b3e5b695722756130a553e9bb5a45e16d21d0a4 |
+| StableArbExecutor              | 0x05A8d0B51A2543184a18Af3Ada75F8C981143a54 |
+| BatchManagementUtils           | 0x458437d173A7d5b8E92b0DC5aF513584cAB4bf3D |
 
 ### Vaults
 
