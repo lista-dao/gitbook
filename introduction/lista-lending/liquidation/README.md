@@ -93,21 +93,7 @@ Following the approval of [LIP-024](https://snapshot.org/#/s:listavote.eth/propo
 
 Normally, when a position’s LTV exceeds its LLTV on Lista, a liquidation will be triggered. With delayed liquidation, eligible borrowers will get a buffer - a higher, new LLTV threshold to protect your positions for 24 hours for selected markets:
 
-| Collateral | Loan   | Original LLTV | New LLTV |
-| ---------- | ------ | ------------- | -------- |
-| BTCB       | U      | 86%           | 92%      |
-| BTCB       | USD1   | 86%           | 92%      |
-| BTCB       | USDT   | 80%           | 92%      |
-| slisBNB    | BNB    | 96.5%         | 97%      |
-| slisBNB    | lisUSD | 85%           | 92%      |
-| slisBNB    | USD1   | 86%           | 92%      |
-| slisBNB    | U      | 86%           | 92%      |
-| slisBNB    | BNB    | 96.5%         | 97%      |
-| USD1       | BNB    | 80%           | 92%      |
-| USD1       | U      | 96.5%         | 97%      |
-| USDT       | BNB    | 85%           | 92%      |
-| ETH        | lisUSD | 80%           | 92%      |
-| wBETH      | lisUSD | 80%           | 92%      |
+<table data-header-hidden><thead><tr><th width="95.890625"></th><th width="80.01953125"></th><th width="125.59375"></th><th width="113.46875"></th><th></th></tr></thead><tbody><tr><td>Collateral</td><td>Loan</td><td>Original LLTV</td><td>New LLTV</td><td>Market Hash</td></tr><tr><td>BTCB</td><td>U</td><td>86%</td><td>92%</td><td>0x6ef28e9f52ffd5e66b14ba95f3da17b782ce8c4a592218fa32f917ca10f4f054</td></tr><tr><td>BTCB</td><td>USD1</td><td>86%</td><td>92%</td><td>0x8de2e1f3e3935024a2667d8203983bdff70a1aee0c91665760e02c257d53032f</td></tr><tr><td>BTCB</td><td>USDT</td><td>80%</td><td>92%</td><td>0xea00a233473bc0585326eec959623a054798b7543205c5079bab49015a2bf810</td></tr><tr><td>slisBNB</td><td>BNB</td><td>96.5%</td><td>97%</td><td>0x2bb68bc7f70186f3d4f16db6a19986df6c6cdea3e589c1ae3d30b56b0632c5ec</td></tr><tr><td>slisBNB</td><td>lisUSD</td><td>85%</td><td>92%</td><td>0x7fe248d8459a88e50e8582c71219edbce1079437e58190aeab41ac503694f0a5</td></tr><tr><td>slisBNB</td><td>USD1</td><td>86%</td><td>92%</td><td>0x95f93825819b67a64610e6adb9ac5f70d5108f5121b9df6551e23a4a7a801b5b</td></tr><tr><td>slisBNB</td><td>U</td><td>86%</td><td>92%</td><td>0xaaf06d7c7fd32ac1b478bdf6f068d707ea32982f299b684ef79b1023a51ad3db</td></tr><tr><td>slisBNB</td><td>BNB</td><td>96.5%</td><td>97%</td><td>0x226935103b730aefad53849e4cf7d92f30083cc417222f395478dabdd9ff3cac</td></tr><tr><td>USD1</td><td>BNB</td><td>80%</td><td>92%</td><td>0xd384584abf6504425c9873f34a63372625d46cd1f2e79aeedc77475cacaca922</td></tr><tr><td>USD1</td><td>U</td><td>96.5%</td><td>97%</td><td>0x17230b8678f7efac75e99f4d9db9b2e5e74aabc1f34156b574b676a8e4e8e6f1</td></tr><tr><td>USDT</td><td>BNB</td><td>85%</td><td>92%</td><td>0xf4859576d776ccbc5c7848228da8edd47902d351b1195787742bf5a2927dfe8c</td></tr><tr><td>ETH</td><td>lisUSD</td><td>80%</td><td>92%</td><td></td></tr><tr><td>wBETH</td><td>lisUSD</td><td>80%</td><td>92%</td><td></td></tr></tbody></table>
 
 For these markets, the total size of protected positions depends on the 7-day average LISTA holding:
 
