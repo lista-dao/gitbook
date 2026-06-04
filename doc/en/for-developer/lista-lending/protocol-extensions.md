@@ -37,7 +37,7 @@ Moolah oracles expose a `peek()` interface with 8-decimal price scale (`1e8`).
 
 For resilient/multi-source oracle design, see:
 
-* [Multi-Oracle](../collateral-debt-position/multi-oracle.md)
+* [Multi-Oracle](../multi-oracle.md)
 
 ### PT Linear Discount Oracle
 
