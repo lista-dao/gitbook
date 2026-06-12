@@ -76,11 +76,16 @@ function parseDate(name) {
 }
 
 // Best-effort product label for a brand-new PDF (only used when not already in the doc).
+// Manual edits to the markdown round-trip — this only fires for genuinely-new URLs.
 function guessFeature(name) {
   const DROP = new Set([
+    // Audit firms
     'bailsec', 'blocksec', 'cantina', 'spearbit', 'openzeppelin', 'certik', 'salus', 'peckshield',
-    'supremacy', 'veridise', 'slowmist', 'hashdit', 'sherlock', 'audit', 'auditreport', 'report',
-    'reports', 'final', 'signed', 'rep',
+    'supremacy', 'veridise', 'slowmist', 'hashdit', 'sherlock',
+    // Noise tokens (organizational labels, not features)
+    'warroom',
+    // Filename boilerplate
+    'audit', 'auditreport', 'report', 'reports', 'final', 'signed', 'rep',
   ]);
   const MONTH = /^(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec|january|february|march|april|june|july|august|september|october|november|december)$/i;
   const DATEY = /^\d*(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\d*$/i;
@@ -95,7 +100,12 @@ function guessFeature(name) {
     if (/\d/.test(tok) && DATEY.test(tok)) continue;
     kept.push(tok);
   }
-  const s = kept.join(' ').replace(/([a-z])([A-Z])/g, '$1 $2');
+  // Split camelCase at word boundaries (lowercase -> uppercase + lowercase) so
+  // "MoolahVaultManager" -> "Moolah Vault Manager". Preserve consecutive
+  // uppercase runs as acronyms so "slisXAUE" stays "slisXAUE" and "slisBNB"
+  // stays "slisBNB" (the lookahead `[A-Z][a-z]` blocks splitting when the next
+  // upper is followed by another upper — i.e., mid-acronym).
+  const s = kept.join(' ').replace(/([a-z])([A-Z][a-z])/g, '$1 $2');
   const out = [];
   for (const w of s.split(/\s+/)) if (w && (!out.length || out[out.length - 1].toLowerCase() !== w.toLowerCase())) out.push(w);
   return out.join(' ').trim() || name.replace(/\.pdf$/i, '');
@@ -201,13 +211,27 @@ async function main() {
     [...original.matchAll(/https:\/\/github\.com\/lista-dao\/[^)\s]+\.pdf/gi)].map((m) => m[0].toLowerCase()),
   );
 
+  // Fallback date for entries whose filename has no parseable date. Using the
+  // scan month places freshly-discovered audits at the TOP of the date-sorted
+  // table (instead of falling into the dateless-and-alphabetized bucket at the
+  // bottom). The displayed date is a best-guess and is fully overridable via
+  // manual edits — the round-trip parser prefers the date shown in markdown
+  // text over re-parsing the filename, so any manual correction persists.
+  const SCAN_MONTH = new Date().toISOString().slice(0, 7); // YYYY-MM
+
   const discovered = (await Promise.all(SOURCES.map(listPdfUrls))).flat();
   const fresh = [];
   for (const url of discovered) {
     const key = url.toLowerCase();
     if (entries.has(key) || allExisting.has(key)) continue;
     const fname = fileNameFromUrl(url);
-    entries.set(key, { url, feature: guessFeature(fname), auditor: detectFirm(fname), date: parseDate(fname), fname });
+    entries.set(key, {
+      url,
+      feature: guessFeature(fname),
+      auditor: detectFirm(fname),
+      date: parseDate(fname) || SCAN_MONTH,
+      fname,
+    });
     fresh.push({ url, fname });
   }
 
