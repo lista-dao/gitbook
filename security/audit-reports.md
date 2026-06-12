@@ -1,14 +1,16 @@
 # 审计报告
 
-Lista的所有核心智能合约都经过了知名第三方安全公司的严格审计。这些独立评估确保了我们协议的完整性和抵抗潜在漏洞的弹性。
+Lista的所有核心智能合约都经过了知名第三方安全公司的严格审计。这些独立评估确保了我们协议的完整性和抵御潜在漏洞的弹性。
 
 **2024年至今**
 
 | 功能 | 审计 |
 | ------- | ------ |
+| War Room Moolah Vault Manager | [2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/WarRoom-MoolahVaultManager-Audit-Report-20260608.pdf) |
 | Atlas Oracle Adaptor | [HashDit · 2026-05](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/hashdit_atlasOracleAdaptor_audit_report_final_22_may_2026.pdf) |
-| 定期借贷 | [Bailsec · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260511.pdf) · [Cantina · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina_Fixed_Term_and_rate_12Nov2025.pdf) · [Bailsec · 2025-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec__Fixed_Term_and_rate_Oct2025.pdf) |
+| 固定期限贷款 | [Bailsec · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260511.pdf) · [Cantina · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina_Fixed_Term_and_rate_12Nov2025.pdf) · [Bailsec · 2025-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec__Fixed_Term_and_rate_Oct2025.pdf) |
 | Idle Market | [HashDit · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-Idle-Market-20260526.pdf) |
+| Lista Lending Broker Batch Ops | [HashDit · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-ListaLending-BrokerBatchOps-20260526.pdf) |
 | Lista V3 Differential | [Bailsec · 2026-05](https://github.com/lista-dao/lista-v3/blob/master/audits/260515-Bailsec-Lista-V3-Differential-Final-Report.pdf) |
 | Lista V3 | [Cantina · 2026-04](https://github.com/lista-dao/lista-v3/blob/master/audits/260430-Cantina-Lista-V3-Final-Report.pdf) |
 | Position Manager | [CertiK · 2026-04](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-REP-Lista-Dao-PositionManager-20260410.pdf) · [Cantina · 2026-04](https://github.com/lista-dao/moolah/blob/master/docs/audits/cantina_PositionManager_20260410.pdf) |
@@ -17,7 +19,7 @@ Lista的所有核心智能合约都经过了知名第三方安全公司的严格
 | 信用贷款 | [Cantina · 2026-02](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina_Credit_loan_04Feb2026.pdf) · [Bailsec · 2026-01](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-Credit-Loan-Jan2026.pdf) |
 | SlisBNBMinter | [Bailsec · 2026-01](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-ListaLending-SlisBNBMinter-20260105.pdf) · [Bailsec · 2026-01](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-ListaLending-SmartPorvider-and-SlisBNBMinter-202601229.pdf) |
 | SlisBNBx Minter | [BlockSec · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Blocksec-ListaLending-SlisBNBxMinter-AuditReport-20251101.pdf) |
-| 智能借贷 | [Bailsec · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-ListaLending-Smart-Collateral-and-Liquidators-20251124.pdf) · [OpenZeppelin · 2025-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/OpenZeppelin-ListaLending-Smart-Collateral-20251020.pdf) |
+| 智能贷款 | [Bailsec · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-ListaLending-Smart-Collateral-and-Liquidators-20251124.pdf) · [OpenZeppelin · 2025-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/OpenZeppelin-ListaLending-Smart-Collateral-20251020.pdf) |
 | PancakeSwap V3 LP | [Bailsec · 2025-09](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Bailsec_V3_LP_20Sept_2025.pdf) · [BlockSec · 2025-09](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/BlockSec_V3_LP_04Sept_2025.pdf) · [CertiK · 2025-09](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/CertiK_V3_LP_04Sept_2025.pdf) · [Spearbit · 2025-09](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/SpearBit_V3_LP_01Sept_2025.pdf) |
 | LISTA Lending Provider | [Bailsec · 2025-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-ListaLending-Provider-20250522.pdf) · [BlockSec · 2025-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/Blocksec-ListaLending-Provider-20250522.pdf) |
 | ERC20 Token Provider | [CertiK · 2025-04](https://github.com/lista-dao/lista-token/blob/master/audits/certik-lp-mint-clisbnb-17apr25.pdf) · [BlockSec · 2025-04](https://github.com/lista-dao/lista-token/blob/master/audits/blocksec-lp-mint-clisbnb-03apr25.pdf) |
@@ -35,6 +37,7 @@ Lista的所有核心智能合约都经过了知名第三方安全公司的严格
 | OFT | [BlockSec](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/BlockSec_OFT_190624.pdf) · [PeckShield](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/PeckShield_OFT_190624.pdf) |
 | PSM | [BlockSec](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/blocksec_psm_241122.pdf) · [Salus](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/salus_PSM_241122.pdf) |
 | RWA | [Bailsec](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-RWA-Audit%20Report.pdf) · [BlockSec](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/BlockSec-RWA-Audit%20Report.pdf) |
+| slis XAUE | [Bailsec](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-slisXAUE-Audit%20Report.pdf) · [CertiK](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/CertiK-slisXAUE-Audit%20Report.pdf) |
 | slisBNB Oracle | [PeckShield](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/PeckShield_slisBNBOracle_180424.pdf) |
 | slisBNB Provider | [Bailsec](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Bailsec_SlisbnbProvider_Final_Report_241127.pdf) · [BlockSec](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/blocksec_lista_SlisbnbProvider-VotingIncentive_v1.0_signed_241127.pdf) |
 | slisBNB Provider & Voting Incentive | [Bailsec](https://github.com/lista-dao/lista-token/blob/master/audits/Bailsec_lista_dao_SlisbnbProvided-VotingIncentive_final.pdf) · [BlockSec](https://github.com/lista-dao/lista-token/blob/master/audits/blocksec_lista_SlisbnbProvided-VotingIncentive_v1.0_signed.pdf) |
