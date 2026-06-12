@@ -8,6 +8,7 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 
 | Feature | Audits |
 | ------- | ------ |
+| War Room Moolah Vault Manager | [2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/WarRoom-MoolahVaultManager-Audit-Report-20260608.pdf) |
 | Atlas Oracle Adaptor | [HashDit · 2026-05](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/hashdit_atlasOracleAdaptor_audit_report_final_22_may_2026.pdf) |
 | Fixed term lending | [Bailsec · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260511.pdf) · [Cantina · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina_Fixed_Term_and_rate_12Nov2025.pdf) · [Bailsec · 2025-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec__Fixed_Term_and_rate_Oct2025.pdf) |
 | Idle Market | [HashDit · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-Idle-Market-20260526.pdf) |
@@ -38,6 +39,7 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 | OFT | [BlockSec](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/BlockSec_OFT_190624.pdf) · [PeckShield](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/PeckShield_OFT_190624.pdf) |
 | PSM | [BlockSec](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/blocksec_psm_241122.pdf) · [Salus](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/salus_PSM_241122.pdf) |
 | RWA | [Bailsec](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-RWA-Audit%20Report.pdf) · [BlockSec](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/BlockSec-RWA-Audit%20Report.pdf) |
+| slis XAUE | [Bailsec](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-slisXAUE-Audit%20Report.pdf) · [CertiK](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/CertiK-slisXAUE-Audit%20Report.pdf) |
 | slisBNB Oracle | [PeckShield](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/PeckShield_slisBNBOracle_180424.pdf) |
 | slisBNB Provider | [Bailsec](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/Bailsec_SlisbnbProvider_Final_Report_241127.pdf) · [BlockSec](https://github.com/lista-dao/lista-dao-contracts/blob/master/audits/blocksec_lista_SlisbnbProvider-VotingIncentive_v1.0_signed_241127.pdf) |
 | slisBNB Provider & Voting Incentive | [Bailsec](https://github.com/lista-dao/lista-token/blob/master/audits/Bailsec_lista_dao_SlisbnbProvided-VotingIncentive_final.pdf) · [BlockSec](https://github.com/lista-dao/lista-token/blob/master/audits/blocksec_lista_SlisbnbProvided-VotingIncentive_v1.0_signed.pdf) |
