@@ -43,6 +43,13 @@
 | StableSwapLPCollateral           | 0x23BC296d67619eA11C9a8B49B8C396B798AF3330 |
 | SmartProvider                    | 0x5fD3971104cF3bAB1dC89EF904Da26F54f75C06B |
 
+## USDC / USDT (Narrow Pair)
+
+| Contract                         | Address                                    |
+| -------------------------------- | ------------------------------------------ |
+| StableSwapPool                   | 0x529E7aE9474a9F871D3C32aF15Ea2D2A4168eF28 |
+| StableSwapLP                     | 0x30b6880e7D8F006E0a04E01B8EAb3a1bA288644d |
+
 ## USD1 / USDT
 
 | Contract                         | Address                                    |
