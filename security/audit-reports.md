@@ -8,6 +8,7 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 
 | Feature | Audits |
 | ------- | ------ |
+| Aster Rewards | [HashDit · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AsterRewards-20260615.pdf) |
 | Moolah Vault Manager | [2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/WarRoom-MoolahVaultManager-Audit-Report-20260608.pdf) |
 | slisXAUE | [Bailsec · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-slisXAUE-Audit%20Report.pdf) · [CertiK · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/CertiK-slisXAUE-Audit%20Report.pdf) |
 | Atlas Oracle Adaptor | [HashDit · 2026-05](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/hashdit_atlasOracleAdaptor_audit_report_final_22_may_2026.pdf) |
