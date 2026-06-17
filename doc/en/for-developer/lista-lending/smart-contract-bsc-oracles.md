@@ -2,6 +2,15 @@
 
 PTLinearDiscountOracle contracts for principal token pricing.
 
+## Stock Oracle
+
+Oracle contracts for tokenized stock price feeds.
+
+| Contract          | Address                                    |
+| ----------------- | ------------------------------------------ |
+| StockOracle       | 0x526D09c604A17D98cb1f260a7774A239990dbDfb |
+| StockOracleSwitch  | 0xb4678C3E8B49d2b95Da48458f98805da193A8498 |
+
 ## PT-sUSDE / PT-USDe (2025 Maturity)
 
 | Contract                                  | Quote Asset | Address                                    |
