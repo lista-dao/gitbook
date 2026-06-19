@@ -1,48 +1,68 @@
 #!/usr/bin/env node
 // utils/sync-multi-oracle.mjs
 //
-// Keeps the "B. Collaterals using Resilient Oracle" table (BNB Chain) in
-// for-developer/multi-oracle.md in sync with the canonical Notion source:
+// Keeps the oracle-config tables in for-developer/multi-oracle.md in sync with
+// the canonical Notion source ("Multi-Oracle For GitBook",
+// page 6a54afccfcf04be4afd4ef10ce839169). Two sections are synced:
 //
-//   "Multi-Oracle For GitBook"  (page 6a54afccfcf04be4afd4ef10ce839169)
+//   * BNB Chain — "B. Collaterals using Resilient Oracle"   (must exist in doc)
+//   * Ethereum Chain                                        (created if missing)
 //
 // Notion is the SOURCE OF TRUTH for the volatile oracle-value columns
 // (Oracle/caller, Main, Pivot, Fallback, BoundValidator). The script does a
-// keyed MERGE — it never blindly mirrors — because the Notion table and the
-// published table are not identical sets:
+// keyed MERGE — never a blind mirror:
 //
 //   * Rows are matched by TOKEN ADDRESS (case-insensitive). For a match, only
 //     the five value columns are refreshed from Notion; the doc's Asset cell
 //     (hand-curated label + links) is PRESERVED.
 //   * Doc rows with no Notion match (e.g. wNLP-USDT, CAKE) are KEPT, never
 //     deleted, and listed in the summary so a human notices the drift.
-//   * Notion rows with no doc match (e.g. a freshly listed collateral) are
-//     APPENDED at the bottom of the table.
-//   * CDP-only variants ("* for OracleCenter Contract", "* for
-//     DynamicDutyCalculator") are SKIPPED — they don't belong in the lending
-//     table. (Legit asterisk assets like "sUSDX (*For CDP...)" or
-//     "pumpBTC (BTCB * 0.99)" are matched by token, so they are unaffected.)
+//   * Notion rows with no doc match are APPENDED at the bottom of the table.
+//   * CDP-only "OracleCenter" variants are SKIPPED.
+//   * Notion rows with NO token address (placeholder/WIP rows) are ignored and
+//     counted as "not ready" — so an incomplete table (e.g. Ethereum today)
+//     does not publish empty rows. A "create if missing" section with zero
+//     ready rows is simply skipped (no empty section is written).
 //
-// Used by .github/workflows/oracle-watch.yml (weekly). No external deps
-// (Node fetch). Outputs in GitHub Actions: GITHUB_OUTPUT has_changes=<bool>,
-// updated=<int>, added=<int>, plus oracle-sync-summary.md (commit/PR body).
+// Used by .github/workflows/oracle-watch.yml (weekly). No external deps.
+// Outputs in GitHub Actions: GITHUB_OUTPUT has_changes=<bool>,
+// value_changes=<int>, added=<int>; plus oracle-sync-summary.md.
 //
-// Offline test (no token needed): point NOTION_FIXTURE_ROWS at a saved
-// get-block-children JSON response for the B table and set DRY_RUN=1, e.g.
-//   NOTION_FIXTURE_ROWS=./b-table.json DRY_RUN=1 node utils/sync-multi-oracle.mjs
+// Offline test (no token): per-section fixtures point at saved
+// get-block-children JSON responses, e.g.
+//   NOTION_FIXTURE_ROWS=./b.json \
+//   NOTION_FIXTURE_ROWS_ETH=./eth.json NOTION_FIXTURE_ETH_RESILIENT=0xA64F... \
+//   DRY_RUN=1 node utils/sync-multi-oracle.mjs
 
 import { readFileSync, writeFileSync, appendFileSync } from 'node:fs';
 
 const DOC = 'for-developer/multi-oracle.md';
 const PAGE_ID = '6a54afccfcf04be4afd4ef10ce839169';
-const ANCHOR = 'B. Collaterals using Resilient Oracle'; // the table follows this line
-const SKIP_ASSET = /for\s+OracleCenter/i; // CDP-only "OracleCenter" variants (absent from the lending table)
-const COLS = 7; // Asset | Token | Oracle/caller | Main | Pivot | Fallback | BoundValidator
+
+const SECTIONS = [
+  {
+    id: 'bnb-b',
+    notionAnchor: 'B. Collaterals using Resilient Oracle',
+    docAnchor: 'B. Collaterals using Resilient Oracle',
+    skip: /for\s+OracleCenter/i, // CDP-only variants absent from the lending table
+    createIfMissing: false,
+    fixtureEnv: 'NOTION_FIXTURE_ROWS',
+  },
+  {
+    id: 'eth',
+    notionAnchor: 'Ethereum Chain',
+    docAnchor: 'Ethereum Chain',
+    skip: /for\s+OracleCenter/i,
+    createIfMissing: true,
+    sectionTitle: 'Ethereum Chain',
+    fixtureEnv: 'NOTION_FIXTURE_ROWS_ETH',
+    resilientEnv: 'NOTION_FIXTURE_ETH_RESILIENT',
+  },
+];
 
 const TOKEN = process.env.NOTION_TOKEN || process.env.NOTION_API_KEY || '';
 const NOTION_VERSION = '2022-06-28';
 const DRY_RUN = process.env.DRY_RUN === '1';
-const FIXTURE_ROWS = process.env.NOTION_FIXTURE_ROWS || '';
 
 const lc = (s) => (s || '').toLowerCase();
 const addrOf = (html) => (html.match(/0x[a-fA-F0-9]{40}/) || [null])[0];
@@ -74,24 +94,40 @@ async function getChildren(blockId) {
   return out;
 }
 
-// Find the table block that immediately follows the ANCHOR paragraph.
-async function findTableRows() {
-  if (FIXTURE_ROWS) {
-    return JSON.parse(readFileSync(FIXTURE_ROWS, 'utf8')).results.filter((b) => b.type === 'table_row');
-  }
-  const blocks = await getChildren(PAGE_ID);
-  let lastText = '';
-  let tableId = null;
+const blockText = (b) => {
+  const rt = b[b.type] && b[b.type].rich_text;
+  return Array.isArray(rt) ? rt.map((t) => t.plain_text).join('') : '';
+};
+
+// Find, for a given anchor, the first table that follows it on the page,
+// plus the Resilient Oracle Address from any quote in between (for new sections).
+function findNotionSection(blocks, anchor) {
+  let active = false;
+  let resilient = null;
   for (const b of blocks) {
-    if (b.type === 'paragraph') {
-      lastText = (b.paragraph.rich_text || []).map((t) => t.plain_text).join('');
-    } else if (b.type === 'table') {
-      if (lastText.includes(ANCHOR)) { tableId = b.id; break; }
+    if (b.type === 'paragraph' || b.type.startsWith('heading_')) {
+      const t = blockText(b);
+      if (t.includes(anchor)) { active = true; resilient = null; continue; }
     }
+    if (!active) continue;
+    if (b.type === 'quote' && !resilient) {
+      resilient = (blockText(b).match(/0x[a-fA-F0-9]{40}/) || [null])[0];
+    }
+    if (b.type === 'table') return { tableId: b.id, resilient };
   }
-  if (!tableId) throw new Error(`Could not locate the "${ANCHOR}" table on the Notion page.`);
-  const rows = (await getChildren(tableId)).filter((b) => b.type === 'table_row');
-  return rows;
+  return null;
+}
+
+async function sectionRows(sec, blocks) {
+  const fx = sec.fixtureEnv && process.env[sec.fixtureEnv];
+  if (fx) {
+    const rows = JSON.parse(readFileSync(fx, 'utf8')).results.filter((b) => b.type === 'table_row');
+    return { rows, resilient: (sec.resilientEnv && process.env[sec.resilientEnv]) || null };
+  }
+  const found = findNotionSection(blocks, sec.notionAnchor);
+  if (!found) throw new Error(`Notion section "${sec.notionAnchor}" not found on the page.`);
+  const rows = (await getChildren(found.tableId)).filter((b) => b.type === 'table_row');
+  return { rows, resilient: found.resilient };
 }
 
 // ---------------------------------------------------------------------------
@@ -100,7 +136,7 @@ async function findTableRows() {
 function renderCell(richText) {
   const parts = [];
   for (const t of richText || []) {
-    const text = (t.plain_text || '');
+    const text = t.plain_text || '';
     if (t.href) {
       const url = t.href.startsWith('/') ? `https://www.notion.so${t.href}` : t.href;
       parts.push(`<a href="${url}">${text.trim()}</a>`);
@@ -109,36 +145,37 @@ function renderCell(richText) {
     }
   }
   let html = parts.join('').replace(/\r/g, '').trim();
-  html = html.replace(/\n+/g, '<br>'); // multi-line cells -> <br>
-  html = html.replace(/\s{2,}/g, ' '); // collapse runs of spaces from Notion
+  html = html.replace(/\n+/g, '<br>');
+  html = html.replace(/\s{2,}/g, ' ');
   return html === '' ? '-' : html;
 }
 
-// Bound column: normalise "Upper Limit: 1.01 Lower Limit: 0.99" to a stable form.
 function renderBound(richText) {
   const raw = renderCell(richText).replace(/<br>/g, ' ');
-  if (raw === '-' ) return '-';
+  if (raw === '-') return '-';
   const up = raw.match(/upper\s*(?:limit|bound)\s*:?\s*([\d.]+)/i);
   const lo = raw.match(/lower\s*(?:limit|bound)\s*:?\s*([\d.]+)/i);
   if (up && lo) return `<p>Upper Limit: ${up[1]}</p><p>Lower Limit: ${lo[1]}</p>`;
   return raw;
 }
 
-function cells(row) {
-  return row.table_row.cells; // array of rich_text arrays
+// Parse a Notion row -> {skip} | {empty} | record | null (header/blank).
+function parseNotionRow(row, idx, skipRe) {
+  const c = row.table_row.cells;
+  const asset = renderCell(c[0]).replace(/<br>/g, ' ');
+  if ((idx === 0 && /^asset$/i.test(asset)) || asset === '-') {
+    return addrOf(renderCell(c[1] || [])) ? mkRecord(asset, c) : null;
+  }
+  if (skipRe && skipRe.test(asset)) return { skip: asset };
+  const token = addrOf(renderCell(c[1] || []));
+  if (!token) return { empty: asset }; // asset present but no token = not ready
+  return mkRecord(asset, c);
 }
 
-// Parse a Notion B-table row into a record (or null to skip).
-function parseNotionRow(row, idx) {
-  const c = cells(row);
-  const asset = renderCell(c[0]).replace(/<br>/g, ' ');
-  if (idx === 0 && /^asset$/i.test(asset)) return null; // header
-  if (SKIP_ASSET.test(asset)) return { skip: asset };
-  const token = addrOf(renderCell(c[1] || []));
-  if (!token) return null; // no token = not a real collateral row
+function mkRecord(asset, c) {
   return {
     asset,
-    token,
+    token: addrOf(renderCell(c[1] || [])),
     tokenHtml: renderCell(c[1]),
     caller: renderCell(c[2] || []),
     main: renderCell(c[3] || []),
@@ -151,13 +188,13 @@ function parseNotionRow(row, idx) {
 // ---------------------------------------------------------------------------
 // Doc table parsing / rendering
 // ---------------------------------------------------------------------------
-function locateTable(doc) {
-  const aIdx = doc.indexOf(ANCHOR);
-  if (aIdx === -1) throw new Error(`Anchor "${ANCHOR}" not found in ${DOC}.`);
+function locateTable(doc, anchor) {
+  const aIdx = doc.indexOf(anchor);
+  if (aIdx === -1) return null;
   const start = doc.indexOf('<table', aIdx);
-  if (start === -1) throw new Error('No <table> found after the anchor.');
+  if (start === -1) return null;
   const end = doc.indexOf('</table>', start);
-  if (end === -1) throw new Error('Unterminated <table> after the anchor.');
+  if (end === -1) return null;
   return { start, end: end + '</table>'.length };
 }
 
@@ -169,17 +206,13 @@ function parseDocRows(tableHtml) {
   let m;
   while ((m = trRe.exec(bodyM[1]))) {
     const tds = [...m[1].matchAll(/<td>([\s\S]*?)<\/td>/gi)].map((x) => x[1]);
-    if (tds.length < COLS) continue;
-    const token = addrOf(tds[1]);
-    // first row is the header in markdown only when inside <thead>; tbody rows are data
-    rows.push({ tds, token });
+    if (tds.length < 7) continue;
+    rows.push({ tds, token: addrOf(tds[1]) });
   }
   return rows;
 }
 
-function renderRow(tds) {
-  return `<tr>${tds.map((t) => `<td>${t}</td>`).join('')}</tr>`;
-}
+const renderRow = (tds) => `<tr>${tds.map((t) => `<td>${t}</td>`).join('')}</tr>`;
 
 function renderTable(rows) {
   const head =
@@ -190,41 +223,35 @@ function renderTable(rows) {
   return head + rows.map((r) => renderRow(r.tds)).join('') + '</tbody></table>';
 }
 
-// ---------------------------------------------------------------------------
-// Merge
-// ---------------------------------------------------------------------------
-function merge(docRows, notionRecords) {
-  const byToken = new Map();
-  const skipped = [];
-  for (const r of notionRecords) {
-    if (!r) continue;
-    if (r.skip) { skipped.push(r.skip); continue; }
-    byToken.set(lc(r.token), r);
-  }
+function buildSection(title, resilient, tableHtml) {
+  const addr = resilient ? `> Resilient Oracle Address: ${resilient}\n\n` : '';
+  return `**${title}**\n\n${addr}${tableHtml}`;
+}
 
-  const reformatted = []; // formatting-only refresh (addresses unchanged)
-  const valueChanges = []; // an oracle ADDRESS actually changed — review these
+// ---------------------------------------------------------------------------
+// Merge (keyed by token; never deletes doc rows)
+// ---------------------------------------------------------------------------
+function merge(docRows, recs) {
+  const byToken = new Map(recs.map((r) => [lc(r.token), r]));
+  const reformatted = [];
+  const valueChanges = [];
   const docOnly = [];
   const consumed = new Set();
-  const addrSet = (html) => (html.match(/0x[a-fA-F0-9]{40}/gi) || []).map(lc).sort().join(',');
-  const label = (row, rec) => ((rec && rec.asset) || row.tds[0].replace(/<[^>]+>/g, '').trim() || row.token);
+  const addrSet = (h) => (h.match(/0x[a-fA-F0-9]{40}/gi) || []).map(lc).sort().join(',');
+  const label = (row, rec) => (rec && rec.asset) || row.tds[0].replace(/<[^>]+>/g, '').trim() || row.token;
 
-  // 1) Walk doc rows in place: refresh value columns for matched tokens.
   for (const row of docRows) {
-    const key = lc(row.token);
-    const rec = byToken.get(key);
+    const rec = byToken.get(lc(row.token));
     if (rec) {
-      consumed.add(key);
+      consumed.add(lc(row.token));
       const next = [...row.tds];
-      // [0]=Asset preserved, [1]=Token preserved, refresh [2..6] from Notion.
       const refreshed = [rec.caller, rec.main, rec.pivot, rec.fallback, rec.bound];
       let changed = false;
       let addrChanged = false;
       for (let i = 0; i < 5; i++) {
-        const before = next[2 + i];
-        if (before !== refreshed[i]) {
+        if (next[2 + i] !== refreshed[i]) {
           changed = true;
-          if (addrSet(before) !== addrSet(refreshed[i])) addrChanged = true;
+          if (addrSet(next[2 + i]) !== addrSet(refreshed[i])) addrChanged = true;
           next[2 + i] = refreshed[i];
         }
       }
@@ -235,19 +262,15 @@ function merge(docRows, notionRecords) {
     }
   }
 
-  // 2) Append Notion rows not present in the doc.
   const added = [];
   const appended = [];
   for (const [key, rec] of byToken) {
     if (consumed.has(key)) continue;
-    appended.push({
-      tds: [rec.asset, rec.tokenHtml, rec.caller, rec.main, rec.pivot, rec.fallback, rec.bound],
-      token: rec.token,
-    });
+    appended.push({ tds: [rec.asset, rec.tokenHtml, rec.caller, rec.main, rec.pivot, rec.fallback, rec.bound], token: rec.token });
     added.push(rec.asset);
   }
 
-  return { rows: [...docRows, ...appended], valueChanges, reformatted, added, docOnly, skipped };
+  return { rows: [...docRows, ...appended], valueChanges, reformatted, added, docOnly };
 }
 
 function emit(kv) {
@@ -258,45 +281,70 @@ function emit(kv) {
 
 // ---------------------------------------------------------------------------
 async function main() {
-  if (!TOKEN && !FIXTURE_ROWS) throw new Error('NOTION_TOKEN is required (or set NOTION_FIXTURE_ROWS for offline runs).');
+  const liveNeeded = SECTIONS.some((s) => !(s.fixtureEnv && process.env[s.fixtureEnv]));
+  if (liveNeeded && !TOKEN) throw new Error('NOTION_TOKEN is required (or set per-section fixtures for offline runs).');
 
   const original = readFileSync(DOC, 'utf8');
-  const { start, end } = locateTable(original);
-  const tableHtml = original.slice(start, end);
-  const docRows = parseDocRows(tableHtml);
+  let doc = original;
+  const blocks = liveNeeded ? await getChildren(PAGE_ID) : null;
 
-  const notionRows = await findTableRows();
-  const records = notionRows.map((r, i) => parseNotionRow(r, i));
+  let totalValueChanges = 0;
+  let totalAdded = 0;
+  const blocksOut = [`## Multi-Oracle sync\n`];
 
-  const { rows, valueChanges, reformatted, added, docOnly, skipped } = merge(docRows, records);
-  const newTable = renderTable(rows);
-  const updatedDoc = original.slice(0, start) + newTable + original.slice(end);
-  const changed = updatedDoc !== original;
-  const line = (label, arr) => `- ${label}: ${arr.length}${arr.length ? ` — ${arr.join(', ')}` : ''}\n`;
+  for (const sec of SECTIONS) {
+    const { rows, resilient } = await sectionRows(sec, blocks);
+    const parsed = rows.map((r, i) => parseNotionRow(r, i, sec.skip)).filter(Boolean);
+    const skipped = parsed.filter((p) => p.skip).map((p) => p.skip);
+    const empties = parsed.filter((p) => p.empty).map((p) => p.empty);
+    const recs = parsed.filter((p) => p.token);
 
-  const summary =
-    `## Multi-Oracle sync (BNB · Collaterals using Resilient Oracle)\n\n` +
-    `- Notion rows scanned: ${notionRows.length}\n` +
-    line('⚠️ Oracle address changes (review)', valueChanges) +
-    line('Added (new collaterals)', added) +
-    line('Reformatted only (no address change)', reformatted) +
-    line('Skipped (OracleCenter CDP variants)', skipped) +
-    line('In doc, not in Notion (kept, not deleted)', docOnly);
+    const loc = locateTable(doc, sec.docAnchor);
+    const line = (lbl, arr) => `- ${lbl}: ${arr.length}${arr.length ? ` — ${arr.join(', ')}` : ''}\n`;
+    let report = `\n### ${sec.id} (${sec.notionAnchor})\n- Notion rows scanned: ${rows.length}\n`;
 
+    if (loc) {
+      const docRows = parseDocRows(doc.slice(loc.start, loc.end));
+      const { rows: merged, valueChanges, reformatted, added, docOnly } = merge(docRows, recs);
+      doc = doc.slice(0, loc.start) + renderTable(merged) + doc.slice(loc.end);
+      totalValueChanges += valueChanges.length;
+      totalAdded += added.length;
+      report +=
+        line('⚠️ Oracle address changes (review)', valueChanges) +
+        line('Added (new collaterals)', added) +
+        line('Reformatted only (no address change)', reformatted) +
+        line('Skipped (OracleCenter CDP variants)', skipped) +
+        line('Not ready (no token address in Notion)', empties) +
+        line('In doc, not in Notion (kept, not deleted)', docOnly);
+    } else if (sec.createIfMissing) {
+      if (recs.length === 0) {
+        report += `- Section not in doc and Notion has 0 ready rows — NOT created.\n` +
+          line('Not ready (no token address in Notion)', empties);
+      } else {
+        const { rows: merged, added } = merge([], recs);
+        const block = buildSection(sec.sectionTitle, resilient, renderTable(merged));
+        doc = `${doc.replace(/\s+$/, '')}\n\n${block}\n`;
+        totalAdded += added.length;
+        report += `- Created new "${sec.sectionTitle}" section.\n` +
+          line('Added (collaterals)', added) +
+          line('Skipped (OracleCenter CDP variants)', skipped) +
+          line('Not ready (no token address in Notion)', empties);
+      }
+    } else {
+      throw new Error(`Doc anchor "${sec.docAnchor}" not found and createIfMissing is false.`);
+    }
+    blocksOut.push(report);
+  }
+
+  const changed = doc !== original;
+  const summary = blocksOut.join('') + `\n**Result:** ${changed ? 'doc updated' : 'no change'}.\n`;
   writeFileSync('oracle-sync-summary.md', summary);
   console.log(summary);
 
-  if (DRY_RUN) {
-    console.log(changed ? '\n[DRY_RUN] doc WOULD change.' : '\n[DRY_RUN] no change.');
-  } else if (changed) {
-    writeFileSync(DOC, updatedDoc);
-  }
+  if (DRY_RUN) console.log(changed ? '[DRY_RUN] doc WOULD change.' : '[DRY_RUN] no change.');
+  else if (changed) writeFileSync(DOC, doc);
 
-  emit({
-    has_changes: String(changed),
-    value_changes: valueChanges.length,
-    added: added.length,
-  });
+  emit({ has_changes: String(changed), value_changes: totalValueChanges, added: totalAdded });
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
