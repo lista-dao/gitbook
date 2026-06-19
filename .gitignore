@@ -4,3 +4,4 @@ node_modules
 logs/*
 .gstack/
 audit-sync-summary.md
+oracle-sync-summary.md
