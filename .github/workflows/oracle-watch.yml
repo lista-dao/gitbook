@@ -1,0 +1,66 @@
+name: Multi-Oracle Watch
+
+# Weekly sync of the "B. Collaterals using Resilient Oracle" table (BNB Chain)
+# in for-developer/multi-oracle.md against the canonical Notion source
+# ("Multi-Oracle For GitBook"). When the oracle config changes, the table is
+# refreshed and committed directly to the `en` branch (auto-commit).
+#
+# NOTE: scheduled (cron) workflows only run from the repository's DEFAULT branch
+# (main), which is why this file lives on main even though the docs live on en.
+#
+# REQUIRED SECRET: NOTION_TOKEN — a Notion internal-integration token whose
+# integration has been shared with the "Multi-Oracle For GitBook" page.
+
+on:
+  schedule:
+    - cron: '30 6 * * 1' # every Monday 06:30 UTC (after audit-watch at 06:00)
+  workflow_dispatch: # allow manual runs (recommended for the first run)
+
+concurrency:
+  group: oracle-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync-oracle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout en branch
+        uses: actions/checkout@v4
+        with:
+          ref: en
+          fetch-depth: 0
+          # A PAT here lets the push to `en` trigger the downstream sync workflow
+          # (en -> RAG). With the default GITHUB_TOKEN, en is still updated but the
+          # RAG sync only runs on the next manual/other push to en.
+          token: ${{ secrets.AUDIT_SCAN_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Sync Multi-Oracle table from Notion
+        id: sync
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: node utils/sync-multi-oracle.mjs
+
+      - name: Commit changes to en
+        if: steps.sync.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add for-developer/multi-oracle.md
+          git commit -m "chore(oracle): sync Multi-Oracle table from Notion
+
+          ${{ steps.sync.outputs.value_changes }} oracle address change(s), ${{ steps.sync.outputs.added }} new collateral(s).
+          Auto-detected by the Multi-Oracle Watch workflow."
+          git push origin HEAD:en
+
+      - name: Job summary
+        if: always()
+        run: cat oracle-sync-summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "Sync did not produce a summary." >> "$GITHUB_STEP_SUMMARY"
