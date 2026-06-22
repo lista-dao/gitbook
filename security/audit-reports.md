@@ -9,8 +9,10 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 | Feature | Audits |
 | ------- | ------ |
 | Aster Rewards | [HashDit · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AsterRewards-20260615.pdf) |
+| Collateral Yield Vault | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-CollateralYieldVault-20260618.pdf) · [CertiK · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-CollateralYieldVault-20260618.pdf) · [HashDit · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-CollateralYieldVault-20260618.pdf) |
 | Moolah Vault Manager | [2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/WarRoom-MoolahVaultManager-Audit-Report-20260608.pdf) |
 | slisXAUE | [Bailsec · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-slisXAUE-Audit%20Report.pdf) · [CertiK · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/CertiK-slisXAUE-Audit%20Report.pdf) |
+| Yield Buffer | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-YieldBuffer-AuditReport-20260611.pdf) · [HashDit · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-YieldBuffer-AuditReport-20260611.pdf) |
 | Atlas Oracle Adaptor | [HashDit · 2026-05](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/hashdit_atlasOracleAdaptor_audit_report_final_22_may_2026.pdf) |
 | Fixed term lending | [Bailsec · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260511.pdf) · [Cantina · 2025-11](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina_Fixed_Term_and_rate_12Nov2025.pdf) · [Bailsec · 2025-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec__Fixed_Term_and_rate_Oct2025.pdf) |
 | Idle Market | [HashDit · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-Idle-Market-20260526.pdf) |
