@@ -43,12 +43,13 @@ const PAGE_ID = '6a54afccfcf04be4afd4ef10ce839169';
 const SECTIONS = [
   {
     id: 'bnb-b',
-    // The page now has a single "BNB Chain" table (the old A./B. split was
-    // removed in the 2026-06-22 rebuild). Anchor matches the heading exactly.
+    // The page has a single "BNB Chain" table (the old A./B. split was removed
+    // in the 2026-06-22 rebuild); the doc was restructured to match.
     notionAnchor: 'BNB Chain',
-    docAnchor: 'B. Collaterals using Resilient Oracle', // doc still uses this heading
+    docAnchor: 'BNB Chain',
     skip: /for\s+OracleCenter/i,
     createIfMissing: false,
+    mirror: true, // doc mirrors Notion: rows absent from Notion are removed
     fixtureEnv: 'NOTION_FIXTURE_ROWS',
   },
   {
@@ -57,6 +58,7 @@ const SECTIONS = [
     docAnchor: 'Ethereum Chain',
     skip: /for\s+OracleCenter/i,
     createIfMissing: true,
+    mirror: true,
     sectionTitle: 'Ethereum Chain',
     fixtureEnv: 'NOTION_FIXTURE_ROWS_ETH',
     resilientEnv: 'NOTION_FIXTURE_ETH_RESILIENT',
@@ -253,7 +255,7 @@ const addrSet = (h) => (h.match(/0x[a-fA-F0-9]{40}/gi) || []).map(lc).sort().joi
 const textKey = (h) => h.replace(/<[^>]+>/g, '').replace(/0x[a-fA-F0-9]{40}/gi, '').replace(/\s+/g, '').toLowerCase();
 const isNone = (h) => h.replace(/<[^>]+>/g, '').replace(/[-\s]/g, '') === '';
 
-function merge(docRows, recs) {
+function merge(docRows, recs, mirror) {
   // Duplicate token guard.
   const seen = new Set();
   for (const r of recs) {
@@ -267,8 +269,10 @@ function merge(docRows, recs) {
   const labelChanges = []; // non-address text changed (e.g. feed label)
   const reformatted = []; // whitespace/<br> only
   const keptBlank = []; // Notion blank would have wiped a doc address — kept doc value
-  const docOnly = [];
+  const docOnly = []; // in doc, not in Notion — kept (non-mirror sections only)
+  const removed = []; // in doc, not in Notion — removed (mirror sections)
   const consumed = new Set();
+  const kept = [];
   const label = (row, rec) => (rec && rec.asset) || row.tds[0].replace(/<[^>]+>/g, '').trim() || row.token;
 
   for (const row of docRows) {
@@ -294,8 +298,11 @@ function merge(docRows, recs) {
       else if (fmt) reformatted.push(name);
       if (blanked) keptBlank.push(name);
       row.tds = next;
-    } else if (row.token) {
-      docOnly.push(label(row, null));
+      kept.push(row);
+    } else {
+      // doc row not present in Notion
+      if (mirror) removed.push(label(row, null));
+      else { docOnly.push(label(row, null)); kept.push(row); }
     }
   }
 
@@ -307,7 +314,7 @@ function merge(docRows, recs) {
     added.push(rec.asset);
   }
 
-  return { rows: [...docRows, ...appended], valueChanges, labelChanges, reformatted, keptBlank, added, docOnly };
+  return { rows: [...kept, ...appended], valueChanges, labelChanges, reformatted, keptBlank, added, docOnly, removed };
 }
 
 function emit(kv) {
@@ -343,24 +350,25 @@ async function main() {
 
     if (loc) {
       const docRows = parseDocRows(doc.slice(loc.start, loc.end));
-      const r = merge(docRows, recs);
+      const r = merge(docRows, recs, sec.mirror);
       doc = doc.slice(0, loc.start) + renderTable(r.rows) + doc.slice(loc.end);
       totalValueChanges += r.valueChanges.length;
       totalAdded += r.added.length;
       report +=
         line('⚠️ Oracle address changes (review)', r.valueChanges) +
         line('⚠️ Kept doc value (Notion cell blank)', r.keptBlank) +
+        line('⚠️ Removed (in doc, not in Notion)', r.removed) +
         line('Label/text changes', r.labelChanges) +
         line('Added (new collaterals)', r.added) +
         line('Reformatted only', r.reformatted) +
         line('Skipped (OracleCenter CDP variants)', skipped) +
         line('Not ready (no token address in Notion)', empties) +
-        line('In doc, not in Notion (kept, not deleted)', r.docOnly);
+        line('In doc, not in Notion (kept)', r.docOnly);
     } else if (sec.createIfMissing) {
       if (recs.length === 0) {
         report += `- Section not in doc and Notion has 0 ready rows — NOT created.\n` + line('Not ready (no token address)', empties);
       } else {
-        const r = merge([], recs);
+        const r = merge([], recs, sec.mirror);
         doc = `${doc.replace(/\s+$/, '')}\n\n${buildSection(sec.sectionTitle, resilient, renderTable(r.rows))}\n`;
         totalAdded += r.added.length;
         report += `- Created new "${sec.sectionTitle}" section.\n` +
