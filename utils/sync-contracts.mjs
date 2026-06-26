@@ -50,6 +50,12 @@ const SOURCES = {
     extraPages: ['29c1d713729f803eb96bf4e57a369688'], // the "1.1 Vaults" sub-page
     excludeSections: [/token address/i, /lltv/i, /^\s*market\s*$/i],
     targets: ['bsc-core', 'bsc-smart-lending', 'bsc-oracles', 'bsc-credit'],
+    // fullRow so the bsc-oracles PT sections get their Quote column filled, not just
+    // name+address. Safe across this source's mixed-width targets: insertRow only writes
+    // full cells when they line up (name first, address last, same count) — the bsc-core/
+    // credit/smart-lending 2-col tables fall back to name+address, and the oracle sections
+    // have a single middle column (Quote) so it can't be mis-ordered.
+    fullRow: true,
     routing: [
       { test: /credit/i, page: 'bsc-credit' },
       { test: /stableswap|smartprovider/i, page: 'bsc-smart-lending' },
