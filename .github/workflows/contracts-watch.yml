@@ -1,0 +1,80 @@
+name: Contract Address Watch
+
+# Syncs contract ADDRESSES from Notion -> the GitBook contract pages and opens a PR
+# for review (addresses are high-risk, so this never commits directly).
+# Source of truth + routing: utils/sync-contracts.mjs + utils/contract-page-map.json.
+#
+# NOTE: scheduled (cron) workflows only run from the repo DEFAULT branch (main),
+# which is why this file lives on main even though the docs live on en.
+#
+# Currently workflow_dispatch ONLY (no cron) — enable the schedule below AFTER:
+#   1. secrets.NOTION_TOKEN integration is shared with every contract source page
+#      (the SOURCES map in utils/sync-contracts.mjs lists them all),
+#   2. each source's table structure is confirmed, and a manual run's PR looks right.
+#
+# REQUIRED SECRET: NOTION_TOKEN (same integration the oracle sync uses).
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 7 * * 1'   # every Monday 07:00 UTC (after audit 06:00 / oracle 06:30)
+
+concurrency:
+  group: contracts-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout en branch
+        uses: actions/checkout@v4
+        with:
+          ref: en
+          fetch-depth: 0
+          # PAT (same as the oracle/audit watchers) so the bot's PR triggers checks;
+          # falls back to GITHUB_TOKEN, which still opens the PR but won't trigger them.
+          token: ${{ secrets.AUDIT_SCAN_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Sync contract addresses from Notion
+        id: sync
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: node utils/sync-contracts.mjs
+
+      - name: Open PR with the changes
+        if: steps.sync.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.AUDIT_SCAN_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          BRANCH="bot/contract-sync-${{ github.run_id }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          # Re-seed the map from the just-edited pages so newly-inserted contracts
+          # are tracked next run (otherwise they'd be re-detected as "new").
+          node utils/gen-contract-map.mjs
+          git add for-developer/ utils/contract-page-map.json
+          git commit -m "chore(contracts): sync contract addresses from Notion
+
+          ${{ steps.sync.outputs.changed }} address change(s), ${{ steps.sync.outputs.added }} new contract(s).
+          Auto-detected by the Contract Address Watch workflow."
+          git push origin "$BRANCH"
+          gh pr create --base en --head "$BRANCH" \
+            --title "chore(contracts): sync contract addresses from Notion" \
+            --body-file contract-sync-summary.md
+
+      - name: Job summary
+        if: always()
+        run: cat contract-sync-summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "No changes / no summary produced." >> "$GITHUB_STEP_SUMMARY"
