@@ -58,7 +58,10 @@ const SOURCES = {
     default: 'bsc-core',
   },
   'moolah-eth':      { notionPageId: '27c1d713729f8091bc46c7adabb6030b', targets: ['ethereum'],    default: 'ethereum' },
-  'lending-brokers': { notionPageId: '2f61d713729f80f0be74f1c76e787647', targets: ['bsc-brokers'], default: 'bsc-brokers' },
+  // fullRow: the brokers table's Notion column order matches GitBook exactly
+  // (Contract | Broker | LLTV | Cap | Market ID | Address), so new rows are inserted
+  // with ALL columns, not just name+address. Only enable this where alignment is verified.
+  'lending-brokers': { notionPageId: '2f61d713729f80f0be74f1c76e787647', targets: ['bsc-brokers'], default: 'bsc-brokers', fullRow: true },
   'rwa-bsc':         { notionPageId: '36d1d713729f8066b153cbf1f4aa010e', targets: ['rwa'],          default: 'rwa' },
   // RWA ETH: sync only Lista's own contracts — exclude the Roles table and the
   // external underlying tokens (XAUt / CoboFund FundToken & Oracle).
@@ -114,7 +117,7 @@ export function targetSection(pageContracts, name) {
 }
 
 // --- append a NEW contract row, following the page's existing structure -----
-export function insertRow(text, format, name, address, section = '') {
+export function insertRow(text, format, name, address, section = '', cells = null) {
   if (!ADDR_STRICT.test(address)) throw new Error(`insertRow: not a clean address for "${name}": ${address}`);
   if (format === 'html') {
     // section-targeted placement isn't implemented for HTML tables; fail closed rather
@@ -145,11 +148,16 @@ export function insertRow(text, format, name, address, section = '') {
   const cols = lines[sep].replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').length;
   let end = sep + 1;
   while (end < lines.length && /^\s*\|/.test(lines[end])) end++;
-  const safeName = String(name).replace(/\|/g, '\\|').replace(/\s+/g, ' ').trim(); // a raw '|' would break the table
-  const cells = Array(cols).fill(' ');
-  cells[0] = ` ${safeName} `;
-  cells[cols - 1] = ` ${address} `;
-  lines.splice(end, 0, `|${cells.join('|')}|`);
+  const clean = (s) => ` ${String(s).replace(/\|/g, '\\|').replace(/\s+/g, ' ').trim()} `; // a raw '|' would break the table
+  // fullRow: write ALL columns from the source row — but ONLY when it lines up with this
+  // table (same column count, name in the first column, address in the last). Otherwise
+  // fall back to name+address so a misaligned source can never scatter data into wrong columns.
+  const aligned = Array.isArray(cells) && cells.length === cols
+    && cells[0]?.trim() === name.trim()
+    && lc(lastAddr(cells[cols - 1]) || '') === lc(address);
+  const out = aligned ? cells.map(clean) : Array(cols).fill(' ');
+  if (!aligned) { out[0] = clean(name); out[cols - 1] = clean(address); }
+  lines.splice(end, 0, `|${out.join('|')}|`);
   return lines.join('\n');
 }
 
@@ -181,9 +189,10 @@ async function liveSource(cfg) {
       if (b.type !== 'table') continue;
       for (const r of await children(b.id)) {
         if (r.type !== 'table_row') continue;
-        const name = cellText(r.table_row.cells[0]);
-        const addr = lastAddr(r.table_row.cells.map(cellText).join(' '));
-        if (name && addr && !ADDR.test(name) && !excluded(cfg, name)) out.push({ name, address: addr });
+        const cells = r.table_row.cells.map(cellText); // full ordered row, for fullRow sources
+        const name = cells[0];
+        const addr = lastAddr(cells.join(' '));
+        if (name && addr && !ADDR.test(name) && !excluded(cfg, name)) out.push({ name, address: addr, cells });
       }
     }
   }
@@ -237,7 +246,8 @@ function plan(map, sources) {
       if (docAddrs.has(lc(e.address)) || consumed.has(lc(e.address))) continue;
       const page = routeNew(src, e.name);
       const section = targetSection(map[page]?.contracts || [], e.name);
-      (pageEdits[page] ??= { repls: [], inserts: [] }).inserts.push({ name: e.name, address: e.address, section });
+      const cells = SOURCES[src]?.fullRow ? e.cells : undefined; // only fullRow sources carry the middle columns through
+      (pageEdits[page] ??= { repls: [], inserts: [] }).inserts.push({ name: e.name, address: e.address, section, cells });
       consumed.add(lc(e.address)); // dedup: a page fed by >1 source (rwa <- rwa-bsc+rwa-eth) must insert each address once
       report.push(`\n### NEW (${src} -> ${page}${section ? ' #' + section : ''})\n- ${e.name} = ${e.address}`);
     }
@@ -344,6 +354,18 @@ function selftest() {
     let threwFall = false;
     try { insertRow(noTbl, 'markdown', 'New', '0x' + '4'.repeat(40), 'SecA'); } catch { threwFall = true; }
     ok(threwFall, 'section with no table throws (does not fall into the next section\'s table)');
+
+    // 6i: fullRow insert writes ALL columns when the source row aligns with the table
+    const A6 = '0x' + 'a'.repeat(40);
+    const tbl6 = '| Contract | Broker | LLTV | Cap | Market ID | Address |\n| --- | --- | --- | --- | --- | --- |\n| Existing | x/y | 86% | 1M | 0xdead | 0x' + '7'.repeat(40) + ' |';
+    const full = ['LendingBroker(X&Y/Z)', 'X&Y/Z', '96.5%', '50M', '0x' + 'c'.repeat(64), A6];
+    const o6i = insertRow(tbl6, 'markdown', 'LendingBroker(X&Y/Z)', A6, '', full).split('\n').find((l) => l.includes('X&Y/Z') && l.includes(A6));
+    ok(o6i && o6i.includes('96.5%') && o6i.includes('50M') && o6i.includes('0x' + 'c'.repeat(64)), 'fullRow insert fills all middle columns (Broker/LLTV/Cap/Market ID)');
+
+    // 6j: misaligned cells (wrong count / address not last) fall back to name+address, never scatter
+    const o6j = insertRow(tbl6, 'markdown', 'Safe', A6, '', ['Safe', 'junk', A6]); // only 3 cells for a 6-col table
+    const row6j = o6j.split('\n').find((l) => l.includes('Safe') && l.includes(A6));
+    ok(row6j && !row6j.includes('junk'), 'misaligned fullRow cells are ignored (safe fallback to name+address)');
   }
 
   console.log(`\n${fail === 0 ? '✅ ALL PASS' : '❌ ' + fail + ' FAILED'} (${pass} passed, ${fail} failed)`);
@@ -366,7 +388,7 @@ async function main() {
     const v = map[page]; if (!v) throw new Error(`route to unknown page "${page}" — refusing to silently drop its edits`);
     let text = readFileSync(v.file, 'utf8');
     const r = applyReplacements(text, ed.repls); text = r.text; changed += r.changed.length;
-    for (const ins of ed.inserts) { text = insertRow(text, v.format, ins.name, ins.address, ins.section); added += 1; }
+    for (const ins of ed.inserts) { text = insertRow(text, v.format, ins.name, ins.address, ins.section, ins.cells); added += 1; }
     if ((r.changed.length || ed.inserts.length) && !DRY) writeFileSync(v.file, text);
   }
 
