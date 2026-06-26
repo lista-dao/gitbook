@@ -1,0 +1,1180 @@
+{
+  "bsc-core": {
+    "file": "for-developer/lista-lending/smart-contract-bsc-core.md",
+    "format": "markdown",
+    "contracts": [
+      {
+        "section": "",
+        "name": "Moolah",
+        "address": "0x8F73b65B4caAf64FBA2aF91cC5D4a2A1318E5D8C",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "InterestRateModel",
+        "address": "0xFe7dAe87Ebb11a7BEB9F534BB23267992d9cDe7c",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "InterestRateModel (Alpha)",
+        "address": "0x5F9f9173B405C6CEAfa7f98d09e4B8447e9797E6",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "VaultAllocator",
+        "address": "0x9ECF66f016FCaA853FdA24d223bdb4276E5b524a",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "Liquidator",
+        "address": "0x6a87C15598929B2db22cF68a9a0dDE5Bf297a59a",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "PublicLiquidator",
+        "address": "0x882475d622c687b079f149B69a15683FCbeCC6D9",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingRevenueDistributor",
+        "address": "0xea55952a51ddd771d6eBc45Bd0B512276dd0b866",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "OracleAdaptor",
+        "address": "0x21650E416dC6C89486B2E654c86cC2c36c597b58",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "Lending TimeLock",
+        "address": "0x2e2807F88C381Cb0CC55c808a751fC1E3fcCbb85",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "TimeLockNew",
+        "address": "0x5E3358352153c864E2b1F03c620f80d66Bd30752",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingFeeRecipient",
+        "address": "0x2E2Eed557FAb1d2E11fEA1E1a23FF8f1b23551f3",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVaultFactory",
+        "address": "0x2a0Cb6401FD3c6196750dc6b46702040761D9671",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVaultManager",
+        "address": "0x5021319C1B8245e0680F19b7aA84a0F0F3d91AA9",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MarketFactory",
+        "address": "0xce26859127d236a61f168d2d0905f77d7E286Ab2",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RevenueCollector (DEX fee and liquidation profit)",
+        "address": "0x86E09296aeDA129D3b0b4c134B3202b84Cd8945C",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RevenueCollector (receive buyback LISTA)",
+        "address": "0xD08BE4Fe91E5786CeC1D3Bce58c2A16c3efcA179",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "PositionManager",
+        "address": "0x8eBFa9e687aF71EC2e87A0380F73b9f57FDf3ec0",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "PositionMigrator",
+        "address": "0x2b3e5b695722756130a553e9bb5a45e16d21d0a4",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BatchManagementUtils",
+        "address": "0x458437d173A7d5b8E92b0DC5aF513584cAB4bf3D",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(WBNB)",
+        "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(USD1)",
+        "address": "0xfa27f172e0b6ebcEF9c51ABf817E2cb142FbE627",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(U)",
+        "address": "0x9A17Fd5Cb8EFc25d11567e713aE795A89775a759",
+        "cols": []
+      },
+      {
+        "section": "Providers",
+        "name": "SlisBNBProvider",
+        "address": "0x33f7A980a246f9B8FEA2254E3065576E127D4D5f",
+        "cols": []
+      },
+      {
+        "section": "Providers",
+        "name": "SlisBNBxMinter",
+        "address": "0x2959c423bfe5Cc6E41516599D982A29C0773F11a",
+        "cols": []
+      },
+      {
+        "section": "Providers",
+        "name": "BNBProvider (MEV WBNB Vault)",
+        "address": "0x501bE17CcA1d8a009753Da271D6714C18c1A35c9",
+        "cols": []
+      },
+      {
+        "section": "Providers",
+        "name": "BNBProvider (Lista WBNB Vault)",
+        "address": "0x367384C54756a25340c63057D87eA22d47Fd5701",
+        "cols": []
+      },
+      {
+        "section": "Providers",
+        "name": "BNBProvider (Loop WBNB Vault)",
+        "address": "0x7901Cb0db0db005c44ee5957Fa22D478258ef64E",
+        "cols": []
+      }
+    ]
+  },
+  "bsc-smart-lending": {
+    "file": "for-developer/lista-lending/smart-contract-bsc-smart-lending.md",
+    "format": "markdown",
+    "contracts": [
+      {
+        "section": "Factory & Pool Info",
+        "name": "StableSwapFactory",
+        "address": "0xDE9c8E1536989d8c3817afDabC37C0fb44cB49b4",
+        "cols": []
+      },
+      {
+        "section": "Factory & Pool Info",
+        "name": "StableSwapPoolInfo",
+        "address": "0x73D2623C8497421B55234e6B25fB744625557a1A",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "StableSwapLPCollateral",
+        "address": "0x719f6445cdAC08B84611D0F19d733F57214bcfee",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "StableSwapPool",
+        "address": "0x3DcEA6AFBA8af84b25F1f8947058AF1ac4c06131",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "StableSwapLP",
+        "address": "0x1bc8b041c1b89b0109E56f2Eb197B5c09BCC1Cf0",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "SmartProvider",
+        "address": "0xC3be83DE4b19aFC4F6021Ea5011B75a3542024dE",
+        "cols": []
+      },
+      {
+        "section": "solvBTC / BTCB",
+        "name": "StableSwapLPCollateral",
+        "address": "0x6f4d7532A402D76F552E1F047Ff7e23bFe1A9f03",
+        "cols": []
+      },
+      {
+        "section": "solvBTC / BTCB",
+        "name": "StableSwapPool",
+        "address": "0x45409865870f0CBC71c01CC00fF8c0b2DE3EB7D9",
+        "cols": []
+      },
+      {
+        "section": "solvBTC / BTCB",
+        "name": "StableSwapLP",
+        "address": "0x3F5AF48B4A3Ac89177cA6aFb59E5469F7ef5cE45",
+        "cols": []
+      },
+      {
+        "section": "solvBTC / BTCB",
+        "name": "SmartProvider",
+        "address": "0xA5F53ca56d87d7d4fEC508665D23f29bfb2749DB",
+        "cols": []
+      },
+      {
+        "section": "U / USDT",
+        "name": "StableSwapPool",
+        "address": "0x6783a05B98Cb83c3f456197A035b9C17a9d57388",
+        "cols": []
+      },
+      {
+        "section": "U / USDT",
+        "name": "StableSwapLP",
+        "address": "0x0F6E7eb2700BC499448008841a61c3aBd820c95d",
+        "cols": []
+      },
+      {
+        "section": "U / USDT",
+        "name": "StableSwapLPCollateral",
+        "address": "0xbBD3e74E69e6BDDDA8e5AAdC1460611A8f7cd05a",
+        "cols": []
+      },
+      {
+        "section": "U / USDT",
+        "name": "SmartProvider",
+        "address": "0x9994D77E5cdcAD9f9055b13402A7BF8C24d4C841",
+        "cols": []
+      },
+      {
+        "section": "USDC / USDT",
+        "name": "StableSwapPool",
+        "address": "0xF5448fC2bEB9324900d08225fE4530bA3bBf654f",
+        "cols": []
+      },
+      {
+        "section": "USDC / USDT",
+        "name": "StableSwapLP",
+        "address": "0xF6136d7e72446C724ecAeef514AE7B2ab4dbb60B",
+        "cols": []
+      },
+      {
+        "section": "USDC / USDT",
+        "name": "StableSwapLPCollateral",
+        "address": "0x23BC296d67619eA11C9a8B49B8C396B798AF3330",
+        "cols": []
+      },
+      {
+        "section": "USDC / USDT",
+        "name": "SmartProvider",
+        "address": "0x5fD3971104cF3bAB1dC89EF904Da26F54f75C06B",
+        "cols": []
+      },
+      {
+        "section": "USDC / USDT (Narrow Pair)",
+        "name": "StableSwapPool",
+        "address": "0x529E7aE9474a9F871D3C32aF15Ea2D2A4168eF28",
+        "cols": []
+      },
+      {
+        "section": "USDC / USDT (Narrow Pair)",
+        "name": "StableSwapLP",
+        "address": "0x30b6880e7D8F006E0a04E01B8EAb3a1bA288644d",
+        "cols": []
+      },
+      {
+        "section": "USD1 / USDT",
+        "name": "StableSwapPool",
+        "address": "0x723ccd2FB5897673Ad108706578886baA15d7242",
+        "cols": []
+      },
+      {
+        "section": "USD1 / USDT",
+        "name": "StableSwapLP",
+        "address": "0x639526a3fAdcB1b1b4B9512592E9bcD3b47E9e2B",
+        "cols": []
+      },
+      {
+        "section": "USD1 / USDT",
+        "name": "StableSwapLPCollateral",
+        "address": "0x091e6Ed7794d74b73081D32cAb59fa47ff15418d",
+        "cols": []
+      },
+      {
+        "section": "USD1 / USDT",
+        "name": "SmartProvider",
+        "address": "0x791cd65F2B8cB7cA3a6c1C4D28A0b23D8E566495",
+        "cols": []
+      },
+      {
+        "section": "lisUSD / USDT",
+        "name": "StableSwapPool",
+        "address": "0x8df7891fb2Cb3e98C7AB3cfB4d9A59FbCC63c956",
+        "cols": []
+      },
+      {
+        "section": "lisUSD / USDT",
+        "name": "StableSwapLP",
+        "address": "0x05f657273A8bc6612E0f20E1C2E947dFEF9fFcAA",
+        "cols": []
+      },
+      {
+        "section": "lisUSD / USDT",
+        "name": "StableSwapLPCollateral",
+        "address": "0x6c7EbA17dDB5D0435FCFb9053BB3087c1d10beB3",
+        "cols": []
+      },
+      {
+        "section": "lisUSD / USDT",
+        "name": "SmartProvider",
+        "address": "0x6A39B04f8a7DB71Cee17f9978004C028bfF2e144",
+        "cols": []
+      }
+    ]
+  },
+  "bsc-oracles": {
+    "file": "for-developer/lista-lending/smart-contract-bsc-oracles.md",
+    "format": "markdown",
+    "contracts": [
+      {
+        "section": "Stock Oracle",
+        "name": "StockOracle",
+        "address": "0x526D09c604A17D98cb1f260a7774A239990dbDfb",
+        "cols": []
+      },
+      {
+        "section": "Stock Oracle",
+        "name": "StockOracleSwitch",
+        "address": "0xb4678C3E8B49d2b95Da48458f98805da193A8498",
+        "cols": []
+      },
+      {
+        "section": "PT-sUSDE / PT-USDe (2025 Maturity)",
+        "name": "PTLinearDiscountOracle (PT-sUSDE-26JUN2025)",
+        "address": "0x56007BD39899bb2bEbC4086a64b5B9B7832614C6",
+        "cols": [
+          "USDe"
+        ]
+      },
+      {
+        "section": "PT-sUSDE / PT-USDe (2025 Maturity)",
+        "name": "PTLinearDiscountOracle (PT-sUSDE-26JUN2025)",
+        "address": "0x89852C82e4a7aa41c7691b374d5D5Ef8487eC370",
+        "cols": [
+          "USDT"
+        ]
+      },
+      {
+        "section": "PT-sUSDE / PT-USDe (2025 Maturity)",
+        "name": "PTLinearDiscountOracle (PT-sUSDE-26JUN2025)",
+        "address": "0xFd31ADF830Fd68d3E646792917e4dDB1d9AB5665",
+        "cols": [
+          "USD1"
+        ]
+      },
+      {
+        "section": "PT-sUSDE / PT-USDe (2025 Maturity)",
+        "name": "PTLinearDiscountOracle (PT-USDe-7AUG2025)",
+        "address": "0x1CCEfa30385d5Fd7c6259362eC110e403974d7A2",
+        "cols": [
+          "USDT"
+        ]
+      },
+      {
+        "section": "PT-sUSDE / PT-USDe (2025 Maturity)",
+        "name": "PTLinearDiscountOracle (PT-USDe-7AUG2025)",
+        "address": "0x2311F923Ca3FdCfF03522700b482644A929dDE70",
+        "cols": [
+          "USD1"
+        ]
+      },
+      {
+        "section": "PT-clisBNB",
+        "name": "PTLinearDiscountPriceOracle (PT-clisBNB-30OCT2025)",
+        "address": "0x1a438f71bc56514F47142c96A8f580AB5767aC17",
+        "cols": []
+      },
+      {
+        "section": "PT-USR / PT-Sigma",
+        "name": "PTLinearDiscountOracle (PT-USR-27NOV2025)",
+        "address": "0xC36a8F8Ad34A68942979bb50B7792862eFb59cF3",
+        "cols": [
+          "USD1"
+        ]
+      },
+      {
+        "section": "PT-USR / PT-Sigma",
+        "name": "PTLinearDiscountOracle (PT-USR-27NOV2025)",
+        "address": "0x01ccc0f0ae8907bD3EFA947B2Ce841082Bcce29f",
+        "cols": [
+          "USDT"
+        ]
+      },
+      {
+        "section": "PT-USR / PT-Sigma",
+        "name": "PTLinearDiscountOracle (PT-Sigma-Stability-Pool-25SEP2025)",
+        "address": "0x68A892d8bC5A41503534C86F7F20a72322A2CDB1",
+        "cols": [
+          "USD1"
+        ]
+      },
+      {
+        "section": "PT-USR / PT-Sigma",
+        "name": "PTLinearDiscountOracle (PT-Sigma-Stability-Pool-25SEP2025)",
+        "address": "0x39D5348B0363AC9D0d4168Bac9A5B8A1E9DBd511",
+        "cols": [
+          "USDT"
+        ]
+      },
+      {
+        "section": "PendleSpark",
+        "name": "PendleSparkLinearDiscountOracle (PT-USDe-7AUG2025)",
+        "address": "0x91D6887f588BFcbC824b9994418867077e1cB59F",
+        "cols": []
+      },
+      {
+        "section": "OFT-PT-USDe",
+        "name": "PTLinearDiscountOracle (OFT-PT-USDe-05Feb2026)",
+        "address": "0x1d25Dd52fd8A509719cBb983f04FAe5B7D00eC86",
+        "cols": [
+          "USD1"
+        ]
+      },
+      {
+        "section": "OFT-PT-USDe",
+        "name": "PTLinearDiscountOracle (OFT-PT-USDe-05Feb2026)",
+        "address": "0x155e987d0d48Ac35D3C2F2c3B16664944D918bA5",
+        "cols": [
+          "USDT"
+        ]
+      },
+      {
+        "section": "PT-USDe-09Apr2026 (Plasma)",
+        "name": "PTLinearDiscountOracle (PT-USDe-09Apr2026-(Plasma))",
+        "address": "0x9A7B029b2Fb0fF2CbA4b8d5C0753862fbD027a63",
+        "cols": [
+          "USD1"
+        ]
+      },
+      {
+        "section": "PT-USDe-09Apr2026 (Plasma)",
+        "name": "PTLinearDiscountOracle (PT-USDe-09Apr2026-(Plasma))",
+        "address": "0x784554Ac9fd7474488aEF89618F9bB549400f748",
+        "cols": [
+          "USDT"
+        ]
+      },
+      {
+        "section": "PT-USDe-09Apr2026 (Plasma)",
+        "name": "PTLinearDiscountOracle (PT-USDe-09Apr2026-(Plasma))",
+        "address": "0x9bb8A4190EE7568Dc3E68A95e8b0afA692B478d0",
+        "cols": [
+          "U"
+        ]
+      },
+      {
+        "section": "PT-USDe-09Apr2026 (Plasma)",
+        "name": "PTLinearDiscountOracle (PT-sUSDe-09Apr2026(Plasma))",
+        "address": "0x9B7FAE34238E37dF77d35559eF62995c066B5e11",
+        "cols": [
+          "USD1"
+        ]
+      },
+      {
+        "section": "PT-USDe-09Apr2026 (Plasma)",
+        "name": "PTLinearDiscountOracle (PT-sUSDe-09Apr2026(Plasma))",
+        "address": "0xd69E4BF784185139994eeb3F0Db9Ea307d31FDdB",
+        "cols": [
+          "USDT"
+        ]
+      },
+      {
+        "section": "PT-USDe-09Apr2026 (Plasma)",
+        "name": "PTLinearDiscountOracle (PT-sUSDe-09Apr2026(Plasma))",
+        "address": "0x09E664516C91461d8ed58C934Af48048D2534fe9",
+        "cols": [
+          "U"
+        ]
+      },
+      {
+        "section": "PT-USDe-07May2026",
+        "name": "PTLinearDiscountOracle (PT-USDe-07May2026)",
+        "address": "0xB2477a5c274d1E23111Bf86fD9130dd411E522B8",
+        "cols": [
+          "USD1"
+        ]
+      },
+      {
+        "section": "PT-USDe-07May2026",
+        "name": "PTLinearDiscountOracle (PT-USDe-07May2026)",
+        "address": "0xcaBe73db8650eBD169e2C41ceeCa01406B191151",
+        "cols": [
+          "USDT"
+        ]
+      },
+      {
+        "section": "PT-USDe-07May2026",
+        "name": "PTLinearDiscountOracle (PT-USDe-07May2026)",
+        "address": "0x80C9BA83fC7495dC7721a1903522587b1021A0BE",
+        "cols": [
+          "U"
+        ]
+      },
+      {
+        "section": "PT-srUSDe-02ARP2026",
+        "name": "PTLinearDiscountOracle (PT-srUSDe-02ARP2026)",
+        "address": "0x301B8285cc11357BD4FbFa98d56591e1320BcD6c",
+        "cols": [
+          "USD1"
+        ]
+      },
+      {
+        "section": "PT-srUSDe-02ARP2026",
+        "name": "PTLinearDiscountOracle (PT-srUSDe-02ARP2026)",
+        "address": "0x6606cC0A12EA21002c39C3ee018F0Bdb9A2A39B2",
+        "cols": [
+          "USDT"
+        ]
+      },
+      {
+        "section": "PT-srUSDe-02ARP2026",
+        "name": "PTLinearDiscountOracle (PT-srUSDe-02ARP2026)",
+        "address": "0x64f9de3C60bf5ff2e8BC824781F1Dfb7A8766F76",
+        "cols": [
+          "U"
+        ]
+      }
+    ]
+  },
+  "bsc-credit": {
+    "file": "for-developer/lista-lending/smart-contract-bsc-credit.md",
+    "format": "markdown",
+    "contracts": [
+      {
+        "section": "",
+        "name": "CreditToken",
+        "address": "0x1f9831626CE85909794eEaA5C35BF34DB3eB52d8",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "CreditBroker",
+        "address": "0x2A6704D56BDedF4c7564C9534D7fa8D8D204D578",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "CreditBrokerInterestRelayer",
+        "address": "0xBd94C4E931c1a15941B6273A952Af322891adC47",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "CreditBrokerInfo",
+        "address": "0x8E58Eb6Eba37ff00BF920Da0DD7Dd63a6576dD63",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVault (Credit Vault)",
+        "address": "0x4E82Fa869F8D05c8F94900d4652Fdb82f3C7A004",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingRewardsDistributorV2 (Credit Emission)",
+        "address": "0xC003fb7485ec58a24F26abcAf7646707AbC4886C",
+        "cols": []
+      }
+    ]
+  },
+  "bsc-brokers": {
+    "file": "for-developer/lista-lending/smart-contract-bsc-brokers.md",
+    "format": "markdown",
+    "contracts": [
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(WBNB/LisUSD)",
+        "address": "0x6BAF9648cffB7C9c4cB7275000a27b9a7dBD59Bc",
+        "cols": [
+          "WBNB/LisUSD",
+          "86%",
+          "100k"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(slisBNB/LisUSD)",
+        "address": "0x0cffd57f93190892ac2dB8A01596304268Bc2014",
+        "cols": [
+          "slisBNB/LisUSD",
+          "86%",
+          "100k"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BTCB/LisUSD)",
+        "address": "0x30DDB3A48863E4897AaCDD5D202E23270d75BaE1",
+        "cols": [
+          "BTCB/LisUSD",
+          "86%",
+          "100k"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(PT-sUSDe 09APR2026 Plasma/USD1)",
+        "address": "0xf7c4701e90867f33745F73d5edF2143f0DE03f9d",
+        "cols": [
+          "PT-sUSDe 09APR2026 Plasma/USD1",
+          "94.5%",
+          "10M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(PT-sUSDe 09APR2026 Plasma/U)",
+        "address": "0xFA25B61ac2c31E82DDE626EE2704700646a2C6E3",
+        "cols": [
+          "PT-sUSDe 09APR2026 Plasma/U",
+          "94.5%",
+          "5M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(PT-sUSDe 09APR2026 Plasma/USDT)",
+        "address": "0xa26488154D61f8977153915510564ce47a5072dD",
+        "cols": [
+          "PT-sUSDe 09APR2026 Plasma/USDT",
+          "94.5%",
+          "1M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BTCB/USD1)",
+        "address": "0x41E2a8C0f0e60ec228735a9ACDe704ff73df7981",
+        "cols": [
+          "BTCB/USD1",
+          "86%",
+          "10M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(slisBNB/USD1)",
+        "address": "0xF07b74724cC734079D9D1aa22fF7591B5A32D9d2",
+        "cols": [
+          "slisBNB/USD1",
+          "86%",
+          "10M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BTCB/U)",
+        "address": "0xFEb7D3Deb6a4CEE8f5da4F618098Ac943440Ff69",
+        "cols": [
+          "BTCB/U",
+          "86%",
+          "100M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(slisBNB/U)",
+        "address": "0xDf05774Cd68cE1FBaE01be3181524c904f91d628",
+        "cols": [
+          "slisBNB/U",
+          "86%",
+          "100M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BTCB/USDT)",
+        "address": "0xa94d926937f29553913A50feDC365De69162613d",
+        "cols": [
+          "BTCB/USDT",
+          "86%",
+          "1M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(slisBNB/USDT)",
+        "address": "0xf9502555CC9A4D3ea557BB79b825CA10B3A8344F",
+        "cols": [
+          "slisBNB/USDT",
+          "86%",
+          "1M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(USDe/U)",
+        "address": "0x52ee1F685ef41E8D1158E2508dC46561Ca839864",
+        "cols": [
+          "USDe/U",
+          "91.5%",
+          "75M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(USDe/USD1)",
+        "address": "0xFDFc9A306084BCa33885b76d23C885dB9E3a6e72",
+        "cols": [
+          "USDe/USD1",
+          "91.5%",
+          "75M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(USDe/USDT)",
+        "address": "0x07b72Adbe196E2E83242C3414eee5Fd7E4c0cD74",
+        "cols": [
+          "USDe/USDT",
+          "91.5%",
+          "75M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(sUSDe/U)",
+        "address": "0x3350fC3c54CE501083a60707823833e67168bb94",
+        "cols": [
+          "sUSDe/U",
+          "91.5%",
+          "75M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(sUSDe/USD1)",
+        "address": "0xCA5929B8fF8B1a4B9B8d77DFc5340977BFa425B3",
+        "cols": [
+          "sUSDe/USD1",
+          "91.5%",
+          "75M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(sUSDe/USDT)",
+        "address": "0x306b7122adb734bD3976f6Fb7dC5E8fEf57528D7",
+        "cols": [
+          "sUSDe/USDT",
+          "91.5%",
+          "75M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(slisBNB/WBNB)",
+        "address": "0x1Fa26015286D1270343d7526C60bd57aB6bE8b54",
+        "cols": [
+          "slisBNB/WBNB",
+          "96.5%",
+          "1M"
+        ]
+      },
+      {
+        "section": "Broker Auxiliary Contracts",
+        "name": "BrokerInterestRelayer (lisUSD)",
+        "address": "0xcb2590F10728e3ffc725d7ECf88EcFd0d92c9d6a",
+        "cols": []
+      },
+      {
+        "section": "Broker Auxiliary Contracts",
+        "name": "BrokerInterestRelayer (USD1)",
+        "address": "0x35720fcA79F33E3817479E0c6abFaD38ea1a9DaC",
+        "cols": []
+      },
+      {
+        "section": "Broker Auxiliary Contracts",
+        "name": "BrokerInterestRelayer (U)",
+        "address": "0x9348923C2f0AD218A8736Ab28cfAe7D93027E73f",
+        "cols": []
+      },
+      {
+        "section": "Broker Auxiliary Contracts",
+        "name": "BrokerInterestRelayer (USDT)",
+        "address": "0x2A119f506ce71cF427D5ae88540fAec580840587",
+        "cols": []
+      },
+      {
+        "section": "Broker Auxiliary Contracts",
+        "name": "BrokerInterestRelayer (BNB)",
+        "address": "0xF2D18e9201d1fE752e3115c029F0f5Ef2Ec2bdbe",
+        "cols": []
+      },
+      {
+        "section": "Broker Auxiliary Contracts",
+        "name": "Rate Calculator",
+        "address": "0xF81A3067ACF683B7f2f40a22bCF17c8310be2330",
+        "cols": []
+      },
+      {
+        "section": "Broker Auxiliary Contracts",
+        "name": "BrokerLiquidator",
+        "address": "0x3AA647a1e902833b61E503DbBFbc58992daa4868",
+        "cols": []
+      },
+      {
+        "section": "Broker Auxiliary Contracts",
+        "name": "LisUSD Vault",
+        "address": "0xE03D86e5Baa3509AC4A059A41737bAa8169B6529",
+        "cols": []
+      }
+    ]
+  },
+  "ethereum": {
+    "file": "for-developer/lista-lending/smart-contract-ethereum.md",
+    "format": "markdown",
+    "contracts": [
+      {
+        "section": "",
+        "name": "Moolah",
+        "address": "0xf820fB4680712CD7263a0D3D024D5b5aEA82Fd70",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVault(USD1)",
+        "address": "0x1A9BeE2F5c85F6b4a0221fB1C733246AF5306Ae3",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVault(USDT)",
+        "address": "0x28643FFD79256719D6AcbCF25Cb44576cAeBCf12",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVault(USDC)",
+        "address": "0x9651Ae50a5763c6f9B883f9d50e8116281CFcab2",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "IRM",
+        "address": "0x8b7d334d243b74D63C4b963893267A0F5240F990",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "FixedRateIRM",
+        "address": "0x9A7cA2CfB886132B6024789163e770979E4222e1",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "Liquidator",
+        "address": "0x5Bf5c3B5f5c29dBC647d2557Cc22B00ED29f301C",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "PublicLiquidator",
+        "address": "0x796302e041d1715a8b1f16Fd7d7CBA38bb031DE5",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "Manager TimeLock",
+        "address": "0x375fdA2Bf66f4CE85EAB29AB6407dCd4a4C428BA",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "Admin TimeLock",
+        "address": "0xa18ae79AEDA3e711E0CD64cfe1Cd06402d400D61",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingFeeRecipient",
+        "address": "0xd10a024602E042dcb9C19e21682c3b896c8B0d30",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "PTLinearDiscountOracle (PT-USDe-27NOV2025 / USD1)",
+        "address": "0xb169d2459F51d02d7fC8A39498ec2801652b594c",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ResilientOracle",
+        "address": "0xA64FE284EB8279B9b63946DD51813b0116099301",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BoundValidator",
+        "address": "0x3127b40bd2E591BFa088CA98b92ED9a41dD370a1",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ETHProvider",
+        "address": "0xFe34BF713F3C2499026cdFA5af43eb22AA2d1aDb",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapFactory",
+        "address": "0xF6c9ffA64bD0aE8a068dd7b7d954c654A3E7F8a6",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPoolInfo",
+        "address": "0xd2231A59936E39d48f5C0D735bF073C7ee3dE02A",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral (ETH & wstETH-SmartLP)",
+        "address": "0xDB8aAB8a0b28F3ceAaC07E749559C45fAc8B775c",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral (USDT & USDC-SmartLP)",
+        "address": "0x0c1BFFa53Cf93220381D88C8FA1bf823a932Aa23",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral (USDT & USD1-SmartLP)",
+        "address": "0x986325959E84a46361D4A4CF18b9e95F2206405B",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral (WBTC & cbBTC-SmartLP)",
+        "address": "0x5432E4FE5736B9B7ddc1Be34ac45bdB557f2bE22",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral (USDT & USDe-SmartLP)",
+        "address": "0xCC28Aa85f146F28Fc3F47B28334BE3Cc3646EA16",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral (USDC & USDe-SmartLP)",
+        "address": "0xE830a2F63eeE5d3cEaDEda0C138cc176B037dae8",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP (ETH & wstETH-LP)",
+        "address": "0x6905809790F8D33B3414B88d23A0CFf7Ec194E59",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP (USDT & USDC-LP)",
+        "address": "0x923C67CeD114dd7341e65C0e2be47f3b0927d667",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP (USDT & USD1-LP)",
+        "address": "0xA7ABa0A4603d274D2536AE21cF6AbE7aa7293d9e",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP (WBTC & cbBTC-LP)",
+        "address": "0x6Ee2d8B77f5559d88057738821951a855EB5F123",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP (USDT & USDe-LP)",
+        "address": "0x0d893A28e0E5cc661866Eb63C3451BEE590387C3",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP (USDC & USDe-LP)",
+        "address": "0x0c7E7C34512AB591545db02e4Fd7fE0a7B84A34F",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool (ETH / wstETH pool)",
+        "address": "0x23072d031d5Af614395C8E58B7f7e91F003b331a",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool (USDT / USDC pool)",
+        "address": "0x35c9a4DaE1ff05788f24B5B32721D89340CBB636",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool (USDT / USD1 pool)",
+        "address": "0xD46Bfa2B03A8467d3fe1685D8d79eb195CB19675",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool (WBTC / cbBTC pool)",
+        "address": "0x94E4A9f24A954047adB3AD4434bf1174F6824e16",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool (USDT / USDe pool)",
+        "address": "0x56a475772Fc0a63752Bc16ddC7e2F7a38eb97f86",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool (USDC / USDe pool)",
+        "address": "0xA838D405c6E62b1E030ABE802fA42b2Eb307Cb78",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider (ETH & wstETH)",
+        "address": "0x92729237Ce941142c686f908136bFA93E9aC935c",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider (USDT & USDC)",
+        "address": "0x50dce7e3b24510Ec6eC2F7ad3b2035aa32861aeC",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider (USDT & USD1)",
+        "address": "0x61864d70C652D7a6a4fc4Fc5aFb6b7FebDC4B194",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider (WBTC & cbBTC)",
+        "address": "0x893666d84B374f96Ab500f56728283eeBB94A9ac",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider (USDT & USDe)",
+        "address": "0xDfdB56a9e2F68c74Fca76c95E852D920890b36D4",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider (USDC & USDe)",
+        "address": "0x6Ae702D18B0fCff0deB7273d4453E9AF67EC153B",
+        "cols": []
+      }
+    ]
+  },
+  "rwa": {
+    "file": "for-developer/rwa/smart-contract.md",
+    "format": "markdown",
+    "contracts": [
+      {
+        "section": "",
+        "name": "RWAEarnPool(USDT.Treasury)",
+        "address": "0x60512AeB641E960faAac7E2bFcB1819f993E7282",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RWAAdapter(USDT.Treasury)",
+        "address": "0xC1AeEBBfD8b1280e78D930C43700758F543F5Fc6",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RWAEarnPool(USDT.AAA)",
+        "address": "0x82664f43676FfD81BE2b472c5A2E2808952ecd56",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RWAAdapter(USDT.AAA)",
+        "address": "0x69D15B7a232244EB0FDDED2a3E038589E5C50105",
+        "cols": []
+      },
+      {
+        "section": "slisXAUE (Staked Lista XAUE)",
+        "name": "SlisXAUE",
+        "address": "0x97b0A9c6A4d9fD51Bf8beBf04015F74C2e36A624",
+        "cols": []
+      },
+      {
+        "section": "slisXAUE (Staked Lista XAUE)",
+        "name": "XAUTStaking",
+        "address": "0x86c92fF74fa55b08b4fA0d59E41e26b14ed1150b",
+        "cols": []
+      },
+      {
+        "section": "slisXAUE (Staked Lista XAUE)",
+        "name": "XAUEAdapter",
+        "address": "0x7509661232741c6912E278193404b912FC342F30",
+        "cols": []
+      }
+    ]
+  },
+  "lisaster": {
+    "file": "for-developer/lisaster/smart-contract.md",
+    "format": "markdown",
+    "contracts": [
+      {
+        "section": "BNB Smart Chain",
+        "name": "LisAster",
+        "address": "0xa17A497D20cC143508FE3b63578b13ba6b9c9f06",
+        "cols": []
+      },
+      {
+        "section": "BNB Smart Chain",
+        "name": "AsterVault",
+        "address": "0xb3Df1b695D720dDc5906005DD5448DB160687C42",
+        "cols": []
+      },
+      {
+        "section": "BNB Smart Chain",
+        "name": "LisAsterStaking",
+        "address": "0x3D786C991452Cb7634D02b351374CB0aCC69fD71",
+        "cols": []
+      },
+      {
+        "section": "BNB Smart Chain",
+        "name": "LisAsterRewards",
+        "address": "0x935E18A52E24746fF7b4D307012D8A82C2AB5A23",
+        "cols": []
+      },
+      {
+        "section": "BNB Smart Chain",
+        "name": "LisAsterDistributor",
+        "address": "0xeE545e1DB73c3Fff0FE81bad7673054706507168",
+        "cols": []
+      }
+    ]
+  }
+}
