@@ -9,17 +9,16 @@ name: Contract Address Watch
 # NOTE: scheduled (cron) workflows only run from the repo DEFAULT branch (main),
 # which is why this file lives on main even though the docs live on en.
 #
-# Currently workflow_dispatch ONLY (no cron) — enable the schedule below AFTER:
-#   1. secrets.NOTION_TOKEN integration is shared with every contract source page
-#      (the SOURCES map in utils/sync-contracts.mjs lists them all),
-#   2. each source's table structure is confirmed, and a manual run's commit looks right.
+# Runs weekly (cron) + on manual dispatch. NOTION_TOKEN's integration must be
+# shared with every contract source page (the SOURCES map in
+# utils/sync-contracts.mjs lists them all), or that page's contracts can't be read.
 #
 # REQUIRED SECRET: NOTION_TOKEN (same integration the oracle sync uses).
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 7 * * 1'   # every Monday 07:00 UTC (after audit 06:00 / oracle 06:30)
+  schedule:
+    - cron: '0 7 * * 1'   # every Monday 07:00 UTC (after audit 06:00 / oracle 06:30)
 
 concurrency:
   group: contracts-watch
