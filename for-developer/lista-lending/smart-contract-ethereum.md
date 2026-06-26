@@ -43,3 +43,4 @@
 | SmartProvider (WBTC & cbBTC)                      | 0x893666d84B374f96Ab500f56728283eeBB94A9ac |
 | SmartProvider (USDT & USDe)                       | 0xDfdB56a9e2F68c74Fca76c95E852D920890b36D4 |
 | SmartProvider (USDC & USDe)                       | 0x6Ae702D18B0fCff0deB7273d4453E9AF67EC153B |
+| MoolahVaultFactory | 0xa91D9E7343d7EEe8Ed2C8f55e9162827850A7F17 |

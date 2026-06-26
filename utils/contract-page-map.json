@@ -118,6 +118,24 @@
         "cols": []
       },
       {
+        "section": "",
+        "name": "CollateralYieldVault",
+        "address": "0x4837fB5c9C84524CC0c93f066c1Ac708a758E5FD",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RewardHarvester",
+        "address": "0xA3363084BD341e6092b941052A399eDB7fCb684E",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RewardsRouter (bStock emission)",
+        "address": "0xC3e73f8e7010E5FBD083AB4C5b29476A3fdF5eC5",
+        "cols": []
+      },
+      {
         "section": "Vaults",
         "name": "MoolahVault(WBNB)",
         "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
@@ -133,6 +151,126 @@
         "section": "Vaults",
         "name": "MoolahVault(U)",
         "address": "0x9A17Fd5Cb8EFc25d11567e713aE795A89775a759",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault (BTCB)",
+        "address": "0xE46b8E65006e6450bdd8cb7D3274AB4F76f4C705",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault (USDT)",
+        "address": "0x6d6783C146F2B0B2774C1725297f1845dc502525",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault (MEV WBNB)",
+        "address": "0xd5cfc0f894bA77e95E3325Aa53Eb3e6CBBb5A81E",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault (MEV USDT)",
+        "address": "0x6402d64F035E18F9834591d3B994dFe41a0f162D",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault (Re7 USDT)",
+        "address": "0x02A5ca3a749855d1002A78813E679584a96646d0",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault (Loop WBNB)",
+        "address": "0xaB251dc87dc313649D024bd69b34c8E7690Ce1fc",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault (Puffer)",
+        "address": "0x2Fa11Fc42e7fdFF98e1D043992Db5e10123A41B0",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(Pangolins USDT)",
+        "address": "0xEB4F6FFB1038E1cCa701e7d53083B37ec5b6Ba33",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(AB)",
+        "address": "0x60eeD309f259050b40B234D105329A4Fd2F91163",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(B)",
+        "address": "0xE27433EE40CFc59B4881b3C37B8e908EA0550aA7",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(B2)",
+        "address": "0xEE161d34F7a12EA3edeA853AA849783d4b51b5b5",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(Solv WBNB)",
+        "address": "0xb798BB56898a86b6fD49FC1eCA4150efdc3Ee6Ea",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(Solv USD1)",
+        "address": "0xD61DD125016728Dd284Cf5dbA8a3B7C27c5058f2",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(SPA)",
+        "address": "0x8703d3ABeA5CCf31c6E13B9C05558b1f4666F183",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(OIK)",
+        "address": "0x34a436478d34cEE558DB242e7A0F1676bD84Ca45",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(EGL1)",
+        "address": "0x52844A906C9A5103ee99C293a2EE181Ce16a6743",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(Aster)",
+        "address": "0xf21308b903F96592B6d6988c646dC2A3028F39fd",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(CDL)",
+        "address": "0x384729E442b7636709896e9a3bEf63EF70C22FB0",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(Take)",
+        "address": "0x68e83cA4c2869fC6E92774E549FF9d547EAE24Ab",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(APRO)",
+        "address": "0x2CB60a0E6c2a5fF4249eB890E267B660C6676Cc6",
         "cols": []
       },
       {
@@ -792,6 +930,48 @@
         ]
       },
       {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(USDT&USDC/USDT",
+        "address": "0x305a5057DA39b0F953a03AfB2A2D74Db8020d39E",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(USDT&USDC/USD1)",
+        "address": "0x6B017339F5299dF34891AF413028DA1ab6Edbe04",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(USDT&USDC/U)",
+        "address": "0x38b741820B0B784840D0223056ed00708b89abCe",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BNB&slisBNB/USDT)",
+        "address": "0xAc1c50a12a060F66a2458231B5305E0AE591D0b9",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BNB&slisBNB/USD1)",
+        "address": "0x111A52D94791D0093B75AC4B9Ad104B7cF4AE568",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BNB&slisBNB/U)",
+        "address": "0xc26CaAcb00854c5460030B0aFde60C37D9d39C79",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BNB&slisBNB/BNB)",
+        "address": "0x3ade951523e81dD45e5787bb0b95Ce7341Db1287",
+        "cols": []
+      },
+      {
         "section": "Broker Auxiliary Contracts",
         "name": "BrokerInterestRelayer (lisUSD)",
         "address": "0xcb2590F10728e3ffc725d7ECf88EcFd0d92c9d6a",
@@ -1089,6 +1269,12 @@
         "section": "",
         "name": "SmartProvider (USDC & USDe)",
         "address": "0x6Ae702D18B0fCff0deB7273d4453E9AF67EC153B",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVaultFactory",
+        "address": "0xa91D9E7343d7EEe8Ed2C8f55e9162827850A7F17",
         "cols": []
       }
     ]

@@ -23,6 +23,13 @@
 | LendingBroker(sUSDe/USD1)                     | sUSDe/USD1                     | 91.5% | 75M  | 0x212d0a36fccb86ff79994d6094271c21149c6a65e97e5ed797429ee56f44ce64 | 0xCA5929B8fF8B1a4B9B8d77DFc5340977BFa425B3 |
 | LendingBroker(sUSDe/USDT)                     | sUSDe/USDT                     | 91.5% | 75M  | 0x86e6bfa9e590d003ce03e34a79a4986120c4ced545ab62db484e43acb049c6a1 | 0x306b7122adb734bD3976f6Fb7dC5E8fEf57528D7 |
 | LendingBroker(slisBNB/WBNB)                   | slisBNB/WBNB                   | 96.5% | 1M   | 0x226935103b730aefad53849e4cf7d92f30083cc417222f395478dabdd9ff3cac | 0x1Fa26015286D1270343d7526C60bd57aB6bE8b54 |
+| LendingBroker(USDT&USDC/USDT | | | | | 0x305a5057DA39b0F953a03AfB2A2D74Db8020d39E |
+| LendingBroker(USDT&USDC/USD1) | | | | | 0x6B017339F5299dF34891AF413028DA1ab6Edbe04 |
+| LendingBroker(USDT&USDC/U) | | | | | 0x38b741820B0B784840D0223056ed00708b89abCe |
+| LendingBroker(BNB&slisBNB/USDT) | | | | | 0xAc1c50a12a060F66a2458231B5305E0AE591D0b9 |
+| LendingBroker(BNB&slisBNB/USD1) | | | | | 0x111A52D94791D0093B75AC4B9Ad104B7cF4AE568 |
+| LendingBroker(BNB&slisBNB/U) | | | | | 0xc26CaAcb00854c5460030B0aFde60C37D9d39C79 |
+| LendingBroker(BNB&slisBNB/BNB) | | | | | 0x3ade951523e81dD45e5787bb0b95Ce7341Db1287 |
 
 ## Broker Auxiliary Contracts
 
