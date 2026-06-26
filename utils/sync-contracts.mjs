@@ -50,12 +50,15 @@ const SOURCES = {
     extraPages: ['29c1d713729f803eb96bf4e57a369688'], // the "1.1 Vaults" sub-page
     excludeSections: [/token address/i, /lltv/i, /^\s*market\s*$/i],
     targets: ['bsc-core', 'bsc-smart-lending', 'bsc-oracles', 'bsc-credit'],
-    // fullRow so the bsc-oracles PT sections get their Quote column filled, not just
-    // name+address. Safe across this source's mixed-width targets: insertRow only writes
-    // full cells when they line up (name first, address last, same count) — the bsc-core/
-    // credit/smart-lending 2-col tables fall back to name+address, and the oracle sections
-    // have a single middle column (Quote) so it can't be mis-ordered.
-    fullRow: true,
+    // NOT fullRow (verified against Notion): this table is 2-col (Contract | Address), and
+    // for PT oracles the Quote is EMBEDDED in the name, e.g.
+    //   "PTLinearDiscountOracle (PT-USDe-07May2026 / USDT)"
+    // whereas GitBook bsc-oracles splits it into a separate Quote column
+    //   | PTLinearDiscountOracle (PT-USDe-07May2026) | USDT | 0x... |
+    // The shapes differ, so fullRow's alignment guard (2 != 3 cols) would just fall back to
+    // name+address anyway. A new oracle therefore inserts with the quote left in the name and
+    // a blank Quote cell. Filling Quote correctly needs a quote-from-name split (TODO), not
+    // fullRow — see the bsc-smart-lending pairs (StableSwapPool (X / Y)) which share this shape.
     routing: [
       { test: /credit/i, page: 'bsc-credit' },
       { test: /stableswap|smartprovider/i, page: 'bsc-smart-lending' },
