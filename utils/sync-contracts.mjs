@@ -50,15 +50,13 @@ const SOURCES = {
     extraPages: ['29c1d713729f803eb96bf4e57a369688'], // the "1.1 Vaults" sub-page
     excludeSections: [/token address/i, /lltv/i, /^\s*market\s*$/i],
     targets: ['bsc-core', 'bsc-smart-lending', 'bsc-oracles', 'bsc-credit'],
-    // NOT fullRow (verified against Notion): this table is 2-col (Contract | Address), and
-    // for PT oracles the Quote is EMBEDDED in the name, e.g.
-    //   "PTLinearDiscountOracle (PT-USDe-07May2026 / USDT)"
-    // whereas GitBook bsc-oracles splits it into a separate Quote column
-    //   | PTLinearDiscountOracle (PT-USDe-07May2026) | USDT | 0x... |
-    // The shapes differ, so fullRow's alignment guard (2 != 3 cols) would just fall back to
-    // name+address anyway. A new oracle therefore inserts with the quote left in the name and
-    // a blank Quote cell. Filling Quote correctly needs a quote-from-name split (TODO), not
-    // fullRow — see the bsc-smart-lending pairs (StableSwapPool (X / Y)) which share this shape.
+    // This Notion table is 2-col (Contract | Address) with the PT-oracle Quote EMBEDDED in the
+    // name ("...(PT-USDe-07May2026 / USDT)"), while GitBook bsc-oracles splits Quote into its own
+    // column. quoteSplitTarget tells the NEW-insert path: for rows routed to bsc-oracles, split
+    // the quote out of the name and place the row in the section already holding that base name
+    // (the oracle's other quotes); a base name with no section is a new maturity -> flag, never
+    // guess. (Not used for the 2-col targets, and StableSwap pairs route to bsc-smart-lending.)
+    quoteSplitTarget: 'bsc-oracles',
     routing: [
       { test: /credit/i, page: 'bsc-credit' },
       { test: /stableswap|smartprovider/i, page: 'bsc-smart-lending' },
@@ -123,6 +121,24 @@ export function targetSection(pageContracts, name) {
     if (hits && (!best || hits > best.hits)) best = { sec, hits };
   }
   return best ? best.sec : '';
+}
+
+// Split a Notion oracle name that EMBEDS the quote, e.g.
+//   "PTLinearDiscountOracle (PT-USDe-07May2026 / USDT)" -> { base:"...(PT-USDe-07May2026)", quote:"USDT" }
+// (handles spaced "/ USDT", unspaced "/USD1", and nested parens like "(Plasma) / U").
+// GitBook's bsc-oracles tables keep the quote in its own column, so a new oracle must be split.
+// Returns null when there is no embedded quote (StockOracle / PendleSpark names) -> insert as-is.
+export function splitNameQuote(name) {
+  const m = String(name).match(/^(.*\S)\s*\/\s*([A-Za-z0-9]+)\s*\)\s*$/);
+  return m ? { base: m[1] + ')', quote: m[2] } : null;
+}
+
+// The section that already holds this exact (quote-stripped) oracle name — i.e. the SAME
+// oracle's other quote variants. null => no such oracle yet (a new maturity): don't guess a
+// section (targetSection's first-token match can't tell PT maturities apart), flag instead.
+function sectionOfBaseName(pageMap, base) {
+  const hit = (pageMap?.contracts || []).find((c) => lc(c.name) === lc(base));
+  return hit ? hit.section : null;
 }
 
 // --- append a NEW contract row, following the page's existing structure -----
@@ -251,12 +267,33 @@ function plan(map, sources) {
 
   // NEW: notion addresses not in docs and not consumed as a change-target.
   for (const [src, entries] of Object.entries(sources)) {
+    const cfg = SOURCES[src];
     for (const e of entries) {
       if (docAddrs.has(lc(e.address)) || consumed.has(lc(e.address))) continue;
       const page = routeNew(src, e.name);
+
+      // Quote-split target (bsc-oracles): the Notion name embeds the quote; GitBook keeps it
+      // in its own column. Split it, and place the row in the section that already holds the
+      // same base name. No such section => a new maturity => flag for review, never guess
+      // (first-token section matching can't tell PT maturities apart — verified).
+      if (cfg?.quoteSplitTarget === page) {
+        const sq = splitNameQuote(e.name);
+        if (sq) {
+          consumed.add(lc(e.address));
+          const sec = sectionOfBaseName(map[page], sq.base);
+          if (sec === null) {
+            report.push(`\n### REVIEW (${src} -> ${page})\n- ⚠️ new oracle, no existing section for "${sq.base}" (new maturity?) — NOT inserted, add manually: ${e.name} = ${e.address}`);
+          } else {
+            (pageEdits[page] ??= { repls: [], inserts: [] }).inserts.push({ name: sq.base, address: e.address, section: sec, cells: [sq.base, sq.quote, e.address] });
+            report.push(`\n### NEW (${src} -> ${page} #${sec})\n- ${sq.base} | ${sq.quote} | ${e.address}`);
+          }
+          continue;
+        }
+        // no embedded quote (StockOracle / PendleSpark) -> fall through to the normal path
+      }
+
       const section = targetSection(map[page]?.contracts || [], e.name);
-      const cells = SOURCES[src]?.fullRow ? e.cells : undefined; // only fullRow sources carry the middle columns through
-      (pageEdits[page] ??= { repls: [], inserts: [] }).inserts.push({ name: e.name, address: e.address, section, cells });
+      (pageEdits[page] ??= { repls: [], inserts: [] }).inserts.push({ name: e.name, address: e.address, section, cells: cfg?.fullRow ? e.cells : undefined });
       consumed.add(lc(e.address)); // dedup: a page fed by >1 source (rwa <- rwa-bsc+rwa-eth) must insert each address once
       report.push(`\n### NEW (${src} -> ${page}${section ? ' #' + section : ''})\n- ${e.name} = ${e.address}`);
     }
@@ -375,6 +412,45 @@ function selftest() {
     const o6j = insertRow(tbl6, 'markdown', 'Safe', A6, '', ['Safe', 'junk', A6]); // only 3 cells for a 6-col table
     const row6j = o6j.split('\n').find((l) => l.includes('Safe') && l.includes(A6));
     ok(row6j && !row6j.includes('junk'), 'misaligned fullRow cells are ignored (safe fallback to name+address)');
+  }
+
+  console.log('\n[7] oracle quote-split + base-name section routing');
+  {
+    // 7a: splitNameQuote across the real Notion formatting variants
+    ok(splitNameQuote('PTLinearDiscountOracle (PT-USDe-07May2026 / USDT)')?.quote === 'USDT', 'split: spaced " / USDT"');
+    ok(splitNameQuote('X (OFT-PT-USDe-05Feb2026/USD1)')?.quote === 'USD1', 'split: unspaced "/USD1"');
+    const sp = splitNameQuote('PTLinearDiscountOracle (PT-USDe-09Apr2026-(Plasma) / U)');
+    ok(sp?.base === 'PTLinearDiscountOracle (PT-USDe-09Apr2026-(Plasma))' && sp.quote === 'U', 'split: nested parens, quote "U"');
+    ok(splitNameQuote('StockOracle') === null && splitNameQuote('PendleSparkLinearDiscountOracle (PT-USDe-7AUG2025)') === null, 'split: no embedded quote -> null');
+
+    // fake bsc-oracles map: one maturity section with 2 existing quotes (steady), seeded as the engine sees it
+    const usd1 = '0x' + '1'.repeat(40), usdt = '0x' + '2'.repeat(40);
+    const fakeMap = { 'bsc-oracles': { file: map['bsc-oracles'].file, format: 'markdown', contracts: [
+      { section: 'PT-USDe-07May2026', name: 'PTLinearDiscountOracle (PT-USDe-07May2026)', address: usd1, cols: ['USD1'] },
+      { section: 'PT-USDe-07May2026', name: 'PTLinearDiscountOracle (PT-USDe-07May2026)', address: usdt, cols: ['USDT'] },
+    ] } };
+
+    // 7b: a NEW quote of an EXISTING maturity -> right section, quote split into its own cell
+    const fresh = '0x' + '3'.repeat(40);
+    const src1 = { 'moolah-bsc': [
+      { name: 'PTLinearDiscountOracle (PT-USDe-07May2026 / USD1)', address: usd1 }, // steady
+      { name: 'PTLinearDiscountOracle (PT-USDe-07May2026 / USDT)', address: usdt }, // steady
+      { name: 'PTLinearDiscountOracle (PT-USDe-07May2026 / FDUSD)', address: fresh }, // new quote
+    ] };
+    const ins = (plan(fakeMap, src1).pageEdits['bsc-oracles']?.inserts || [])[0];
+    ok(ins && ins.section === 'PT-USDe-07May2026' && ins.name === 'PTLinearDiscountOracle (PT-USDe-07May2026)'
+       && JSON.stringify(ins.cells) === JSON.stringify(['PTLinearDiscountOracle (PT-USDe-07May2026)', 'FDUSD', fresh]),
+       'new quote of existing maturity -> correct section + [base, quote, addr]');
+
+    // 7c: a NEW maturity (no existing section) -> flagged for review, NOT inserted (never guessed)
+    const src2 = { 'moolah-bsc': [
+      { name: 'PTLinearDiscountOracle (PT-USDe-07May2026 / USD1)', address: usd1 },
+      { name: 'PTLinearDiscountOracle (PT-USDe-07May2026 / USDT)', address: usdt },
+      { name: 'PTLinearDiscountOracle (PT-BRAND-NEW-2099 / USDT)', address: '0x' + '4'.repeat(40) },
+    ] };
+    const p2 = plan(fakeMap, src2);
+    ok((p2.pageEdits['bsc-oracles']?.inserts || []).length === 0 && p2.report.join('').includes('REVIEW'),
+       'new maturity with no matching section -> flagged, not inserted');
   }
 
   console.log(`\n${fail === 0 ? '✅ ALL PASS' : '❌ ' + fail + ' FAILED'} (${pass} passed, ${fail} failed)`);
