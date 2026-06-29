@@ -1390,5 +1390,10 @@
         "cols": []
       }
     ]
+  },
+  "dex-bsc": {
+    "file": "for-developer/dex/smart-contract.md",
+    "format": "markdown",
+    "contracts": []
   }
 }
