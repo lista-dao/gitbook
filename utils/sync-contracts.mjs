@@ -40,6 +40,13 @@ const ADDR = /0x[a-fA-F0-9]{40}/;
 const ADDR_STRICT = /^0x[a-fA-F0-9]{40}$/; // a whole string that is exactly one address (no trailing junk)
 const ADDR_LAST = /0x[a-fA-F0-9]{40}(?![a-fA-F0-9])/g; // 40-hex not continued by hex (skips 64-hex Market IDs)
 const lastAddr = (s) => { const m = String(s).match(ADDR_LAST); return m ? m[m.length - 1] : null; };
+// The contract address from an ordered row: the FIRST cell that yields an address. This is
+// equivalent to lastAddr(cells.join(' ')) for sources where the address is the last meaningful
+// column (2-col pages, the 6-col brokers table whose 64-hex Market ID never matches ADDR_LAST),
+// but it does NOT let a trailing note column (e.g. V3 Dex's "Address | note" layout) override the
+// real address if that note ever contains a 0x… token. A name cell that itself contains an address
+// is still rejected downstream by the !ADDR.test(name) guard, so this never picks a name-as-address.
+export const rowAddress = (cells) => { for (const c of cells) { const a = lastAddr(c); if (a) return a; } return null; };
 const lc = (s) => (s || '').toLowerCase();
 const tokens = (s) => new Set((String(s).toLowerCase().match(/[a-z0-9]+/g) || []));
 const subset = (a, b) => [...a].every((t) => b.has(t)); // a ⊆ b
@@ -75,6 +82,13 @@ const SOURCES = {
   'rwa-eth':         { notionPageId: '3791d713729f8193ac18dd1f7e54fce9', targets: ['rwa'], default: 'rwa',
                        excludeNames: [/\b(DEFAULT_ADMIN|MANAGER|BOT|PAUSER|feeReceiver)\b/i, /tether gold|cobofund|fundtoken/i] },
   'lisaster':        { notionPageId: '36d1d713729f802ea39bef0849eb39a3', targets: ['lisaster'],     default: 'lisaster' },
+  // V3 Dex (BSC): a flat 2-col list (Contract | Address) with a free-text note in a 3rd column.
+  // No fullRow — the address is the MIDDLE column in Notion (note is last), so a full-row insert
+  // would never align (insertRow needs the address in the table's last column); name+address only.
+  // Note: two "ListaV3Pool" rows share a name (different pools/addresses) — fine on insert (keyed
+  // by address); gen-contract-map will warn on the dup, and a future address CHANGE there is
+  // reported for review rather than guessed. The pool-pair note is dropped (not a synced column).
+  'v3-dex-bsc':      { notionPageId: '3871d713729f803da800f505ae8c78dc', targets: ['dex-bsc'],      default: 'dex-bsc' },
   // clisbnb/slisBNBx page is OUT OF SCOPE: those contracts live in the frozen CDP section of
   // Lista Mainnet Contracts and will not change. No Notion sync source is configured for that page.
 };
@@ -216,7 +230,7 @@ async function liveSource(cfg) {
         if (r.type !== 'table_row') continue;
         const cells = r.table_row.cells.map(cellText); // full ordered row, for fullRow sources
         const name = cells[0];
-        const addr = lastAddr(cells.join(' '));
+        const addr = rowAddress(cells); // first address-bearing cell (note columns after the address can't override it)
         if (name && addr && !ADDR.test(name) && !excluded(cfg, name)) out.push({ name, address: addr, cells });
       }
     }
@@ -451,6 +465,17 @@ function selftest() {
     const p2 = plan(fakeMap, src2);
     ok((p2.pageEdits['bsc-oracles']?.inserts || []).length === 0 && p2.report.join('').includes('REVIEW'),
        'new maturity with no matching section -> flagged, not inserted');
+  }
+
+  console.log('\n[8] rowAddress: address taken from the first address-bearing cell (note columns can\'t override)');
+  {
+    const A = '0x' + 'a'.repeat(40), B = '0x' + 'b'.repeat(40);
+    ok(rowAddress(['Name', A]) === A, '2-col [name, addr] -> addr');
+    // V3 Dex shape: [Contract, Address, note]; a note that contains a 0x must NOT win over the real address
+    ok(rowAddress(['ListaV3Pool', A, `WBNB/slisBNB see ${B}`]) === A, 'addr in middle col, note has a 0x -> real addr (not the note\'s)');
+    // brokers shape: a 64-hex Market ID before the address is skipped (ADDR_LAST won't match a 40-hex continued by hex)
+    ok(rowAddress(['LendingBroker', 'x/y', '86%', '1M', '0x' + 'c'.repeat(64), A]) === A, '64-hex Market ID is skipped, real 40-hex addr returned');
+    ok(rowAddress(['Header', 'Address', '']) === null, 'no address anywhere -> null (header row)');
   }
 
   console.log(`\n${fail === 0 ? '✅ ALL PASS' : '❌ ' + fail + ' FAILED'} (${pass} passed, ${fail} failed)`);

@@ -930,6 +930,76 @@
         ]
       },
       {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(USDT&USDC/USDT)",
+        "address": "0x305a5057DA39b0F953a03AfB2A2D74Db8020d39E",
+        "cols": [
+          "USDT&USDC/USDT",
+          "96.5%",
+          "50M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(USDT&USDC/USD1)",
+        "address": "0x6B017339F5299dF34891AF413028DA1ab6Edbe04",
+        "cols": [
+          "USDT&USDC/USD1",
+          "96.5%",
+          "50M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(USDT&USDC/U)",
+        "address": "0x38b741820B0B784840D0223056ed00708b89abCe",
+        "cols": [
+          "USDT&USDC/U",
+          "96.5%",
+          "50M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BNB&slisBNB/USDT)",
+        "address": "0xAc1c50a12a060F66a2458231B5305E0AE591D0b9",
+        "cols": [
+          "BNB&slisBNB/USDT",
+          "86%",
+          "50M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BNB&slisBNB/USD1)",
+        "address": "0x111A52D94791D0093B75AC4B9Ad104B7cF4AE568",
+        "cols": [
+          "BNB&slisBNB/USD1",
+          "86%",
+          "50M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BNB&slisBNB/U)",
+        "address": "0xc26CaAcb00854c5460030B0aFde60C37D9d39C79",
+        "cols": [
+          "BNB&slisBNB/U",
+          "86%",
+          "50M"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker(BNB&slisBNB/BNB)",
+        "address": "0x3ade951523e81dD45e5787bb0b95Ce7341Db1287",
+        "cols": [
+          "BNB&slisBNB/BNB",
+          "96.5%",
+          "100k"
+        ]
+      },
+      {
         "section": "Broker Auxiliary Contracts",
         "name": "BrokerInterestRelayer (lisUSD)",
         "address": "0xcb2590F10728e3ffc725d7ECf88EcFd0d92c9d6a",
@@ -1320,5 +1390,10 @@
         "cols": []
       }
     ]
+  },
+  "dex-bsc": {
+    "file": "for-developer/dex/smart-contract.md",
+    "format": "markdown",
+    "contracts": []
   }
 }
