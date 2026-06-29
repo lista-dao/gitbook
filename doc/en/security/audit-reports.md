@@ -10,6 +10,7 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 | ------- | ------ |
 | Aster Rewards | [HashDit · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AsterRewards-20260615.pdf) |
 | Collateral Yield Vault | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-CollateralYieldVault-20260618.pdf) · [CertiK · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-CollateralYieldVault-20260618.pdf) · [HashDit · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-CollateralYieldVault-20260618.pdf) |
+| Fixed Term | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260628.pdf) |
 | Moolah Vault Manager | [2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/WarRoom-MoolahVaultManager-Audit-Report-20260608.pdf) |
 | slisXAUE | [Bailsec · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-slisXAUE-Audit%20Report.pdf) · [CertiK · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/CertiK-slisXAUE-Audit%20Report.pdf) |
 | Yield Buffer | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-YieldBuffer-AuditReport-20260611.pdf) · [HashDit · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-YieldBuffer-AuditReport-20260611.pdf) |
@@ -18,7 +19,7 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 | Idle Market | [HashDit · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-Idle-Market-20260526.pdf) |
 | Lista Lending Broker Batch Ops | [HashDit · 2026-05](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-ListaLending-BrokerBatchOps-20260526.pdf) |
 | Lista V3 Differential | [Bailsec · 2026-05](https://github.com/lista-dao/lista-v3/blob/master/audits/260515-Bailsec-Lista-V3-Differential-Final-Report.pdf) |
-| Lista V3 | [Cantina · 2026-04](https://github.com/lista-dao/lista-v3/blob/master/audits/260430-Cantina-Lista-V3-Final-Report.pdf) |
+| Lista V3 | [Cantina · 2026-04](https://github.com/lista-dao/lista-v3/blob/master/audits/260430-Cantina-Lista-V3-Final-Report.pdf) · [HashDit · 2026-04](https://github.com/lista-dao/lista-v3/blob/master/audits/260430-HashDit-Lista-V3-Final-Report.pdf) |
 | Position Manager | [CertiK · 2026-04](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-REP-Lista-Dao-PositionManager-20260410.pdf) · [Cantina · 2026-04](https://github.com/lista-dao/moolah/blob/master/docs/audits/cantina_PositionManager_20260410.pdf) |
 | Credit liquidation | [Bailsec · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-Credit-Liquidation-20260303.pdf) · [Spearbit · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Spearbit-Credit-Liquidation-20260303.pdf) |
 | Position Migrator | [Bailsec · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-Position-Migrator-20260318.pdf) · [Cantina · 2026-03](https://github.com/lista-dao/moolah/blob/master/docs/audits/Cantina-Position-Migrator-20260318.pdf) |
