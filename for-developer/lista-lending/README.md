@@ -15,6 +15,10 @@ In addition, it supports two integration patterns for external systems:
 
 * [Protocol Extensions](protocol-extensions.md)
 * [Integration Patterns](integration-patterns.md)
+* [Contract & Interface Reference](contract-reference.md)
+* [Events & Callbacks](events-and-callbacks.md)
+* [Interest Rate Model (IRM)](irm.md)
+* [Smart Lending & StableSwap](stableswap-integration.md)
 * [Smart Contract](smart-contract.md)
   * [BSC Core](smart-contract-bsc-core.md)
   * [BSC Lending Brokers](smart-contract-bsc-brokers.md)
