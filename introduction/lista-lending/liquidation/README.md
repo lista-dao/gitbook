@@ -34,7 +34,7 @@ Standard liquidation is Lista Lending’s primary defense against borrower defau
 
 A position becomes liquidatable when its LTV exceeds the LLTV of its corresponding market.
 
-This may occurs due to:
+This may occur due to:
 
 * A drop in collateral value (e.g., BTCB price falls).
 * An increase in debt from accrued interest.
