@@ -28,6 +28,7 @@
 | CollateralYieldVault | 0x4837fB5c9C84524CC0c93f066c1Ac708a758E5FD |
 | RewardHarvester | 0xA3363084BD341e6092b941052A399eDB7fCb684E |
 | RewardsRouter (bStock emission) | 0xC3e73f8e7010E5FBD083AB4C5b29476A3fdF5eC5 |
+| BuyBack (USDT → SPCXB) | 0x3C5Fe2e3EC0CD37e4AC86e08AEba5A90bBd742b5 |
 
 ### Vaults
 
