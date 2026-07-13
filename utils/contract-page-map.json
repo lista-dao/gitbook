@@ -280,6 +280,12 @@
         "cols": []
       },
       {
+        "section": "Vaults",
+        "name": "MoolahVault (XAUt)",
+        "address": "0x4109415de2271097fb5fa16af8a753aab8c46d6f",
+        "cols": []
+      },
+      {
         "section": "Providers",
         "name": "SlisBNBProvider",
         "address": "0x33f7A980a246f9B8FEA2254E3065576E127D4D5f",
