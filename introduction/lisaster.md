@@ -21,11 +21,27 @@ By targeting maximum veASTER weight and the highest Volume Boost, lisAster posit
 
 Theoretical maximum power advantage vs. a short-term solo staker:
 
-Lista Power  = max veASTER (4x) × max Volume Boost (1.25x) = 5x
+Lista Power = max veASTER (4x) × max Volume Boost (1.25x) = 5x
 
-Solo Power   = min veASTER (1x) × no boost (1.0x)          = 1x
+Solo Power = min veASTER (1x) × no boost (1.0x) = 1x
 
 Depending on a user's solo staking parameters, the effective power improvement through lisAster can be up to 5x.
+
+### How are my lisAster rewards calculated?&#x20;
+
+When you deposit ASTER, it will be locked for up to 208 weeks and automatically\
+renewed each Epoch to maintain full veASTER weightage. Rewards are distributed weekly in ASTER, in proportion to your staked lisAster.
+
+Please note:
+
+* Only staked lisAster earns rewards — depositing alone does not.
+* lisAster supplied as collateral in the \[lisAster/Aster] market, or used as smart collateral in the \[lisAster\&Aster/Aster] Smart Lending market, still counts as staked and earns rewards as  per normal.
+* The staking cutoff is every Thursday at 08:00 (UTC).&#x20;
+* Stake before the cutoff: Rewards will start accruing from the following Monday, with the first claim available on the Thursday after next. Stake after the cutoff: The staked amount will be counted in next week's batch, and your schedule is delayed by one week accordingly.
+
+### DeFi Composability
+
+Use lisAster as collateral in the \[lisAster/Aster] market, or as smart collateral in the \[lisAster\&Aster/Aster] Smart Lending market. It remains in staked status while collateralized, and rewards continue to accrue — the same asset earns rewards and backs your borrowing at the same time.
 
 ### Exiting lisAster
 
