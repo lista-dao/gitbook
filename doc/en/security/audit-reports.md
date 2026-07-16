@@ -8,9 +8,12 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 
 | Feature | Audits |
 | ------- | ------ |
+| Liquidation Vault | [HashDit · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-LiquidationVault-20260709.pdf) |
+| Moolah Vault EIP170 | [HashDit · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-MoolahVault-EIP170-20260703.pdf) |
 | Aster Rewards | [HashDit · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AsterRewards-20260615.pdf) |
 | Collateral Yield Vault | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-CollateralYieldVault-20260618.pdf) · [CertiK · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-CollateralYieldVault-20260618.pdf) · [HashDit · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-CollateralYieldVault-20260618.pdf) |
 | Fixed Term | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260628.pdf) |
+| listaOFTv2 | [HashDit · 2026-06](https://github.com/lista-dao/lista-token/blob/master/audits/HashDit-listaOFTv2-20260630.pdf) |
 | Moolah Vault Manager | [2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/WarRoom-MoolahVaultManager-Audit-Report-20260608.pdf) |
 | slisXAUE | [Bailsec · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/Bailsec-slisXAUE-Audit%20Report.pdf) · [CertiK · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/CertiK-slisXAUE-Audit%20Report.pdf) |
 | Yield Buffer | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-YieldBuffer-AuditReport-20260611.pdf) · [HashDit · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-YieldBuffer-AuditReport-20260611.pdf) |
