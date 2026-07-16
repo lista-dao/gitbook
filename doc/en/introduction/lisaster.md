@@ -29,12 +29,9 @@ Depending on a user's solo staking parameters, the effective power improvement t
 
 ### How are my lisAster rewards calculated?&#x20;
 
-When you deposit ASTER, it will be locked for up to 208 weeks and automatically\
-renewed each Epoch to maintain full veASTER weightage. Rewards are distributed weekly in ASTER, in proportion to your staked lisAster.
+Deposited ASTER will be locked for up to 208 weeks and automatically renewed after each Epoch to maintain full veASTER weightage. Rewards are distributed weekly in ASTER, in proportion to the amount of lisAster staked.
 
-Please note:
-
-* Only staked lisAster earns rewards — depositing alone does not.
+* Only staked lisAster earns rewards, depositing alone does not.
 * lisAster supplied as collateral in the \[lisAster/Aster] market, or used as smart collateral in the \[lisAster\&Aster/Aster] Smart Lending market, still counts as staked and earns rewards as  per normal.
 * The staking cutoff is every Thursday at 08:00 (UTC).&#x20;
 * Stake before the cutoff: Rewards will start accruing from the following Monday, with the first claim available on the Thursday after next. Stake after the cutoff: The staked amount will be counted in next week's batch, and your schedule is delayed by one week accordingly.
