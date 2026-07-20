@@ -142,6 +142,12 @@
         "cols": []
       },
       {
+        "section": "",
+        "name": "LiquidationVault",
+        "address": "0xEe3aa1AF4Ee231f2e1277A48fc4A2f29A3D7C028",
+        "cols": []
+      },
+      {
         "section": "Vaults",
         "name": "MoolahVault(WBNB)",
         "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
@@ -355,6 +361,30 @@
         "section": "slisBNB / BNB",
         "name": "SmartProvider",
         "address": "0xC3be83DE4b19aFC4F6021Ea5011B75a3542024dE",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "StableSwapPool (lisAster/ASTER)",
+        "address": "0x510D69b25A2177EDdCe9becdB0A66a511C944840",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "StableSwapLP (lisAster/ASTER)",
+        "address": "0x0f84dD5EBfceb6fE65B1552A310a000349278068",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "StableSwapLPCollateral (lisAster & ASTER-SmartLP)",
+        "address": "0xC970dc3aF680C2F316b821842E5782a05e886a90",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "SmartProvider (lisAster & ASTER-SmartLP)",
+        "address": "0x1cc913Cde4dF80d271230F615482c1270c0a56C8",
         "cols": []
       },
       {
@@ -1010,6 +1040,36 @@
           "96.5%",
           "100k"
         ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (lisUSD vault)",
+        "address": "0x7FC3223081c5Dd9159781E6EB28Af3012138A323",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (USD1 vault)",
+        "address": "0xA5AAEAA7AC64d33c0C609686777d72C244C97578",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (U vault)",
+        "address": "0x8c51220e29684BbAE2bF4412952C47d090BC6B3E",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (USDT vault)",
+        "address": "0x23c3E7f13C97011b84dAB247587425F55ffeD137",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (WBNB vault)",
+        "address": "0xCa5D2d07243a3E9ab58A2b6C924a67F060EC6371",
+        "cols": []
       },
       {
         "section": "Broker Auxiliary Contracts",

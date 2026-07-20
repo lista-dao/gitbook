@@ -29,6 +29,7 @@
 | RewardHarvester | 0xA3363084BD341e6092b941052A399eDB7fCb684E |
 | RewardsRouter (bStock emission) | 0xC3e73f8e7010E5FBD083AB4C5b29476A3fdF5eC5 |
 | BuyBack (USDT → SPCXB) | 0x3C5Fe2e3EC0CD37e4AC86e08AEba5A90bBd742b5 |
+| LiquidationVault | 0xEe3aa1AF4Ee231f2e1277A48fc4A2f29A3D7C028 |
 
 ### Vaults
 

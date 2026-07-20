@@ -15,6 +15,10 @@
 | StableSwapPool                   | 0x3DcEA6AFBA8af84b25F1f8947058AF1ac4c06131 |
 | StableSwapLP                     | 0x1bc8b041c1b89b0109E56f2Eb197B5c09BCC1Cf0 |
 | SmartProvider                    | 0xC3be83DE4b19aFC4F6021Ea5011B75a3542024dE |
+| StableSwapPool (lisAster/ASTER) | 0x510D69b25A2177EDdCe9becdB0A66a511C944840 |
+| StableSwapLP (lisAster/ASTER) | 0x0f84dD5EBfceb6fE65B1552A310a000349278068 |
+| StableSwapLPCollateral (lisAster & ASTER-SmartLP) | 0xC970dc3aF680C2F316b821842E5782a05e886a90 |
+| SmartProvider (lisAster & ASTER-SmartLP) | 0x1cc913Cde4dF80d271230F615482c1270c0a56C8 |
 
 ## solvBTC / BTCB
 
