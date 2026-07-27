@@ -148,6 +148,12 @@
         "cols": []
       },
       {
+        "section": "",
+        "name": "PreIPODistributor",
+        "address": "0x9f7526EDAa18278D4bC1fA6b63B749A649Cb1844",
+        "cols": []
+      },
+      {
         "section": "Vaults",
         "name": "MoolahVault(WBNB)",
         "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
