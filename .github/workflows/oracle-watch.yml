@@ -6,8 +6,17 @@ name: Multi-Oracle Watch
 #
 # The script writes more than one page (the BNB table is partitioned into
 # for-developer/multi-oracle.md and for-developer/multi-oracle-bstock.md), so the
-# commit step stages the paths the script reports via its changed_files output
-# rather than a hardcoded filename.
+# commit step stages the whole for-developer/ tree rather than a hardcoded
+# filename.
+#
+# It is deliberately NOT keyed to the script's changed_files output: this file
+# lives on `main` and the script lives on `en`, and the two merge independently.
+# A path-scoped `git add -A` is correct under either merge order — with the old
+# two-section script (nothing extra to stage) and with the new one (bStock page
+# staged too). Keying it to changed_files would mean that whichever branch landed
+# first silently broke the sync: docs-first would discard the bStock page from
+# the auto-commit, workflow-first would fail on an empty pathspec.
+# The scope stays for-developer/ so oracle-sync-summary.md is never committed.
 #
 # NOTE: scheduled (cron) workflows only run from the repository's DEFAULT branch
 # (main), which is why this file lives on main even though the docs live on en.
@@ -58,7 +67,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- ${{ steps.sync.outputs.changed_files }}
+          git add -A -- for-developer/
           git commit -m "chore(oracle): sync Multi-Oracle table from Notion
 
           ${{ steps.sync.outputs.value_changes }} oracle address change(s), ${{ steps.sync.outputs.added }} new collateral(s).
