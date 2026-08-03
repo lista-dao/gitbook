@@ -1,13 +1,21 @@
 #!/usr/bin/env node
 // utils/sync-multi-oracle.mjs
 //
-// Keeps the oracle-config tables in for-developer/multi-oracle.md in sync with
-// the canonical Notion source ("Multi-Oracle For GitBook",
-// page 6a54afccfcf04be4afd4ef10ce839169). Two sections are synced:
+// Keeps the oracle-config tables in the Multi-Oracle docs in sync with the
+// canonical Notion source ("Multi-Oracle For GitBook",
+// page 6a54afccfcf04be4afd4ef10ce839169). Three sections are synced:
 //
-//   * BNB Chain (Notion anchor "BNB Chain")   — merged into the doc's existing
-//     "B. Collaterals using Resilient Oracle" table.
-//   * Ethereum Chain (Notion anchor "Ethereum Chain") — created if missing.
+//   * BNB Chain — core collaterals   -> for-developer/multi-oracle.md
+//   * BNB Chain — bStock collaterals -> for-developer/multi-oracle-bstock.md
+//   * Ethereum Chain                 -> for-developer/multi-oracle.md
+//
+// The two BNB sections read the SAME Notion table ("BNB Chain") and PARTITION
+// it by asset name: rows whose Asset matches BSTOCK_RE (the "(bStock)" suffix)
+// go to the bStock page, everything else stays on the main page. Notion keeps a
+// single flat table — the split is a docs-side concern only. See the partition
+// guard in syncSection(): if the classifier suddenly matches nothing while the
+// target page still has rows, the run FAILS rather than silently relocating 40+
+// rows (which is what a change to the Notion naming convention would look like).
 //
 // Notion is the SOURCE OF TRUTH for the volatile oracle-value columns
 // (Oracle/caller, Main, Pivot, Fallback, BoundValidator). The script does a
@@ -30,7 +38,8 @@
 //   * Notion text/URLs are HTML-escaped on output.
 //
 // Used by .github/workflows/oracle-watch.yml (weekly). No external deps.
-// GITHUB_OUTPUT: has_changes, value_changes, added. Writes oracle-sync-summary.md
+// GITHUB_OUTPUT: has_changes, value_changes, added, changed_files (space-separated
+// paths, for `git add`). Writes oracle-sync-summary.md
 // (skipped under DRY_RUN). Offline test: per-section fixtures, e.g.
 //   NOTION_FIXTURE_ROWS=./bnb.json NOTION_FIXTURE_ROWS_ETH=./eth.json \
 //   NOTION_FIXTURE_ETH_RESILIENT=0xA64F... DRY_RUN=1 node utils/sync-multi-oracle.mjs
@@ -38,23 +47,44 @@
 import { readFileSync, writeFileSync, appendFileSync } from 'node:fs';
 
 const DOC = 'for-developer/multi-oracle.md';
+const DOC_BSTOCK = 'for-developer/multi-oracle-bstock.md';
 const PAGE_ID = '6a54afccfcf04be4afd4ef10ce839169';
+
+// Asset-name classifier for the BNB partition. Tokenized-equity collaterals are
+// named "<TICKER>B (bStock)" in Notion. Keep this in sync with the naming
+// convention agreed with the contract team; see the partition guard below.
+const BSTOCK_RE = /\(\s*bstock\s*\)/i;
 
 const SECTIONS = [
   {
-    id: 'bnb-b',
+    id: 'bnb-core',
     // The page has a single "BNB Chain" table (the old A./B. split was removed
     // in the 2026-06-22 rebuild); the doc was restructured to match.
     notionAnchor: 'BNB Chain',
+    doc: DOC,
     docAnchor: 'BNB Chain',
     skip: /for\s+OracleCenter/i,
+    rowFilter: (rec) => !BSTOCK_RE.test(rec.asset),
     createIfMissing: false,
     mirror: true, // doc mirrors Notion: rows absent from Notion are removed
     fixtureEnv: 'NOTION_FIXTURE_ROWS',
   },
   {
+    id: 'bnb-bstock',
+    // Same Notion table as bnb-core, complementary half of the partition.
+    notionAnchor: 'BNB Chain',
+    doc: DOC_BSTOCK,
+    docAnchor: 'BNB Chain',
+    skip: /for\s+OracleCenter/i,
+    rowFilter: (rec) => BSTOCK_RE.test(rec.asset),
+    createIfMissing: false,
+    mirror: true,
+    fixtureEnv: 'NOTION_FIXTURE_ROWS',
+  },
+  {
     id: 'eth',
     notionAnchor: 'Ethereum Chain',
+    doc: DOC,
     docAnchor: 'Ethereum Chain',
     skip: /for\s+OracleCenter/i,
     createIfMissing: true,
@@ -129,7 +159,16 @@ function findNotionSection(blocks, anchor) {
   return null;
 }
 
+// Sections that share a Notion anchor (the BNB partition) read the same table —
+// fetch it once.
+const rowCache = new Map();
 async function sectionRows(sec, blocks) {
+  const key = (sec.fixtureEnv && process.env[sec.fixtureEnv]) || `anchor:${sec.notionAnchor}`;
+  if (!rowCache.has(key)) rowCache.set(key, fetchSectionRows(sec, blocks));
+  return rowCache.get(key);
+}
+
+async function fetchSectionRows(sec, blocks) {
   const fx = sec.fixtureEnv && process.env[sec.fixtureEnv];
   if (fx) {
     const data = JSON.parse(readFileSync(fx, 'utf8'));
@@ -328,8 +367,16 @@ async function main() {
   const liveNeeded = SECTIONS.some((s) => !(s.fixtureEnv && process.env[s.fixtureEnv]));
   if (liveNeeded && !TOKEN) throw new Error('NOTION_TOKEN is required (or set per-section fixtures for offline runs).');
 
-  const original = readFileSync(DOC, 'utf8');
-  let doc = original;
+  // path -> { original, doc }
+  const docs = new Map();
+  const loadDoc = (path) => {
+    if (!docs.has(path)) {
+      const original = readFileSync(path, 'utf8');
+      docs.set(path, { original, doc: original });
+    }
+    return docs.get(path);
+  };
+
   const blocks = liveNeeded ? await getChildren(PAGE_ID) : null;
 
   let totalValueChanges = 0;
@@ -343,15 +390,27 @@ async function main() {
     const parsed = rows.map((r, i) => parseNotionRow(r, i, sec.skip)).filter(Boolean);
     const skipped = parsed.filter((p) => p.skip).map((p) => p.skip);
     const empties = parsed.filter((p) => p.empty).map((p) => p.empty);
-    const recs = parsed.filter((p) => p.token);
+    const all = parsed.filter((p) => p.token);
+    const recs = sec.rowFilter ? all.filter(sec.rowFilter) : all;
 
-    const loc = locateTable(doc, sec.docAnchor);
-    let report = `\n### ${sec.id} (${sec.notionAnchor})\n- Notion rows scanned: ${rows.length}\n`;
+    const target = loadDoc(sec.doc);
+    const loc = locateTable(target.doc, sec.docAnchor);
+    let report = `\n### ${sec.id} (${sec.notionAnchor} -> ${sec.doc})\n- Notion rows scanned: ${rows.length}\n`;
+    if (sec.rowFilter) report += `- Matched this section's partition: ${recs.length} of ${all.length} ready rows\n`;
 
     if (loc) {
-      const docRows = parseDocRows(doc.slice(loc.start, loc.end));
+      const docRows = parseDocRows(target.doc.slice(loc.start, loc.end));
+      // Partition guard: a classifier that matches nothing while the page still
+      // holds rows means the Notion naming convention moved out from under us.
+      // Mirroring that would wipe the page and dump every row on its sibling.
+      if (sec.rowFilter && recs.length === 0 && docRows.length > 0) {
+        throw new Error(
+          `[${sec.id}] Partition matched 0 of ${all.length} Notion rows but ${sec.doc} has ${docRows.length} — ` +
+            `the Notion asset-naming convention likely changed. Refusing to write.`
+        );
+      }
       const r = merge(docRows, recs, sec.mirror);
-      doc = doc.slice(0, loc.start) + renderTable(r.rows) + doc.slice(loc.end);
+      target.doc = target.doc.slice(0, loc.start) + renderTable(r.rows) + target.doc.slice(loc.end);
       totalValueChanges += r.valueChanges.length;
       totalAdded += r.added.length;
       report +=
@@ -369,7 +428,7 @@ async function main() {
         report += `- Section not in doc and Notion has 0 ready rows — NOT created.\n` + line('Not ready (no token address)', empties);
       } else {
         const r = merge([], recs, sec.mirror);
-        doc = `${doc.replace(/\s+$/, '')}\n\n${buildSection(sec.sectionTitle, resilient, renderTable(r.rows))}\n`;
+        target.doc = `${target.doc.replace(/\s+$/, '')}\n\n${buildSection(sec.sectionTitle, resilient, renderTable(r.rows))}\n`;
         totalAdded += r.added.length;
         report += `- Created new "${sec.sectionTitle}" section.\n` +
           line('Added (collaterals)', r.added) +
@@ -377,22 +436,24 @@ async function main() {
           line('Not ready (no token address)', empties);
       }
     } else {
-      throw new Error(`Doc anchor "${sec.docAnchor}" not found and createIfMissing is false.`);
+      throw new Error(`Doc anchor "${sec.docAnchor}" not found in ${sec.doc} and createIfMissing is false.`);
     }
     out.push(report);
   }
 
-  const changed = doc !== original;
-  const summary = out.join('') + `\n**Result:** ${changed ? 'doc updated' : 'no change'}.\n`;
+  const dirty = [...docs.entries()].filter(([, v]) => v.doc !== v.original).map(([p]) => p);
+  const changed = dirty.length > 0;
+  const summary =
+    out.join('') + `\n**Result:** ${changed ? `updated ${dirty.join(', ')}` : 'no change'}.\n`;
   console.log(summary);
   if (!DRY_RUN) {
     writeFileSync('oracle-sync-summary.md', summary);
-    if (changed) writeFileSync(DOC, doc);
+    for (const path of dirty) writeFileSync(path, docs.get(path).doc);
   } else {
-    console.log(changed ? '[DRY_RUN] doc WOULD change (nothing written).' : '[DRY_RUN] no change.');
+    console.log(changed ? `[DRY_RUN] WOULD change: ${dirty.join(', ')} (nothing written).` : '[DRY_RUN] no change.');
   }
 
-  emit({ has_changes: String(changed), value_changes: totalValueChanges, added: totalAdded });
+  emit({ has_changes: String(changed), value_changes: totalValueChanges, added: totalAdded, changed_files: dirty.join(' ') });
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
