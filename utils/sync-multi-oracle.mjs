@@ -52,7 +52,10 @@ const PAGE_ID = '6a54afccfcf04be4afd4ef10ce839169';
 // Asset-name classifier for the BNB partition. Tokenized-equity collaterals are
 // named "<TICKER>B (bStock)" in Notion. Keep this in sync with the naming
 // convention agreed with the contract team; see the partition guard below.
-const BSTOCK_RE = /\(\s*bstock\s*\)/i;
+// Full-width parens are accepted too: the Notion table is edited by people on
+// CJK input methods, where "（bStock）" is what you get without switching modes,
+// and an ASCII-only class would silently route that row to the wrong page.
+const BSTOCK_RE = /[(（]\s*bstock\s*[)）]/i;
 
 const SECTIONS = [
   {
@@ -271,11 +274,21 @@ function validateHeader(rows, sec) {
 // is genuinely absent (-> createIfMissing); an anchor with no table under it is
 // a malformed page, so throw rather than guess.
 function locateTable(doc, anchor) {
-  const marker = `**${anchor}**`;
-  const aIdx = doc.indexOf(marker);
-  if (aIdx === -1) return null;
-  const after = aIdx + marker.length;
-  const rel = doc.slice(after).search(/\n\*\*[^*\n]+\*\*|\n#{1,6}\s/);
+  // The anchor counts only as a STANDALONE bold line — the same shape used for
+  // the boundary below. An inline mention ("see **Ethereum Chain** below") sits
+  // at a lower index than the real heading, so a bare indexOf would bind this
+  // section to whichever table follows the PROSE, and mirror-merge would
+  // overwrite it with the wrong chain's rows.
+  const re = new RegExp(`(^|\\n)\\*\\*${anchor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\*\\*[ \\t]*(?=\\r?\\n|$)`);
+  const m = re.exec(doc);
+  if (!m) return null;
+  const after = m.index + m[0].length;
+  // Boundary = the next STANDALONE bold line (nothing after the closing **) or
+  // the next ATX heading. Requiring the line to end there matters: section
+  // headings are standalone bold lines, but ordinary prose like
+  // "**Note:** the pivot is ..." is not a section break, and treating it as one
+  // would make a routine docs edit abort the unattended weekly sync.
+  const rel = doc.slice(after).search(/\n\*\*[^*\n]+\*\*[ \t]*(?=\r?\n|$)|\n#{1,6}\s/);
   const limit = rel === -1 ? doc.length : after + rel;
   const start = doc.indexOf('<table', after);
   if (start === -1 || start >= limit) throw new Error(`Section "${anchor}" has no <table> before the next heading — refusing to write.`);
@@ -410,6 +423,13 @@ async function main() {
 
   let totalValueChanges = 0;
   let totalAdded = 0;
+  // Cross-page relocation tracking. The two BNB pages are partitioned purely by
+  // the Asset cell's "(bStock)" suffix, so a typo there moves a live collateral
+  // to the other page at exit 0. A wrongly-classified row is indistinguishable
+  // from a genuine reclassification, so this cannot fail closed — it surfaces
+  // every move in the run summary the workflow attaches to its commit.
+  const leftPage = new Map();
+  const joinedPage = new Map();
   const out = [`## Multi-Oracle sync\n`];
   const line = (lbl, arr) => `- ${lbl}: ${arr.length}${arr.length ? ` — ${arr.join(', ')}` : ''}\n`;
 
@@ -430,6 +450,12 @@ async function main() {
 
     if (loc) {
       const docRows = parseDocRows(target.doc.slice(loc.start, loc.end));
+      if (sec.rowFilter) {
+        const notionTokens = new Set(recs.map((x) => lc(x.token)));
+        const docTokens = new Set(docRows.map((x) => lc(x.token)));
+        for (const t of docTokens) if (!notionTokens.has(t)) leftPage.set(t, sec.doc);
+        for (const x of recs) if (!docTokens.has(lc(x.token))) joinedPage.set(lc(x.token), { doc: sec.doc, asset: x.asset });
+      }
       const r = merge(docRows, recs, sec.mirror);
       // Mass-removal cap. In mirror mode every doc row missing from Notion is
       // deleted, unbounded — so a truncated fetch, a bad anchor, or drift in the
@@ -438,7 +464,9 @@ async function main() {
       // never increment `removed`, so this cannot false-positive on a bulk
       // listing; it only fires on a bulk DELIST, which warrants a human anyway.
       const cap = Math.max(3, Math.ceil(docRows.length * 0.15));
-      if (sec.mirror && r.removed.length > cap && !process.env.ORACLE_ALLOW_BULK_REMOVAL) {
+      // Exact '1' only — an inherited or mistyped ORACLE_ALLOW_BULK_REMOVAL=0
+      // must not read as "override enabled" and disarm the guard in production.
+      if (sec.mirror && r.removed.length > cap && process.env.ORACLE_ALLOW_BULK_REMOVAL !== '1') {
         throw new Error(
           `[${sec.id}] ${r.removed.length} of ${docRows.length} rows would be removed from ${sec.doc} ` +
             `(cap ${cap}): ${r.removed.slice(0, 8).join(', ')}${r.removed.length > 8 ? ', …' : ''}. ` +
@@ -478,6 +506,17 @@ async function main() {
     }
     out.push(report);
   }
+
+  const relocated = [...joinedPage.entries()]
+    .filter(([t, v]) => leftPage.has(t) && leftPage.get(t) !== v.doc)
+    .map(([t, v]) => `${v.asset} (${t}): ${leftPage.get(t)} -> ${v.doc}`);
+  if (relocated.length)
+    out.push(
+      `\n### ⚠️ Cross-page relocations (${relocated.length})\n` +
+        `These collaterals changed page because their Notion Asset cell gained or lost the "(bStock)" suffix. ` +
+        `Confirm each was intentional — a typo in that cell republishes a live contract address on the wrong page.\n` +
+        relocated.map((s) => `- ${s}\n`).join('')
+    );
 
   const dirty = [...docs.entries()].filter(([, v]) => v.doc !== v.original).map(([p]) => p);
   const changed = dirty.length > 0;
