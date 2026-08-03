@@ -1382,6 +1382,30 @@
         "name": "MoolahVaultFactory",
         "address": "0xa91D9E7343d7EEe8Ed2C8f55e9162827850A7F17",
         "cols": []
+      },
+      {
+        "section": "",
+        "name": "MarketFactory",
+        "address": "0xA2ff080D4c0b71B6c8796129DD4aCc0B09D7592c",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RateCalculator",
+        "address": "0xeA00cE2992656A0F1DeDf3bBF082A3c725477796",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerLiquidator",
+        "address": "0x0aEfEC58e6339c663E80306e38fFEBbAe0820C70",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVault (WETH)",
+        "address": "0x2E3BbD03DbC6D890c8c7e06BE4e065c5c0EeE7e8",
+        "cols": []
       }
     ]
   },

@@ -44,3 +44,7 @@
 | SmartProvider (USDT & USDe)                       | 0xDfdB56a9e2F68c74Fca76c95E852D920890b36D4 |
 | SmartProvider (USDC & USDe)                       | 0x6Ae702D18B0fCff0deB7273d4453E9AF67EC153B |
 | MoolahVaultFactory | 0xa91D9E7343d7EEe8Ed2C8f55e9162827850A7F17 |
+| MarketFactory | 0xA2ff080D4c0b71B6c8796129DD4aCc0B09D7592c |
+| RateCalculator | 0xeA00cE2992656A0F1DeDf3bBF082A3c725477796 |
+| BrokerLiquidator | 0x0aEfEC58e6339c663E80306e38fFEBbAe0820C70 |
+| MoolahVault (WETH) | 0x2E3BbD03DbC6D890c8c7e06BE4e065c5c0EeE7e8 |
