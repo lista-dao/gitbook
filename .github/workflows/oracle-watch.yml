@@ -1,9 +1,13 @@
 name: Multi-Oracle Watch
 
-# Weekly sync of the "B. Collaterals using Resilient Oracle" table (BNB Chain)
-# in for-developer/multi-oracle.md against the canonical Notion source
-# ("Multi-Oracle For GitBook"). When the oracle config changes, the table is
-# refreshed and committed directly to the `en` branch (auto-commit).
+# Weekly sync of the Resilient Oracle config tables against the canonical Notion
+# source ("Multi-Oracle For GitBook"). When the oracle config changes, the tables
+# are refreshed and committed directly to the `en` branch (auto-commit).
+#
+# The script writes more than one page (the BNB table is partitioned into
+# for-developer/multi-oracle.md and for-developer/multi-oracle-bstock.md), so the
+# commit step stages the paths the script reports via its changed_files output
+# rather than a hardcoded filename.
 #
 # NOTE: scheduled (cron) workflows only run from the repository's DEFAULT branch
 # (main), which is why this file lives on main even though the docs live on en.
@@ -54,7 +58,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add for-developer/multi-oracle.md
+          git add -- ${{ steps.sync.outputs.changed_files }}
           git commit -m "chore(oracle): sync Multi-Oracle table from Notion
 
           ${{ steps.sync.outputs.value_changes }} oracle address change(s), ${{ steps.sync.outputs.added }} new collateral(s).
