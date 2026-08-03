@@ -55,7 +55,10 @@ const PAGE_ID = '6a54afccfcf04be4afd4ef10ce839169';
 // Full-width parens are accepted too: the Notion table is edited by people on
 // CJK input methods, where "（bStock）" is what you get without switching modes,
 // and an ASCII-only class would silently route that row to the wrong page.
-const BSTOCK_RE = /[(（]\s*bstock\s*[)）]/i;
+// Delimiters must MATCH: a mismatched "(bStock）" is a typo, not a convention,
+// and letting it classify a row means a typo silently moves a live contract
+// address to the other page.
+const BSTOCK_RE = /\(\s*bstock\s*\)|（\s*bstock\s*）/i;
 
 const SECTIONS = [
   {
@@ -273,26 +276,43 @@ function validateHeader(rows, sec) {
 // to overwrite with the wrong chain's rows. Returns null only when the section
 // is genuinely absent (-> createIfMissing); an anchor with no table under it is
 // a malformed page, so throw rather than guess.
+// Blank out regions that look like markup but are inert when rendered, keeping
+// every byte offset intact so matches still index into the original document.
+// Without this, a `**BNB Chain**` inside a fenced example or an HTML comment is
+// indistinguishable from the real heading — and if that inert region also holds
+// a syntactically valid <table>, the sync happily rewrites the DEAD table and
+// leaves the published one stale.
+function maskInert(doc) {
+  const blank = (m) => m.replace(/[^\n]/g, ' ');
+  return doc.replace(/```[\s\S]*?```|~~~[\s\S]*?~~~|<!--[\s\S]*?-->/g, blank);
+}
+
 function locateTable(doc, anchor) {
+  const masked = maskInert(doc);
   // The anchor counts only as a STANDALONE bold line — the same shape used for
   // the boundary below. An inline mention ("see **Ethereum Chain** below") sits
   // at a lower index than the real heading, so a bare indexOf would bind this
   // section to whichever table follows the PROSE, and mirror-merge would
   // overwrite it with the wrong chain's rows.
-  const re = new RegExp(`(^|\\n)\\*\\*${anchor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\*\\*[ \\t]*(?=\\r?\\n|$)`);
-  const m = re.exec(doc);
-  if (!m) return null;
+  const re = new RegExp(`(^|\\n)\\*\\*${anchor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\*\\*[ \\t]*(?=\\r?\\n|$)`, 'g');
+  const hits = [...masked.matchAll(re)];
+  if (hits.length === 0) return null;
+  // Two live headings with the same name: first-match would silently pick one
+  // and let the other drift. There is no safe way to guess which is canonical.
+  if (hits.length > 1)
+    throw new Error(`Section "${anchor}" appears ${hits.length} times as a heading in the doc — ambiguous, refusing to write.`);
+  const m = hits[0];
   const after = m.index + m[0].length;
   // Boundary = the next STANDALONE bold line (nothing after the closing **) or
   // the next ATX heading. Requiring the line to end there matters: section
   // headings are standalone bold lines, but ordinary prose like
   // "**Note:** the pivot is ..." is not a section break, and treating it as one
   // would make a routine docs edit abort the unattended weekly sync.
-  const rel = doc.slice(after).search(/\n\*\*[^*\n]+\*\*[ \t]*(?=\r?\n|$)|\n#{1,6}\s/);
+  const rel = masked.slice(after).search(/\n\*\*[^*\n]+\*\*[ \t]*(?=\r?\n|$)|\n#{1,6}\s/);
   const limit = rel === -1 ? doc.length : after + rel;
-  const start = doc.indexOf('<table', after);
+  const start = masked.indexOf('<table', after);
   if (start === -1 || start >= limit) throw new Error(`Section "${anchor}" has no <table> before the next heading — refusing to write.`);
-  const end = doc.indexOf('</table>', start);
+  const end = masked.indexOf('</table>', start);
   if (end === -1 || end >= limit) throw new Error(`Section "${anchor}" has an unterminated <table> — refusing to write.`);
   return { start, end: end + '</table>'.length };
 }
@@ -428,8 +448,10 @@ async function main() {
   // to the other page at exit 0. A wrongly-classified row is indistinguishable
   // from a genuine reclassification, so this cannot fail closed — it surfaces
   // every move in the run summary the workflow attaches to its commit.
-  const leftPage = new Map();
-  const joinedPage = new Map();
+  const beforeDocs = new Map();
+  const afterDocs = new Map();
+  const assetLabel = new Map();
+  const addTo = (m, k, v) => m.set(k, (m.get(k) || new Set()).add(v));
   const out = [`## Multi-Oracle sync\n`];
   const line = (lbl, arr) => `- ${lbl}: ${arr.length}${arr.length ? ` — ${arr.join(', ')}` : ''}\n`;
 
@@ -451,10 +473,11 @@ async function main() {
     if (loc) {
       const docRows = parseDocRows(target.doc.slice(loc.start, loc.end));
       if (sec.rowFilter) {
-        const notionTokens = new Set(recs.map((x) => lc(x.token)));
-        const docTokens = new Set(docRows.map((x) => lc(x.token)));
-        for (const t of docTokens) if (!notionTokens.has(t)) leftPage.set(t, sec.doc);
-        for (const x of recs) if (!docTokens.has(lc(x.token))) joinedPage.set(lc(x.token), { doc: sec.doc, asset: x.asset });
+        for (const row of docRows) addTo(beforeDocs, lc(row.token), sec.doc);
+        for (const x of recs) {
+          addTo(afterDocs, lc(x.token), sec.doc);
+          assetLabel.set(lc(x.token), x.asset);
+        }
       }
       const r = merge(docRows, recs, sec.mirror);
       // Mass-removal cap. In mirror mode every doc row missing from Notion is
@@ -507,16 +530,30 @@ async function main() {
     out.push(report);
   }
 
-  const relocated = [...joinedPage.entries()]
-    .filter(([t, v]) => leftPage.has(t) && leftPage.get(t) !== v.doc)
-    .map(([t, v]) => `${v.asset} (${t}): ${leftPage.get(t)} -> ${v.doc}`);
-  if (relocated.length)
-    out.push(
-      `\n### ⚠️ Cross-page relocations (${relocated.length})\n` +
-        `These collaterals changed page because their Notion Asset cell gained or lost the "(bStock)" suffix. ` +
-        `Confirm each was intentional — a typo in that cell republishes a live contract address on the wrong page.\n` +
-        relocated.map((s) => `- ${s}\n`).join('')
+  // Cross-page relocations. Compare the set of pages a token sat on BEFORE with
+  // the set it sits on AFTER — not "added here / removed there", which misses
+  // the case where the destination page already carried the token.
+  const relocated = [];
+  for (const [t, after] of afterDocs) {
+    const before = beforeDocs.get(t);
+    if (!before || before.size === 0) continue; // brand-new collateral, not a move
+    const moved = [...after].some((d) => !before.has(d)) || [...before].some((d) => !after.has(d));
+    if (moved) relocated.push(`${assetLabel.get(t) || t} (${t}): ${[...before].join(' + ')} -> ${[...after].join(' + ')}`);
+  }
+  // Fail closed. A typo in the Asset cell and a genuine reclassification are
+  // textually identical, so the script cannot tell them apart — and a warning
+  // in the job summary only reaches a human AFTER the address is published and
+  // the translation/RAG cascade has run. Stop instead, and make a real
+  // reclassification an explicit one-run decision.
+  if (relocated.length && process.env.ORACLE_ALLOW_RECLASSIFY !== '1') {
+    throw new Error(
+      `${relocated.length} collateral(s) would change page:\n` +
+        relocated.map((s) => `  - ${s}\n`).join('') +
+        `A page change comes purely from the Asset cell gaining or losing the "(bStock)" suffix, so a typo ` +
+        `looks exactly like a real reclassification. Refusing to write. Confirm in Notion, then re-run with ` +
+        `ORACLE_ALLOW_RECLASSIFY=1.`
     );
+  }
 
   const dirty = [...docs.entries()].filter(([, v]) => v.doc !== v.original).map(([p]) => p);
   const changed = dirty.length > 0;
