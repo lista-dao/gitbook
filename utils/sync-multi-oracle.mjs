@@ -282,9 +282,59 @@ function validateHeader(rows, sec) {
 // indistinguishable from the real heading — and if that inert region also holds
 // a syntactically valid <table>, the sync happily rewrites the DEAD table and
 // leaves the published one stale.
+// A line-aware scanner rather than a regex: fences are line-anchored and close
+// only on a delimiter of the SAME char and >= length (so ```` opens a block that
+// an inner ``` does not close), and HTML comments span lines. A regex with `*?`
+// gets all of that wrong — it treats any later ``` as a close, mis-parses 4+
+// backtick fences, and silently ignores an UNTERMINATED fence/comment, leaving a
+// fake heading live. An unterminated fence or comment is malformed markdown that
+// would also render broken, so we fail closed rather than guess where it ends.
 function maskInert(doc) {
-  const blank = (m) => m.replace(/[^\n]/g, ' ');
-  return doc.replace(/```[\s\S]*?```|~~~[\s\S]*?~~~|<!--[\s\S]*?-->/g, blank);
+  const src = doc.split('\n');
+  const out = new Array(src.length);
+  let fence = null;      // { char, len } while inside a fenced code block
+  let inComment = false; // while inside <!-- ... -->
+  const opener = (line) => {
+    const m = line.match(/^ {0,3}(`{3,}|~{3,})/);
+    return m ? { char: m[1][0], len: m[1].length } : null;
+  };
+  const closes = (line, f) => {
+    const m = line.match(/^ {0,3}(`{3,}|~{3,})[ \t]*$/);
+    return !!m && m[1][0] === f.char && m[1].length >= f.len;
+  };
+  for (let i = 0; i < src.length; i++) {
+    const line = src[i];
+    if (fence) {
+      out[i] = ' '.repeat(line.length);
+      if (closes(line, fence)) fence = null;
+      continue;
+    }
+    if (!inComment) {
+      const f = opener(line);
+      if (f) {
+        out[i] = ' '.repeat(line.length); // the delimiter line (incl. info string) is inert
+        fence = f;
+        continue;
+      }
+    }
+    // Char-scan for HTML comment open/close, carrying `inComment` across lines.
+    let res = '', j = 0;
+    while (j < line.length) {
+      if (inComment) {
+        const end = line.indexOf('-->', j);
+        if (end === -1) { res += ' '.repeat(line.length - j); j = line.length; }
+        else { res += ' '.repeat(end + 3 - j); j = end + 3; inComment = false; }
+      } else {
+        const start = line.indexOf('<!--', j);
+        if (start === -1) { res += line.slice(j); j = line.length; }
+        else { res += line.slice(j, start); j = start; inComment = true; }
+      }
+    }
+    out[i] = res;
+  }
+  if (fence) throw new Error(`Unterminated code fence (${fence.char.repeat(fence.len)}) in the doc — refusing to write against malformed markdown.`);
+  if (inComment) throw new Error(`Unterminated HTML comment (<!-- with no -->) in the doc — refusing to write against malformed markdown.`);
+  return out.join('\n');
 }
 
 function locateTable(doc, anchor) {
