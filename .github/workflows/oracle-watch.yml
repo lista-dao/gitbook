@@ -82,10 +82,15 @@ jobs:
           #    auto-push. Allowlist the paths instead, and fail loudly on anything
           #    unexpected rather than committing it.
           files="${CHANGED_FILES:-}"
-          [ -n "$files" ] || files="for-developer/multi-oracle.md"
+          [ -n "$files" ] || files="for-developer/multi-oracle-standard.md"
+          # Allowlist covers BOTH the current layout (standard + bstock pages) and
+          # the pre-restructure page (multi-oracle.md), so the weekly sync survives
+          # whichever merge order the workflow (main) and the script (en) land in.
+          # The hub multi-oracle.md is never written by the current script; it stays
+          # here only so an older script's output is tolerated, not rejected.
           for f in $files; do
             case "$f" in
-              for-developer/multi-oracle.md|for-developer/multi-oracle-bstock.md) ;;
+              for-developer/multi-oracle.md|for-developer/multi-oracle-standard.md|for-developer/multi-oracle-bstock.md) ;;
               *) echo "::error::sync reported unexpected path '$f' — refusing to commit."; exit 1 ;;
             esac
           done
