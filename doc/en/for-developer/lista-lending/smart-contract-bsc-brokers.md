@@ -30,6 +30,11 @@
 | LendingBroker(BNB&slisBNB/USD1) | BNB&slisBNB/USD1 | 86% | 50M | 0x303fddd3479e86023cec2a52b3b4da45c6a593067db573feb42e9ed75323349e | 0x111A52D94791D0093B75AC4B9Ad104B7cF4AE568 |
 | LendingBroker(BNB&slisBNB/U) | BNB&slisBNB/U | 86% | 50M | 0x8b3efb84b55dbdde264ae2401316bb282ca58df0f3d7600463b49ad4a1dff2f4 | 0xc26CaAcb00854c5460030B0aFde60C37D9d39C79 |
 | LendingBroker(BNB&slisBNB/BNB) | BNB&slisBNB/BNB | 96.5% | 100k | 0x34b10e29626e1829e24e44bffd0b6795eb901120d9fcb6217973a67589b3b8e4 | 0x3ade951523e81dD45e5787bb0b95Ce7341Db1287 |
+| BrokerInterestLockBuffer (lisUSD vault) | | | | | 0x7FC3223081c5Dd9159781E6EB28Af3012138A323 |
+| BrokerInterestLockBuffer (USD1 vault) | | | | | 0xA5AAEAA7AC64d33c0C609686777d72C244C97578 |
+| BrokerInterestLockBuffer (U vault) | | | | | 0x8c51220e29684BbAE2bF4412952C47d090BC6B3E |
+| BrokerInterestLockBuffer (USDT vault) | | | | | 0x23c3E7f13C97011b84dAB247587425F55ffeD137 |
+| BrokerInterestLockBuffer (WBNB vault) | | | | | 0xCa5D2d07243a3E9ab58A2b6C924a67F060EC6371 |
 
 ## Broker Auxiliary Contracts
 
