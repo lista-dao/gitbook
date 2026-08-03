@@ -5,13 +5,16 @@
 // canonical Notion source ("Multi-Oracle For GitBook",
 // page 6a54afccfcf04be4afd4ef10ce839169). Three sections are synced:
 //
-//   * BNB Chain — core collaterals   -> for-developer/multi-oracle.md
+//   * BNB Chain — core collaterals   -> for-developer/multi-oracle-standard.md
 //   * BNB Chain — bStock collaterals -> for-developer/multi-oracle-bstock.md
-//   * Ethereum Chain                 -> for-developer/multi-oracle.md
+//   * Ethereum Chain                 -> for-developer/multi-oracle-standard.md
+//
+// (for-developer/multi-oracle.md is now an overview hub with no tables and is
+// never written by this script.)
 //
 // The two BNB sections read the SAME Notion table ("BNB Chain") and PARTITION
 // it by asset name: rows whose Asset matches BSTOCK_RE (the "(bStock)" suffix)
-// go to the bStock page, everything else stays on the main page. Notion keeps a
+// go to the bStock page, everything else goes to the standard page. Notion keeps a
 // single flat table — the split is a docs-side concern only. Drift in the
 // naming convention would relocate rows wholesale between the two pages; the
 // mass-removal cap in main() catches that and fails the run instead.
@@ -45,7 +48,10 @@
 
 import { readFileSync, writeFileSync, appendFileSync } from 'node:fs';
 
-const DOC = 'for-developer/multi-oracle.md';
+// The standard-collateral config tables live on their own page under the
+// Multi-Oracle hub (for-developer/multi-oracle.md is now an overview that holds
+// no tables and is never written by this script).
+const DOC = 'for-developer/multi-oracle-standard.md';
 const DOC_BSTOCK = 'for-developer/multi-oracle-bstock.md';
 const PAGE_ID = '6a54afccfcf04be4afd4ef10ce839169';
 

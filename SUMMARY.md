@@ -99,6 +99,7 @@
 
 * [Overview](for-developer/overview.md)
 * [Multi-Oracle](for-developer/multi-oracle.md)
+  * [Standard Collaterals](for-developer/multi-oracle-standard.md)
   * [bStock Collaterals](for-developer/multi-oracle-bstock.md)
 * [LISTA Governance](for-developer/lista-governance/README.md)
   * [Smart Contract](for-developer/lista-governance/smart-contract.md)
