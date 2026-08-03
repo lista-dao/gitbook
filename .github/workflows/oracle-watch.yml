@@ -64,13 +64,37 @@ jobs:
 
       - name: Commit changes to en
         if: steps.sync.outputs.has_changes == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.sync.outputs.changed_files }}
+          VALUE_CHANGES: ${{ steps.sync.outputs.value_changes }}
+          ADDED: ${{ steps.sync.outputs.added }}
         run: |
+          set -euo pipefail
+          # Stage exactly the oracle pages, nothing else. Two constraints meet here:
+          #
+          #  - This workflow lives on main while the sync script lives on en, so the
+          #    two merge independently. An older script emits no changed_files, and
+          #    `git add --` with an empty pathspec stages nothing, then the commit
+          #    fails and the weekly sync stops silently. Hence the fallback to the
+          #    single page the old script maintained.
+          #  - `git add -A -- for-developer/` would be safe against that, but it
+          #    sweeps the ~50 other files under that directory into an unattended
+          #    auto-push. Allowlist the paths instead, and fail loudly on anything
+          #    unexpected rather than committing it.
+          files="${CHANGED_FILES:-}"
+          [ -n "$files" ] || files="for-developer/multi-oracle.md"
+          for f in $files; do
+            case "$f" in
+              for-developer/multi-oracle.md|for-developer/multi-oracle-bstock.md) ;;
+              *) echo "::error::sync reported unexpected path '$f' — refusing to commit."; exit 1 ;;
+            esac
+          done
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A -- for-developer/
+          git add -A -- $files
           git commit -m "chore(oracle): sync Multi-Oracle table from Notion
 
-          ${{ steps.sync.outputs.value_changes }} oracle address change(s), ${{ steps.sync.outputs.added }} new collateral(s).
+          ${VALUE_CHANGES} oracle address change(s), ${ADDED} new collateral(s).
           Auto-detected by the Multi-Oracle Watch workflow."
           git push origin HEAD:en
 
