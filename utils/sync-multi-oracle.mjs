@@ -12,10 +12,9 @@
 // The two BNB sections read the SAME Notion table ("BNB Chain") and PARTITION
 // it by asset name: rows whose Asset matches BSTOCK_RE (the "(bStock)" suffix)
 // go to the bStock page, everything else stays on the main page. Notion keeps a
-// single flat table — the split is a docs-side concern only. See the partition
-// guard in syncSection(): if the classifier suddenly matches nothing while the
-// target page still has rows, the run FAILS rather than silently relocating 40+
-// rows (which is what a change to the Notion naming convention would look like).
+// single flat table — the split is a docs-side concern only. Drift in the
+// naming convention would relocate rows wholesale between the two pages; the
+// mass-removal cap in main() catches that and fails the run instead.
 //
 // Notion is the SOURCE OF TRUTH for the volatile oracle-value columns
 // (Oracle/caller, Main, Pivot, Fallback, BoundValidator). The script does a
@@ -234,6 +233,25 @@ function parseNotionRow(row, idx, skipRe) {
   return mkRecord(c);
 }
 
+// Token uniqueness must be asserted over the WHOLE Notion table, before any
+// rowFilter runs. merge()'s own duplicate guard only sees one half of the
+// partition, so a token listed twice — once as "FOO", once as "FOO (bStock)" —
+// would put one copy on each page, with neither guard firing and the two pages
+// publishing different oracle addresses for the same on-chain token.
+function assertUniqueTokens(recs, sec) {
+  const seen = new Map();
+  for (const r of recs) {
+    const k = lc(r.token);
+    if (seen.has(k)) {
+      throw new Error(
+        `[${sec.id}] Duplicate token ${k} in the "${sec.notionAnchor}" Notion table ` +
+          `("${seen.get(k)}" and "${r.asset}") — refusing to merge.`
+      );
+    }
+    seen.set(k, r.asset);
+  }
+}
+
 // Validate the Notion table header so we never merge a wrong/shifted table.
 function validateHeader(rows, sec) {
   if (!rows.length) throw new Error(`[${sec.id}] Notion table is empty.`);
@@ -245,13 +263,24 @@ function validateHeader(rows, sec) {
 // ---------------------------------------------------------------------------
 // Doc table parsing / rendering
 // ---------------------------------------------------------------------------
+// Locate a section's table. The anchor must appear in its BOLD heading form
+// ("**BNB Chain**") and the table must sit between that heading and the next
+// heading. A bare indexOf(anchor) would happily match the anchor inside prose
+// and then bind to a DIFFERENT section's table — which mirror-merge would go on
+// to overwrite with the wrong chain's rows. Returns null only when the section
+// is genuinely absent (-> createIfMissing); an anchor with no table under it is
+// a malformed page, so throw rather than guess.
 function locateTable(doc, anchor) {
-  const aIdx = doc.indexOf(anchor);
+  const marker = `**${anchor}**`;
+  const aIdx = doc.indexOf(marker);
   if (aIdx === -1) return null;
-  const start = doc.indexOf('<table', aIdx);
-  if (start === -1) return null;
+  const after = aIdx + marker.length;
+  const rel = doc.slice(after).search(/\n\*\*[^*\n]+\*\*|\n#{1,6}\s/);
+  const limit = rel === -1 ? doc.length : after + rel;
+  const start = doc.indexOf('<table', after);
+  if (start === -1 || start >= limit) throw new Error(`Section "${anchor}" has no <table> before the next heading — refusing to write.`);
   const end = doc.indexOf('</table>', start);
-  if (end === -1) return null;
+  if (end === -1 || end >= limit) throw new Error(`Section "${anchor}" has an unterminated <table> — refusing to write.`);
   return { start, end: end + '</table>'.length };
 }
 
@@ -391,6 +420,7 @@ async function main() {
     const skipped = parsed.filter((p) => p.skip).map((p) => p.skip);
     const empties = parsed.filter((p) => p.empty).map((p) => p.empty);
     const all = parsed.filter((p) => p.token);
+    assertUniqueTokens(all, sec);
     const recs = sec.rowFilter ? all.filter(sec.rowFilter) : all;
 
     const target = loadDoc(sec.doc);
@@ -400,16 +430,24 @@ async function main() {
 
     if (loc) {
       const docRows = parseDocRows(target.doc.slice(loc.start, loc.end));
-      // Partition guard: a classifier that matches nothing while the page still
-      // holds rows means the Notion naming convention moved out from under us.
-      // Mirroring that would wipe the page and dump every row on its sibling.
-      if (sec.rowFilter && recs.length === 0 && docRows.length > 0) {
+      const r = merge(docRows, recs, sec.mirror);
+      // Mass-removal cap. In mirror mode every doc row missing from Notion is
+      // deleted, unbounded — so a truncated fetch, a bad anchor, or drift in the
+      // bStock naming convention (which would relocate rows wholesale between
+      // the two pages) can silently wipe published contract addresses. Additions
+      // never increment `removed`, so this cannot false-positive on a bulk
+      // listing; it only fires on a bulk DELIST, which warrants a human anyway.
+      const cap = Math.max(3, Math.ceil(docRows.length * 0.15));
+      if (sec.mirror && r.removed.length > cap && !process.env.ORACLE_ALLOW_BULK_REMOVAL) {
         throw new Error(
-          `[${sec.id}] Partition matched 0 of ${all.length} Notion rows but ${sec.doc} has ${docRows.length} — ` +
-            `the Notion asset-naming convention likely changed. Refusing to write.`
+          `[${sec.id}] ${r.removed.length} of ${docRows.length} rows would be removed from ${sec.doc} ` +
+            `(cap ${cap}): ${r.removed.slice(0, 8).join(', ')}${r.removed.length > 8 ? ', …' : ''}. ` +
+            `Refusing to write. Set ORACLE_ALLOW_BULK_REMOVAL=1 to override once the delist is confirmed.` +
+            (sec.rowFilter && recs.length === 0
+              ? ` NOTE: this section's partition matched 0 of ${all.length} Notion rows — the asset-naming convention has probably changed; check BSTOCK_RE.`
+              : '')
         );
       }
-      const r = merge(docRows, recs, sec.mirror);
       target.doc = target.doc.slice(0, loc.start) + renderTable(r.rows) + target.doc.slice(loc.end);
       totalValueChanges += r.valueChanges.length;
       totalAdded += r.added.length;
@@ -447,8 +485,9 @@ async function main() {
     out.join('') + `\n**Result:** ${changed ? `updated ${dirty.join(', ')}` : 'no change'}.\n`;
   console.log(summary);
   if (!DRY_RUN) {
-    writeFileSync('oracle-sync-summary.md', summary);
+    // Docs first: if a write throws, the summary must not already claim success.
     for (const path of dirty) writeFileSync(path, docs.get(path).doc);
+    writeFileSync('oracle-sync-summary.md', summary);
   } else {
     console.log(changed ? `[DRY_RUN] WOULD change: ${dirty.join(', ')} (nothing written).` : '[DRY_RUN] no change.');
   }
