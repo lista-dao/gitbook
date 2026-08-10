@@ -1406,6 +1406,42 @@
         "name": "MoolahVault (WETH)",
         "address": "0x2E3BbD03DbC6D890c8c7e06BE4e065c5c0EeE7e8",
         "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaRevenueDistributor",
+        "address": "0x0fe5741e8dFe53618c4056F745fad531118640D9",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestRelayer",
+        "address": "0xeBf4A1f9EF14De6C69F3F60881314372A31C056a",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingBroker (wBETH/WETH)",
+        "address": "0x2B7cb7Fe6C545e23cb96f2B8E7e5120fF9e16444",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingBroker (wstETH/WETH)",
+        "address": "0x39acab377A7cA24c1BF4B2AE5294F57519d8719B",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BatchManagementUtils",
+        "address": "0xe0830369D616410B80f8591267771D76E244d419",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestLockBuffer",
+        "address": "0x85616B54C80fA11285567DFCD073BF24cA6aD7fa",
+        "cols": []
       }
     ]
   },
@@ -1537,6 +1573,18 @@
         "section": "",
         "name": "ListaV3Pool",
         "address": "0x46eE2C5F2b9De7C6e08Ffe3Bde8Dd88A46D6f568",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV2Factory",
+        "address": "0x28F5E6C71C7541b1C6523351AE331CcAfC443626",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV2Router02",
+        "address": "0x3CcbB50C93ffCdA64e58Cc9E299791Fd85A41941",
         "cols": []
       }
     ]
