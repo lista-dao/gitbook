@@ -1442,6 +1442,18 @@
         "name": "BrokerInterestLockBuffer",
         "address": "0x85616B54C80fA11285567DFCD073BF24cA6aD7fa",
         "cols": []
+      },
+      {
+        "section": "",
+        "name": "LiquidationVault",
+        "address": "0xC1D8F6072D8a987BCbB675dc4805E8A2dE604899",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RevenueCollector",
+        "address": "0x8a6e34A7860dD9C46770635fe3Da4073C56f8131",
+        "cols": []
       }
     ]
   },
