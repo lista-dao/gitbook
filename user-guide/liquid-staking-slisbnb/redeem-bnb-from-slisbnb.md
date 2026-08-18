@@ -4,6 +4,9 @@ description: 如何从slisBNB赎回BNB
 
 # 从slisBNB赎回BNB
 
+{% embed url="https://www.loom.com/share/194d96042ed64669b30cf44c5df3261b?sid=b5fb2a59-1e06-4a05-9fa5-189fe49d1ad1" %}
+
+
 #### **步骤1:** <a href="#id-4299" id="id-4299"></a>
 
 要取消质押您的BNB，请返回主页面，然后点击“取消质押”。

@@ -106,4 +106,54 @@ Lista DAO将继续优先发展其三个关键支柱，以此为基础：
 
 对slisBNB的增强将专注于优化节点操作，通过创建更小、可扩展的节点进一步去中心化，并加强治理。这些改进将提高性能和可访问性，确保用户的稳健和可持续的质押体验。
 
-### Lista 3.0
+### Lista 3.0：扩展 BNBFi 生态系统 <a href="#eda7" id="eda7"></a>
+
+随着 Lista DAO 扩展其跨链集成，BNBFi 生态系统（slisBNBx）将在 2025 年迎来显著增长。通过与 StakeStone、Solv 等协议合作，Lista DAO 将把来自其他区块链（包括 Ethereum）的质押资产引入 BNB。该举措将为用户解锁参与 Launchpool、Megadrop 与 Hodler Airdrop 等项目的机会，提供超过 30% APR 的可观收益。
+
+为进一步增强生态系统，Lista DAO 将推出跨链金库产品，用于捕获多个网络上的激励与空投。此外，还将上线推荐系统以吸引影响者与 KOL，推动用户增长并加速采用。
+
+作为引领 DeFi 领域战略的一部分，Lista DAO 将专注于把更多 DeFi 原语集成进其生态系统。这些「乐高积木」将包括更丰富的抵押品选项、进阶的流动性质押方案与创新的流动性机制。通过构建模块化且可互操作的生态系统，Lista DAO 希望为用户提供更大的灵活性，同时解锁资本效率与优化方面的新机会。
+
+## 2025 上半年[总结](https://medium.com/listadao/lista-dao-h1-2025-update-pioneering-bnbfi-9d4c70d779c0)
+
+### **1. 重大里程碑**：
+
+推出去中心化 P2P 借贷协议 Lista Lending，并完成 slisBNBx 铸造、金库管理器 GUI、Alpha Zone 与清算区等升级。
+
+### **2. 生态系统扩展**
+
+与 USD1 合作，将稳定币使用场景整合进 Lista DAO 的 DeFi 协议，提升流动性与实用性。
+
+### **3. 战略集成**
+
+与 World Liberty Finance、Pendle Finance 等战略伙伴合作，拓展收益机会。
+
+### **4. 创新实用性**
+
+为 veLISTA 持有者推出 lisUSD 借款返利，降低借款成本并提升资本效率。
+
+## 2025 下半年[路线图](https://medium.com/listadao/lista-dao-2025-h2-roadmap-fc63d701f059)
+
+### **1. USD1 枢纽领导地位**
+
+将 Lista 打造为 USD1 最大的链上枢纽。目前 Lista Lending 中已有超过 7,000 万美元，目标是通过扩展集成与收益优化，将 TVL 提升至 1 亿美元以上，并提供有竞争力的存款 APY。
+
+### **2. 面向 PancakeSwap 的 Lista CDP**
+
+于第三季度上线，支持将 PancakeSwap 的 LP 仓位作为铸造 lisUSD 的抵押品，提升资本效率。
+
+### **3. RWA 生息稳定币**
+
+于第三季度初推出以美国国债与公司债支持的 USD1 基础稳定币。
+
+### **4. lisUSD 增长**
+
+通过生息稳定币与 LP 铸造产品，在年底前将 lisUSD 铸造量从 6,320 万提升至 8,000 万（增长 26.6%）。
+
+### **5. Fluid 式 DEX**
+
+于第四季度推出借贷与 AMM 集成的 DEX，将 Lista Lending 的抵押品转化为 LP 仓位。
+
+### **6. 固定利率借贷扩展**
+
+扩展 Lista CDP 以提供固定利率与固定期限的借贷产品，时间表待确认。
