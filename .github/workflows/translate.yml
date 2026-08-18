@@ -5,6 +5,12 @@ on:
     branches:
       - en
 
+# Two pushes to en in quick succession used to race: both jobs checked out
+# zh-CN, both committed, and the loser's push was rejected and discarded.
+concurrency:
+  group: translate-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   sync-and-translate:
     runs-on: ubuntu-latest
@@ -15,14 +21,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "20"
 
       - name: Install dependencies
         run: npm install
@@ -32,9 +38,15 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      - name: Run tests
+        run: npm test
+
       - name: Sync and Translate
         run: |
           node utils/sync-and-translate.js
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Full push range, so a push of N commits translates all N.
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
+          GITHUB_SHA: ${{ github.sha }}
