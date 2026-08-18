@@ -1,97 +1,125 @@
-const { execSync } = require("child_process");
+const { execFileSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
-const glob = require("glob");
 const { translateContent } = require("./translate-content");
 
 const languageBranches = ["zh-CN"];
 
-function getChangedFiles() {
-  try {
-    const diffOutput = execSync("git diff --name-status HEAD~1 HEAD", {
-      encoding: "utf8",
-    });
-    const fileChanges = diffOutput
-      .split("\n")
-      .filter((line) => {
-        const [status, ...fileParts] = line.split(/\s+/);
-        return Boolean(status) && Boolean(fileParts[0]);
-      })
-      .map((line) => {
-        const [status, ...fileParts] = line.split(/\s+/);
-        if (status.startsWith("R")) {
-          const oldPath = fileParts[0];
-          const newPath = fileParts[1];
-          if (fs.existsSync(newPath) && fs.lstatSync(newPath).isDirectory()) {
-            const oldFiles = glob.sync(`${oldPath}/**/*`);
-            return oldFiles.map((oldFile) => ({
-              status: "R",
-              oldFile: oldFile,
-              file: oldFile.replace(oldPath, newPath),
-            }));
-          }
-        }
-        if (line.endsWith(".md")) {
-          if (status.startsWith("R")) {
-            return { status, oldFile: fileParts[0], file: fileParts[1] };
-          }
-          return { status, file: fileParts[0] };
-        }
-        return { status, file: fileParts?.[1] ?? fileParts[0] };
-      })
-      .flat();
-    return fileChanges;
-  } catch (error) {
-    console.error("Error getting changed files:", error);
-    throw error;
-  }
+// Run a git command with arguments passed as an array. Never build a shell
+// string: paths in this repo contain spaces and parentheses (GitBook names
+// its assets "image (1) (1).png"), which the shell would split or expand.
+function git(args, opts = {}) {
+  return execFileSync("git", args, { encoding: "utf8", ...opts });
 }
 
-const deleteFile = (file) => {
+/**
+ * Files changed by the push that triggered this run.
+ *
+ * `--name-status -z` emits NUL-separated fields, so filenames keep their
+ * spaces. Splitting on whitespace (the previous behaviour) shattered
+ * "image (1).png" into "image", "(1)", ".png" and made the very first
+ * `git checkout` of the run fail, aborting translation for the whole push.
+ *
+ * The range covers every commit in the push, not just the tip: GITHUB_EVENT
+ * gives us the SHA the branch pointed at before the push. A push of N commits
+ * used to translate only the last one.
+ */
+function getChangedFiles(range) {
+  const out = git(["diff", "--name-status", "-z", ...range]);
+  const fields = out.split("\0").filter(Boolean);
+  const changes = [];
+
+  for (let i = 0; i < fields.length; ) {
+    const status = fields[i++];
+    if (status.startsWith("R") || status.startsWith("C")) {
+      // Renames and copies emit two paths.
+      const oldFile = fields[i++];
+      const file = fields[i++];
+      changes.push({ status: status[0], oldFile, file });
+    } else {
+      changes.push({ status: status[0], file: fields[i++] });
+    }
+  }
+  return changes;
+}
+
+function deleteFile(file) {
   if (fs.existsSync(file)) {
     console.log(`Deleting file: ${file}`);
     fs.unlinkSync(file);
   }
-};
+}
+
+function resolveRange() {
+  // github.event.before is the pre-push SHA. It is all-zeroes for a new
+  // branch and may point at a rewritten commit after a force-push, so fall
+  // back to the tip commit only when it is unusable.
+  const before = process.env.GITHUB_EVENT_BEFORE;
+  const sha = process.env.GITHUB_SHA || "HEAD";
+  if (before && !/^0+$/.test(before)) {
+    try {
+      git(["cat-file", "-e", `${before}^{commit}`], { stdio: "pipe" });
+      return [before, sha];
+    } catch {
+      console.warn(`before-SHA ${before} not reachable; falling back to HEAD~1`);
+    }
+  }
+  return [`${sha}~1`, sha];
+}
+
 async function syncAndTranslate() {
-  const changedFiles = getChangedFiles();
+  const range = resolveRange();
+  console.log(`Diff range: ${range.join("..")}`);
+
+  const changedFiles = getChangedFiles(range);
   console.log(`Changed files: ${JSON.stringify(changedFiles, null, 2)}`);
 
   for (const branch of languageBranches) {
-    try {
-      execSync(`git checkout ${branch}`);
+    git(["checkout", branch]);
+    // The GitBook space pushes to the language branches too, so the local
+    // ref can be behind. Rebase before writing, or the push at the end is
+    // rejected and the whole translation is silently thrown away.
+    git(["pull", "--rebase", "origin", branch]);
 
-      for (const { status, file, oldFile } of changedFiles) {
-        const targetFile = path.join(process.cwd(), file);
-        console.log(`Processing file: ${file} with status: ${status}`);
-        if (file.endsWith(".md")) {
-          if (status === "D") {
-            deleteFile(targetFile);
-          } else {
-            if (oldFile) {
-              const oldFilePath = path.join(process.cwd(), oldFile);
-              deleteFile(oldFilePath);
-            }
-            execSync(`git checkout origin/en -- ${file}`);
-            const content = fs.readFileSync(targetFile, "utf-8");
-            const translatedContent = await translateContent(content, branch);
-            fs.writeFileSync(targetFile, translatedContent, "utf-8");
-          }
-        } else execSync(`git checkout origin/en -- ${file}`);
+    for (const { status, file, oldFile } of changedFiles) {
+      const targetFile = path.join(process.cwd(), file);
+      console.log(`Processing file: ${file} with status: ${status}`);
+
+      if (status === "D") {
+        deleteFile(targetFile);
+        continue;
       }
-      execSync(`git add .`);
-      execSync(
-        `git commit -m "Sync and translate ${changedFiles.length} files to ${branch}" || true`
-      );
-      console.log(`Committed changes to branch: ${branch}`);
+      if (oldFile) deleteFile(path.join(process.cwd(), oldFile));
 
-      execSync(`git push`);
-    } catch (error) {
-      console.error(`Error processing branch ${branch}:`, error);
+      git(["checkout", "origin/en", "--", file]);
+
+      if (file.endsWith(".md")) {
+        const content = fs.readFileSync(targetFile, "utf-8");
+        const translated = await translateContent(content, branch, file);
+        fs.writeFileSync(targetFile, translated, "utf-8");
+      }
     }
+
+    git(["add", "-A"]);
+    const staged = git(["diff", "--staged", "--name-only"]).trim();
+    if (!staged) {
+      console.log(`No changes to commit on ${branch}`);
+      continue;
+    }
+
+    git(["commit", "-m", `Sync and translate ${changedFiles.length} files to ${branch}`]);
+    git(["push", "origin", branch]);
+    console.log(`Pushed changes to branch: ${branch}`);
   }
 }
 
-syncAndTranslate().catch((error) => {
-  console.error("Error in syncAndTranslate:", error);
-});
+module.exports = { getChangedFiles, resolveRange, syncAndTranslate };
+
+if (require.main === module) {
+  // Fail loudly. This used to swallow every error and still exit 0, so 23 of
+  // the last 299 pushes reported success while translating nothing.
+  syncAndTranslate().catch((error) => {
+    console.error("Error in syncAndTranslate:", error);
+    process.exit(1);
+  });
+}
