@@ -52,17 +52,21 @@ function assertNotTruncated(source, translated, label) {
   // Chinese runs roughly a third the character count of English, so compare
   // structure rather than length: markup and headings survive translation.
   const count = (text, re) => (text.match(re) || []).length;
+  // Headings and table markup inside a fenced code block are sample text, not
+  // structure; counting them would fail translations that legitimately
+  // reformat a code sample.
+  const outsideCode = (text) => text.replace(/^```[\s\S]*?^```/gm, "");
 
   const checks = [
-    ["headings", /^#{1,6} /gm],
-    ["table rows", /<tr[\s>]/g],
-    ["code fences", /^```/gm],
-    ["contract addresses", /0x[0-9a-fA-F]{40}/g],
+    ["headings", /^#{1,6} /gm, outsideCode],
+    ["table rows", /<tr[\s>]/g, outsideCode],
+    ["code fences", /^```/gm, (t) => t],
+    ["contract addresses", /0x[0-9a-fA-F]{40}/g, (t) => t],
   ];
 
-  for (const [name, re] of checks) {
-    const want = count(source, re);
-    const got = count(translated, re);
+  for (const [name, re, scope] of checks) {
+    const want = count(scope(source), re);
+    const got = count(scope(translated), re);
     if (got < want) {
       throw new Error(
         `Translation of ${label} looks truncated: ${got}/${want} ${name} survived`
