@@ -14,13 +14,27 @@ async function translateContent(content, language) {
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-5.6-sol",
       messages: [{ role: "system", content: prompt }],
-      max_tokens: 4096,
+      max_completion_tokens: 16384,
       temperature: 0.2,
     });
 
-    return response.choices[0].message.content.trim();
+    const choice = response.choices?.[0];
+    if (choice?.finish_reason === "length") {
+      throw new Error(
+        "Translation truncated (finish_reason: length); raise max_completion_tokens or split the input."
+      );
+    }
+
+    const translated = choice?.message?.content;
+    if (typeof translated !== "string" || translated.trim() === "") {
+      throw new Error(
+        `Translation returned no content (finish_reason: ${choice?.finish_reason ?? "unknown"}).`
+      );
+    }
+
+    return translated.trim();
   } catch (error) {
     console.error("Error translating content:", error);
     throw error;
