@@ -17,7 +17,8 @@ async function translateContent(content, language) {
       model: "gpt-5.6-sol",
       messages: [{ role: "system", content: prompt }],
       max_completion_tokens: 16384,
-      temperature: 0.2,
+      // Note: gpt-5.6-sol (reasoning model) only supports the default temperature (1);
+      // passing any other value returns a 400, so temperature is intentionally omitted.
     });
 
     const choice = response.choices?.[0];
