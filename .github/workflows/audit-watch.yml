@@ -10,7 +10,7 @@ name: Audit Reports Watch
 
 on:
   schedule:
-    - cron: '0 6 * * 1' # every Monday 06:00 UTC
+    - cron: '23 6 * * 1' # every Monday 06:23 UTC (offset off the hour to avoid GitHub cron drops)
   workflow_dispatch: # allow manual runs
 
 concurrency:
