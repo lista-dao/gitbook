@@ -40,7 +40,7 @@ jobs:
           # A PAT here lets the push to `en` trigger the downstream sync workflow
           # (en -> RAG). With the default GITHUB_TOKEN, en is still updated but the
           # RAG sync only runs on the next manual/other push to en.
-          token: ${{ secrets.AUDIT_SCAN_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.BOT_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
