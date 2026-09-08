@@ -1,6 +1,7 @@
 name: Translate Markdown Files
 
 on:
+  workflow_dispatch: # allow manual runs / backfill
   push:
     branches:
       - en
