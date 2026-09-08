@@ -31,6 +31,7 @@
 | BuyBack (USDT → SPCXB) | 0x3C5Fe2e3EC0CD37e4AC86e08AEba5A90bBd742b5 |
 | LiquidationVault | 0xEe3aa1AF4Ee231f2e1277A48fc4A2f29A3D7C028 |
 | PreIPODistributor | 0x9f7526EDAa18278D4bC1fA6b63B749A649Cb1844 |
+| MoolahVaultAccount | 0xA0b8b78208Cfe45dDC7AC7B51B108B2742B32652 |
 
 ### Vaults
 
@@ -60,6 +61,7 @@
 | MoolahVault(Take) | 0x68e83cA4c2869fC6E92774E549FF9d547EAE24Ab |
 | MoolahVault(APRO) | 0x2CB60a0E6c2a5fF4249eB890E267B660C6676Cc6 |
 | MoolahVault (XAUt) | 0x4109415de2271097fb5fa16af8a753aab8c46d6f |
+| MoolahVault(Fourmeme U Vault) | 0xaDa9dab14Ddd115F02a044cD61fFeb5c5E82653D |
 
 ### Providers
 

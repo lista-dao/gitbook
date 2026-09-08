@@ -154,6 +154,12 @@
         "cols": []
       },
       {
+        "section": "",
+        "name": "MoolahVaultAccount",
+        "address": "0xA0b8b78208Cfe45dDC7AC7B51B108B2742B32652",
+        "cols": []
+      },
+      {
         "section": "Vaults",
         "name": "MoolahVault(WBNB)",
         "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
@@ -295,6 +301,12 @@
         "section": "Vaults",
         "name": "MoolahVault (XAUt)",
         "address": "0x4109415de2271097fb5fa16af8a753aab8c46d6f",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(Fourmeme U Vault)",
+        "address": "0xaDa9dab14Ddd115F02a044cD61fFeb5c5E82653D",
         "cols": []
       },
       {
@@ -1454,6 +1466,96 @@
         "name": "RevenueCollector",
         "address": "0x8a6e34A7860dD9C46770635fe3Da4073C56f8131",
         "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestLockBuffer (USDT vault)",
+        "address": "0xf307A2DFcE4A64ceA2960241d387e3e671eE6762",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestLockBuffer (USDC vault)",
+        "address": "0xf9eb9EDCe360D98240dB4F72B9665a37789593Dc",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestRelayer (USDT vault)",
+        "address": "0x2d3097F1dd408be90dBF8200b08d9F5f7a43F764",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestRelayer (USDC vault)",
+        "address": "0xDBd85270726a03d8cFb086Ca4B35B0715d16F358",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingBroker (sUSDS/USDT)",
+        "address": "0x1961ef66C252cDCB09FaF464Ea1360Ca4bb4269C",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingBroker (sUSDS/USDC)",
+        "address": "0x0780b0E16C6d60798AFee808633f1E91665b403a",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool",
+        "address": "0x0a935ea575bf50CE8DC0FF61ae24B21BbcCfc554",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP",
+        "address": "0x12d0218A282Fc449Eb910B39b47527296664A522",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool",
+        "address": "0x2Bc918B6D3CB09cD415fA3AC74CE582F4Cd853e4",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP",
+        "address": "0x65cB8747a87AFD4AEF50221F97DEC0F058F185Ba",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral",
+        "address": "0xB2ebbe4FC0c37425cFDE99c7693a87e6c902987D",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider",
+        "address": "0x7F9DbdD3941FB9d33cfFeCf75F1bEfF147863021",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral",
+        "address": "0x4772B3356791F8e584200429909f7295EF16E9Fd",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider",
+        "address": "0x94A58615a100604fDE7fcac44258A5cD4B7c79e7",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "PositionManager",
+        "address": "0x6d9eD2A68c2759DA53A74D6a85Cd486737257A82",
+        "cols": []
       }
     ]
   },
@@ -1597,6 +1699,12 @@
         "section": "",
         "name": "ListaV2Router02",
         "address": "0x3CcbB50C93ffCdA64e58Cc9E299791Fd85A41941",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "QuoterV2",
+        "address": "0x6B61a2C67c45B40d754e4e7c1c565590685C03E2",
         "cols": []
       }
     ]
