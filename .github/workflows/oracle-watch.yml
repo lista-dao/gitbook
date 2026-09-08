@@ -26,7 +26,7 @@ name: Multi-Oracle Watch
 
 on:
   schedule:
-    - cron: '30 6 * * 1' # every Monday 06:30 UTC (after audit-watch at 06:00)
+    - cron: '43 6 * * 1' # every Monday 06:43 UTC (after audit-watch at 06:23)
   workflow_dispatch: # allow manual runs (recommended for the first run)
 
 concurrency:

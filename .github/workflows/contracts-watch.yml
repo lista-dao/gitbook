@@ -18,7 +18,7 @@ name: Contract Address Watch
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 7 * * 1'   # every Monday 07:00 UTC (after audit 06:00 / oracle 06:30)
+    - cron: '23 7 * * 1'   # every Monday 07:23 UTC (after audit 06:23 / oracle 06:43)
 
 concurrency:
   group: contracts-watch
