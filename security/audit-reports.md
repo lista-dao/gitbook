@@ -9,6 +9,7 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 | Feature | Audits |
 | ------- | ------ |
 | Lista Dao ClisBNBLaunch Pool Distributor Update | [2026-08](https://github.com/lista-dao/lista-token/blob/master/audits/ListaDao_ClisBNBLaunchPoolDistributor_Update_Audit_Report_Final.pdf) |
+| Moolah Vault Account | [HashDit · 2026-08](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-MoolahVaultAccount-AuditReport-20260825.pdf) |
 | Liquidation Vault | [HashDit · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-LiquidationVault-20260709.pdf) |
 | Lista Dao Market Factory Lista Revenue Distributor | [2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/ListaDao-MarketFactory-ListaRevenueDistributor-Audit-Final-20260714.pdf) · [2026-07](https://github.com/lista-dao/lista-token/blob/master/audits/ListaDao-MarketFactory-ListaRevenueDistributor-Audit-Final-20260714.pdf) |
 | Moolah Vault EIP170 | [HashDit · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-MoolahVault-EIP170-20260703.pdf) |
