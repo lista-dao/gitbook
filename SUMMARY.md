@@ -130,7 +130,7 @@
   * [Smart Contract](for-developer/dex/smart-contract.md)
 * [Lista Platform Services](for-developer/services/README.md)
   * [Position Data Maintenance](for-developer/services/position-data-maintenance.md)
-  * [Liquidation Logic (Service)](for-developer/services/liquidation-logic.md)
+  * [Liquidation (Service)](for-developer/services/liquidation-logic.md)
   * [Subscription Module](for-developer/services/subscription-module.md)
   * [Moolah Lending API](for-developer/services/lending-api/README.md)
     * [Overall](for-developer/services/lending-api/overall.md)

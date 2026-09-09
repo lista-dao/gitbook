@@ -56,8 +56,8 @@ Typical fields (names may differ in implementation):
                            │ UPSERT
                            ▼
                ┌───────────────────────┐     ┌───────────────────┐
-               │ moolah_user_position  │◄────│ Scheduled refresh  │
-               │ (user position table) │UPDATE│ (debt + liq. rate) │
+               │ User position store   │◄────│ Scheduled refresh  │
+               │ (indexed positions)   │UPDATE│ (debt + liq. rate) │
                └──────────┬────────────┘     └───────────────────┘
                           │ READ
           ┌───────────────┼────────────────────┐
@@ -83,7 +83,7 @@ Position data is updated by **consuming on-chain events** from Moolah (supply, w
 5. **Write operation log** — Optionally write to a user-operation log table.
 6. **Trigger alerts** — If the event is a liquidation, trigger Telegram (or other) alerts.
 
-**Idempotency:** Each event is tracked (e.g. Redis key with TTL 1500s) so the same event is not applied twice. Failed events are retried; after a max retry count they are skipped and processing continues.
+**Idempotency:** Each event is applied at most once. Events that cannot be processed are retried and, if they keep failing, are set aside so the pipeline does not stall.
 
 ### 4.2 Scheduled refresh
 
@@ -152,6 +152,6 @@ Moolah runs on **BSC and Ethereum**. Position data is usually stored in a single
 ## 9. Notes
 
 - **Precision:** Collateral and borrowed amount are usually stored in human form (e.g. 18 decimals); borrow shares are often stored as raw Wei.
-- **Read/write separation:** Writes go to the primary DB; reads may use replicas. Replication lag should be considered for consistency.
-- **Idempotency:** Event processing uses Redis (or similar) plus UPSERT so the same event is not applied twice.
+- **Consistency:** API reads can lag the latest indexed write. For any value you will sign a transaction against, read it on-chain.
+- **Idempotency:** Event processing is idempotent (dedup plus UPSERT), so the same event is not applied twice.
 - **Rate type:** Floating-rate and fixed-rate markets use different formulas for borrowed amount and liquidation price; the market config drives which path is used.

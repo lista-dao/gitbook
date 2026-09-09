@@ -57,7 +57,7 @@ Unbinds the wallet from Telegram and stops all notifications. Sends an unbind co
 
 ## Telegram Bot
 
-The Bot receives messages via **Webhook** (internal endpoint). Supported interactions:
+The Bot receives messages via **Webhook**. Supported interactions:
 
 | Command / action      | Description |
 |-----------------------|-------------|
