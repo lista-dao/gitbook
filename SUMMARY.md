@@ -39,6 +39,7 @@
     * [lisUSD's liquidity](introduction/collateral-debt-position-lisusd/lisusd/lisusds-liquidity.md)
   * [Technical Guide](introduction/collateral-debt-position-lisusd/technical-guide.md)
 * [RWA Markets](introduction/rwa-markets/README.md)
+  * [Pre-IPO](introduction/rwa-markets/pre-ipo.md)
   * [slisXAUE](introduction/rwa-markets/slisxaue.md)
 * [Lista Credit](introduction/lista-credit.md)
 * [Binance Launchpool: slisBNBx](introduction/binance-launchpool-clisbnb/README.md)
