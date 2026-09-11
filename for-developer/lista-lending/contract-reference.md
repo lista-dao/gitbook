@@ -2,7 +2,7 @@
 
 This page is the interface-level reference for the **Moolah** core contract — the singleton that holds every Lista Lending market. It is intended for auditors, security researchers, and integrators calling the contract directly (e.g. from Solidity, or from a non-TypeScript stack that cannot use the [SDK](../sdk.md)).
 
-Moolah is powered by Morpho and built on the Morpho Blue smart contracts, then extended with Lista-specific controls. Every market — regardless of collateral, oracle, or IRM — lives inside this one contract and is addressed by a market `Id`. For deployed addresses, see the [Smart Contract](smart-contract.md) reference; this page does not restate address tables. For higher-level flows see [Integration Patterns](integration-patterns.md); for the callback interfaces and emitted events see [Events & Callbacks](events-and-callbacks.md).
+Moolah is powered by Morpho and built on the Morpho Blue smart contracts, then extended with Lista-specific controls. This page covers the **core market contract only** — the ERC-4626 vault layer is in [Vault Reference](vault-reference.md), the provider-gated collaterals in [Providers](providers.md), and the fixed-term broker surface in [Broker Reference](broker-reference.md). Every market — regardless of collateral, oracle, or IRM — lives inside this one contract and is addressed by a market `Id`. For deployed addresses, see the [Smart Contract](smart-contract.md) reference; this page does not restate address tables. For higher-level flows see [Integration Patterns](integration-patterns.md); for the callback interfaces and emitted events see [Events & Callbacks](events-and-callbacks.md).
 
 All facts below are derived from `src/moolah/Moolah.sol` and `src/moolah/interfaces/IMoolah.sol`.
 
