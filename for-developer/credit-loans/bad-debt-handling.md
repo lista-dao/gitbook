@@ -4,7 +4,7 @@
 
 Credit Vault has a fairness issue if defaults are not explicitly recognized on-chain.
 
-On `UPFRONT_INTEREST` positions the full term's interest is booked and distributed early in the term (see [Loan Lifecycle](loan-lifecycle.md) for both interest modes), so early withdrawers may exit before default losses are reflected. If bad debt remains booked at face value, vault NAV is overstated and later withdrawers bear disproportionate liquidity risk.
+On `UPFRONT_INTEREST` positions the full term's interest is **owed from the start** rather than accruing with elapsed time (see [Loan Lifecycle](loan-lifecycle.md) for both interest modes), so it can be collected and supplied to the vault well before maturity — and early withdrawers may exit before default losses are reflected. If bad debt remains booked at face value, vault NAV is overstated and later withdrawers bear disproportionate liquidity risk.
 
 ## Write-Off Flow
 

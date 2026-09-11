@@ -27,7 +27,7 @@ Moolah is deployed as an upgradeable system.
 
 ## Oracle Architecture
 
-Moolah oracles expose `peek(address)`. Every deployed Lista oracle returns an 8-decimal price, but that is a property of those deployments, not something the interface declares or Moolah validates — see [Consuming Oracle Prices](../multi-oracle/consuming-prices.md) before trusting a scale on a market whose oracle you did not deploy.
+Moolah oracles expose `peek(address)`. Every deployed Lista oracle except `IdleOracle` (which returns a literal `0` for its idle collateral) returns an 8-decimal price, but that is a property of those deployments, not something the interface declares or Moolah validates — see [Consuming Oracle Prices](../multi-oracle/consuming-prices.md) before trusting a scale on a market whose oracle you did not deploy.
 
 ### Resilient Oracle
 

@@ -25,7 +25,7 @@ function onFlashLoan(address initiator, address token, uint256 amount, uint256 f
   external returns (bytes32);
 ```
 
-It must return `keccak256("ERC3156FlashBorrower.onFlashLoan")` — a wrong value reverts `Flash/callback-failed`. Separately, it must hold `amount + fee` and have approved the lender by the time the callback returns; otherwise the lender's `transferFrom` reverts `Hay/insufficient-allowance` or `Hay/insufficient-balance`.
+It must return `keccak256("ERC3156FlashBorrower.onFlashLoan")` — a wrong value reverts `Flash/callback-failed`. Separately, it must hold `amount + fee` and have approved the lender by the time the callback returns; otherwise the lender's `transferFrom` reverts `LisUSD/insufficient-allowance` or `LisUSD/insufficient-balance`.
 
 > **Flash loans cannot bid on CDP liquidations.** This fork makes the auction buy side permissioned — `Clipper.take` / `redo` are `auth` and `Interaction.buyFromAuction` is whitelisted. The liquidation surface that *is* open to third parties is on Lista Lending: see [Liquidator Integration](../lista-lending/liquidator-integration.md).
 

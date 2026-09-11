@@ -28,5 +28,5 @@ In many broker markets, base market rate is initialized to zero in Moolah and br
 
 | Broker Type | Product | Key Differentiator |
 | --- | --- | --- |
-| Lending Broker | Lista fixed term & fixed rate markets | Uses `FixedRateIRM` instead of utilization-based adaptive curve |
+| Lending Broker | Lista fixed term & fixed rate markets | Uses `FixedRateIrm` instead of utilization-based adaptive curve |
 | Credit Broker | Lista Credit Loans | Supports undercollateralized borrowing with credit-limit gating |

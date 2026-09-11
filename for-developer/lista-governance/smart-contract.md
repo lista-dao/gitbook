@@ -7,7 +7,7 @@
 > * `claim()` — only once the lock term has elapsed **and** the position is not auto-locked. Otherwise it reverts `no claimable tokens`.
 > * `earlyClaim()` — only while the position is still locked or auto-locked. Otherwise it reverts `cannot claim with penalty`.
 >
-> Two caveats. The penalty-free period is a bounded window (`freePenaltyEndTime`, currently year 9999) that a `MANAGER` can change. And `earlyClaim` checks an independent `earlyClaimBlacklist` before anything else, so a **blacklisted auto-locked position has no exit at all** — `claim()` is blocked by the auto-lock and `earlyClaim()` by the blacklist.
+> Two caveats. The penalty-free period is a bounded window (`freePenaltyEndTime`, currently year 9999) that a `MANAGER` can change. And `earlyClaim` checks an independent `earlyClaimBlacklist` before anything else. A blacklisted auto-locked position therefore cannot use `earlyClaim()`, and `claim()` is blocked while auto-lock is on — but the exit is **delayed, not removed**: `disableAutoLock()` is not gated by the penalty-free modifier and carries no blacklist check, and it converts the position to a fixed term ending `lockWeeks` weeks later, after which `claim()` works penalty-free. Worst case is a 52-week wait.
 >
 > The `veLista*` contracts below stay readable on-chain and existing positions can still be exited through them, but they should not be used for new integrations.
 

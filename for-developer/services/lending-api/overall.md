@@ -50,7 +50,7 @@ Returns the protocol snapshot. This endpoint takes **no query parameters**.
 
 ### `bStock` object
 
-bStock markets are **included** in `totalBorrowed`, `totalCollateral`, `totalDeposits` and the `collateralTokens` list; this object tallies the same markets again so they can be shown on their own. **Do not add it to the protocol-wide totals** — you would double-count. The shape is stable, and present even before the snapshot is populated.
+bStock markets are **included** in `totalBorrowed`, `totalCollateral` and the `collateralTokens` list; this object tallies the same markets again so they can be shown on their own. **Do not add `bStock.totalBorrowed` / `bStock.totalCollateral` to the protocol-wide totals** — you would double-count. `totalDeposits` is a vault-level aggregate and has no bStock counterpart. The shape is stable, and present even before the snapshot is populated.
 
 | Field | Type | Description |
 |-------|------|-------------|

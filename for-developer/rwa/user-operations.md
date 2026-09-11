@@ -4,7 +4,7 @@ Users call `RWAEarnPool` methods for subscription and redemption, after a one-ti
 
 ## Flow
 
-1. User calls `RWAEarnPool.deposit`. The pool pulls `USDT` from the caller **straight to `RWAAdapter`** — it never holds the asset itself, so do not expect a balance on the pool.
+1. User calls `RWAEarnPool.deposit`. The pool pulls `USDT` from the caller **straight to `RWAAdapter`**, so it holds no deposited principal. The only asset balance it carries is withdrawal liquidity the adapter has pushed back via `finishWithdraw`, waiting to be claimed — do not read the pool's balance as AUM.
 2. Pool mints shares to the `receiver` argument (not necessarily `msg.sender`).
 3. `RWAAdapter` forwards into the external vault flow.
 4. For redemption, user requests withdrawal first, then claims when funds are available.

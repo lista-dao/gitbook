@@ -16,7 +16,7 @@ Users interact with `RWAEarnPool` for deposit and withdrawal requests:
 
 `RWAEarnPool` routes funds to `RWAAdapter`, which handles asynchronous vault operations through Centrifuge `AsyncVault`.
 
-Bots periodically execute vault deposit/withdraw request-confirm flows and call `notifyInterest` to keep share NAV growth updated.
+Bots (the `BOT` role on `RWAAdapter`) periodically execute the vault deposit/withdraw request-confirm flows and call `RWAAdapter.updateVaultAssets()`, which forwards accrued interest to the pool through `notifyInterest`. `notifyInterest` itself is adapter-only and cannot be called by a bot.
 
 ## Contents
 
