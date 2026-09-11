@@ -14,9 +14,11 @@ A provider sits between user and Moolah core for specific collateral types. Inst
 | Provider | Collateral Type | `slisBNBx` Minting |
 | --- | --- | --- |
 | `SlisBNBProvider` | `slisBNB` liquid staking token | Yes |
-| `SmartProvider` | Lista StableSwap LP tokens | Yes |
+| `SmartProvider` | Lista StableSwap LP tokens | Only the slisBNB/BNB instance |
 | `BNBProvider` | Native BNB wrapped to WBNB | No |
 | `CreditBroker` | Lista Credit Token | No |
+
+> `CreditBroker` appears in **both** tables on purpose: on the Credit market it is registered as the collateral provider *and* as the broker. Both `Moolah.providers(id, creditToken)` and `Moolah.brokers(id)` return the same address, so it gates collateral movement and borrow/repay origination at once. It is the only contract registered in both roles.
 
 ## Broker Integration
 

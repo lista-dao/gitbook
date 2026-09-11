@@ -1,5 +1,7 @@
 # Flash Loan
 
+> **The lisUSD CDP is being wound down** — see [Mechanics](mechanics.md) for the live gates. Flash minting is documented here for existing integrations and for auditors; new integrations should use [Lista Lending](../lista-lending/README.md), whose `Moolah.flashLoan` is described in the [contract reference](../lista-lending/contract-reference.md).
+
 Flash Loans are uncollateralized loans that allow the user to borrow lisUSD as long as the borrowed amount (and a fee) is returned before the end of the transaction.
 
 {% hint style="warning" %}
@@ -26,15 +28,15 @@ To get the fee, call the `flashFee(address token, uint256 amount)` function that
 
 ### Code example
 
-flashLender — [flash.sol](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol)
+flashLender — [flash.sol](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/flash.sol)
 
-flashBorrower — [flashBorrower.sol](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/mock/flashBorrower.sol)
+flashBorrower — [flashBorrower.sol](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/mock/flashBorrower.sol)
 
 ### Step-by-step
 
 #### 1. Set up your flashBorrower contract
 
-Your contract must conform to the [ERC3156FlashBorrower ](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol)interface by implementing the `onFlashLoan()` function.&#x20;
+Your contract must conform to the [ERC3156FlashBorrower ](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol)interface by implementing the `onFlashLoan()` function.&#x20;
 
 To interact with flashLender, your contract must implement _`flashBorrow(token, amount)`_ and _`onFlashLoan(initiator, token, amount, fee, data)`_, which is a callback function called during the execution of _`flashLoan()`._&#x20;
 
@@ -99,7 +101,7 @@ contract FlashBorrower is IERC3156FlashBorrower {
 ```
 
 {% hint style="info" %}
-* The flashBorrower must implement the [IERC3156FlashBorrower](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol), and [onFlashLoan()](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol#L30) must return the [CALLBACK\_SUCCESS](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol#L108) hash.&#x20;
+* The flashBorrower must implement the [IERC3156FlashBorrower](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol), and [onFlashLoan()](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol#L30) must return the [CALLBACK\_SUCCESS](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/flash.sol#L108) hash.&#x20;
 {% endhint %}
 
 #### 2. Understand how to interact with flashLender
@@ -119,7 +121,7 @@ Understand the functions you want to interact with:
 3. `flashLoan(IERC3156FlashBorrower receiver, address token, uint256 amount, bytes calldata data)` — mints _token `amount`_ to _`receiver`_ with extra _data_ (if any), and expects a return equal to `CALLBACK_SUCCESS`.
 4. `function accrue()` — sends the surplus fee to _vow.sol_.
 
-If you're curious, understand the MakerDao parameters/constants used in the [flash.sol](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol).
+If you're curious, understand the MakerDao parameters/constants used in the [flash.sol](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/flash.sol).
 
 1. `vat` — Address of vat.sol.
 2. `hayJoin` — Address of hayJoin.sol.
@@ -140,7 +142,6 @@ For a deeper understanding of the MakerDao contract, such as var, hay, vow, etc,
 
 flashLender is available by the following addresses:
 
-* Testnet — coming soon
 * Mainnet — [0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa](https://bscscan.com/address/0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa)&#x20;
 
 A typical interaction follows this workflow:
@@ -151,10 +152,10 @@ A typical interaction follows this workflow:
 4. flashLender then burns the minted loan and stores the fee as surplus.
 
 {% hint style="info" %}
-* The flashBorrower must implement the [I](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol), and [onFlashLoan()](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol#L30) must return the [CALLBACK\_SUCCESS](https://github.com/helio-money/helio-smart-contracts/blob/master/contracts/flash.sol#L108) hash.&#x20;
+* The flashBorrower must implement the [I](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol), and [onFlashLoan()](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/interfaces/IERC3156FlashBorrower.sol#L30) must return the [CALLBACK\_SUCCESS](https://github.com/lista-dao/lista-dao-contracts/blob/master/contracts/flash.sol#L108) hash.&#x20;
 {% endhint %}
 
 ### Close-to-life usage example
 
-Look into [the tests ](https://github.com/helio-money/helio-smart-contracts/blob/master/test/flash.test.js)to find a close-to-life usage example.
+Look into [the tests ](https://github.com/lista-dao/lista-dao-contracts/blob/master/test/flash.test.js)to find a close-to-life usage example.
 

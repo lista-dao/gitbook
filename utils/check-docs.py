@@ -52,3 +52,25 @@ print('table column mismatches:',len(tb))
 for b in tb[:10]: print('  ',*b)
 print('ORPHANED table rows (header lost — renders as literal text):',len(orphan))
 for b in orphan[:15]: print('  ',*b)
+
+# --- external links (opt-in: --external) -----------------------------------
+if '--external' in sys.argv:
+    import urllib.request, urllib.error
+    ext={}
+    for f in md:
+        for m in re.finditer(r'\]\((https?://[^)\s]+)\)', open(f,encoding='utf-8').read()):
+            ext.setdefault(m.group(1).rstrip('.,'), set()).add(f)
+    print(f'external links: {len(ext)} unique')
+    dead=[]
+    for u,srcs in sorted(ext.items()):
+        try:
+            rq=urllib.request.Request(u, method='HEAD', headers={'User-Agent':'Mozilla/5.0'})
+            urllib.request.urlopen(rq, timeout=12)
+        except urllib.error.HTTPError as e:
+            if e.code in (403,405,429):
+                continue          # bot-walls / HEAD not allowed — inconclusive, not dead
+            dead.append((u, e.code, sorted(srcs)))
+        except Exception as e:
+            dead.append((u, type(e).__name__, sorted(srcs)))
+    print('dead external links:', len(dead))
+    for u,why,srcs in dead: print('  ', why, u, '<-', ', '.join(srcs))
