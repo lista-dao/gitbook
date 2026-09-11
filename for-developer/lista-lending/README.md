@@ -2,7 +2,7 @@
 
 ## Overview
 
-Moolah is Lista DAO's decentralized lending protocol on BNB Smart Chain, branded as Lista Lending. It is powered by Morpho and built on Morpho Blue smart contracts.
+Moolah is Lista DAO's decentralized lending protocol, branded as Lista Lending. It is deployed on BNB Smart Chain and on Ethereum — see [Ethereum](smart-contract-ethereum.md) for that address set, and note the [SDK](../sdk.md)'s Ethereum coverage lags the protocol. It is powered by Morpho and built on Morpho Blue smart contracts.
 
 Moolah extends standard Morpho market architecture with Lista-specific controls and integrations, including minimum loan floor, resilient oracle routing, protocol-level reentrancy protection, upgradeability, and role-based access control.
 

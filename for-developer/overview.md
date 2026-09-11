@@ -4,7 +4,7 @@
 
 ## Lista DAO for developers
 
-Lista DAO is a BNB Chain DeFi protocol spanning lending, liquid staking, a decentralized stablecoin, and a concentrated-liquidity DEX. The current developer-facing product set is anchored by **Lista Lending (Moolah)** — a Morpho-based isolated-market lending protocol — alongside **slisBNB** liquid staking, **Smart Lending**, the **V3 DEX**, **RWA** markets, **Credit Loans**, the **LISTA** governance token, **lisAster**, the **slisBNBx** Launchpool certificate, and the legacy **lisUSD** Collateral Debt Position. This section is the entry point for integrators building on Lista, auditors reviewing the contracts, and developers learning how the pieces fit together. Each product below links to its developer README and its on-chain contract reference.
+Lista DAO is a DeFi protocol spanning lending, liquid staking, a decentralized stablecoin, and a concentrated-liquidity DEX. Most of it is deployed on BNB Smart Chain; Lista Lending also runs on Ethereum (see [Networks](#networks)). The current developer-facing product set is anchored by **Lista Lending (Moolah)** — a Morpho-based isolated-market lending protocol — alongside **slisBNB** liquid staking, **Smart Lending**, the **V3 DEX**, **RWA** markets, **Credit Loans**, the **LISTA** governance token, **lisAster**, the **slisBNBx** Launchpool certificate, and the legacy **lisUSD** Collateral Debt Position. This section is the entry point for integrators building on Lista, auditors reviewing the contracts, and developers learning how the pieces fit together. Each product below links to its developer README and its on-chain contract reference.
 
 ## Product map
 
@@ -19,9 +19,10 @@ Lista DAO is a BNB Chain DeFi protocol spanning lending, liquid staking, a decen
 | **Credit Loans** | Fixed-term, fixed-rate `CreditBroker` lending gated by off-chain credit scoring represented on-chain via Merkle roots and a non-transferable `CreditToken`. | [README](credit-loans/README.md) · [Loan Lifecycle](credit-loans/loan-lifecycle.md) | [Smart Contract](credit-loans/smart-contract.md) |
 | **Governance (LISTA)** | The `LISTA` token and governance contracts. Note: the veLISTA voting-escrow mechanism is retired under LIP-024 — new locking has been disabled on-chain since 2026-04-07, and governance voting has moved to plain LISTA on Snapshot. Existing locks can still be exited without penalty — `claim()` after the term elapses, `earlyClaim()` while still locked; the two are mutually exclusive. | [README](lista-governance/README.md) | [Smart Contract](lista-governance/smart-contract.md) |
 | **lisAster** | ASTER staking aggregator: deposit ASTER to mint the transferable `lisAster` ERC-20, then stake it for epoch-based rewards. | [README](lisaster/README.md) | [Smart Contract](lisaster/smart-contract.md) |
-| **slisBNBx** | Non-transferable collateral certificate (`SlisBNBxMinter`) that lets a Moolah collateral position also join Binance Launchpool. Formerly `clisBNB`. | [README](clisbnb/README.md) · [Delegation](clisbnb/delegation.md) | [Smart Contract](clisbnb/smart-contract.md) |
+| **Lista Rights** | Reward distribution — `LendingRewardsDistributorV2` and `RewardsRouter`. | [README](lista-rights/README.md) | [Smart Contract](lista-rights/smart-contract.md) |
+| **slisBNBx** | A non-transferable collateral certificate that lets a Moolah collateral position also join Binance Launchpool. Formerly `clisBNB`. Minting and burning are driven by `SlisBNBxMinter`, whose address is on the [Lista Lending BSC Core](lista-lending/smart-contract-bsc-core.md) page rather than the slisBNBx one. | [README](clisbnb/README.md) · [Delegation](clisbnb/delegation.md) | [Smart Contract](clisbnb/smart-contract.md) |
 
-Cross-cutting references: the [Multi-Oracle](multi-oracle.md) resilient price layer that backs lending and CDP, and [Lista Platform Services](services/README.md) for the off-chain APIs and data services.
+Cross-cutting references: the resilient price layer behind lending and the CDP — start at [Standard Collaterals](multi-oracle-standard.md) for the per-asset sources, or [Consuming Oracle Prices](multi-oracle/consuming-prices.md) to read prices in code — and [Lista Platform Services](services/README.md) for the off-chain APIs.
 
 ## Find your path
 

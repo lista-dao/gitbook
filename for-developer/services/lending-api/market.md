@@ -2,7 +2,7 @@
 
 A lending market is defined by a collateral/loan asset pair, an LLTV, an interest rate model (IRM), and an oracle. These endpoints expose market listings, per-market detail, the vaults that fund a market, historical borrow/supply series, and the raw on-chain market parameters used to build transactions.
 
-All paths are under **Base URL** `/api/moolah`. List and detail responses are served from a short-lived server-side cache, so values reflect the last sync rather than live on-chain state. USD and asset amounts are returned as fixed-point decimal strings (18 decimal places) unless noted. `GET /allMarkets` is the exception — it returns raw on-chain base units throughout, despite no field name ending in `Wei`.
+All paths are under **Base URL** `/api/moolah`. List and detail responses are served from a short-lived server-side cache, so values reflect the last sync rather than live on-chain state. USD and asset amounts are returned as fixed-point decimal strings (18 decimal places) unless noted. `GET /allMarkets` is the exception — it returns raw on-chain base units throughout, despite no field name ending in `Wei`. It also carries **no decimals fields**, unlike the liquidation feeds, so read `decimals()` from each token contract rather than assuming 18. Defaulting to 18 puts USDT and USDC out by 1e12.
 
 The `chain` query parameter is a **string network key** (`bsc`, `ethereum`, `bscTest`), not a numeric chain ID. When omitted it defaults to the live network (`bsc` in production). List sorting uses the pair `sort` (a field key) + `order` (`asc` | `desc`), not `sortBy`/`sortOrder`.
 
@@ -48,7 +48,7 @@ Paginated list of borrow markets with sorting and filtering.
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | string | Market identifier (bytes32). |
-| `lltv` | string | Liquidation loan-to-value. |
+| `lltv` | string | Liquidation loan-to-value as a **decimal fraction** (e.g. `0.86`). Note `GET /allMarkets` returns the same field scaled to 1e18. |
 | `liquidity` | string | Available liquidity in loan-token units (decimal-adjusted). |
 | `liquidityUsd` | string | Available liquidity in USD. |
 | `loan` | string | Loan token name/symbol. |
