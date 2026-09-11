@@ -69,7 +69,7 @@ function withdrawCollateral(
 
 On withdrawal the caller must be `onBehalf` or authorized for it (`unauthorized sender`).
 
-Liquidation is the exception to the gate: Moolah transfers seized collateral straight to the liquidator and only notifies the provider afterwards, so collateral can leave a position without any provider call.
+Liquidation is the exception to the *user-facing* gate: Moolah transfers the seized collateral straight to the liquidator and then calls the provider's `liquidate(id, borrower)` hook. So collateral can leave a position without anyone calling `withdrawCollateral` — but the provider is still invoked, and on `SlisBNBProvider` that hook re-syncs the position and burns the corresponding `slisBNBx`, so Launchpool eligibility follows the liquidation.
 
 Supplying through this provider also mints the non-transferable `slisBNBx` certificate that carries Binance Launchpool eligibility, and withdrawing burns it. The delegatee that holds it, and how to change it, are covered in [slisBNBx Delegation](../clisbnb/delegation.md) — including that the certificate covers the user's part only, not the fee slice.
 
