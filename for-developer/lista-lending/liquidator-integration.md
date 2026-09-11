@@ -20,7 +20,7 @@ Moolah deploys three liquidator contracts. Only one of them is for you.
 | `Liquidator` | `BOT` role only | Protocol-held funds | Lista's internal keeper. Not callable by external parties. |
 | `BrokerLiquidator` | `BOT` role only | Protocol-held funds | Fixed-term / broker markets, where health accounting sits at the broker. Not callable by external parties. |
 
-Deployed addresses: [BSC Core](smart-contract-bsc-core.md) and [Ethereum](smart-contract-ethereum.md).
+Deployed addresses: [BSC Core](smart-contract-bsc-core.md) for `Liquidator` and `PublicLiquidator`, [BSC Lending Brokers](smart-contract-bsc-brokers.md) for `BrokerLiquidator`, and [Ethereum](smart-contract-ethereum.md) for all three.
 
 ---
 
