@@ -42,13 +42,13 @@ To deploy a vault, specify the following parameters:
 
 #### Before deployment, you need to prepare the following parameters:
 
-* #### manager: Manager address (must be a timelock contract), this will be the same as the owner role
-* #### asset: Asset address
-* #### name: Name of the vault, used primarily for display and identification purposes
-* #### symbol: The abbreviation or ticker symbol of the vault.
-* #### This symbol is a shorter way to represent the vault, typically used in interfaces and listings.
-* #### curator: Curator address (must be a timelock contract)
-* #### allocator: Allocator address (does not need to be a timelock contract)
+* **manager: Manager address (must be a timelock contract), this will be the same as the owner role**
+* **asset: Asset address**
+* **name: Name of the vault, used primarily for display and identification purposes**
+* **symbol: The abbreviation or ticker symbol of the vault.**
+* **This symbol is a shorter way to represent the vault, typically used in interfaces and listings.**
+* **curator: Curator address (must be a timelock contract)**
+* **allocator: Allocator address (does not need to be a timelock contract)**
 
 #### All these parameters need values (marked as "TODO" in your reference image).
 
@@ -74,11 +74,11 @@ Run the following command to deploy the vault contract to BSC network:
 
 This command will:
 
-* #### Execute the deployment script
-* #### Connect to the BSC network
-* #### Broadcast the transaction to deploy the contract
-* #### Verify the contract on the blockchain explorer
-* #### Provide verbose output (-vvv) for detailed logs
+* **Execute the deployment script**
+* **Connect to the BSC network**
+* **Broadcast the transaction to deploy the contract**
+* **Verify the contract on the blockchain explorer**
+* **Provide verbose output (-vvv) for detailed logs**
 
 #### Make sure you have sufficient funds in your wallet to cover gas fees and that your environment is properly configured for Foundry.
 
@@ -155,7 +155,7 @@ Parameters:
 * `collateralToken (address)`
 * `oracle (address)`
 * `irm (address)`
-* `lltv (uint256)`&#x20;
+* `lltv (uint256)`
 
 Note: This marks a market for removal. The market will only be removed after the Vault's position in it is zero, and the updateWithdrawQueue function has been called.
 
