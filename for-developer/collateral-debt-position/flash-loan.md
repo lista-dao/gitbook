@@ -12,7 +12,9 @@ To use Flash Loans and get profit from them, you need a good understanding of BN
 
 There are various applications of Flash Loans.
 
-An obvious example is arbitrage between assets, where the user can flash-loan lisUSD to purchase BNB in a Dutch auction that happens during somebody's [Lista loan liquidation](../../introduction/collateral-debt-position-lisusd/collateral/loan-liquidation.md), immediately swap lisUSD for another asset on a DEX, then immediately swap the obtained asset for lisUSD on another DEX where the asset's ratio is higher, and repay Lista the flash loan + interest, keeping the difference — all within one loan transaction.
+The usual one is DEX arbitrage: flash-mint lisUSD, buy an asset where it is cheap, sell it where it is dearer, repay the loan plus the fee and keep the difference — all in one transaction, with no capital of your own.
+
+> **Not CDP liquidations.** This fork gates the auction buy side — `Clipper.take` and `redo` are `auth`, and `Interaction.buyFromAuction` is behind `auctionWhitelist` — so a flash loan cannot be used to bid on a CDP liquidation. The liquidation surface that *is* open to third parties is on Lista Lending: see [Liquidator Integration](../lista-lending/liquidator-integration.md).
 
 ### Involved entities
 
@@ -109,15 +111,15 @@ contract FlashBorrower is IERC3156FlashBorrower {
 Understand the parameters used in flashLender:
 
 1. `CALLBACK_SUCCESS` — Hash of custom string, returned on success.
-2. `token` (address) — address of the BNB ERC-20 token that EOA flash-loans.
+2. `token` (address) — the token being flash-minted. Only **lisUSD** is supported; anything else reverts `Flash/token-unsupported`.
 3. `amount` (uint256) — amount of the flash loan.
 4. `receiver` (IERC3156FlashBorrower) — address of the flashBorrowed deployed by the EOA.
-5. `data` (bytes calldata) — rudimentary non-used parameter left not to change the `flashLoan()` signature.
+5. `data` (bytes calldata) — arbitrary caller data. The lender does not interpret it; it is forwarded verbatim as the final argument of `onFlashLoan`, which is where the borrower decodes it (the example above does exactly this).
 
 Understand the functions you want to interact with:
 
-1. `maxFlashLoan(address token)` — returns “max” if _token_ is supported destablecoin.
-2. `flashFee(address token, uint256 amount)` — applies “toll” on _amount_ and returns if _token_ is a supported destablecoin.
+1. `maxFlashLoan(address token)` — returns the `max` ceiling for lisUSD, and `0` for any other token.
+2. `flashFee(address token, uint256 amount)` — applies `toll` to _amount_ and returns the fee as an 18-decimal wad; reverts `Flash/token-unsupported` for any token but lisUSD.
 3. `flashLoan(IERC3156FlashBorrower receiver, address token, uint256 amount, bytes calldata data)` — mints _token `amount`_ to _`receiver`_ with extra _data_ (if any), and expects a return equal to `CALLBACK_SUCCESS`.
 4. `function accrue()` — sends the surplus fee to _vow.sol_.
 
