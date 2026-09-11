@@ -25,13 +25,15 @@ Paginated list of borrow markets with sorting and filtering.
 |-----------|------|----------|-------------|
 | `page` | number | No | Page number (1-based). Defaults to `1`. |
 | `pageSize` | number | No | Items per page. Defaults to `10`, capped at `50`. |
-| `sort` | string | No | Sort key: `rate`, `liquidity`, `lltv`, `loan`, `collateral`, or `termType`. Unrecognized values fall back to borrow rate. Results are grouped by a Lista-assigned display order first, with `sort` / `order` applied within each group. |
+| `sort` | string | No | Sort key: `rate`, `liquidity`, `lltv`, `loan`, `collateral`, or `termType`. Unrecognized values fall back to borrow rate. Note `rate` orders by the **net** borrow rate (gross minus borrow-emission APY) while the response returns the gross `rate`, and `liquidity` orders by the USD value. Results are grouped by a Lista-assigned display order first, with `sort` / `order` applied within each group. |
 | `order` | string | No | Sort direction: `asc` or `desc` (case-insensitive). Defaults to `desc` when omitted or unrecognised. |
 | `keyword` | string | No | Free-text search over loan/collateral symbols. Max length 50. |
 | `loans` | string[] | No | Filter by loan token symbol(s). Repeat the param for multiple values (e.g. `loans=USDT&loans=USDC`). |
 | `collaterals` | string[] | No | Filter by collateral token symbol(s). Repeatable. |
-| `zone` | string | No | Comma-separated zone id(s). Defaults to `0`. |
+| `zone` | string | No | Comma-separated zone id(s). Defaults to `0`, which is a **filter, not "all"** — the default response excludes bStock, smart-collateral and fixed-term markets. Pass the zones you want explicitly. |
 | `chain` | string | No | Network key (`bsc`, `ethereum`, `bscTest`). Defaults to the live network — `bsc` in production. Not validated: an unrecognised key returns an empty result, not a `400`. |
+
+> **Repeat array parameters; do not send a single bare value.** On `/borrow/markets` and `/vault/list` an un-repeated `?loans=USD1` arrives as a string and the query builder throws — the request fails with HTTP `500`, not an empty list. Use `?loans=USD1&loans=USDT`, or `?loans[]=USD1` for one value. (The `/api/liquidation/zone/*` feeds behave differently: they match nothing instead of failing.)
 
 #### Response
 
@@ -90,7 +92,7 @@ Returns the market object. When the id is unknown the response omits the `data` 
 | `descriptionZh` | string | Chinese market description. |
 | `curator` | string | Curator name. |
 | `curatorIcon` | string | Curator icon URL. |
-| `performanceFeeRate` | number | Market performance fee rate. |
+| `performanceFeeRate` | number | Market performance fee rate, **1e18-scaled** — 10% arrives as `100000000000000000`, not `0.1`. |
 | `borrowRate` | number | Current borrow rate. |
 | `supplyApy` | string | Supply APY. |
 | `loanToken` | string | Loan token address. |

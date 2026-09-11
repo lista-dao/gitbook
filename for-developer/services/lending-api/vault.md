@@ -28,16 +28,14 @@ Paginated list of vaults with filtering and sorting.
 | `chain` | string | No | `bsc` \| `bscTest` \| `ethereum`. Comma-separated for multiple (e.g. `bsc,ethereum`). Defaults to the live network. |
 | `page` | number | No | 1-based page number. Default `1`. |
 | `pageSize` | number | No | Items per page. Default `10`, max `50` (values above 50 are clamped). |
-| `assets` | string[] | No | Filter by deposit-asset **symbol** (matched against the vault's asset symbol, e.g. `assets=USD1&assets=WBNB`). |
-| `curators` | string[] | No | Filter by curator **name** (e.g. `Lista DAO`), matched exactly. Passing an address returns an empty list rather than an error. |
+| `assets` | string[] | No | Filter by deposit-asset **symbol**, repeated (e.g. `assets=USD1&assets=WBNB`). A single bare value fails the request with HTTP `500` — use `?assets[]=USD1` for one. |
+| `curators` | string[] | No | Filter by curator **name** (e.g. `Lista DAO`), matched exactly — an address matches nothing. **Send it repeated** (`?curators=A&curators=B`): a single un-repeated value arrives as a string and the query builder fails on it, returning HTTP `500`. |
 | `keyword` | string | No | Free-text search over vault name/keywords. Max 50 chars; ignored if empty. |
 | `sort` | string | No | Sort field key — one of `deposits`, `apy`, `utilization`. Unknown values fall back to `deposits`. |
 | `order` | string | No | `asc` or `desc`. Default `desc`. |
 | `zone` | number | No | Zone (segment) filter. Default `0`. |
 
 > Results are grouped by a Lista-assigned display order before the requested `sort` / `order` is applied.
->
-> The response also always contains a synthetic **"Idle Market"** row representing un-allocated liquidity. It ignores the `keyword` and `zone` filters, and `collateralSymbol`, `collateralIcon`, `icon`, `liquidity`, `utilization` and `smartCollateralConfig` are all `null` on it. A strictly-typed client will fail to parse the response unless those fields are modelled as nullable.
 
 #### Response
 
@@ -56,7 +54,7 @@ Paginated list of vaults with filtering and sorting.
 | `apy` | string | Current supply APY. |
 | `emissionApy` | string | Additional APY from token emissions/rewards. |
 | `emissionEnabled` | boolean | Whether reward emissions are active for this vault. |
-| `emissionDetail` | array | Reward breakdown (token + rate metadata) derived from the current reward config. |
+| `emissionDetail` | object | Reward breakdown keyed by token symbol — `{ [symbol]: { apy, total, icon } }`, or `{}` when there is none. Note `/vault/allocation` returns an array for its own emission field. |
 | `deposits` | string | Total assets deposited (token units). |
 | `depositsUsd` | string | Total deposits valued in USD. |
 | `asset` | string | Deposit (loan) asset token address. |
@@ -103,7 +101,7 @@ Full details for a single vault, including its curator metadata and the collater
 | `liquidity` | string | Idle (un-allocated) liquidity in the vault. |
 | `emissionApy` | string | Additional APY from token emissions/rewards. |
 | `emissionEnabled` | boolean | Whether reward emissions are active. |
-| `emissionDetail` | array | Reward breakdown derived from the current reward config. |
+| `emissionDetail` | object | Reward breakdown keyed by token symbol — `{ [symbol]: { apy, total, icon } }`, or `{}` when there is none. |
 | `asset` | string | Deposit (loan) asset token address. |
 | `assetSymbol` | string | Deposit asset symbol. |
 | `assetIcon` | string | Deposit asset icon URL. |
@@ -147,7 +145,7 @@ Daily snapshots of a vault's total deposits and APY over a time range. Both endp
 | `startTime` | number | No\* | Range start, UNIX timestamp in **seconds** (UTC day boundary). |
 | `endTime` | number | No\* | Range end, UNIX timestamp in **seconds** (UTC day boundary). |
 
-> \* Syntactically optional but **required in practice**: omitting either bound produces an invalid date range and returns an empty array rather than the full history, with no error.
+> \* Syntactically optional, but the two behave differently when omitted, and neither raises an error. Omitting `startTime` (or both) returns an **empty array**. Omitting `endTime` returns the **entire history from `startTime` onward** — the bound is compared as a string, and the placeholder it degrades to sorts above every real date. Pass both explicitly.
 
 #### Response
 
@@ -166,6 +164,8 @@ Array of daily snapshot objects, ordered ascending by date:
 ## 4. Vault allocation
 
 ### GET /api/moolah/vault/allocation
+
+> The response also includes a synthetic **"Idle Market"** row representing un-allocated liquidity. It ignores the `keyword` and `zone` filters, and `collateralSymbol`, `collateralIcon`, `icon`, `liquidity`, `utilization` and `smartCollateralConfig` are all `null` on it. A strictly-typed client will fail to parse the response unless those fields are modelled as nullable.
 
 Paginated breakdown of how a vault's liquidity is allocated across its lending markets.
 
@@ -223,5 +223,5 @@ Paginated breakdown of how a vault's liquidity is allocated across its lending m
 ## Notes
 
 - **Amounts are strings.** Token-denominated and APY/USD values are returned as decimal strings to preserve precision; use the `displayDecimal` hint for presentation.
-- **Economic values are live, on-chain-derived.** APY, utilization, deposits, caps, and emission figures reflect the current protocol state and are governance/manager-adjustable on-chain — treat them as snapshots, not fixed terms.
+- **Economic values come from the indexer and a short-lived cache, not from a live chain read.** APY, utilization, deposits, caps, and emission figures reflect the current protocol state and are governance/manager-adjustable on-chain — treat them as snapshots, not fixed terms.
 - For the per-market interest-rate, LLTV, and oracle details behind an allocation, see the [Market API](market.md). For protocol-wide totals, see [Overall](overall.md).

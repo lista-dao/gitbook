@@ -41,7 +41,7 @@ Error example:
 
 ### Reading responses
 
-- **Check `code`, not the HTTP status alone.** Successful responses return HTTP `200` with `code = "000000000"`. Client errors (bad or missing parameters) return HTTP `400` with a non-success `code`; server-side failures return HTTP `500`. An **unknown resource is not an error** — a valid request for an id that does not exist returns HTTP `200` with an empty `data` payload (`{}` or `[]`), so check for emptiness rather than expecting a `404`. Always branch on `code === "000000000"` and read the payload from `data`.
+- **Check `code`, not the HTTP status alone.** Successful responses return HTTP `200` with `code = "000000000"`. Client errors (bad or missing parameters) return HTTP `400` with a non-success `code`; server-side failures return HTTP `500`. An **unknown resource is not an error** — a valid request for an id that does not exist returns HTTP `200`, so check the payload rather than expecting a `404`. Three shapes are possible: `{}`, `[]`, or — on `GET /market/:marketId` — **no `data` key at all**. Read it defensively. Always branch on `code === "000000000"` and read the payload from `data`.
 - **`timestamp` is in milliseconds**, not seconds — note this when comparing against the `startTime` / `endTime` history parameters, which are in **seconds**.
 
 ### Common error codes

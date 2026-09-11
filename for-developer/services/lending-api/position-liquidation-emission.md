@@ -48,14 +48,15 @@ Array of position objects:
 | `borrowShares` | string | Borrow shares (raw). |
 | `totalBorrowAssets` | string | Market total borrow assets. |
 | `totalBorrowShares` | string | Market total borrow shares. |
-
-> **This endpoint is the exception to the page convention above.** *Every* numeric field here is a raw on-chain integer — `collateral`, `borrowed`, `borrowShares`, `totalBorrowAssets`, `totalBorrowShares` and `collateralPrice` — even though none of their names end in `Wei`.
 | `collateralToken` | string | Collateral token address. |
 | `collateralDecimal` | number | Collateral token decimals. |
 | `loanToken` | string | Loan token address. |
 | `oracle` | string | Oracle contract address used for this market. |
 | `lltv` | string | Liquidation LTV as a **decimal fraction** (e.g. `0.86`) — note this differs from `/api/moolah/allMarkets`, which returns it scaled to 1e18. |
 | `collateralPrice` | string | Live oracle price used to select the position (raw, as returned by the on-chain `getPrice` call). |
+
+> **This endpoint is the exception to the page convention above.** The amount fields here are **raw on-chain integers** — `collateral`, `borrowed`, `borrowShares`, `totalBorrowAssets`, `totalBorrowShares` and `collateralPrice` — even though none of their names end in `Wei`. (`lltv` is a decimal fraction and `collateralDecimal` is a plain count, as the table says.)
+
 
 In terms of the fields returned here (raw integers, with `lltv` a decimal fraction) the selection condition is `borrowed × 1e36 > collateral × collateralPrice × lltv`. `collateralPrice` carries Moolah's oracle price scale, so the `1e36` divisor is not optional. `borrowShares` / `totalBorrowAssets` / `totalBorrowShares` let an integrator recompute the exact current debt from shares before submitting a liquidation.
 
@@ -273,7 +274,7 @@ Lista Lending distributes emission rewards via a **weekly merkle-root** model: a
 
 Returns the LISTA-emission merkle proof for the latest active weekly root.
 
-> **`amount` is cumulative, not a balance.** The merkle leaf encodes everything the address has earned to date, and the distributor subtracts what it has already paid out. To show what is actually claimable now, subtract the on-chain `claimed(user, token)` from `amountWei` — treating `amount` as the claimable figure over-reports by the full claim history.
+> **`amount` is cumulative, not a balance.** The merkle leaf encodes everything the address has earned to date, and the distributor subtracts what it has already paid out. To show what is actually claimable now, subtract the address's on-chain claimed total from `amountWei` — `claimed(user)` on the single-token LISTA distributor behind this endpoint, or `claimed(user, token)` on the multi-token distributor behind `/userMultiProof` — treating `amount` as the claimable figure over-reports by the full claim history.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -292,7 +293,7 @@ Returns the LISTA-emission merkle proof for the latest active weekly root.
 | `proof` | string[] | Merkle proof nodes. |
 | `currentAmount` | string | Amount attributable to the current week. |
 
-When the user has no leaf for the latest root, an empty proof is returned (`rootId: ""`, `amount: "0"`, `amountWei: "0"`, `proof: ""`).
+When the user has no leaf for the latest root, an empty proof is returned: `{ rootId: "", amount: "0", amountWei: "0", proof: "" }`. Two differences from the populated shape — `currentAmount` is **absent entirely**, and `proof` is an empty **string** rather than the `string[]` the table lists.
 
 ### GET /api/moolah/emission/userMultiProof
 
