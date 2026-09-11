@@ -109,7 +109,7 @@ Because `borrowRate` requires `msg.sender == MOOLAH`, integrators reading a rate
 
 Two complementary reads are available:
 
-1. **The anchor rate.** `rateAtTarget(Id id)` returns the stored per-second rate-at-target for a market (the height of the curve). It is `0` for a market that has never accrued interest.
+1. **The anchor rate.** `rateAtTarget(Id id)` returns the stored per-second rate-at-target for a market (the height of the curve). It is seeded to `INITIAL_RATE_AT_TARGET`, clamped by the market's floor and cap, in the **market-creation transaction** — `createMarket` calls `IIrm.borrowRate` once to initialize the model. A `0` reading therefore means this IRM has never been invoked for that `Id`: the market does not exist, or it uses a different IRM.
 
    ```solidity
    int256 anchor = IInterestRateModel(irm).rateAtTarget(id);

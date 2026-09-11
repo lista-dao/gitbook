@@ -69,7 +69,7 @@ Your callback body runs in step 4, so it must leave `msg.sender` holding enough 
 
 ### Typical atomic flows
 
-> **Read this before designing a flow.** Moolah inherits a **single global** reentrancy guard, and eight entry points carry it — `supply`, `withdraw`, `borrow`, `repay`, `supplyCollateral`, `withdrawCollateral`, `liquidate` and `liquidateBrokerPosition`. `flashLoan` is the **only** callback entry point without it. So from inside `onMoolahSupply`, `onMoolahRepay`, `onMoolahSupplyCollateral` or `onMoolahLiquidate` you **cannot call back into Moolah at all** — any re-entry reverts `ReentrancyGuardReentrantCall()`. Multi-step Moolah composition is possible only from `onMoolahFlashLoan`. This is a deliberate divergence from upstream Morpho Blue, where the equivalent flows do work, so do not carry a Morpho design over unchanged.
+> **Read this before designing a flow.** Moolah inherits a **single global** reentrancy guard, and eight entry points carry it — `supply`, `withdraw`, `borrow`, `repay`, `supplyCollateral`, `withdrawCollateral`, `liquidate` and `liquidateBrokerPosition`. `flashLoan` is the **only** callback entry point without it. So from inside `onMoolahSupply`, `onMoolahRepay`, `onMoolahSupplyCollateral` or `onMoolahLiquidate` you **cannot re-enter any of those eight** — they revert `ReentrancyGuardReentrantCall()`. Views, `accrueInterest` and `flashLoan` carry no guard and remain callable, but no position-mutating composition is possible. Multi-step Moolah composition is possible only from `onMoolahFlashLoan`. This is a deliberate divergence from upstream Morpho Blue, where the equivalent flows do work, so do not carry a Morpho design over unchanged.
 
 | Flow | Callback used | Sketch |
 | --- | --- | --- |
@@ -145,13 +145,13 @@ The ERC-4626 curator vault layer emits its own lifecycle and configuration event
 | `ReallocateWithdraw` | **`address caller`**, **`Id id`**, `uint256 withdrawnAssets`, `uint256 withdrawnShares` |
 | `AccrueInterest` | `uint256 newTotalAssets`, `uint256 feeShares` |
 | `UpdateLastTotalAssets` | `uint256 updatedTotalAssets` |
-| `SetCurator` | **`address newCurator`** |
-| `SetIsAllocator` | **`address allocator`**, `bool isAllocator` |
 | `SetFee` | **`address caller`**, `uint256 newFee` |
 | `SetFeeRecipient` | **`address newFeeRecipient`** |
 | `Skim` | **`address caller`**, **`address token`**, `uint256 amount` |
 
-Timelocked/governance actions on the vault emit the matching `Submit*` / `Set*` / `Revoke*` pairs (`SubmitTimelock`/`SetTimelock`, `SubmitGuardian`/`SetGuardian`, `SubmitMarketRemoval`/`RevokePendingMarketRemoval`, etc.), also in the same `EventsLib`.
+**Do not index the vault's `Submit*` / `Revoke*` events.** `SubmitCap`, `SubmitTimelock`, `SetTimelock`, `SubmitGuardian`, `SetGuardian`, `SubmitMarketRemoval` and the `RevokePending*` family are all declared in `EventsLib` but emitted **nowhere** — they are MetaMorpho leftovers. Lista replaced the in-contract pending/timelock mechanism with two external OpenZeppelin `TimelockController`s created per vault, whose addresses appear in `CreateMoolahVault` as `managerTimeLock` and `curatorTimeLock`; watch those for `CallScheduled` / `CallExecuted` / `Cancelled`. `SetCap` is emitted directly by the vault, with no preceding `SubmitCap`.
+
+Likewise there is no `SetCurator` or `SetIsAllocator` event. The vault uses OpenZeppelin `AccessControl`, so role changes surface as `RoleGranted` / `RoleRevoked` filtered on the `CURATOR` / `ALLOCATOR` role hashes.
 
 To reconstruct how a vault allocates deposits across underlying Moolah markets, track `SetSupplyQueue`/`SetWithdrawQueue` for ordering, `SetCap` for per-market limits, and `ReallocateSupply`/`ReallocateWithdraw` for actual moves.
 
