@@ -37,9 +37,9 @@ Generates a one-time 6-digit code for the user to send in the Telegram Bot to co
 |------------|-------------|
 | `user`    | Wallet address |
 
-**Request body:** `signature`, `message` (or equivalent). Server recovers address from signature + message; it must match path `user`.
+**Request body:** `signature` and `message`. The server recovers the address from them; it must match the path `user`.
 
-**Response:** e.g. `{ "otp": "123456" }` or similar (OTP valid 5 minutes).
+**Response:** the OTP, valid for 5 minutes.
 
 ### 3. Unsubscribe (unbind)
 
@@ -51,13 +51,13 @@ Unbinds the wallet from Telegram and stops all notifications. Sends an unbind co
 |------------|-------------|
 | `user`    | Wallet address |
 
-**Request body:** `signature`, `message` (or equivalent).
+**Request body:** `signature` and `message`.
 
 ---
 
 ## Telegram Bot
 
-The Bot receives messages via **Webhook** (internal endpoint). Supported interactions:
+The Bot receives messages via **Webhook**. Supported interactions:
 
 | Command / action      | Description |
 |-----------------------|-------------|
@@ -77,11 +77,3 @@ The Bot receives messages via **Webhook** (internal endpoint). Supported interac
 | Liquidation alert  | Position at or over liquidation threshold; may include mute button. |
 | Borrow-rate reminder | Daily (e.g. UTC 02:00) for markets subscribed via `/subscribe`. |
 | Unbind confirmation| Sent to Telegram after successful unbind. |
-
----
-
-## Security and privacy
-
-* Verify wallet signature on OTP and unsubscribe; do not trust client-supplied Telegram ID without going through the Bot OTP flow.
-* Only include the subscribed user’s own positions/vaults in messages.
-* Store minimal data (e.g. Telegram ID, subscription state, muted flags); consider retention and deletion policy.

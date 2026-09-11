@@ -21,5 +21,4 @@ Bots periodically execute vault deposit/withdraw request-confirm flows and call 
 ## Contents
 
 * [User Operations](user-operations.md)
-* [Bot Operations](bot-operations.md)
 * [Smart Contract](smart-contract.md)
