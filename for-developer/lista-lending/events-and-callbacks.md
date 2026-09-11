@@ -1,6 +1,6 @@
 # Events & Callbacks
 
-This page is the integration reference for the two ways Moolah hands control back to your contracts and off-chain systems:
+This page is the integration reference for the ways Moolah hands control back to your contracts and off-chain systems:
 
 - **Callbacks** — synchronous, in-transaction hooks that Moolah invokes on the caller mid-execution (before it pulls the tokens it is owed), enabling atomic flows such as leverage loops, flash-liquidations, and position migrations.
 - **Events** — the logs Moolah, the IRM, and the vault layer emit for off-chain indexers, subgraphs, and monitoring.
@@ -69,12 +69,14 @@ Your callback body runs in step 4, so it must leave `msg.sender` holding enough 
 
 ### Typical atomic flows
 
+> **Read this before designing a flow.** Moolah inherits a **single global** reentrancy guard, and eight entry points carry it — `supply`, `withdraw`, `borrow`, `repay`, `supplyCollateral`, `withdrawCollateral`, `liquidate` and `liquidateBrokerPosition`. `flashLoan` is the **only** callback entry point without it. So from inside `onMoolahSupply`, `onMoolahRepay`, `onMoolahSupplyCollateral` or `onMoolahLiquidate` you **cannot call back into Moolah at all** — any re-entry reverts `ReentrancyGuardReentrantCall()`. Multi-step Moolah composition is possible only from `onMoolahFlashLoan`. This is a deliberate divergence from upstream Morpho Blue, where the equivalent flows do work, so do not carry a Morpho design over unchanged.
+
 | Flow | Callback used | Sketch |
 | --- | --- | --- |
-| **Leverage loop** | `onMoolahSupplyCollateral` | Deposit seed collateral with non-empty `data`; in the callback, borrow the loan token, swap it to more collateral, and top up so the net collateral requirement is met on return — opening a levered position in one transaction. |
-| **Flash-liquidation** | `onMoolahLiquidate` | Call `liquidate` with `data`; Moolah sends you the seized collateral first, then calls back. Swap that collateral to the loan token (e.g. via [Lista DEX](../dex/README.md) or any DEX) so you can cover the `repaidAssets` pulled on return — no upfront capital. |
-| **Debt / position migration** | `onMoolahFlashLoan` | Flash-loan the loan token, use it to repay a position elsewhere, withdraw the freed collateral, re-supply it into a Moolah market, borrow, and repay the flash loan — all atomically. |
-| **Zero-capital deleverage** | `onMoolahRepay` | Repay a borrow with `data`; in the callback withdraw collateral and swap part of it to fund the repayment that Moolah pulls on return. |
+| **Leverage loop** | `onMoolahFlashLoan` | Flash-loan the loan token; in the callback swap it to collateral, `supplyCollateral`, then `borrow` enough to repay the flash loan. Must be built on `flashLoan` — the `supplyCollateral` callback cannot borrow. |
+| **Flash-liquidation** | `onMoolahLiquidate` | Call `liquidate` with `data`; Moolah sends you the seized collateral first, then calls back. Swap that collateral on an **external** venue to raise the repayment. No Moolah call is needed inside the callback, which is why this one works. |
+| **Debt / position migration** | `onMoolahFlashLoan` | Flash-loan the loan token, use it to repay a position elsewhere, withdraw the freed collateral, move it, and re-borrow to repay the flash loan. |
+| **Zero-capital deleverage** | `onMoolahFlashLoan` | Flash-loan the loan token, `repay` with it, `withdrawCollateral`, swap part of the collateral back to the loan token and repay the flash loan. Not available via `onMoolahRepay`, which cannot call `withdrawCollateral`. |
 
 > Callbacks are a low-level primitive. If you are integrating in TypeScript and do not need custom atomic routing, the [Moolah Lending SDK](../sdk.md) builds standard supply/borrow/repay transactions for you.
 
@@ -117,7 +119,7 @@ Lista-specific administrative events (provider/broker wiring, whitelists, blackl
 
 ### Interest-rate model events (`InterestRateModel`)
 
-The adaptive-curve IRM (`src/interest-rate-model/InterestRateModel.sol`) emits its own events. `BorrowRateUpdate` is emitted each time Moolah accrues interest against a market that uses this IRM (Moolah calls `IIrm.borrowRate` during `_accrueInterest`), so it is the finest-grained rate signal available to indexers.
+The IRMs emit their own events. **Three of the four below are emitted by both IRMs with byte-identical signatures**, so they share a `topic0` — `BorrowRateCapUpdate`, `BorrowRateFloorUpdate` and `MinCapUpdate` come from either `InterestRateModel` or `FixedRateIrm`. Filter by the emitting address, not by topic alone, or you will file fixed-rate broker-market logs as adaptive-curve events. Only `BorrowRateUpdate` is exclusive to the adaptive curve (`FixedRateIrm` declares it but never emits it, since its `borrowRate` is `view`). `BorrowRateUpdate` is emitted each time Moolah accrues interest against a market that uses this IRM (Moolah calls `IIrm.borrowRate` during `_accrueInterest`), so it is the finest-grained rate signal available to indexers.
 
 | Event | Parameters (indexed in **bold**) |
 | --- | --- |

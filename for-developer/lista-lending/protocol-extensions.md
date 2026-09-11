@@ -13,6 +13,8 @@ This avoids dust positions that are expensive to liquidate and can increase bad-
 
 ## Reentrancy Protection
 
+> The guard is a **single global** slot, not per-function, and it covers eight entry points: `supply`, `withdraw`, `borrow`, `repay`, `supplyCollateral`, `withdrawCollateral`, `liquidate` and `liquidateBrokerPosition`. `flashLoan` is deliberately excluded. See [Events & Callbacks](events-and-callbacks.md) for what that means for callback-based flows — in short, only `onMoolahFlashLoan` can call back into Moolah.
+
 State-changing paths apply `nonReentrant` guards, including:
 
 * `supply()`

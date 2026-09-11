@@ -23,11 +23,11 @@ The Collateral Debt Position (CDP) module let a user deposit collateral and mint
 | `Interaction.locked(token, usr)` | Collateral deposited (`ink`). |
 | `Interaction.borrowed(token, usr)` | Current lisUSD debt (`art * rate / RAY`). When the debt is non-zero this adds a flat 100-wei buffer so a repay can fully clear the position — repay the value it returns, not your own computation. |
 | `Interaction.payback(token, amount)` | Repay lisUSD. Burns via `HayJoin` and reduces `art`. |
-| `Interaction.withdraw(token, amount)` | Withdraw collateral, subject to the position staying safe. |
+| `Interaction.withdraw(participant, token, dink)` | Withdraw collateral, subject to the position staying safe. Note the **three** parameters with `participant` first — there is no two-argument form. When the collateral has no provider, `msg.sender` must equal `participant`; when it does have one (slisBNB, for example), the withdrawal has to be driven through that provider so the certificate token is unwrapped. |
 
 A position is safe while `ink * spot >= art * rate`. `spot` already has the liquidation ratio applied, so it sits below the raw oracle price.
 
-Interest accrues into the Vat's per-collateral rate accumulator and is realized in lisUSD on repayment — nothing is charged at borrow time. The rate is set by the `DynamicDutyCalculator` AMO from the lisUSD price; since the Vat compounds `base + duty`, read both `Jug.base()` and the calculator's own views rather than treating any single value as the rate. `Interaction.borrowApr(token)` returns the combined figure **scaled by 1e18** — `4035532478367910700` is 4.0355%, not 403%.
+Interest accrues into the Vat's per-collateral rate accumulator and is realized in lisUSD on repayment — nothing is charged at borrow time. The rate is set by the `DynamicDutyCalculator` AMO from the lisUSD price. The **Jug** compounds `base + duty` and the Vat only folds the resulting delta into its accumulator, so read both `Jug.base()` and the calculator's own views rather than treating any single value as the rate. `Interaction.borrowApr(token)` returns the combined figure with **20 decimals** — i.e. a *percentage* scaled by `1e18`, so `4035532478367910700` is 4.0355%; divide by `1e20` for a fraction. Despite the name it raises the per-second rate to one year of seconds, so it is a compounded annual figure (an APY).
 
 ## Component map
 

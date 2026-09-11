@@ -2,6 +2,8 @@
 
 Cross-cutting conventions shared by every [Moolah Lending API](README.md) endpoint: the base URL, the response envelope, the chain selector, pagination and sorting, signature-gated endpoints, and caching. Each endpoint page assumes these and only documents what is specific to it.
 
+**Host:** `https://api.lista.org`.
+
 **Base URL:** most paths are served under `/api/moolah` (for example `GET /api/moolah/borrow/markets`). The liquidation and aggregated-position feeds are the exception — they sit under `/api/liquidation` and `/api/v2`; see [Positions, Liquidation & Emission](position-liquidation-emission.md).
 
 ---
