@@ -1,11 +1,15 @@
 # Smart Contract
 
-> **veLISTA is being retired under LIP-024.** The on-chain switch is `freePenaltyStartTime` = 2026-04-07 08:20 UTC; from that point `lock` / `increaseAmount*` / `extendWeek` revert and `getPenalty` returns `0`. `lock`, `relockUnclaimed`, `increaseAmount`/`increaseAmountFor` and `extendWeek` all revert, though `enableAutoLock` / `disableAutoLock` stay callable on existing positions. Existing locks can be exited without penalty — there is no `withdraw` function, and `getPenalty(address)` returns `0` for every account inside the window. The two exits are **mutually exclusive**, not interchangeable:
+> **veLISTA is being retired under LIP-024.** The on-chain switch is `freePenaltyStartTime` = **2026-04-07 08:20 UTC**. From that moment `lock`, `relockUnclaimed`, `increaseAmount` / `increaseAmountFor` and `extendWeek` all revert with `free penalty period start`, and `getPenalty(address)` returns `0` for every account. `enableAutoLock` / `disableAutoLock` remain callable on existing positions. Governance voting has moved to plain LISTA on Snapshot, and protocol revenue previously distributed to veLISTA stakers now funds LISTA buybacks.
+>
+> Existing locks can still be exited without penalty. There is no `withdraw` function, and the two exits are **mutually exclusive**:
 >
 > * `claim()` — only once the lock term has elapsed **and** the position is not auto-locked. Otherwise it reverts `no claimable tokens`.
 > * `earlyClaim()` — only while the position is still locked or auto-locked. Otherwise it reverts `cannot claim with penalty`.
 >
-> Two further caveats: the penalty-free period is a bounded window (`freePenaltyEndTime`, currently year 9999) that a `MANAGER` can change; and `earlyClaim` checks an independent `earlyClaimBlacklist` before anything else, so a **blacklisted auto-locked position has no exit at all** — `claim()` is blocked by the auto-lock and `earlyClaim()` by the blacklist. governance voting has moved to plain LISTA on Snapshot; protocol revenue previously distributed to veLISTA stakers now funds LISTA buybacks. The `veLista*` contracts below are kept for reference — they remain readable on-chain and existing positions can still be exited through them — but they should not be used for new integrations.
+> Two caveats. The penalty-free period is a bounded window (`freePenaltyEndTime`, currently year 9999) that a `MANAGER` can change. And `earlyClaim` checks an independent `earlyClaimBlacklist` before anything else, so a **blacklisted auto-locked position has no exit at all** — `claim()` is blocked by the auto-lock and `earlyClaim()` by the blacklist.
+>
+> The `veLista*` contracts below stay readable on-chain and existing positions can still be exited through them, but they should not be used for new integrations.
 
 ## Main
 
