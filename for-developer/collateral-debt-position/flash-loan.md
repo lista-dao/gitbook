@@ -12,7 +12,7 @@ To use Flash Loans and get profit from them, you need a good understanding of BN
 
 There are various applications of Flash Loans.
 
-An obvious example is arbitrage between assets, where the user can flash-loan lisUSD to purchase BNB in a Dutch auction that happens during somebody's [Lista loan liquidation](https://docs.helio.money/protocol/loan-liquidation), immediately swap lisUSD for another asset on a DEX, then immediately swap the obtained asset for lisUSD on another DEX where the asset's ratio is higher, and repay Lista the flash loan + interest, keeping the difference — all within one loan transaction.
+An obvious example is arbitrage between assets, where the user can flash-loan lisUSD to purchase BNB in a Dutch auction that happens during somebody's [Lista loan liquidation](../../introduction/collateral-debt-position-lisusd/collateral/loan-liquidation.md), immediately swap lisUSD for another asset on a DEX, then immediately swap the obtained asset for lisUSD on another DEX where the asset's ratio is higher, and repay Lista the flash loan + interest, keeping the difference — all within one loan transaction.
 
 ### Involved entities
 
