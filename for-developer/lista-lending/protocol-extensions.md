@@ -4,16 +4,17 @@ Moolah extends Morpho Blue with protocol-level controls designed for production 
 
 ## Minimum Loan Restriction (`minLoan`)
 
-Each market can enforce a minimum borrow amount.
+Moolah enforces a single **protocol-wide** minimum, `minLoanValue`, which `minLoan(marketParams)` converts into each market's loan token. There is no per-market setting.
 
-* Borrow transactions that result in debt below `minLoan` revert.
-* Partial repay transactions that leave remaining debt below `minLoan` also revert.
+* Supply, borrow and repay all revert when they would leave a **non-zero** position below `minLoan`.
+
+See [Contract & Interface Reference](contract-reference.md) for the conversion and the `MANAGER`-adjustable value.
 
 This avoids dust positions that are expensive to liquidate and can increase bad-debt risk.
 
 ## Reentrancy Protection
 
-> The guard is a **single global** slot, not per-function, and it covers eight entry points: `supply`, `withdraw`, `borrow`, `repay`, `supplyCollateral`, `withdrawCollateral`, `liquidate` and `liquidateBrokerPosition`. `flashLoan` is deliberately excluded. See [Events & Callbacks](events-and-callbacks.md) for what that means for callback-based flows — in short, only `onMoolahFlashLoan` can call back into Moolah.
+> The guard is a **single global** slot, not per-function, and it covers eight entry points: `supply`, `withdraw`, `borrow`, `repay`, `supplyCollateral`, `withdrawCollateral`, `liquidate` and `liquidateBrokerPosition`. `flashLoan` is deliberately excluded. See [Events & Callbacks](events-and-callbacks.md) for what that means for callback-based flows — in short, only `onMoolahFlashLoan` can re-enter a guarded entry point, though views, `accrueInterest` and `flashLoan` stay callable from any callback.
 
 
 ## Upgradeability
@@ -26,7 +27,7 @@ Moolah is deployed as an upgradeable system.
 
 ## Oracle Architecture
 
-Moolah oracles expose a `peek()` interface with 8-decimal price scale (`1e8`).
+Moolah oracles expose `peek(address)`. Every deployed Lista oracle returns an 8-decimal price, but that is a property of those deployments, not something the interface declares or Moolah validates — see [Consuming Oracle Prices](../multi-oracle/consuming-prices.md) before trusting a scale on a market whose oracle you did not deploy.
 
 ### Resilient Oracle
 

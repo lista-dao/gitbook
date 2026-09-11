@@ -4,7 +4,7 @@ Read endpoints for **user positions**, **liquidatable / at-risk positions**, **l
 
 These endpoints tell you *what* is liquidatable; for *how* to execute a liquidation on-chain see [Liquidator Integration](../../lista-lending/liquidator-integration.md).
 
-These endpoints are served by the Lista API across three route namespaces:
+These endpoints are served by the Lista API across these route namespaces:
 
 | Namespace | Purpose |
 |-----------|---------|

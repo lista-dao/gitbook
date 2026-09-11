@@ -32,7 +32,7 @@ The immutable definition of a market. Once created, these values cannot change; 
 | --- | --- | --- |
 | `loanToken` | `address` | The asset supplied and borrowed. |
 | `collateralToken` | `address` | The asset posted as collateral. |
-| `oracle` | `address` | Price source; must expose `peek(address)` returning an 8-decimal price. |
+| `oracle` | `address` | Price source; must expose `peek(address)`. Every currently deployed Lista oracle returns an 8-decimal price, but Moolah neither declares nor validates a scale — see [Consuming Oracle Prices](../multi-oracle/consuming-prices.md). |
 | `irm` | `address` | Interest Rate Model. Must be enabled via `isIrmEnabled`. |
 | `lltv` | `uint256` | Liquidation Loan-To-Value, scaled by `WAD` (`1e18`). Must be enabled via `isLltvEnabled`. |
 

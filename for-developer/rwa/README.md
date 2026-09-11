@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lista DAO RWA market provides users access to U.S. short-term Treasury and **AAA-rated collateralized-loan-obligation (CLO)** strategies. The two live pools are `USDT.Treasury`, backed by the Janus Henderson Treasury Fund (JTRSY), and `USDT.AAA`, backed by the Janus Henderson AAA CLO Fund (JAAA).
+Lista DAO RWA market provides users access to U.S. short-term Treasury and **AAA-rated collateralized-loan-obligation (CLO)** strategies. The two `RWAEarnPool` pools are `USDT.Treasury`, backed by the Janus Henderson Treasury Fund (JTRSY), and `USDT.AAA`, backed by the Janus Henderson AAA CLO Fund (JAAA). A separate RWA product, **slisXAUE** (Tether Gold on Ethereum), does not use `RWAEarnPool` — its addresses are on [Smart Contract](smart-contract.md).
 
 Users subscribe with `USDT` and receive shares that represent pool ownership. Funds are allocated to underlying bond strategies, and earnings are reflected continuously in pool value.
 

@@ -9,7 +9,7 @@ Two different price functions exist in the Lista stack, and they are frequently 
 
 Rule of thumb: `peek` answers "what is this asset worth in USD?"; `getPrice` answers "how much loan token is one unit of collateral worth, on the scale Moolah's math expects?". Health checks and liquidations use `getPrice`. Use `peek` only when you genuinely need a single asset's USD value (for example, to reconstruct the two legs of a market price, or to sanity-check a feed).
 
-This page shows how to read a market's oracle, call both functions read-only, verify which feeds back an asset, and compute a position's health and liquidation price with the exact scale factor from `Moolah.sol`. For the (auto-synced) per-asset oracle address tables, see [Multi-Oracle](../multi-oracle.md).
+This page shows how to read a market's oracle, call both functions read-only, verify which feeds back an asset, and compute a position's health and liquidation price with the exact scale factor from `Moolah.sol`. For the (auto-synced) per-asset oracle address tables, see [Standard Collaterals](../multi-oracle-standard.md) and [bStock Collaterals](../multi-oracle-bstock.md).
 
 ---
 
