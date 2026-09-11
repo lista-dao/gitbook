@@ -61,7 +61,7 @@ const sdk = new MoolahSDK({
 >
 > **The SDK is still iterating, and its Ethereum coverage lags the protocol.** On BNB Chain everything on this page applies. On Ethereum, market and vault reads and the market and vault builders work, but several entries in the SDK's bundled address book are unset, so at the versions named above:
 >
-> * Resolve Ethereum addresses from [Smart Contract — Ethereum](lista-lending/smart-contract-ethereum.md), not from `getContractAddress` / `getContractAddressOptional`. The first throws for an unset entry and the second returns the zero address, which is the more dangerous failure since a caller can send to it.
+> * Resolve Ethereum addresses from [Smart Contract — Ethereum](lista-lending/smart-contract-ethereum.md), not from `getContractAddress` / `getContractAddressOptional`. The first throws for an unset entry and the second returns the zero address, which is the more dangerous failure since a caller can send to it. **Some entries are unset on BNB Chain too**, so treat a zero result from either helper as "not available" on every chain, not just Ethereum.
 > * `getBrokerUserPositions` and `getMarketUserDataWithBroker` do not work on Ethereum.
 > * Native-asset (ETH) markets and vaults are not detected correctly; use the ERC-20 paths.
 

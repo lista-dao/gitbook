@@ -43,25 +43,27 @@ Array of position objects:
 | Field | Type | Description |
 |-------|------|-------------|
 | `user` | string | Borrower address. |
-| `collateral` | string | Collateral amount, scaled by the collateral token decimals. |
-| `borrowed` | string | Borrowed amount, scaled by the loan token decimals. |
+| `collateral` | string | Collateral amount as the **raw on-chain integer**. |
+| `borrowed` | string | Borrowed amount as the **raw on-chain integer**. |
 | `borrowShares` | string | Borrow shares (raw). |
 | `totalBorrowAssets` | string | Market total borrow assets. |
 | `totalBorrowShares` | string | Market total borrow shares. |
+
+> **This endpoint is the exception to the page convention above.** *Every* numeric field here is a raw on-chain integer — `collateral`, `borrowed`, `borrowShares`, `totalBorrowAssets`, `totalBorrowShares` and `collateralPrice` — even though none of their names end in `Wei`.
 | `collateralToken` | string | Collateral token address. |
 | `collateralDecimal` | number | Collateral token decimals. |
 | `loanToken` | string | Loan token address. |
 | `oracle` | string | Oracle contract address used for this market. |
-| `lltv` | string | Liquidation LTV. |
+| `lltv` | string | Liquidation LTV as a **decimal fraction** (e.g. `0.86`) — note this differs from `/api/moolah/allMarkets`, which returns it scaled to 1e18. |
 | `collateralPrice` | string | Live oracle price used to select the position (raw, as returned by the on-chain `getPrice` call). |
 
-The liquidation condition is, in effect, `borrowed > collateral * price * lltv`. `borrowShares` / `totalBorrowAssets` / `totalBorrowShares` let an integrator recompute the exact current debt from shares before submitting a liquidation.
+In terms of the fields returned here (raw integers, with `lltv` a decimal fraction) the selection condition is `borrowed × 1e36 > collateral × collateralPrice × lltv`. `collateralPrice` carries Moolah's oracle price scale, so the `1e36` divisor is not optional. `borrowShares` / `totalBorrowAssets` / `totalBorrowShares` let an integrator recompute the exact current debt from shares before submitting a liquidation.
 
 ---
 
 ## 2. Liquidation zone (Moolah)
 
-A higher-level liquidation feed for Moolah markets, used to surface positions that are at risk or have already been liquidated. All paths are under `/api/liquidation/zone`.
+Three related feeds under `/api/liquidation/zone`: `/list` is the per-market borrower whitelist with position snapshots, `/closeToLiquidate` is the at-risk feed, and `/history` is settled liquidations.
 
 ### GET /api/liquidation/zone/list
 
@@ -81,6 +83,8 @@ Returns the contents of the liquidation whitelist, ordered by insertion. This en
 | `collaterals` | string[] | No | Filter by collateral symbol(s). Max 10. |
 | `loans` | string[] | No | Filter by loan symbol(s). Max 10. |
 | `loanInUsd` | number | No | Minimum borrow value in USD (rounded down to the nearest 1,000). |
+
+> **Send array filters as repeated parameters** — `?collaterals=BTCB&collaterals=WBNB`, or `?collaterals[]=BTCB`. A single un-repeated `?collaterals=BTCB` arrives as a plain string, is iterated character by character, and silently matches nothing. `/list` and `/history` additionally reject more than 10 values; that check is on length, so one un-repeated value longer than 10 characters is rejected too.
 
 #### Response
 
@@ -109,7 +113,7 @@ Returns the contents of the liquidation whitelist, ordered by insertion. This en
 | `loanDecimal` | number | Loan token decimals. |
 | `loanSymbol` | string | Loan symbol. |
 | `oracle` | string | Market oracle address. |
-| `lltv` | string | Liquidation LTV. |
+| `lltv` | string | Liquidation LTV as a **decimal fraction** (e.g. `0.86`) — note this differs from `/api/moolah/allMarkets`, which returns it scaled to 1e18. |
 | `time` | number | Entry time (unix seconds). |
 | `chain` | string | Chain identifier of the market. |
 
@@ -133,6 +137,8 @@ Completed Moolah liquidations.
 | `userAddress` | string | No | Filter by borrower address. |
 | `loanInUsd` | number | No | Minimum borrow value in USD (rounded down to the nearest 1,000). |
 
+> **Send array filters as repeated parameters** — `?collaterals=BTCB&collaterals=WBNB`, or `?collaterals[]=BTCB`. A single un-repeated `?collaterals=BTCB` arrives as a plain string, is iterated character by character, and silently matches nothing. `/list` and `/history` additionally reject more than 10 values; that check is on length, so one un-repeated value longer than 10 characters is rejected too.
+
 #### Response
 
 `{ total, list }`, where each item describes a settled liquidation:
@@ -154,13 +160,13 @@ Completed Moolah liquidations.
 | `loan` | string | Loan amount. |
 | `loanInUsd` | string | Loan value in USD. |
 | `loanToken` / `loanSymbol` / `loanDecimal` | string / number | Loan token metadata. |
-| `lltv` | string | Liquidation LTV. |
-| `time` | number | Liquidation time (unix seconds). |
+| `lltv` | string | Liquidation LTV as a **decimal fraction** (e.g. `0.86`) — note this differs from `/api/moolah/allMarkets`, which returns it scaled to 1e18. |
+| `time` | number | Unix seconds when the indexer recorded the liquidation — **not** the on-chain block time, and it can lag. `/api/v2/liquidated/lending/history` returns the on-chain event time instead. |
 | `chain` | string | Chain identifier. |
 
 ### GET /api/liquidation/zone/closeToLiquidate
 
-Healthy-but-at-risk positions: open positions whose safety factor (`marketLiqRate / positionLiqRate`) is below `1.5`. Ordered by safety factor ascending (closest to liquidation first).
+Open positions whose safety factor (`marketLiqRate / positionLiqRate`) is below `1.5`. There is **no lower bound** — a safety factor under `1` means the position is already liquidatable, so this feed overlaps `/api/moolah/redPositions` rather than being strictly "at risk but healthy". Ordered by safety factor ascending (closest to liquidation first), then by position update time descending.
 
 | | |
 |--|--|
@@ -178,6 +184,8 @@ Healthy-but-at-risk positions: open positions whose safety factor (`marketLiqRat
 | `userAddress` | string | No | Filter by borrower address. |
 | `loanInUsd` | number | No | Minimum borrow value in USD. |
 
+> Unlike `/list` and `/history`, this endpoint normalises a single un-repeated value, so both `?collaterals=BTCB` and the repeated form work, and there is no 10-value limit.
+
 #### Response
 
 `{ total, list }`, where each item includes:
@@ -193,7 +201,7 @@ Healthy-but-at-risk positions: open positions whose safety factor (`marketLiqRat
 | `collateralPrice` | string | Collateral price. |
 | `loanToken` / `loanSymbol` / `loanIcon` | string | Loan token metadata. |
 | `loanPrice` | string | Loan price. |
-| `lltv` | string | Liquidation LTV. |
+| `lltv` | string | Liquidation LTV as a **decimal fraction** (e.g. `0.86`) — note this differs from `/api/moolah/allMarkets`, which returns it scaled to 1e18. |
 | `safeFactor` | string | Safety factor (`< 1.5`; smaller is closer to liquidation). |
 | `loanInUsd` | string | Borrow value in USD. |
 | `time` | number | Position update time. |
@@ -211,14 +219,14 @@ Positions that are currently liquidatable (current price has crossed the positio
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `start` | number | No | Offset (snapped to a multiple of 10). |
-| `count` | number | No | Page size (snapped to a multiple of 20; min 20, max 100). |
+| `start` | number | **Yes** | Offset, snapped down to a multiple of 10. There is no default — omitting it makes the server compute `NaN` and the request fails. |
+| `count` | number | **Yes** | Page size, snapped down to a multiple of 20 then clamped to `[20, 100]`. No default; omitting it fails the request. |
 
-Response: `{ users: [...] }`, each entry containing `userAddress`, `tokenName`, `collateralCurrency`, `collateral`, `liquidationPrice`, `liquidationCost`, `rangeFromLiquidation`. On this endpoint `rangeFromLiquidation` is always `0` (the positions are already liquidatable), and `liquidationCost` serializes as a BigNumber object rather than a string.
+Response: `{ users: [...] }`, each entry containing `userAddress`, `tokenName`, `collateralCurrency`, `collateral`, `liquidationPrice`, `liquidationCost`, `rangeFromLiquidation`. On this endpoint `rangeFromLiquidation` is always `0` (the positions are already liquidatable), and `liquidationCost` is a high-precision decimal string of up to 20 fractional digits — parse it with a big-number library, not `parseFloat`.
 
 ### GET /api/v2/liquidations/orange
 
-Positions approaching the liquidation threshold (within the danger band, but not yet liquidatable). Same parameters and response shape as `/red`; `rangeFromLiquidation` reflects the remaining buffer to liquidation.
+Positions approaching the liquidation threshold (within the danger band, but not yet liquidatable). Same parameters and response shape as `/red`, but **not the same ordering**: `/red` sorts by liquidation price descending, `/orange` by `rangeFromLiquidation` ascending. Here `rangeFromLiquidation` reflects the remaining buffer to liquidation.
 
 ### GET /api/v2/liquidations/auctionUser
 
@@ -242,7 +250,9 @@ Recently liquidated CDP positions.
 | `start` | number | No | Offset. Defaults to `0`. |
 | `count` | number | No | Page size. Defaults to and capped at `20`. |
 
-Related sub-paths on the same controller: `GET /api/v2/liquidated/:user` (liquidations for one address — matched **as given**, not lower-cased, unlike the zone endpoints), `GET /api/v2/liquidated/:user/latest?collateral=` (volume-weighted average liquidation price for an address + collateral), and `GET /api/v2/liquidated/lending/history` (Moolah lending liquidation history, with `collaterals` / `loans` / `userAddress` / `loanInUsd` filters). Three things to know about that last one: results are hard-capped to the **last 30 days** despite the name; `pageSize` is snapped down to a multiple of 10, floored at 10 and capped at 50; and the item shape differs from `/zone/history` — it carries `tx` and omits `repaidInUsd` / `seizedInUsd` / the token addresses and decimals.
+Related sub-paths on the same controller: `GET /api/v2/liquidated/:user` (liquidations for one address), `GET /api/v2/liquidated/:user/latest?collateral=` (volume-weighted average liquidation price for an address + collateral), and `GET /api/v2/liquidated/lending/history` (Moolah lending liquidation history, with `collaterals` / `loans` / `userAddress` / `loanInUsd` filters). Three things to know about that last one: results are hard-capped to the **last 30 days** despite the name; `pageSize` is snapped down to a multiple of 10, floored at 10 and capped at 50; and the item shape differs from `/zone/history` — it adds `tx` and uses the on-chain event time, but omits `liquidator`, `repaidInUsd`, `seizedInUsd`, `collateralMarketPrice`, `loan`, `loanInUsd`, the token addresses and the decimals. Its `type` is always the literal `"lending"`.
+
+> Addresses are stored lower-cased by the indexer. `/zone/history` lower-cases the filter for you; `/closeToLiquidate` and `/liquidated/:user` pass it through verbatim — send lower-case to be safe.
 
 
 ---
@@ -263,6 +273,8 @@ Lista Lending distributes emission rewards via a **weekly merkle-root** model: a
 
 Returns the LISTA-emission merkle proof for the latest active weekly root.
 
+> **`amount` is cumulative, not a balance.** The merkle leaf encodes everything the address has earned to date, and the distributor subtracts what it has already paid out. To show what is actually claimable now, subtract the on-chain `claimed(user, token)` from `amountWei` — treating `amount` as the claimable figure over-reports by the full claim history.
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `address` | string | Yes | Claiming address. |
@@ -275,8 +287,8 @@ Returns the LISTA-emission merkle proof for the latest active weekly root.
 | Field | Type | Description |
 |-------|------|-------------|
 | `rootId` | string | Week identifier of the root the proof belongs to. |
-| `amount` | string | Claimable amount (scaled). |
-| `amountWei` | string | Claimable amount (raw integer). |
+| `amount` | string | **Cumulative** amount earned to date, as encoded in the leaf (scaled). |
+| `amountWei` | string | Same figure, raw integer. |
 | `proof` | string[] | Merkle proof nodes. |
 | `currentAmount` | string | Amount attributable to the current week. |
 
@@ -297,8 +309,8 @@ Array, one entry per reward token:
 | `token` | string | Reward token address. |
 | `tokenSymbol` | string | Reward token symbol. |
 | `tokenIcon` | string | Reward token icon URL. |
-| `amount` | string | Claimable amount (scaled); `0` if only an estimate exists. |
-| `amountWei` | string | Claimable amount (raw); `0` if estimate-only. |
+| `amount` | string | **Cumulative** amount earned to date (scaled); `0` if only an estimate exists. |
+| `amountWei` | string | Same figure, raw; `0` if estimate-only. |
 | `proof` | string[] | Merkle proof nodes; empty if estimate-only. |
 | `currentAmount` | string | Amount for the current period. |
 | `estRewards` | object | Map of `symbol → estimated USD value`. |

@@ -29,13 +29,15 @@ Paginated list of vaults with filtering and sorting.
 | `page` | number | No | 1-based page number. Default `1`. |
 | `pageSize` | number | No | Items per page. Default `10`, max `50` (values above 50 are clamped). |
 | `assets` | string[] | No | Filter by deposit-asset **symbol** (matched against the vault's asset symbol, e.g. `assets=USD1&assets=WBNB`). |
-| `curators` | string[] | No | Filter by curator address. |
+| `curators` | string[] | No | Filter by curator **name** (e.g. `Lista DAO`), matched exactly. Passing an address returns an empty list rather than an error. |
 | `keyword` | string | No | Free-text search over vault name/keywords. Max 50 chars; ignored if empty. |
 | `sort` | string | No | Sort field key — one of `deposits`, `apy`, `utilization`. Unknown values fall back to `deposits`. |
 | `order` | string | No | `asc` or `desc`. Default `desc`. |
 | `zone` | number | No | Zone (segment) filter. Default `0`. |
 
 > Results are grouped by a Lista-assigned display order before the requested `sort` / `order` is applied.
+>
+> The response also always contains a synthetic **"Idle Market"** row representing un-allocated liquidity. It ignores the `keyword` and `zone` filters, and `collateralSymbol`, `collateralIcon`, `icon`, `liquidity`, `utilization` and `smartCollateralConfig` are all `null` on it. A strictly-typed client will fail to parse the response unless those fields are modelled as nullable.
 
 #### Response
 
@@ -61,7 +63,7 @@ Paginated list of vaults with filtering and sorting.
 | `assetSymbol` | string | Deposit asset symbol (e.g. `USD1`, `WBNB`). |
 | `assetIcon` | string | Deposit asset icon URL. |
 | `displayDecimal` | string | Decimals to use when displaying amounts. |
-| `curator` | string | Curator address. |
+| `curator` | string | Curator display name. |
 | `curatorIcon` | string | Curator icon URL. |
 | `collaterals` | array | Collateral assets reachable through this vault's markets (`{ id, name, icon, loanSymbol, allocation }`). |
 | `zone` | number | Zone (segment) the vault belongs to. |
@@ -107,7 +109,7 @@ Full details for a single vault, including its curator metadata and the collater
 | `assetIcon` | string | Deposit asset icon URL. |
 | `assetPrice` | string | Current USD price of the deposit asset (8-decimal string). |
 | `displayDecimal` | string | Decimals to use when displaying amounts. |
-| `curator` | string | Curator address. |
+| `curator` | string | Curator display name. |
 | `curatorIcon` | string | Curator icon URL. |
 | `curatorDesc` | string | Curator description (English). |
 | `curatorDescZh` | string | Curator description (Chinese). |

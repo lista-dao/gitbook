@@ -2,7 +2,7 @@
 
 A lending market is defined by a collateral/loan asset pair, an LLTV, an interest rate model (IRM), and an oracle. These endpoints expose market listings, per-market detail, the vaults that fund a market, historical borrow/supply series, and the raw on-chain market parameters used to build transactions.
 
-All paths are under **Base URL** `/api/moolah`. List and detail responses are served from a short-lived server-side cache, so values reflect the last sync rather than live on-chain state. USD and asset amounts are returned as fixed-point decimal strings (18 decimal places) unless noted.
+All paths are under **Base URL** `/api/moolah`. List and detail responses are served from a short-lived server-side cache, so values reflect the last sync rather than live on-chain state. USD and asset amounts are returned as fixed-point decimal strings (18 decimal places) unless noted. `GET /allMarkets` is the exception — it returns raw on-chain base units throughout, despite no field name ending in `Wei`.
 
 The `chain` query parameter is a **string network key** (`bsc`, `ethereum`, `bscTest`), not a numeric chain ID. When omitted it defaults to the live network (`bsc` in production). List sorting uses the pair `sort` (a field key) + `order` (`asc` | `desc`), not `sortBy`/`sortOrder`.
 
@@ -81,7 +81,7 @@ Full details for one market, including curator metadata and oracle configuration
 
 #### Response
 
-Returns the market object, or empty when the id is unknown.
+Returns the market object. When the id is unknown the response omits the `data` key altogether rather than returning an empty object, so read it defensively — `res.data.marketId` throws in that case.
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -236,7 +236,7 @@ Array of points:
 
 ### GET /api/moolah/allMarkets
 
-Returns every active, liquidatable market with its raw on-chain parameters — the values needed to build Moolah transactions (`MarketParams`-equivalent) and to read totals directly. No pagination and **no query parameters**.
+Returns active, liquidatable markets with their raw on-chain parameters. A small server-side denylist withholds specific markets, so do not treat this as a provably exhaustive list — the values needed to build Moolah transactions (`MarketParams`-equivalent) and to read totals directly. No pagination and **no query parameters**.
 
 | | |
 |--|--|
@@ -314,7 +314,7 @@ Returns the distinct loan or collateral tokens available across markets — used
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `typeId` | string | Must be `loan` or `collateral`. Any other value returns `400`. |
+| `typeId` | string | Must be `loan` or `collateral`. Any other value returns HTTP `400` with envelope code `-1`. |
 
 #### Query parameters
 

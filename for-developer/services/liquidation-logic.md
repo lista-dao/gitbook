@@ -22,7 +22,7 @@ Re-read the oracle and position state at execution time: Moolah accrues interest
 
 ## Finding candidates
 
-* `GET /api/liquidation/zone/list` — positions currently eligible.
+* `GET /api/liquidation/zone/list` — the per-market borrower whitelist with each account's latest position snapshot. It applies **no** health test, so treat it as a candidate roster and evaluate eligibility yourself.
 * `GET /api/liquidation/zone/closeToLiquidate` — positions approaching the threshold.
 * `GET /api/liquidation/zone/history` — settled liquidations.
 

@@ -8,7 +8,7 @@ Cross-cutting conventions shared by every [Moolah Lending API](README.md) endpoi
 
 ## Response envelope
 
-Every response is wrapped in a uniform JSON envelope. The endpoint's own payload is carried in `data`; the surrounding fields are the same on success and on error.
+Responses from the endpoints documented in this section are wrapped in a uniform JSON envelope. (A few unrelated partner routes elsewhere on the host return raw payloads, so do not assume the envelope for paths outside this reference.) The endpoint's own payload is carried in `data`; the surrounding fields are the same on success and on error.
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -52,7 +52,7 @@ Codes are strings. This is not the complete set:
 |--------|---------|
 | `000000000` | Success. |
 | `400` | Invalid request parameters. |
-| `404` | Resource not found. |
+| `404` | No route matched the path. A valid request for a non-existent id does **not** produce this — see above. |
 | `401` | Signed message expired (see [Signature-gated endpoints](#signature-gated-endpoints)). |
 | `1005` | Invalid signature. |
 | `500` | Server error. |
@@ -83,7 +83,7 @@ List endpoints use 1-based page pagination:
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `page` | number | Page number, **1-based**. Values missing or `≤ 0` are treated as `1`. |
-| `pageSize` | number | Items per page. Defaults to `10`. Capped per endpoint — requesting more than the cap silently clamps to it. |
+| `pageSize` | number | Items per page. The default is **endpoint-specific** — `20` on the `/api/liquidation/zone/*` feeds, `10` on `/api/v2/liquidated/lending/history`. Capped per endpoint; requesting more than the cap silently clamps to it. |
 
 The `pageSize` cap is endpoint-specific:
 
@@ -118,7 +118,7 @@ Use the pair `sort` + `order`, **not** `sortBy` / `sortOrder`.
 
 `order` is optional everywhere. Any value other than `asc` / `desc` (case-insensitive) — including an omitted one — falls back to `desc`.
 
-Valid `sort` keys for `GET /borrow/markets`: `rate`, `liquidity`, `lltv`, `loan`, `collateral`. See [Market API](market.md) for what each maps to.
+Valid `sort` keys for `GET /borrow/markets`: `rate`, `liquidity`, `lltv`, `loan`, `collateral`, `termType`. See [Market API](market.md) for what each maps to.
 
 ---
 
@@ -130,7 +130,7 @@ A small number of endpoints return address-specific data (the emission / reward 
 |-----------|------|----------|-------------|
 | `address` | string | Yes | The address the data is being requested for. |
 | `signature` | string | Yes | A wallet signature over `message`. |
-| `message` | string | Yes | The signed message. Must be **exactly two lines**: an ISO-8601 UTC timestamp (`YYYY-MM-DDTHH:MM:SSZ`, optional `.SSS` milliseconds, literal `Z` only), then the literal line `Thank you for your support of listaDAO.` The timestamp must be no older than **7 days**. A message that does not match returns code `1005`, not an HTTP 400 — the format check sits inside the signature verification. |
+| `message` | string | Yes | The signed message. Must be **exactly two lines**: an ISO-8601 UTC timestamp (`YYYY-MM-DDTHH:MM:SSZ`, optional `.SSS` milliseconds, literal `Z` only), then the literal line `Thank you for your support of listaDAO.` The timestamp must be no older than **7 days**. A message that does not match returns envelope code `1005` over HTTP 400. |
 | `type` | string | No | `safe` to validate as an ERC-1271 contract wallet (e.g. Safe); omitted/other validates as a standard EOA signature. |
 
 How verification works:

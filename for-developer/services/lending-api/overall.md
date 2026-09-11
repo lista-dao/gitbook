@@ -23,8 +23,8 @@ Returns the protocol snapshot. This endpoint takes **no query parameters**.
 | `totalBorrowed` | string | Total borrowed across all markets, in USD (fixed-point, 18 decimals). |
 | `totalCollateral` | string | Total collateral posted across all markets, in USD (fixed-point, 18 decimals). |
 | `totalDeposits` | string | Total assets deposited across all vaults, in USD (fixed-point, 18 decimals). |
-| `maxVaultApy` | string | Highest APY among active vaults (fixed-point, 18 decimals; e.g. `0.05` = 5%). |
-| `minBorrowRate` | string | Lowest borrow rate among active markets (fixed-point, 18 decimals). |
+| `maxVaultApy` | string | Highest **combined** APY (base plus emission) among vaults holding assets (fixed-point, 18 decimals; e.g. `0.05` = 5%). |
+| `minBorrowRate` | string | Lowest **net** borrow rate (borrow rate minus borrow-emission APY) among markets with non-zero borrows. Can be **negative** when emissions exceed the borrow rate (fixed-point, 18 decimals). |
 | `loanTokens` | array | Top loan/deposit tokens by deposited USD, sorted descending (up to 10). See below. |
 | `collateralTokens` | array | Top collateral tokens by available liquidity in USD, sorted descending (up to 10). See below. |
 | `bStock` | object | Tokenized-equity (bStock) sub-totals, reported separately from the aggregate figures above. See below. |

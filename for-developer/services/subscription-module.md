@@ -8,7 +8,7 @@ The subscription module lets users bind a wallet to **Telegram** and receive not
 
 ## Binding flow
 
-1. Client application calls **POST /api/v2/subscription/:user/otp** (with wallet signature) -> service returns a **6-digit OTP**, valid for **5 minutes**.
+1. Client application calls **POST /api/v2/subscription/:user/otp** (with wallet signature) -> service returns a **6-character alphanumeric OTP** (`A-Z`, `a-z`, `0-9`), valid for **5 minutes**.
 2. User opens the Telegram Bot and sends that OTP in the chat.
 3. Bot verifies the OTP and binds the wallet address to the user’s Telegram ID.
 4. After binding, the user can receive **liquidation alerts** and **borrow-rate reminders**.
@@ -31,13 +31,13 @@ Returns whether the given wallet is bound to Telegram and related subscription s
 
 **POST /api/v2/subscription/:user/otp**
 
-Generates a one-time 6-digit code for the user to send in the Telegram Bot to complete binding. Requires **wallet signature** to prove ownership.
+Generates a one-time 6-character alphanumeric code for the user to send in the Telegram Bot to complete binding. Requires **wallet signature** to prove ownership.
 
 | Path param | Description |
 |------------|-------------|
 | `user`    | Wallet address |
 
-**Request body:** `signature` and `message`. The server recovers the address from them; it must match the path `user`.
+**Request body:** `signature` and `message`. `message` must be exactly the literal string `one-time-password` — this is a **different** challenge from the emission endpoints' timestamped message, and anything else returns envelope code `1005`. The server recovers the address from the signature and it must match the path `user`.
 
 **Response:** the OTP, valid for 5 minutes.
 
@@ -61,7 +61,7 @@ The Bot receives messages via **Webhook**. Supported interactions:
 
 | Command / action      | Description |
 |-----------------------|-------------|
-| **OTP (plain text)**  | User sends the 6-digit OTP from the API → Bot binds wallet to Telegram. |
+| **OTP (plain text)**  | User sends the 6-character OTP from the API → Bot binds wallet to Telegram. |
 | **/unbind**           | Shows list of bound wallets (inline buttons); user selects one to unbind. |
 | **/subscribe**        | Lists markets where the user has borrow positions; user replies with market number(s) (e.g. `1,4`) to subscribe to **borrow-rate reminders**. Pushed daily at **UTC 02:00**. |
 | **/cancel**           | Lists subscribed markets; user replies with number(s) to stop rate reminders. |

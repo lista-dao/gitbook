@@ -35,7 +35,7 @@ Cross-cutting references: the [Multi-Oracle](multi-oracle.md) resilient price la
 - Published audit reports are in [Security → Audit Reports](../security/audit-reports.md).
 
 ### General developers — learning the protocol
-- Begin with the conceptual [Introduction](../README.md): [Lista Lending](../introduction/lista-lending/README.md), [Liquid Staking](../introduction/liquid-staking-slisbnb/README.md), [Smart Lending & Swap](../introduction/smart-lending.md), the [lisUSD CDP](../introduction/collateral-debt-position-lisusd/README.md), [RWA Markets](../introduction/rwa-markets.md), [Lista Credit](../introduction/lista-credit.md), and [lisAster](../introduction/lisaster.md).
+- Begin with the conceptual [Introduction](../README.md): [Lista Lending](../introduction/lista-lending/README.md), [Liquid Staking](../introduction/liquid-staking-slisbnb/README.md), [Smart Lending & Swap](../introduction/smart-lending.md), the [lisUSD CDP](../introduction/collateral-debt-position-lisusd/README.md), [RWA Markets](../introduction/rwa-markets/README.md), [Lista Credit](../introduction/lista-credit.md), and [lisAster](../introduction/lisaster.md).
 
 ## Networks
 
