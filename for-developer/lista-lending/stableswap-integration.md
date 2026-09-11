@@ -104,8 +104,10 @@ function get_dy(uint256 i, uint256 j, uint256 dx) external view returns (uint256
 Convention: token0 → token1 is `i = 0, j = 1`; token1 → token0 is `i = 1, j = 0`.
 
 ```solidity
-// USDC (coin 0) in, USDT (coin 1) out
-uint256 amountOut = pool.get_dy(0, 1, dxUSDC);
+// USDT (coin 0) in, USDC (coin 1) out.
+// USDT 0x55d3... sorts below USDC 0x8AC7..., so USDT is coin 0 —
+// read coins(0) / coins(1) rather than assuming an order.
+uint256 amountOut = pool.get_dy(0, 1, dxUSDT);
 ```
 
 `get_dy_without_fee(i, j, dx)` returns the pre-fee output if you need to isolate the fee component. The executed swap is:
