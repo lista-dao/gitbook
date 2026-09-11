@@ -30,7 +30,7 @@ Parameters and response fields are in [Positions, Liquidation & Emission](lendin
 
 ## Executing
 
-Liquidations are executed through the `PublicLiquidator` contract, which is permissionless and self-funded. Entry points, sizing, the eligibility gate, and the revert reference are in [Liquidator Integration](../lista-lending/liquidator-integration.md).
+Liquidations are executed through the `PublicLiquidator` contract. It has no role gate, but reachability is **per market** — an under-water position is not necessarily liquidatable by you, and there are both self-funded and flash-swap paths. Entry points, sizing, the eligibility gate, and the revert reference are in [Liquidator Integration](../lista-lending/liquidator-integration.md).
 
 Lista's keeper competes on the same public paths as anyone else. Running your own liquidator does not require, and does not receive, any knowledge of its configuration.
 

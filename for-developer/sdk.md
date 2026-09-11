@@ -186,7 +186,7 @@ for (const step of borrowSteps) {
 | `buildWithdrawParams(params)` | Withdraw collateral (by `assets` or `withdrawAll`). |
 | `buildVaultDepositParams(params)` | Deposit into an ERC-4626 vault. |
 | `buildVaultWithdrawParams(params)` | Withdraw from a vault (by `assets`, `shares`, or `withdrawAll`). |
-| `buildSmartSupplyDexLpParams(params)` | Supply existing DEX LP as Smart Lending collateral. |
+| `buildSmartSupplyDexLpParams(params)` | Supply existing LP as Smart Lending collateral. |
 | `buildSmartSupplyCollateralParams(params)` | Supply token A/B (zap to LP) as Smart Lending collateral. |
 | `buildSmartWithdrawDexLpParams(params)` | Withdraw Smart Lending collateral as LP. |
 | `buildSmartWithdrawCollateralParams(params)` | Withdraw Smart Lending collateral as token A/B. |
@@ -194,6 +194,8 @@ for (const step of borrowSteps) {
 | `buildSmartRepayParams(params)` | Repay a Smart Lending market position. |
 | `buildBrokerBorrowParams(params)` | Borrow through a broker (optionally a fixed `termId`). |
 | `buildBrokerRepayParams(params)` | Repay a broker position. |
+> The `Smart*` builders operate on **Lista StableSwap** LP, not the V3 DEX. The `DexLp` in the function names mirrors `SmartProvider`'s own on-chain naming — see [Smart Lending & StableSwap](lista-lending/stableswap-integration.md).
+
 
 Common builder inputs are `chainId`, `marketId` / `vaultAddress` / `brokerAddress`, `walletAddress`, and a raw `bigint` amount (`assets`, `shares`, `lpAmount`, etc.). Most builders also accept an optional `onBehalf`/`receiver` address and an optional pre-fetched config object to skip a round-trip. The broker builders are the exception: `buildBrokerBorrowParams` takes only `{ chainId, brokerAddress, amount, termId? }`, and both broker builders name the amount field `amount` rather than `assets`. See each method's parameter type (`BuildSupplyParams`, `BuildBorrowParams`, …) for the full shape.
 
