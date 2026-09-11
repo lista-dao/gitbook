@@ -2,7 +2,7 @@
 
 A lending market is defined by a collateral/loan asset pair, an LLTV, an interest rate model (IRM), and an oracle. These endpoints expose market listings, per-market detail, the vaults that fund a market, historical borrow/supply series, and the raw on-chain market parameters used to build transactions.
 
-All paths are under **Base URL** `/api/moolah`. List and detail responses are served from a short-lived server-side cache, so values reflect the last sync rather than live on-chain state. USD and asset amounts are returned as fixed-point decimal strings (18 decimal places) unless noted. `GET /allMarkets` is the exception — it returns raw on-chain base units throughout, despite no field name ending in `Wei`. It also carries **no decimals fields**, unlike the liquidation feeds, so read `decimals()` from each token contract rather than assuming 18. Defaulting to 18 puts USDT and USDC out by 1e12.
+All paths are under **Base URL** `/api/moolah`. List and detail responses are served from a short-lived server-side cache, so values reflect the last sync rather than live on-chain state. USD and asset amounts are returned as fixed-point decimal strings (18 decimal places) unless noted. `GET /allMarkets` is the exception — it returns raw on-chain base units throughout, despite no field name ending in `Wei`. It also carries **no decimals fields**, unlike the liquidation feeds, so read `decimals()` from each token contract rather than assuming 18. This bites on Ethereum, where USDT and USDC are 6-decimal: defaulting to 18 puts them out by 1e12. Their BSC counterparts are 18-decimal, so the same assumption happens to work there — which is exactly why it goes unnoticed until an Ethereum market is read.
 
 The `chain` query parameter is a **string network key** (`bsc`, `ethereum`, `bscTest`), not a numeric chain ID. When omitted it defaults to the live network (`bsc` in production). List sorting uses the pair `sort` (a field key) + `order` (`asc` | `desc`), not `sortBy`/`sortOrder`.
 
@@ -25,7 +25,7 @@ Paginated list of borrow markets with sorting and filtering.
 |-----------|------|----------|-------------|
 | `page` | number | No | Page number (1-based). Defaults to `1`. |
 | `pageSize` | number | No | Items per page. Defaults to `10`, capped at `50`. |
-| `sort` | string | No | Sort key: `rate`, `liquidity`, `lltv`, `loan`, `collateral`, or `termType`. Unrecognized values fall back to borrow rate. Note `rate` orders by the **net** borrow rate (gross minus borrow-emission APY) while the response returns the gross `rate`, and `liquidity` orders by the USD value. Results are grouped by a Lista-assigned display order first, with `sort` / `order` applied within each group. |
+| `sort` | string | No | Sort key: `rate`, `liquidity`, `lltv`, `loan`, `collateral`, or `termType`. Unrecognized values fall back to the net borrow rate — the same ordering as `sort=rate`. Note `rate` orders by the **net** borrow rate (gross minus borrow-emission APY) while the response returns the gross `rate`, and `liquidity` orders by the USD value. Results are grouped by a Lista-assigned display order first, with `sort` / `order` applied within each group. |
 | `order` | string | No | Sort direction: `asc` or `desc` (case-insensitive). Defaults to `desc` when omitted or unrecognised. |
 | `keyword` | string | No | Free-text search over loan/collateral symbols. Max length 50. |
 | `loans` | string[] | No | Filter by loan token symbol(s). Repeat the param for multiple values (e.g. `loans=USDT&loans=USDC`). |
@@ -99,7 +99,7 @@ Returns the market object. When the id is unknown the response omits the `data` 
 | `loanToken` | string | Loan token address. |
 | `loanTokenName` | string | Loan token name/symbol. |
 | `loanTokenIcon` | string | Loan token icon URL. |
-| `loanTokenPrice` | string | Loan token price. |
+| `loanTokenPrice` | number | Loan token price, as a JSON float — unlike most amount fields on this page, which are decimal strings. |
 | `collateralToken` | string | Collateral token address. |
 | `collateralTokenName` | string | Collateral token name/symbol. |
 | `collateralTokenIcon` | string | Collateral token icon URL. |

@@ -27,7 +27,7 @@ Returns the protocol snapshot. This endpoint takes **no query parameters**.
 | `minBorrowRate` | string | Lowest **net** borrow rate (borrow rate minus borrow-emission APY) among markets with non-zero borrows. Can be **negative** when emissions exceed the borrow rate (fixed-point, 18 decimals). |
 | `loanTokens` | array | Top loan/deposit tokens by deposited USD, sorted descending (up to 10). See below. |
 | `collateralTokens` | array | Top collateral tokens by available liquidity in USD, sorted descending (up to 10). See below. |
-| `bStock` | object | Tokenized-equity (bStock) sub-totals, reported separately from the aggregate figures above. See below. |
+| `bStock` | object | Tokenized-equity (bStock) sub-totals. A **breakout** of markets that are already counted in the aggregates above, not a separate bucket. See below. |
 | `updateAt` | number | Unix timestamp (seconds) of the snapshot. |
 
 **Item in `loanTokens`:**
@@ -50,7 +50,7 @@ Returns the protocol snapshot. This endpoint takes **no query parameters**.
 
 ### `bStock` object
 
-Reported separately so bStock markets can be shown apart from the protocol-wide totals. The shape is stable — it is present even before the snapshot is populated.
+bStock markets are **included** in `totalBorrowed`, `totalCollateral`, `totalDeposits` and the `collateralTokens` list; this object tallies the same markets again so they can be shown on their own. **Do not add it to the protocol-wide totals** — you would double-count. The shape is stable, and present even before the snapshot is populated.
 
 | Field | Type | Description |
 |-------|------|-------------|

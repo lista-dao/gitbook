@@ -53,14 +53,14 @@ Paginated list of vaults with filtering and sorting.
 | `icon` | string | Vault icon URL. |
 | `apy` | string | Current supply APY. |
 | `emissionApy` | string | Additional APY from token emissions/rewards. |
-| `emissionEnabled` | boolean | Whether reward emissions are active for this vault. |
+| `emissionEnabled` | number | `1` when reward emissions are active for this vault, `0` when not. Serialized as an integer, not a JSON boolean. |
 | `emissionDetail` | object | Reward breakdown keyed by token symbol — `{ [symbol]: { apy, total, icon } }`, or `{}` when there is none. Note `/vault/allocation` returns an array for its own emission field. |
 | `deposits` | string | Total assets deposited (token units). |
 | `depositsUsd` | string | Total deposits valued in USD. |
 | `asset` | string | Deposit (loan) asset token address. |
 | `assetSymbol` | string | Deposit asset symbol (e.g. `USD1`, `WBNB`). |
 | `assetIcon` | string | Deposit asset icon URL. |
-| `displayDecimal` | string | Decimals to use when displaying amounts. |
+| `displayDecimal` | number | Decimals to use when displaying amounts. Serialized as a JSON number. |
 | `curator` | string | Curator display name. |
 | `curatorIcon` | string | Curator icon URL. |
 | `collaterals` | array | Collateral assets reachable through this vault's markets (`{ id, name, icon, loanSymbol, allocation }`). |
@@ -100,13 +100,13 @@ Full details for a single vault, including its curator metadata and the collater
 | `apy` | string | Current supply APY. |
 | `liquidity` | string | Idle (un-allocated) liquidity in the vault. |
 | `emissionApy` | string | Additional APY from token emissions/rewards. |
-| `emissionEnabled` | boolean | Whether reward emissions are active. |
+| `emissionEnabled` | number | `1` when reward emissions are active, `0` when not. Serialized as an integer, not a JSON boolean. |
 | `emissionDetail` | object | Reward breakdown keyed by token symbol — `{ [symbol]: { apy, total, icon } }`, or `{}` when there is none. |
 | `asset` | string | Deposit (loan) asset token address. |
 | `assetSymbol` | string | Deposit asset symbol. |
 | `assetIcon` | string | Deposit asset icon URL. |
 | `assetPrice` | string | Current USD price of the deposit asset (8-decimal string). |
-| `displayDecimal` | string | Decimals to use when displaying amounts. |
+| `displayDecimal` | number | Decimals to use when displaying amounts. Serialized as a JSON number. |
 | `curator` | string | Curator display name. |
 | `curatorIcon` | string | Curator icon URL. |
 | `curatorDesc` | string | Curator description (English). |
