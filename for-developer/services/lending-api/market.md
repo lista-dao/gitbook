@@ -30,7 +30,8 @@ Paginated list of borrow markets with sorting and filtering.
 | `keyword` | string | No | Free-text search over loan/collateral symbols. Max length 50. |
 | `loans` | string[] | No | Filter by loan token symbol(s). Repeat the param for multiple values (e.g. `loans=USDT&loans=USDC`). |
 | `collaterals` | string[] | No | Filter by collateral token symbol(s). Repeatable. |
-| `zone` | string | No | Comma-separated zone id(s). Defaults to `0`, which is a **filter, not "all"** — the default response excludes bStock, smart-collateral and fixed-term markets. Pass the zones you want explicitly. |
+| `zone` | string | No | Comma-separated zone id(s). Defaults to `0`, which is a **filter, not "all"** — the default response excludes bStock (`5`) and smart-collateral (`3`) markets. Pass the zones you want explicitly. Zone `10` is the idle marker and is always excluded. |
+| `termType` | number | No | Filter to fixed-term markets. **Independent of `zone`** — a fixed-term market usually sits at `zone = 0`, so changing `zone` will not surface or hide it; this is the only lever for it. Unset means no term filter is applied. |
 | `chain` | string | No | Network key (`bsc`, `ethereum`, `bscTest`). Defaults to the live network — `bsc` in production. Not validated: an unrecognised key returns an empty result, not a `400`. |
 
 > **Repeat array parameters; do not send a single bare value.** On `/borrow/markets` and `/vault/list` an un-repeated `?loans=USD1` arrives as a string and the query builder throws — the request fails with HTTP `500`, not an empty list. Use `?loans=USD1&loans=USDT`, or `?loans[]=USD1` for one value. (The `/api/liquidation/zone/*` feeds behave differently: they match nothing instead of failing.)
