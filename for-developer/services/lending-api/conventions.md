@@ -16,7 +16,7 @@ Responses from the endpoints documented in this section are wrapped in a uniform
 |-------|------|-------------|
 | `code` | string | Status code. `"000000000"` on success. Any other value indicates an error. |
 | `msg` | string | Human-readable message for `code`, localized to the request language. |
-| `data` | any | The endpoint payload — an object, an array, or `null`. Shape is documented per endpoint. |
+| `data` | any | The endpoint payload — an object or an array. It is **absent** rather than `null` when there is nothing to return, so read it defensively; see the three empty shapes below. Shape is documented per endpoint. |
 | `timestamp` | number | Server time when the response was built, in **milliseconds** since the Unix epoch. |
 
 Success example:
@@ -36,10 +36,11 @@ Error example:
 {
   "code": "400",
   "msg": "Invalid params",
-  "data": null,
   "timestamp": 1751414400000
 }
 ```
+
+> Note the error envelope has **no `data` key at all** — it is omitted, not `null`. A client that tests `response.data === null` to detect an error will throw instead.
 
 ### Reading responses
 

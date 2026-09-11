@@ -39,7 +39,7 @@ Generates a one-time 6-character alphanumeric code for the user to send in the T
 
 **Request body:** `signature` and `message`. `message` must be exactly the literal string `one-time-password` — this is a **different** challenge from the emission endpoints' timestamped message, and anything else returns envelope code `1005`. The server recovers the address from the signature and it must match the path `user`.
 
-**Response:** `{ user, password, otpValidUntil }` — the code is under **`password`**, not `otp`, and `otpValidUntil` is a Unix-seconds expiry. The code is **case-sensitive**; do not upper-case it before the user sends it to the bot.
+**Response:** `{ user, password, otpValidUntil }` — the code is under **`password`**, not `otp`, and `otpValidUntil` is a Unix-seconds expiry. Pass the code to the user verbatim. The bot accepts `[0-9a-zA-Z]{6}`, and it validates the trimmed message but looks up the untrimmed one — so trailing whitespace fails even though the code is right.
 
 ### 3. Unsubscribe (unbind)
 
