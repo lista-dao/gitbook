@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lista V3 Dex is a concentrated-liquidity automated market maker (AMM) on BNB Smart Chain. Liquidity providers concentrate capital within chosen price ranges (tick ranges) rather than across the full price curve, and each liquidity position is held as an ERC-721 NFT. The same pools are the on-chain liquidity engine behind Lista's Smart Lending / Smart Swap experience. The protocol is a Uniswap V3 fork, so the canonical Uniswap V3 model and tooling apply directly.
+Lista V3 Dex is a concentrated-liquidity automated market maker (AMM) on BNB Smart Chain. Liquidity providers concentrate capital within chosen price ranges (tick ranges) rather than across the full price curve, and each liquidity position is held as an ERC-721 NFT. These are not the pools behind Smart Lending — that product takes **StableSwap** LP as collateral through `SmartProvider`; see [Smart Lending & StableSwap](../lista-lending/stableswap-integration.md). The protocol is a Uniswap V3 fork, so the canonical Uniswap V3 model and tooling apply directly.
 
 ## Core components
 
@@ -15,15 +15,17 @@ Lista V3 Dex is a concentrated-liquidity automated market maker (AMM) on BNB Sma
 
 ## Fee tiers
 
-The factory seeds three fee tiers at deployment. Fees are denominated in hundredths of a basis point (units of `1e-6`):
+Fees are denominated in hundredths of a basis point (units of `1e-6`). The live factory currently has five tiers enabled:
 
 | Fee tier | `fee` value | Tick spacing |
 | -------- | ----------- | ------------ |
+| 0.0002% | `2` | `1` |
+| 0.01% | `100` | `1` |
 | 0.05% | `500` | `10` |
 | 0.30% | `3000` | `60` |
 | 1.00% | `10000` | `200` |
 
-The factory owner can enable additional fee tiers on-chain via `enableFeeAmount`; the three tiers above are those configured at deployment.
+> Only three of these (`500`, `3000`, `10000`) are seeded in the constructor; `2` and `100` were enabled later via `enableFeeAmount`, and they are the tiers Lista's own pools actually use. **Do not hard-code the constructor set** — `getPool(tokenA, tokenB, 500)` returns the zero address for pools that live on another tier. Read `feeAmountTickSpacing(fee)`, or watch `FeeAmountEnabled`, for the authoritative list. A tier, once enabled, can never be removed.
 
 ## Uniswap V3 compatibility
 

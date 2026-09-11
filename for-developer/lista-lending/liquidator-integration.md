@@ -85,7 +85,7 @@ function liquidateSmartCollateral(
 ) external returns (uint256, uint256);
 ```
 
-Returns `(actualSeizedAssets, repaidAssets)`, both straight from `Moolah.liquidate`. Self-funded liquidation of a smart-collateral market that redeems the LP in the same transaction. `smartProvider` must be registered in `smartProviders` and its `TOKEN()` must equal the market's collateral token. `payload` is `abi.encode(minToken0Amt, minToken1Amt)` — your slippage bound on the LP redeem. Both underlying tokens are sent to you directly (native BNB is transferred as value, not wrapped).
+Returns `(actualSeizedAssets, repaidAssets)`, both straight from `Moolah.liquidate`. Self-funded liquidation of a smart-collateral market that redeems the LP in the same transaction. `smartProvider` must be registered in `smartProviders` and its `TOKEN()` must equal the market's collateral token. `payload` is `abi.encode(minToken0Amt, minToken1Amt)` — your slippage bound on the LP redeem. **On `flashLiquidateSmartCollateral` these values do double duty:** for a leg whose token is native BNB, the contract forwards the min amount as the swap call's exact `msg.value`. Setting a conservative floor there underfunds the swap rather than protecting you, so for a native-BNB leg the value must be the amount you intend to send. Both underlying tokens are sent to you directly (native BNB is transferred as value, not wrapped).
 
 ### Flash-swap (no loan-token capital required)
 
@@ -109,7 +109,7 @@ function flashLiquidateSmartCollateral(
 
 The smart-collateral variant: redeems the LP inside the callback, then swaps each leg to the loan token. Any leftover of either underlying is returned to you. Returns `(actualSeizedAssets, repayAmount)` — note the second value here is the locally pre-computed `loanTokenAmountNeed`, not Moolah's returned repaid amount as in `liquidateSmartCollateral`.
 
-> **`pair` must be whitelisted.** Both flash paths require `pairWhitelist[pair]`, which only the `MANAGER` role can set — an arbitrary DEX router will revert with `NotWhitelisted()`. Read `pairWhitelist(address)` before building the route. Self-funded paths have no such constraint, so if the venue you want is not whitelisted, use `liquidate` and do the swap yourself afterwards.
+> **Every pair must be whitelisted.** Both flash paths require `pairWhitelist[pair]`, which only the `MANAGER` role can set. On `flashLiquidateSmartCollateral` **both** `token0Pair` and `token1Pair` must be whitelisted unconditionally — including a leg that is never actually swapped, e.g. when that token already is the loan token — an arbitrary DEX router will revert with `NotWhitelisted()`. Read `pairWhitelist(address)` before building the route. Self-funded paths have no such constraint, so if the venue you want is not whitelisted, use `liquidate` and do the swap yourself afterwards.
 
 ### Unwinding deferred collateral
 
@@ -190,14 +190,14 @@ event Liquidated(
 );
 ```
 
-Emitted by `PublicLiquidator` in addition to Moolah's own `Liquidate` event (see [Events & Callbacks](events-and-callbacks.md)). Index on this one to attribute liquidations to the public path specifically — but read the **settled** amounts from Moolah's `Liquidate`: the fields here echo the caller's *inputs*, so `repaidShares` is `0` on both flash paths and on any `seizedAssets > 0` call even though Moolah burned a non-zero share amount, and `seizedAssets` is likewise the requested figure rather than Moolah's returned value. Settled liquidations are also served by [`/api/liquidation/zone/history`](../services/lending-api/position-liquidation-emission.md).
+Emitted by `PublicLiquidator` in addition to Moolah's own `Liquidate` event (see [Events & Callbacks](events-and-callbacks.md)). Index on this one to attribute liquidations to the public path specifically — but read the **settled** amounts from Moolah's `Liquidate`: the fields here echo the caller's *inputs*, so `repaidShares` is `0` on both flash paths and on any `seizedAssets > 0` call even though Moolah burned a non-zero share amount, and `seizedAssets` is likewise the requested figure rather than Moolah's returned value. `repaidAssets` is `PublicLiquidator`'s own `loanTokenAmountNeed` quote, priced at the plain market price, so on a broker market it diverges from what Moolah actually settled. Settled liquidations are also served by [`/api/liquidation/zone/history`](../services/lending-api/position-liquidation-emission.md).
 
 ---
 
 ## Reference flow
 
 1. **Poll candidates.** `GET /api/liquidation/zone/list` for whitelisted / flagged positions, or `GET /api/liquidation/zone/closeToLiquidate` for positions approaching the threshold (safety factor `< 1.5`). The [Moolah liquidatable endpoint](../services/lending-api/position-liquidation-emission.md) returns `borrowShares`, `totalBorrowAssets`, and `totalBorrowShares` so you can recompute exact current debt from shares.
-2. **Re-verify on chain.** API data is indexed and can lag. Confirm `isLiquidationWhitelist(id, address(0))` / `marketWhitelist(id)` / `marketUserWhitelist(id, borrower)` and that the position is still unhealthy at the live oracle price — Moolah re-checks health at execution time and will revert otherwise.
+2. **Re-verify on chain.** API data is indexed and can lag. Confirm reachability the way the eligibility section describes — `getLiquidationWhitelist(id).length == 0` for an open market, or `isLiquidationWhitelist(id, <PublicLiquidator>)` plus `marketWhitelist(id)` / `marketUserWhitelist(id, borrower)` for a gated one — and that the position is still unhealthy at the live oracle price — Moolah re-checks health at execution time and will revert otherwise.
 3. **Size it.** Choose `seizedAssets` or `repaidShares`, then call `loanTokenAmountNeed` for the repayment.
 4. **Approve** that amount of the loan token to `PublicLiquidator` (self-funded paths only).
 5. **Execute.** `liquidate` for plain collateral; `liquidateSmartCollateral` for smart collateral; the `flash*` variants if you would rather not hold the loan token and the venue is whitelisted.

@@ -85,13 +85,13 @@ Read pool state directly from the `StableSwapPool` (the `swapContract` address).
 | LP → coins | `calc_coins_amount(address pool, uint256 lpAmount) → uint256[2]` | Coin amounts a proportional withdrawal of `lpAmount` LP would yield. |
 | Holder → coins | `get_coins_amount_of(address pool, address account) → uint256[2]` | Same, for an account's full LP balance. |
 | Mint preview | `get_add_liquidity_mint_amount(address pool, uint256[2] amounts) → uint256` | LP that `add_liquidity(amounts)` would mint (net of deposit fee). |
-| Reverse quote | `get_dx(address pool, uint256 i, uint256 j, uint256 dy, uint256 max_dx) → uint256` | Input of coin `i` required to receive `dy` of coin `j` (fee-inclusive). Reverts `Excess balance` / `Exchange resulted in fewer coins than expected`. |
+| Reverse quote | `get_dx(address pool, uint256 i, uint256 j, uint256 dy, uint256 max_dx) → uint256` | Input of coin `i` required to receive `dy` of coin `j`, **grossed up** to cover the fee. Reverts `Excess balance` / `Exchange resulted in fewer coins than expected`. |
 
 ---
 
 ## Quoting a swap: `get_dy`
 
-`get_dy` returns the **fee-inclusive** output amount for a swap, in the output coin's own decimals:
+`get_dy` returns the output amount **net of the fee** — what you actually receive — in the output coin's own decimals:
 
 ```solidity
 function get_dy(uint256 i, uint256 j, uint256 dx) external view returns (uint256);
@@ -120,7 +120,9 @@ function exchange(uint256 i, uint256 j, uint256 dx, uint256 min_dy) external pay
 
 ## Oracle price-difference guard
 
-Each pool holds a resilient-oracle reference and enforces a **price-difference guard** on state-changing operations. On `exchange`, `add_liquidity`, and every `remove_liquidity*` variant, the pool calls `checkPriceDiff()` (unless the guard is disabled — see below), which reverts when the pool's implied price for either coin diverges from the oracle price beyond a per-coin threshold:
+Each pool holds a resilient-oracle reference and **can** enforce a price-difference guard on state-changing operations — but whether it does is per-pool and manager-controlled, and **most Lista pools currently have it switched off** (`skipPriceDiff() == true`). Always read `skipPriceDiff()` on the specific pool rather than assuming the guard protects you.
+
+Where it is enabled, `exchange`, `add_liquidity`, and every `remove_liquidity*` variant call `checkPriceDiff()`, which reverts when the pool's implied price for either coin diverges from the oracle price beyond a per-coin threshold:
 
 - `Price difference for token0 exceeds threshold`
 - `Price difference for token1 exceeds threshold`
@@ -131,8 +133,8 @@ Relevant reads:
 | --- | --- | --- |
 | Oracle prices | `fetchOraclePrice() → uint256[2]` | Oracle price of each coin, `1e18`-scaled. |
 | Guard check | `checkPriceDiff()` | `view`; reverts if either coin's price diff exceeds its threshold. Safe to call as a pre-flight probe. |
-| Skip flag | `skipPriceDiff() → bool` | When `true`, the guard is not enforced on pool operations. |
-| Thresholds | `price0DiffThreshold()`, `price1DiffThreshold() → uint256` | Per-coin thresholds, `1e18`-scaled (e.g. `3e16` = 3%). |
+| Skip flag | `skipPriceDiff() → bool` | When `true`, the guard is not enforced. True on most live pools. One older registered pool predates this function and **reverts** when you call it — treat a revert as "guard behaviour unknown", not as `false`. |
+| Thresholds | `price0DiffThreshold()`, `price1DiffThreshold() → uint256` | Per-coin thresholds, `1e18`-scaled. Values differ per pool — read them rather than assuming the deployment default. |
 
 These thresholds and the skip flag are current on-chain values that are manager-adjustable on-chain; read them at call time rather than assuming a fixed number. For a large or price-sensitive route, call `checkPriceDiff()` as a `staticcall` before submitting so you can surface a clear error instead of a failed transaction.
 

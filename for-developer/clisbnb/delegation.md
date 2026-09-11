@@ -8,17 +8,17 @@ Delegation is managed by `SlisBNBxMinter`, the mint-and-burn engine for `slisBNB
 
 | Property | Behavior |
 | --- | --- |
-| Scope | **Per account, not per position.** A single delegatee holds the account's *entire* `slisBNBx` balance across all collateral modules (the `slisBNB` provider and the `slisBNB/BNB` LP provider). |
-| Granularity | **No partial delegation.** You cannot split an account's `slisBNBx` between multiple wallets — it is all-or-nothing. |
+| Scope | **Per account, not per position.** A single delegatee holds the account's whole recorded `slisBNBx` position across all collateral modules (the `slisBNB` provider and the `slisBNB/BNB` LP provider). Note this is the **user's part only** — each module mints a fee slice to a Lista wallet, which is not part of the delegated amount. |
+| Granularity | **No partial delegation through the minter.** `SlisBNBxMinter.delegateAllTo` is all-or-nothing. The legacy CDP providers are a separate, still-live path that does support per-amount delegation — see the note below. |
 | Default | If an account has never set a delegatee, the holder defaults to **the account itself**. Note this default is applied lazily: `delegation[account]` is written during the first balance-changing rebalance, so **reading it beforehand returns `address(0)`, not the account**. Treat a zero result as "delegated to self", not as unset-and-broken. |
 | Mutability | **Can be changed at any time** via `delegateAllTo`. It is *not* fixed at mint time. |
 | Effect on collateral | Delegation only changes **who holds the `slisBNBx` certificate**. It does not move, re-own, or otherwise affect the underlying collateral in Moolah. |
 
-The minter stores delegation as a single mapping, `delegation[account] => delegatee`, and tracks the total `slisBNBx` minted for each account across every module in `userTotalBalance[account]`. Both are read-only and queryable on-chain.
+The minter stores delegation as a single mapping, `delegation[account] => delegatee`, and tracks each account's own `slisBNBx` across every module in `userTotalBalance[account]` (the user part, excluding the per-module fee slice minted to Lista). Both are read-only and queryable on-chain.
 
 ## Changing the delegatee
 
-Reassigning the delegatee is **atomic**: the minter burns the account's entire `slisBNBx` balance from the old holder and mints the same amount to the new delegatee in a single call. No rebalance against collateral happens during the switch — only the holder changes.
+Reassigning the delegatee is **atomic**: the minter burns the account's recorded `userTotalBalance` from the old holder and mints the same amount to the new delegatee in a single call (a delegatee may hold for several accounts, so this is not necessarily their whole balance). No rebalance against collateral happens during the switch — only the holder changes.
 
 ### `delegateAllTo` (called by the account)
 
@@ -46,7 +46,9 @@ The burn step uses a safe-burn that tolerates a holder whose actual `slisBNBx` b
 
 ## Legacy `SlisBNBProvider.delegateAllTo` is disabled
 
-The `SlisBNBProvider` collateral module also exposes a `delegateAllTo(address)` function from an earlier design. Once the provider has been wired to the minter (`slisBNBxMinter` is set), this legacy path **reverts with `"not supported"`**. All delegation must go through `SlisBNBxMinter.delegateAllTo`.
+The `SlisBNBProvider` collateral module also exposes `delegateAllTo(address)` from an earlier design. Once that provider is wired to the minter, its own `delegateAllTo` **reverts with `"not supported"`** and delegation for it must go through `SlisBNBxMinter.delegateAllTo`.
+
+> The same `slisBNBx` token has several minters, and the legacy CDP providers are still live and unpaused. Those support **per-amount** delegation and are not gated by the minter, so "all delegation goes through the minter" holds for the modules the minter owns, not for the token as a whole. Read the specific provider before assuming which path applies.
 
 ```solidity
 // SlisBNBProvider.delegateAllTo — legacy path, gated off once the minter is set
@@ -55,7 +57,7 @@ require(slisBNBxMinter == address(0), "not supported");
 
 ## Events
 
-Index these to track delegation and the resulting certificate movements:
+These track delegation and the resulting certificate movements. Note **none of their parameters is `indexed`**, so you cannot filter by account at the node — fetch by address and topic0, then filter client-side:
 
 | Event | Emitted by | Signature | Meaning |
 | --- | --- | --- | --- |
@@ -67,6 +69,6 @@ Index these to track delegation and the resulting certificate movements:
 
 ## Integration notes
 
-* **Read, don't expect transfers.** `slisBNBx` is non-transferable. To find an account's certificate holder, read `delegation[account]`; to find the minted total, read `userTotalBalance[account]`.
+* **Read, don't expect transfers.** `slisBNBx` is non-transferable. To find an account's certificate holder, read `delegation[account]`; to find the account's own amount, read `userTotalBalance[account]`.
 * **Delegation does not auto-rebalance.** `delegateAllTo` moves the existing balance as-is. Subsequent collateral supply/withdraw will rebalance the certificate to the *current* delegatee. See [Token Lifecycle](token-lifecycle.md).
 * **The new holder receives Launchpool eligibility.** Because eligibility is computed off-chain from `slisBNBx` balances, the wallet that holds the certificate after delegation is the one credited with rewards.

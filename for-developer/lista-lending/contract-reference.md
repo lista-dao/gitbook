@@ -236,7 +236,7 @@ function isLiquidationWhitelist(Id id, address account) external view returns (b
 
 Per-market allowlist of eligible liquidators. When a market's list is **empty, liquidation is open to anyone**; once any address is added, only listed addresses may call `liquidate` for that market.
 
-Third-party liquidators should not call `liquidate` on this contract directly — go through `PublicLiquidator`, which also reaches positions on markets that are gated here. See [Liquidator Integration](liquidator-integration.md).
+Third-party liquidators should not call `liquidate` on this contract directly — go through `PublicLiquidator`. Note that reaching a market gated here needs **both** sides to line up: the `BOT` must have opened the market or borrower on `PublicLiquidator`, *and* `PublicLiquidator` itself must be on this market's `liquidationWhitelist`. See [Liquidator Integration](liquidator-integration.md).
 
 ### Supply/borrow whitelist
 

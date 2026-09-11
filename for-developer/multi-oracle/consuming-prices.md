@@ -37,7 +37,7 @@ interface IOracle {
 
 Every oracle Lista currently deploys on the `IOracle` path returns a USD price with **8 decimals** — the same precision Moolah uses internally for `minLoanValue`, which is why `Moolah.minLoan` can mix `minLoanValue` and `peek` directly. Upstream feeds (Chainlink, Atlas, RedStone on BNB Chain) publish 8-decimal answers, and Lista's adaptors normalize *to* 8 rather than away from it: `PTLinearDiscountOracle` divides an 18-decimal discount-oracle input by `1e10` and declares `decimals() = 8`.
 
-> **This is a property of the deployed oracles, not a guarantee of the interface.** `IOracle` declares only `peek(address) → uint256` — no denomination, no scale — and Moolah does not validate either; it simply divides the two `peek` results, so any consistent pair of scales would pass. For a market whose oracle you did not deploy, confirm the denomination and decimals of **both** legs before trusting the magnitude. Note also that the legacy CDP `peek(bytes32) → (bytes32, bool)` surface, which Moolah never calls, normalizes *upward* to 18 decimals — do not carry that assumption over.
+> **This is a property of the deployed oracles, not a guarantee of the interface.** `IOracle` declares only `peek(address) → uint256` — no denomination, no scale — and Moolah does not validate either; it simply divides the two `peek` results, so any consistent pair of scales would pass. For a market whose oracle you did not deploy, confirm the denomination and decimals of **both** legs before trusting the magnitude. Note also that the legacy CDP `peek() → (bytes32, bool)` surface (no arguments — there is one pip per collateral), which Moolah never calls, normalizes *upward* to 18 decimals — do not carry that assumption over.
 
 You do **not** need to guess these decimals when working at the market layer: `getPrice` (Layer 2) reads both legs and normalizes them against the token decimals for you. When you call `peek` directly, always confirm the decimals of the specific feed you are reading rather than assuming a fixed magnitude.
 
@@ -171,12 +171,17 @@ import { createPublicClient, http } from "viem";
 const client = createPublicClient({ transport: http(RPC_URL) });
 
 // 1. Resolve the market's params from its id (bytes32).
-const marketParams = await client.readContract({
-  address: MOOLAH,
-  abi: MOOLAH_ABI,
-  functionName: "idToMarketParams",
-  args: [marketId],
-});
+// `idToMarketParams` is a public-mapping getter, so its ABI outputs are five
+// FLATTENED values, not a struct — viem returns an array. Destructure it;
+// reading `.lltv` off the result is undefined.
+const [loanToken, collateralToken, oracle, irm, lltv] =
+  await client.readContract({
+    address: MOOLAH,
+    abi: MOOLAH_ABI,
+    functionName: "idToMarketParams",
+    args: [marketId],
+  });
+const marketParams = { loanToken, collateralToken, oracle, irm, lltv };
 
 // 2. Collateral price, quoted in the loan token, scaled by 1e36.
 const price = await client.readContract({
@@ -189,7 +194,7 @@ const price = await client.readContract({
 // 3. Borrowing power of `collateral` units, in loan-token units.
 const ORACLE_PRICE_SCALE = 10n ** 36n;
 const WAD = 10n ** 18n;
-const maxBorrow = (collateral * price) / ORACLE_PRICE_SCALE * marketParams.lltv / WAD;
+const maxBorrow = ((collateral * price) / ORACLE_PRICE_SCALE) * lltv / WAD;
 const healthy = maxBorrow >= borrowed;
 ```
 
@@ -207,7 +212,7 @@ liquidationPrice = borrowed * 1e36 * 1e18 / (collateral * lltv)
 
 > Treat that as an **approximate analytical threshold, not an exact integer boundary.** The on-chain check is `maxBorrow >= borrowed`, where `maxBorrow` is floored twice and `borrowed` is rounded up — all in the protocol's favour — so a position can already be liquidatable *at* the computed price. Use this formula to rank and monitor candidates, and `isHealthy` or a simulated transaction to decide whether a specific position can actually be liquidated right now.
 
-For the liquidation mechanics themselves, note how the same scale appears when collateral is seized (`Moolah.liquidate`): the loan-token value of seized collateral is `seizedAssets.mulDivUp(collateralPrice, ORACLE_PRICE_SCALE)`, i.e. `seizedAssets * getPrice / 1e36`. The liquidation incentive factor and cursor are **compile-time constants** (`LIQUIDATION_CURSOR`, `MAX_LIQUIDATION_INCENTIVE_FACTOR` in `ConstantsLib`), not governance-tunable parameters, and are not covered here.
+For the liquidation mechanics themselves, note how the same scale appears when collateral is seized (`Moolah.liquidate`): the loan-token value of seized collateral is `seizedAssets.mulDivUp(collateralPrice, ORACLE_PRICE_SCALE)`. That equals `seizedAssets * getPrice / 1e36` **only on non-broker markets** — `liquidate` prices with `_getPrice(marketParams, borrower)`, which routes through the broker when one is set, so on a broker market it is not the `getPrice` value. The liquidation incentive factor and cursor are **compile-time constants** (`LIQUIDATION_CURSOR`, `MAX_LIQUIDATION_INCENTIVE_FACTOR` in `ConstantsLib`), not governance-tunable parameters, and are not covered here.
 
 ---
 
@@ -216,7 +221,7 @@ For the liquidation mechanics themselves, note how the same scale appears when c
 - **Pricing a position's health / a liquidation:** use `getPrice(marketParams)` and divide by `ORACLE_PRICE_SCALE` (`1e36`), then apply `lltv` with the `1e18` WAD. Never mix in a raw `peek` value here.
 - **Need a single asset's USD value:** use `oracle.peek(asset)` and confirm that feed's decimals before scaling.
 - **Auditing a market's oracle:** read `marketParams.oracle`, then `getTokenConfig(collateralToken)` to see the main/pivot/fallback sources, enabled flags, and staleness tolerance; cross-reference the addresses on [Standard Collaterals](../multi-oracle-standard.md) / [bStock Collaterals](../multi-oracle-bstock.md).
-- **All of these are `view` calls** — no transaction needed. They are not all unconditionally callable, though: for a **bStock** collateral, `StockOracle` reverts with `StockMarketClosed()` outside stock-market hours, so `peek`, `getPrice`, and `isHealthy` all revert for that asset while the market is closed. Treat that as expected protocol state, not an RPC fault.
+- **All of these are `view` calls** — no transaction needed. They are not all unconditionally callable, though: for a **bStock** collateral, `StockOracle` reverts with `StockMarketClosed()` while the market is flagged closed, so `peek` and `getPrice` revert for that asset. `isHealthy` reverts too **unless** the position has no debt, in which case it returns `true` without touching the oracle. Treat the revert as expected protocol state, not an RPC fault. Note the closed flag is not a clock — it is a manager-level global switch, a per-stock bot flag, and a pauser-level emergency close, so it will not always line up with exchange hours.
 
 ## Related pages
 

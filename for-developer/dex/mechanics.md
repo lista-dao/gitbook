@@ -184,13 +184,17 @@ Liquidity events follow the same Uniswap V3 shapes: `Mint`, `Burn`, `Collect`, `
 
 ## Fee tiers and tick spacing
 
-Fee tiers are set in the `ListaV3Factory`. Each tier maps a fee (in hundredths of a basis point, i.e. `1e-6`) to a `tickSpacing`. The following tiers are enabled in the factory constructor:
+Fee tiers are set in the `ListaV3Factory`. Each tier maps a fee (in hundredths of a basis point, i.e. `1e-6`) to a `tickSpacing`. Five are enabled on the live factory:
 
-| Fee tier | `fee` (uint24) | `tickSpacing` | Typical use |
-| -------- | -------------- | ------------- | ----------- |
-| 0.05% | `500` | `10` | Stable / correlated pairs |
-| 0.30% | `3000` | `60` | Most pairs |
-| 1.00% | `10000` | `200` | Exotic / volatile pairs |
+| Fee tier | `fee` (uint24) | `tickSpacing` | Notes |
+| -------- | -------------- | ------------- | ----- |
+| 0.0002% | `2` | `1` | Enabled post-deployment; used by Lista stablecoin pools |
+| 0.01% | `100` | `1` | Enabled post-deployment; used by Lista LST pools |
+| 0.05% | `500` | `10` | Constructor |
+| 0.30% | `3000` | `60` | Constructor |
+| 1.00% | `10000` | `200` | Constructor |
+
+> The two lowest tiers are the ones Lista's own pools use, and they are **not** in the constructor set — an integrator who hard-codes `500` / `3000` / `10000` will get the zero address from `getPool` for every real Lista pool.
 
 Additional tiers can be added by the factory owner via `enableFeeAmount(fee, tickSpacing)`; a tier, once enabled, can never be removed, and `feeAmountTickSpacing(fee)` returns `0` for tiers that are not enabled. Read `feeAmountTickSpacing(fee)` (or watch the `FeeAmountEnabled` event) for the authoritative live list rather than hard-coding tiers.
 

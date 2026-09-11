@@ -1,185 +1,68 @@
 # Mechanics
 
-The Collateral Debt Position (CDP) module lets a user deposit a supported asset as collateral and mint **lisUSD**, an over-collateralized stablecoin, against it. The engine is a MakerDAO/Helio-style fork deployed on BNB Chain: a small set of specialized contracts (VAT, JUG, SPOT, DOG, CLIP, ABACI, VOW) sit behind a single user-facing entrypoint, the **Interaction** contract.
+The Collateral Debt Position (CDP) module let a user deposit a supported asset as collateral and mint **lisUSD**, an over-collateralized stablecoin, against it. The engine is a MakerDAO/Helio-style fork on BNB Chain: `Vat`, `Jug`, `Spotter`, `Dog`, `Clipper`, `Abacus` and `Vow` behind the **Interaction** entrypoint.
 
-> **Naming.** `lisUSD` is the canonical stablecoin name. Throughout the engine source you will also see the legacy alias **Hay** (`hay.sol`, name `"Hay Destablecoin"`) and the `HayJoin` adapter. `Hay` and `lisUSD` refer to the same token; the live mainnet token is `LisUSD` (name `"Lista USD"`). This page uses `lisUSD`.
+> **This product is being wound down, and most of its surface is already closed.** Verify each of the following live before building anything against it:
+>
+> * **New borrowing is disabled protocol-wide.** The global debt ceiling `Vat.Line()` is `0`, so any operation that increases debt reverts `Vat/ceiling-exceeded` no matter what the per-collateral `line` says.
+> * **Deposits are whitelisted.** `Interaction.whitelistMode()` is `1`, and the gate applies to the **participant**, not the caller — an integrator cannot deposit on behalf of a non-whitelisted user. Non-whitelisted deposits revert `Interaction/not-in-whitelist`.
+> * **The auction surface is permissioned.** `Interaction.auctionWhitelistMode()` is `1`, and this fork adds `auth` to `Clipper.take` / `redo`. Unlike upstream MakerDAO there is no open keeper or buyer role: starting, buying from and resetting auctions are all restricted to `Interaction.auctionWhitelist`, in practice the Lista liquidator.
+>
+> What still works is repaying, withdrawing collateral, and liquidation of the positions that remain. This page documents the engine for auditors and for integrators unwinding existing positions. **New integrations should target [Lista Lending](../lista-lending/README.md) instead.**
 
-This page describes the on-chain mechanics and ties each user action to the real `Interaction` function and the `IDao` event it emits, so integrators and auditors can index and reproduce each step.
+> **Naming.** `lisUSD` is the canonical stablecoin name. In the engine source you will also see the legacy alias **Hay** (`hay.sol`, `HayJoin`); they are the same token. The live mainnet token is `LisUSD` (`"Lista USD"`).
 
 ## Component map
 
 | Contract | Role |
 | --- | --- |
 | `Interaction` | User entrypoint; orchestrates deposit / borrow / payback / withdraw and the auction surface. |
-| `Vat` | Core accounting engine: per-collateral `ilks` and per-user `urns` (`ink` = collateral, `art` = normalized debt), plus the debt rate accumulator. |
-| `Jug` | Stability-fee accrual. `drip` folds the per-collateral `duty` into the Vat `rate` accumulator. |
-| `Spotter` (SPOT) | Pulls the collateral price from the oracle and applies the liquidation ratio (`mat`) to produce the safe `spot` price. |
-| `GemJoin` | Per-collateral adapter that escrows the ERC-20 collateral and credits it into the Vat. |
-| `HayJoin` | lisUSD adapter: `exit` mints lisUSD to the user on borrow; `join` burns it on repay. |
-| `Dog` | Liquidation trigger (`bark`): marks an unsafe position and kicks a Dutch auction. |
-| `Clipper` (CLIP) | Per-collateral Dutch auction (`kick` / `take` / `redo`). |
-| `Abacus` (ABACI) | Auction price-decay curve (`LinearDecrease` / `StairstepExponentialDecrease` / `ExponentialDecrease`). |
+| `Vat` | Core accounting: per-collateral `ilks`, per-user `urns` (`ink` = collateral, `art` = normalized debt), and the debt rate accumulator. |
+| `Jug` | Stability-fee accrual. `drip` folds the per-collateral `duty` into the Vat `rate` accumulator, compounding `base + duty`. |
+| `Spotter` (SPOT) | Applies the liquidation ratio (`mat`) to the oracle price to produce the safe `spot` price. |
+| `GemJoin` | Per-collateral adapter that escrows the ERC-20 and credits it into the Vat. |
+| `HayJoin` | lisUSD adapter: `exit` mints on borrow, `join` burns on repay. |
+| `Dog` | Liquidation trigger (`bark`). Bounded by `Hole` / `ilk.hole`, so it liquidates **partially** — it reverts `Dog/liquidation-limit-hit` or `Dog/dusty-auction-from-partial-liquidation` rather than always taking the whole position. |
+| `Clipper` (CLIP) | Per-collateral Dutch auction (`kick` / `take` / `redo`), all permissioned in this fork. |
+| `Abacus` (ABACI) | Auction price-decay curve. Four are implemented; every live Clipper uses a `LinearDecrease`, so `tau` is the operative parameter and `cut` / `step` are unused. |
 | `Vow` | Surplus/debt accounting; receiver of auction proceeds. |
-| `DynamicDutyCalculator` (AMO) | Computes the per-collateral borrow rate dynamically from the lisUSD price (see [Borrow rate](#borrow-rate-amo)). |
+| `DynamicDutyCalculator` (AMO) | Computes the per-collateral borrow rate from the lisUSD price. |
 
-## Fees
+## Reading a position
 
-1. **Borrowing interest (stability fee).** Interest accrues continuously into the Vat debt-rate accumulator and is realized in lisUSD when debt is repaid. **No interest is charged at borrow time.** The rate is **dynamic**, computed per collateral by the AMO `DynamicDutyCalculator` from the lisUSD price — it is not a fixed governance number. See [Borrow rate](#borrow-rate-amo).
-2. **Liquidation penalty.** When a position is liquidated, the lisUSD target the auction must raise is the outstanding debt plus a liquidation penalty (`Dog.chop`). The penalty is a governance/manager-adjustable on-chain parameter; its live value is not published here.
-
-## Collateral ratio
-
-Each collateral has a liquidation ratio (`mat`, set per `ilk` on the Spotter). The Spotter combines the oracle price with `mat` to compute the `spot` price used by the Vat to decide whether a position is safe. A position is **safe** while
-
-```
-ink * spot  >=  art * rate
-```
-
-i.e. collateral value (at the safe price) is at least the current debt. When this no longer holds the position becomes liquidatable. The contract exposes read-only helpers an integrator can call directly:
-
-| Function | Returns |
+| Call | Returns |
 | --- | --- |
-| `collateralPrice(token)` | Current oracle price of the collateral. |
-| `collateralRate(token)` | `10**45 / mat` — the collateral ratio (18 decimals). |
-| `locked(token, usr)` | User collateral (`ink`). |
-| `free(token, usr)` | Unlocked (un-pledged) collateral. |
-| `borrowed(token, usr)` | Current lisUSD debt (`art * rate / RAY`); when the debt is non-zero the helper adds a flat 100-wei buffer so `repay` can fully clear the position. |
-| `availableToBorrow(token, usr)` | Additional lisUSD borrowable against current collateral. |
-| `willBorrow(token, usr, amount)` | Borrowable lisUSD if `amount` more collateral were added (or removed, if negative). |
-| `currentLiquidationPrice(token, usr)` | Collateral price at which the position becomes liquidatable. |
-| `borrowApr(token)` | Current annualized borrow rate for the collateral. |
+| `Interaction.locked(token, usr)` | Collateral deposited (`ink`). |
+| `Interaction.borrowed(token, usr)` | Current lisUSD debt (`art * rate / RAY`). When the debt is non-zero the helper adds a flat 100-wei buffer so `repay` can fully clear the position. |
+| `Interaction.collateralRate(token)` | `1e18 / mat` — the maximum loan-to-value for the collateral. |
+| `Interaction.borrowApr(token)` | Borrow rate **scaled by 1e18** — `4035532478367910700` is 4.0355%, not 403%. Despite the name it is `base + duty` compounded over a year, i.e. an APY. |
 
-## Borrow rate (AMO)
+A position is safe while `ink * spot >= art * rate`. `spot` already has the liquidation ratio applied, so it is below the raw oracle price.
 
-The borrow rate is **not** a fixed governance constant. It is the per-collateral stability fee (`duty`) computed on-chain by the `DynamicDutyCalculator` (Algorithmic Market Operations / AMO) to defend the lisUSD peg, modeled on Curve's crvUSD monetary policy. The mechanism and formula are already public in the protocol's [AMO documentation](../../introduction/collateral-debt-position-lisusd/lisusd/algorithmic-market-operations-amo/README.md).
+## Interest
 
-The rate is derived from the lisUSD oracle price:
+Interest accrues continuously into the Vat's per-collateral rate accumulator and is realized in lisUSD when debt is repaid — **nothing is charged at borrow time**. The rate is dynamic: on every borrow, repay or deposit, `Interaction.drip(token)` asks `DynamicDutyCalculator` for an up-to-date `duty` and updates the Jug before the Vat operation.
 
-```
-deviation = PEG - price(lisUSD)         // PEG = $1 (1e8)
-r         = r0 * exp(deviation / beta)
-duty      = r + 1e27                     // per-second rate in the Vat
-```
+The calculator derives `duty` from the lisUSD oracle price using a per-collateral baseline `rate0` and a sensitivity `beta`: below peg the rate rises to incentivize repayment, above peg it falls. Two behaviours worth knowing: when `ilks[collateral].enabled` is `false` the existing duty is returned unchanged, and the rate does not move at all while the price stays within a `delta` band of the last recorded price.
 
-where `r0` is the per-collateral baseline rate (when lisUSD trades at peg) and `beta` controls how sharply the rate responds to depeg. When lisUSD trades below $1 the rate rises (incentivizing repayment, contracting supply); above $1 it falls. **The AMO clamps `duty` to `[minDuty, maxDuty]`**, applying `maxDuty` when the price is at/below `minPrice` and `minDuty` when it is at/above `maxPrice`. Note this bounds `duty`, **not the borrow rate**: `jug.drip` compounds `base + duty`, so with a non-zero `Jug.base` the effective floor is `base`'s own APY rather than zero. All four values are governance/manager-adjustable — read them live from `DynamicDutyCalculator.ilks(collateral)` and `Jug.base` rather than treating any as a fixed cap. The clamp also exists only on this AMO path; neither `Jug.file(ilk, "duty")` nor `Interaction.setCollateralDuty` enforces a maximum.
+Read the inputs live — `rate0` and `beta` from `DynamicDutyCalculator.ilks(collateral)` (that struct is `{ enabled, lastPrice, rate0, beta }`), the bounds from the top-level `minDuty()` / `maxDuty()` / `minPrice()` / `maxPrice()` views, and `Jug.base()`. Note the AMO clamp bounds `duty`, not the borrow rate: since the Vat compounds `base + duty`, a non-zero `base` puts the effective floor above zero. The clamp also exists only on this path — neither `Jug.file(ilk, "duty")` nor `Interaction.setCollateralDuty` enforces a maximum.
 
-The per-collateral `r0`, `beta`, and the price/duty bounds are governance/manager-adjustable on-chain values — read them from `DynamicDutyCalculator.ilks(collateral)` and the lisUSD oracle rather than treating them as fixed promises. On every borrow, repay, or deposit, `Interaction.drip(token)` asks the calculator for the up-to-date `duty` and updates the Jug before the Vat operation, so the live rate is always re-applied.
+## Liquidation
 
-## CDP lifecycle
+When `ink * spot < art * rate`, `Dog.bark` marks the position and kicks a Dutch auction on the collateral's `Clipper`. The auction opens above the oracle price and decays along the Abacus curve until someone takes it; proceeds repay the debt plus a liquidation penalty (`Dog.chop`), and any surplus collateral returns to the borrower.
 
-Each step below names the `Interaction` function called and the `IDao` event emitted, for indexing.
+The live risk parameters — the penalty (`Dog.chop`), the starting-price multiplier (`buf`), the reset window (`tail`), the reset threshold (`cusp`), and the keeper incentives (`tip`, `chip`) — are governance-adjustable on-chain values and are not published here. Read them from the relevant `Clipper` and `Dog`.
 
-### a. Deposit collateral
+Two implementation details that catch integrators:
 
-<figure><img src="../../.gitbook/assets/image (41).png" alt=""><figcaption></figcaption></figure>
+* **Auction state.** `Clipper.status` is `internal`; use `getStatus(id)` or `Interaction.getAuctionStatus`.
+* **The reset clock is `tic`, not the auction start.** `tic` is reset on every `redo`, so a long-running auction's reset window is measured from its last reset.
 
-**`deposit(address participant, address token, uint256 dink)`**
-
-1. `Interaction` drips the stability fee (`drip`), then pulls `dink` of collateral from the caller.
-2. The collateral is escrowed via the collateral's `GemJoin` adapter (`gem.join`).
-3. `Interaction` calls `vat.frob` to record the collateral (`ink`) against the user's position in the Vat.
-4. A debt snapshot is taken for reward accounting.
-
-Collaterals that have a registered provider must be deposited **through** that provider unless `providerCompatibilityMode` is enabled for the token. Emits `Deposit(user, collateral, amount, totalAmount)`.
-
-### b. Borrow lisUSD
-
-<figure><img src="../../.gitbook/assets/image (40).png" alt=""><figcaption></figcaption></figure>
-
-**`borrow(address token, uint256 hayAmount)`**
-
-1. `Interaction` first calls `drip(token)` (refresh the dynamic rate and accrue interest into the Vat) and `poke(token)` (refresh the collateral price).
-2. It converts the requested lisUSD amount into a normalized debt delta `dart = hayAmount * RAY / rate` (rounded up) and calls `vat.frob` to record the new debt against the position. **No interest is charged at this point** — `frob` only increases `art`; the stability fee accrues over time through the Vat `rate` accumulator and is paid in lisUSD when the debt is repaid.
-3. `Interaction` moves the freshly minted internal balance (`vat.move`) and calls `hayJoin.exit` to mint `hayAmount` of lisUSD to the borrower.
-4. A debt snapshot is taken for reward accounting.
-
-The borrow reverts if it would leave the position unsafe (enforced inside `vat.frob`). Emits `Borrow(user, collateral, collateralAmount, amount, liquidationPrice)`.
-
-### c. Payback (repay) lisUSD
-
-<figure><img src="../../.gitbook/assets/image (39).png" alt=""><figcaption></figcaption></figure>
-
-**`payback(address token, uint256 hayAmount)`** — repay your own debt.
-**`paybackFor(address token, uint256 hayAmount, address borrower)`** — repay another address's debt.
-
-1. `Interaction` calls `drip` and `poke`, so the repayment settles the debt **including all accrued interest** at the current `rate`.
-2. lisUSD is pulled from the caller and burned via `hayJoin.join`. If the amount covers the full debt the position is closed (`art` set to 0); otherwise the debt is reduced proportionally (`dart = realAmount * RAY / rate`).
-3. `vat.frob` reduces the position's `art` by `dart`.
-4. A debt snapshot is taken for reward accounting.
-
-Emits `Payback(borrower, collateral, amount, debt, liquidationPrice)`.
-
-### d. Withdraw collateral
-
-<figure><img src="../../.gitbook/assets/image (35).png" alt=""><figcaption></figcaption></figure>
-
-**`withdraw(address participant, address token, uint256 dink)`**
-
-1. `Interaction` calls `drip` and `poke`.
-2. If the position has outstanding debt, only collateral above the amount required to keep the position safe can be withdrawn; the Vat enforces this and reverts otherwise.
-3. Collateral is moved out via `vat.flux` and returned to the user via the `GemJoin` adapter (`gem.exit`).
-4. A debt snapshot is taken for reward accounting.
-
-As with deposits, tokens with a registered provider are withdrawn through that provider (unless `providerCompatibilityMode` is on). Emits `Withdraw(participant, amount)`.
-
-## Liquidation & Dutch auctions
-
-When a position falls below its liquidation ratio (`ink * spot < art * rate`), its collateral is sold for lisUSD through a **Dutch auction**: the price starts above the oracle price and decreases over time until a buyer takes it. The `Interaction` contract exposes the auction surface; the work is done by `Dog`, `Clipper`, and an `Abacus` price curve.
-
-> The example numbers below are **illustrative only** to show the shape of the math. The live liquidation parameters — penalty (`Dog.chop`), starting-price multiplier (`buf`), reset window (`tail`), reset price-drop threshold (`cusp`), and keeper incentives (`tip`, `chip`) — are governance/manager-adjustable on-chain values and are **not** published here.
-
-### g.1 Starting an auction
-
-<figure><img src="../../.gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
-
-**`startAuction(address token, address user, address keeper)`** → `Dog.bark` → `Clipper.kick`.
-
-`Dog.bark` checks the position is unsafe, grabs the collateral and debt out of the position into the auction, adds the liquidation penalty (`chop`) to compute the lisUSD target (`tab`) the auction must raise, and kicks a `Clipper` auction. The Clipper sets the starting price:
-
-```
-top = collateralFeedPrice * buf / par
-```
-
-where `buf` lifts the start price above the current oracle price and `par` is the lisUSD target price (`1` RAY under normal operation). Note `buf >= 1` is a convention, not an on-chain requirement — the Clipper does not enforce it. A keeper that triggers the auction can receive an incentive (a flat `tip` plus a `chip` proportion of `tab`).
-
-*Illustrative shape:* with collateral at \$1.80 and a starting-price multiplier `buf`, the auction would open at `1.80 * buf`; the lisUSD to raise would be the outstanding debt scaled up by `(1 + penalty)`.
-
-Emits `AuctionStarted(token, user, amount, price)` and the Dog's `Bark` event.
-
-### g.2 Buying from an auction
-
-<figure><img src="../../.gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
-
-**`buyFromAuction(address token, uint256 auctionId, uint256 collateralAmount, uint256 maxPrice, address receiverAddress, bytes data)`** → `Clipper.take`.
-
-The price decreases from `top` according to the auction's configured **Abacus** curve. Three curves are implemented in `abaci.sol`; a given Clipper is wired to one of them via its `calc` setting:
-
-| Curve | Price as a function of elapsed time `dur` |
-| --- | --- |
-| `LinearDecrease` | `price = top * (tau - dur) / tau` (reaches 0 at `tau`). |
-| `StairstepExponentialDecrease` | `price = top * cut^floor(dur / step)` — drops by a fixed factor `cut` every `step` seconds, stepping rather than sliding. |
-| `ExponentialDecrease` | `price = top * cut^dur` — continuous per-second exponential decay. |
-
-(There is also `AlwaysOneDollarCalc`, a fixed \$1 curve used only for specific USD-denominated LP collateral.)
-
-A buyer calls `take` with an upper bound on collateral and a `maxPrice` slippage guard; the auction never collects more lisUSD than its `tab`, and partial buys must leave a non-dusty remainder (`Clipper.chost`). Emits `Liquidation(urn, token, collateralAmount, leftover)` and the Clipper's `Take` event.
-
-### g.3 Resetting an auction
-
-**`resetAuction(address token, uint256 auctionId, address keeper)`** → `Clipper.redo`.
-
-An auction can be reset (its price re-initialized from the current feed) once it has run too long or its price has fallen too far. `Clipper.status` flags a reset when either condition holds:
-
-```
-needsRedo  =  (now - startTime) > tail        // ran longer than the reset window
-           ||  price / top      < cusp          // price dropped past the reset threshold
-```
-
-The keeper that resets it may receive the same `tip` + `chip` incentive (subject to the auction still being economically meaningful). The concrete `tail` and `cusp` values are on-chain risk parameters and are not published here.
+Because `take` and `redo` are permissioned in this fork, none of this is an open keeper opportunity. For a liquidation surface that *is* open to third parties, see [Liquidator Integration](../lista-lending/liquidator-integration.md) on Lista Lending.
 
 ## Earn / staking note
 
-Historically, lisUSD holders could stake into the **Jar** (`jar.sol`) to earn rewards. The Jar contract still exists in the repository but is **largely deprecated**: the live lisUSD staking / saving-rate product is now the **LisUSDPoolSet** / **EarnPool** stack (the Stable Pool / lisUSD Saving Rate layer). New integrations should target that layer rather than the Jar. See the [Stable Pool (PSM)](../../introduction/collateral-debt-position-lisusd/lisusd/stable-pool-price-stability-module-psm.md) and [lisUSD Saving Rate (LSR)](../../introduction/collateral-debt-position-lisusd/lisusd/lisusd-saving-rate-lsr.md) docs.
+lisUSD holders could historically stake into the **Jar** (`jar.sol`). The Jar still exists in the repository but is largely deprecated; the live lisUSD staking / saving-rate product is the **LisUSDPoolSet** / **EarnPool** stack. New integrations should target that layer. See [Stable Pool (PSM)](../../introduction/collateral-debt-position-lisusd/lisusd/stable-pool-price-stability-module-psm.md) and [lisUSD Saving Rate (LSR)](../../introduction/collateral-debt-position-lisusd/lisusd/lisusd-saving-rate-lsr.md).
 
 ## See also
 
