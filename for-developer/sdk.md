@@ -61,7 +61,7 @@ const sdk = new MoolahSDK({
 >
 > **The SDK is still iterating, and its Ethereum coverage lags the protocol.** On BNB Chain everything on this page applies. On Ethereum, market and vault reads and the market and vault builders work, but several entries in the SDK's bundled address book are unset, so at the versions named above:
 >
-> * Resolve Ethereum addresses from [Smart Contract — Ethereum](lista-lending/smart-contract-ethereum.md), not from `getContractAddress` / `getContractAddressOptional`. The first throws for an unset entry and the second returns the zero address, which is the more dangerous failure since a caller can send to it. **Some entries are unset on BNB Chain too**, so treat a zero result from either helper as "not available" on every chain, not just Ethereum.
+> * Resolve Ethereum addresses from [Smart Contract — Ethereum](lista-lending/smart-contract-ethereum.md), not from `getContractAddress` / `getContractAddressOptional`. The first throws for an unset entry and the second returns the zero address, which is the more dangerous failure since a caller can send to it. **Some entries are unset on BNB Chain too**, so treat a zero result from `getContractAddressOptional`, or a throw from `getContractAddress`, as "not available" on every chain — not just Ethereum.
 > * `getBrokerUserPositions` and `getMarketUserDataWithBroker` do not work on Ethereum.
 > * Native-asset (ETH) markets and vaults are not detected correctly; use the ERC-20 paths.
 
@@ -75,7 +75,7 @@ const chain = sdk.getApiChain(56); // "bsc"
 
 ## Read operations
 
-Read methods are split by source: **Chain** methods read on-chain state through your RPC; **API** methods read from the public Lista API. Human-scaled economic amounts are returned as [`Decimal`](#decimal-utility) rather than `number` or `bigint`; raw on-chain integers — share amounts, timestamps, rate caps/floors, and the `MarketParams` struct — remain `bigint`.
+Read methods are split by source: **Chain** methods read on-chain state through your RPC; **API** methods read from the public Lista API. Human-scaled economic amounts are returned as [`Decimal`](#decimal-utility) rather than `number` or `bigint`; raw on-chain integers — market borrow shares (`borrowShares`, `totalBorrowShares`), timestamps, rate caps/floors, and the `MarketParams` struct — remain `bigint`.
 
 | Method | Source | Returns |
 | --- | --- | --- |
@@ -116,7 +116,7 @@ const vaults = await sdk.getVaultList({ chain, page: 1, pageSize: 20 });
 
 ## Building transactions: the `StepParam[]` pattern
 
-Write operations are **builders**, not senders. Each `build*Params` method reads whatever it needs from chain/config and returns an ordered `StepParam[]`. You iterate the steps and execute them with your own wallet client. This keeps key custody and signing entirely in your control.
+Write operations are **builders**, not senders. Most `build*Params` methods read whatever they need from chain/config and returns an ordered `StepParam[]`. You iterate the steps and execute them with your own wallet client. This keeps key custody and signing entirely in your control.
 
 A `StepParam` is a plain descriptor:
 
@@ -142,7 +142,7 @@ interface StepParam {
 }
 ```
 
-A builder may prepend one or more `"approve"` steps when an ERC-20 allowance is required, so always execute the whole array in order and never dedupe by `step`. Ethereum mainnet USDT is the case that catches people out: when a non-zero allowance already exists, **two** approve steps are emitted — a reset to `0` (flagged `meta.reset === true`) followed by the real approve — because that contract rejects non-zero → non-zero allowance changes.
+A builder may prepend one or more `"approve"` steps when an ERC-20 allowance is required, so always execute the whole array in order and never dedupe by `step`. Ethereum mainnet USDT is the case that catches people out: when a non-zero but **insufficient** allowance already exists, **two** approve steps are emitted (a sufficient allowance emits none at all) — a reset to `0` (flagged `meta.reset === true`) followed by the real approve — because that contract rejects non-zero → non-zero allowance changes.
 
 ```typescript
 import { parseUnits } from "viem";
@@ -268,7 +268,7 @@ The core package also exposes interest-rate helpers — `getAnnualBorrowRate(rat
 
 ## Decimal utility
 
-Human-scaled economic amounts are returned as `Decimal` (from `@lista-dao/moolah-sdk-core`) instead of `number` or `bigint`, to avoid JavaScript floating-point error. Raw on-chain integers (share amounts, timestamps, rate caps/floors, `MarketParams`) stay `bigint`.
+Human-scaled economic amounts are returned as `Decimal` (from `@lista-dao/moolah-sdk-core`) instead of `number` or `bigint`, to avoid JavaScript floating-point error. Raw on-chain integers (market borrow shares (`borrowShares`, `totalBorrowShares`), timestamps, rate caps/floors, `MarketParams`) stay `bigint`.
 
 ```typescript
 import { Decimal, RoundingMode } from "@lista-dao/moolah-sdk-core";
