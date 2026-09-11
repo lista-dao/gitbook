@@ -29,7 +29,9 @@ function redeem(uint256 shares, address payable receiver, address owner) externa
 
 The amount is `msg.value` — there is no assets argument on `deposit`. On `mint` you send at least the previewed cost (`msg.value >= previewAssets`, else `invalid BNB amount`) and the surplus is refunded.
 
-Each instance is **bound to one vault**, which is why the addresses table lists several. There is also a multi-vault form that takes the vault explicitly:
+Each instance is **bound to one vault**, which is why the addresses table lists several.
+
+A newer implementation adds a multi-vault form, but **not every deployed provider runs it** — the calls below are absent from some of the listed addresses and revert with empty returndata there. Probe `vaults` first; if it reverts, you have a single-vault instance and only the four signatures above exist.
 
 ```solidity
 function deposit(address vault, address receiver) external payable returns (uint256 shares);
@@ -37,13 +39,15 @@ function mint(address vault, uint256 shares, address receiver) external payable 
 function vaults(address vault) external view returns (bool);
 ```
 
-`vaults(v)` must be `true` or the call reverts `vault not added`. Note the vault's own whitelist still applies to the **receiver** — see [Vault Reference](vault-reference.md).
+On that implementation `vaults(v)` must be `true` or the call reverts `vault not added` — including for the single-argument form, which routes through the provider's own `MOOLAH_VAULT`. So a default vault that was never registered makes even `deposit(receiver)` revert.
+
+The vault's own whitelist still applies to the **receiver** either way — see [Vault Reference](vault-reference.md).
 
 ---
 
 ## SlisBNBProvider — slisBNB collateral
 
-slisBNB collateral is provider-gated, so these are the only ways to move it:
+slisBNB collateral is provider-gated, so these are the only ways *you* can move it:
 
 ```solidity
 function supplyCollateral(
@@ -64,6 +68,8 @@ function withdrawCollateral(
 **Approve the provider**, not Moolah — it pulls slisBNB from you with `transferFrom`. `marketParams.collateralToken` must be slisBNB (`invalid collateral token` otherwise), and `assets` must be non-zero.
 
 On withdrawal the caller must be `onBehalf` or authorized for it (`unauthorized sender`).
+
+Liquidation is the exception to the gate: Moolah transfers seized collateral straight to the liquidator and only notifies the provider afterwards, so collateral can leave a position without any provider call.
 
 Supplying through this provider also mints the non-transferable `slisBNBx` certificate that carries Binance Launchpool eligibility, and withdrawing burns it. The delegatee that holds it, and how to change it, are covered in [slisBNBx Delegation](../clisbnb/delegation.md) — including that the certificate covers the user's part only, not the fee slice.
 

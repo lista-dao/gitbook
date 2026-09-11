@@ -28,7 +28,7 @@ function maxDeposit(address) external view returns (uint256);
 function maxMint(address) external view returns (uint256);
 ```
 
-Call `maxDeposit` before sizing a deposit. Exceeding it reverts `AllCapsReached()` or `SupplyCapExceeded(Id)`. The source notes `maxMint` **may over-report** when the supply queue contains duplicate markets, so treat it as an upper bound rather than a promise.
+Call `maxDeposit` before sizing a deposit; exceeding it reverts `AllCapsReached()`. Both `maxDeposit` and `maxMint` are documented in-source as possibly **over-reporting** when the supply queue contains the same market twice — that market's headroom gets counted once per entry. Treat either as an upper bound rather than a promise, and leave margin: a deposit sized at exactly `maxDeposit` can still revert.
 
 **3. Withdrawal is bounded by reachable liquidity, not by your balance.** A vault withdraw pulls from markets in withdraw-queue order, and a market whose liquidity is fully borrowed cannot be pulled from. So a holder's shares are not always redeemable in full at that moment:
 
@@ -57,7 +57,9 @@ function redeem(uint256 shares, address receiver, address owner) external return
 
 **Approve the vault itself** for `deposit` / `mint` — it pulls the asset with `transferFrom`. `withdraw` and `redeem` from an `owner` other than the caller consume the ERC-20 allowance on the *shares*, per the standard.
 
-`totalAssets` and the `convertTo*` / `preview*` conversions account for accrued performance fees, so a quote taken before a fee accrual can differ slightly from what settles. For an exact figure, simulate the call.
+The `convertTo*` / `preview*` conversions account for the not-yet-minted performance-fee shares, so a quote taken before a fee accrual can differ slightly from what settles. For an exact figure, simulate the call.
+
+`totalAssets` does **not** net out the fee — the fee is taken by minting shares to the fee recipient, not by reducing assets. It does subtract the broker interest lock buffer's `currentLocked()`, so it is not simply the sum of the vault's market positions.
 
 ### Two non-standard helpers
 
@@ -77,9 +79,9 @@ function supplyQueueLength() external view returns (uint256);
 function withdrawQueueLength() external view returns (uint256);
 ```
 
-The supply queue determines where a deposit lands; the withdraw queue determines what a withdrawal can reach, in order. Both are curator-managed (`setSupplyQueue`, `updateWithdrawQueue`, `reallocate`, all role-gated), so they change without notice — read them rather than caching.
+The supply queue determines where a deposit lands; the withdraw queue determines what a withdrawal can reach, in order. Both are allocator-managed (`setSupplyQueue`, `updateWithdrawQueue`, and `reallocate` — the last also callable by a bot role), while the per-market caps behind them are curator-managed (`setCap`, `setMarketRemoval`). All are role-gated, and all change without notice — read the queues rather than caching them.
 
-Per-market caps and queue changes are observable as events; see [Events & Callbacks](events-and-callbacks.md) for the vault event set, including `SetCap`, `SubmitCap`, `SetSupplyQueue` and `SetWithdrawQueue`.
+Per-market caps and queue changes are observable as events; see [Events & Callbacks](events-and-callbacks.md) for the vault event set, including `SetCap`, `SetSupplyQueue` and `SetWithdrawQueue`.
 
 ---
 
@@ -89,7 +91,7 @@ Per-market caps and queue changes are observable as events; see [Events & Callba
 | --- | --- |
 | `NotWhiteList()` | The **receiver** is not on a non-empty vault whitelist. |
 | `AllCapsReached()` | Every market in the supply queue is at its cap. |
-| `SupplyCapExceeded(Id)` | The deposit would push one market past its cap. |
+| `SupplyCapExceeded(Id)` | A **reallocation** would push one market past its cap — an allocator error, not a deposit one. A deposit clamps to the cap instead and reverts `AllCapsReached()`. |
 | `NotEnoughLiquidity()` | The withdraw queue cannot reach enough liquidity right now. |
 | `MarketNotEnabled(Id)` · `UnauthorizedMarket(Id)` | The market is not enabled for this vault — relevant to curator calls, not to a plain deposit. |
 | `InconsistentAsset(Id)` | A market's loan token does not match the vault's `asset()`. |

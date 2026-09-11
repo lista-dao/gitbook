@@ -139,7 +139,6 @@ The ERC-4626 curator vault layer emits its own lifecycle and configuration event
 | `CreateMoolahVault` | **`address moolahVault`**, `address implementation`, `address managerTimeLock`, `address curatorTimeLock`, `uint256 timeLockDelay`, **`address caller`**, `address manager`, `address curator`, `address guardian`, **`address asset`**, `string name`, `string symbol` |
 | `SetMoolahVaultImpl` | **`address impl`** — emitted by the factory when the vault implementation used for newly created vaults is changed. |
 | `SetCap` | **`address caller`**, **`Id id`**, `uint256 cap` |
-| `SubmitCap` | **`address caller`**, **`Id id`**, `uint256 cap` |
 | `SetSupplyQueue` | **`address caller`**, `Id[] newSupplyQueue` |
 | `SetWithdrawQueue` | **`address caller`**, `Id[] newWithdrawQueue` |
 | `ReallocateSupply` | **`address caller`**, **`Id id`**, `uint256 suppliedAssets`, `uint256 suppliedShares` |
@@ -154,7 +153,7 @@ The ERC-4626 curator vault layer emits its own lifecycle and configuration event
 
 Timelocked/governance actions on the vault emit the matching `Submit*` / `Set*` / `Revoke*` pairs (`SubmitTimelock`/`SetTimelock`, `SubmitGuardian`/`SetGuardian`, `SubmitMarketRemoval`/`RevokePendingMarketRemoval`, etc.), also in the same `EventsLib`.
 
-To reconstruct how a vault allocates deposits across underlying Moolah markets, track `SetSupplyQueue`/`SetWithdrawQueue` for ordering, `SetCap`/`SubmitCap` for per-market limits, and `ReallocateSupply`/`ReallocateWithdraw` for actual moves.
+To reconstruct how a vault allocates deposits across underlying Moolah markets, track `SetSupplyQueue`/`SetWithdrawQueue` for ordering, `SetCap` for per-market limits, and `ReallocateSupply`/`ReallocateWithdraw` for actual moves.
 
 ### Vault allocator events (`VaultAllocator`)
 
