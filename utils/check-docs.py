@@ -51,6 +51,17 @@ for f in md:
 print('table column mismatches:',len(tb))
 for b in tb[:10]: print('  ',*b)
 print('ORPHANED table rows (header lost — renders as literal text):',len(orphan))
+glued=[]
+for f in md:
+    L=open(f,encoding='utf-8').read().split('\n'); fence=False
+    for i in range(1,len(L)):
+        if L[i].lstrip().startswith('```'): fence = not fence; continue
+        if fence: continue
+        prev,cur=L[i-1].strip(),L[i].strip()
+        if prev.startswith('|') and cur and not cur.startswith('|'):
+            glued.append((f,i+1,cur[:60]))
+print('TEXT GLUED to a table (renders as a table cell):',len(glued))
+for b in glued[:10]: print('  ',*b)
 for b in orphan[:15]: print('  ',*b)
 
 # --- external links (opt-in: --external) -----------------------------------

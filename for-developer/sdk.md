@@ -45,7 +45,7 @@ import { MoolahSDK } from "@lista-dao/moolah-lending-sdk";
 const sdk = new MoolahSDK({
   rpcUrls: {
     56: "https://bsc-dataseed.binance.org", // BSC mainnet
-    1: "https://eth.llamarpc.com",          // Ethereum mainnet
+    1: "https://ethereum-rpc.publicnode.com",          // Ethereum mainnet
   },
 });
 ```
@@ -194,6 +194,7 @@ for (const step of borrowSteps) {
 | `buildSmartRepayParams(params)` | Repay a Smart Lending market position. |
 | `buildBrokerBorrowParams(params)` | Borrow through a broker (optionally a fixed `termId`). |
 | `buildBrokerRepayParams(params)` | Repay a broker position. |
+
 > The `Smart*` builders operate on **Lista StableSwap** LP, not the V3 DEX. The `DexLp` in the function names mirrors `SmartProvider`'s own on-chain naming — see [Smart Lending & StableSwap](lista-lending/stableswap-integration.md).
 
 
