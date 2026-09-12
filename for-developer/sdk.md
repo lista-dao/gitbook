@@ -15,7 +15,7 @@ For the contract-level mechanics behind these calls, see [Integration Patterns](
 | [`@lista-dao/moolah-sdk-core`](https://www.npmjs.com/package/@lista-dao/moolah-sdk-core) | `1.0.12` | Core types, pure calculation/simulation functions, contract ABIs, the `Decimal` precision utility, and `MoolahApiClient`. No wallet or chain dependency for the pure functions. |
 | [`@lista-dao/moolah-lending-sdk`](https://www.npmjs.com/package/@lista-dao/moolah-lending-sdk) | `1.0.11` | The high-level `MoolahSDK` builder. Reads chain/API data and returns transaction steps (`StepParam[]`). Re-exports a curated subset of the core package (`Decimal`, `MoolahApiClient`, contract-address helpers, builder step functions, and types). |
 
-Those were the latest published releases as of September 2026 (`moolah-sdk-core@1.0.12`, published 2026-03-23; `moolah-lending-sdk@1.0.11`, published 2026-03-19). Run `npm view @lista-dao/moolah-lending-sdk version` for the current release.
+Run `npm view @lista-dao/moolah-lending-sdk version` for the current release.
 
 `moolah-lending-sdk` depends on `moolah-sdk-core`, so installing the lending SDK pulls the core package in and re-exports a curated convenience subset of it — the core types, `Decimal`, `MoolahApiClient`, and the contract-address helpers. The pure **simulate functions**, interest-rate helpers, and contract **ABIs** are *not* re-exported; import those directly from `@lista-dao/moolah-sdk-core` (as the examples below do). Install `moolah-sdk-core` on its own if you only want the pure calculation/type layer without the builder.
 
@@ -269,7 +269,6 @@ The core package also exposes interest-rate helpers — `getAnnualBorrowRate(rat
 
 ## Decimal utility
 
-Human-scaled economic amounts are returned as `Decimal` (from `@lista-dao/moolah-sdk-core`) instead of `number` or `bigint`, to avoid JavaScript floating-point error. Raw on-chain integers (market borrow shares (`borrowShares`, `totalBorrowShares`), timestamps, rate caps/floors, `MarketParams`) stay `bigint`.
 
 ```typescript
 import { Decimal, RoundingMode } from "@lista-dao/moolah-sdk-core";
@@ -297,10 +296,6 @@ amount.toFormat(2);  // thousand separators
 
 When you need a raw `bigint` for a transaction amount, either take `.roundDown(decimals).numerator` from a `Decimal`, or use viem's `parseUnits` directly on user input.
 
-```typescript
-import { parseUnits } from "viem";
-const rawValue = parseUnits("100.5", 18); // 100500000000000000000n
-```
 
 | Read type | Decimal fields (examples) |
 | --- | --- |
@@ -334,10 +329,6 @@ const market = await api.getMarketInfo(marketId, "bsc");
 The client unwraps the standard Lista API envelope, returning the `data` payload on success and throwing on a non-success code. For the full endpoint reference — paths, query parameters, and response schemas — see the [Moolah Lending API](services/lending-api/README.md) section, in particular [Market](services/lending-api/market.md) and [Vault](services/lending-api/vault.md).
 
 ---
-
-## End-to-end shape
-
-A typical integration is: pick a chain ID, **read** market/user state (chain or API), optionally **simulate** the resulting position, **build** the `StepParam[]` for the operation, then **execute** each step with your own wallet client. The SDK only ever reads and encodes — signing and broadcasting remain in your application.
 
 ## See also
 

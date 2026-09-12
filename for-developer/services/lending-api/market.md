@@ -4,7 +4,7 @@ A lending market is defined by a collateral/loan asset pair, an LLTV, an interes
 
 All paths are under **Base URL** `/api/moolah`. List and detail responses are served from a short-lived server-side cache, so values reflect the last sync rather than live on-chain state. USD and asset amounts are returned as fixed-point decimal strings (18 decimal places) unless noted. `GET /allMarkets` is the exception — it returns raw on-chain base units throughout, despite no field name ending in `Wei`. It also carries **no decimals fields**, unlike the liquidation feeds, so read `decimals()` from each token contract rather than assuming 18. This bites on Ethereum, where USDT and USDC are 6-decimal: defaulting to 18 puts them out by 1e12. Their BSC counterparts are 18-decimal, so the same assumption happens to work there — which is exactly why it goes unnoticed until an Ethereum market is read.
 
-The `chain` query parameter is a **string network key** (`bsc`, `ethereum`, `bscTest`), not a numeric chain ID. When omitted it defaults to the live network (`bsc` in production). List sorting uses the pair `sort` (a field key) + `order` (`asc` | `desc`), not `sortBy`/`sortOrder`.
+See [Conventions](conventions.md) for the chain selector, pagination and sorting — note the parameter pair is `sort` + `order`, not `sortBy`/`sortOrder`.
 
 ---
 
