@@ -54,7 +54,7 @@ Paginated list of vaults with filtering and sorting.
 | `apy` | string | Current supply APY. |
 | `emissionApy` | string | Additional APY from token emissions/rewards. |
 | `emissionEnabled` | number | `1` when reward emissions are active for this vault, `0` when not. Serialized as an integer, not a JSON boolean. |
-| `emissionDetail` | object | Reward breakdown keyed by token symbol — `{ [symbol]: { apy, total, icon } }`, or `{}` when there is none. Note `/vault/allocation` has no such field; its per-market reward breakdown is the `rewards` array for its own emission field. |
+| `emissionDetail` | object | Reward breakdown keyed by token symbol — `{ [symbol]: { apy, total, icon } }`, or `{}` when there is none. Note `/vault/allocation` returns `emissionDetail` as an **array**, not an object keyed by symbol. |
 | `deposits` | string | Total assets deposited (token units). |
 | `depositsUsd` | string | Total deposits valued in USD. |
 | `asset` | string | Deposit (loan) asset token address. |

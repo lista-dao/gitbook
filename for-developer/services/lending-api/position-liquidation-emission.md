@@ -85,7 +85,7 @@ Returns the contents of the liquidation whitelist, ordered by insertion. **`{"to
 | `loans` | string[] | No | Filter by loan symbol(s). Max 10. |
 | `loanInUsd` | number | No | Minimum borrow value in USD (rounded down to the nearest 1,000). |
 
-> **Send array filters as repeated parameters** — `?collaterals=BTCB&collaterals=WBNB`, or `?collaterals[]=BTCB`. A single un-repeated `?collaterals=BTCB` arrives as a plain string, is iterated character by character, and silently matches nothing. `/list` and `/history` additionally reject more than 10 values; that check is on length, so one un-repeated value longer than 10 characters is rejected too.
+> **Send array filters as repeated parameters** — `?collaterals=BTCB&collaterals=WBNB`, or the bracket form `?collaterals[]=BTCB` for a single value. A single un-repeated `?collaterals=BTCB` arrives as a plain **string** and is spread **character by character** into the `IN (…)` list, so it silently matches the tokens `B`, `T`, `C` — a wrong result set, not an empty one and not an error. `/list` and `/history` additionally reject more than 10 values; that check is on length, so one un-repeated value longer than 10 characters is rejected too.
 
 #### Response
 
@@ -138,7 +138,7 @@ Completed Moolah liquidations.
 | `userAddress` | string | No | Filter by borrower address. |
 | `loanInUsd` | number | No | Minimum borrow value in USD (rounded down to the nearest 1,000). |
 
-> **Send array filters as repeated parameters** — `?collaterals=BTCB&collaterals=WBNB`, or `?collaterals[]=BTCB`. A single un-repeated `?collaterals=BTCB` arrives as a plain string, is iterated character by character, and silently matches nothing. `/list` and `/history` additionally reject more than 10 values; that check is on length, so one un-repeated value longer than 10 characters is rejected too.
+> **Send array filters as repeated parameters** — `?collaterals=BTCB&collaterals=WBNB`, or the bracket form `?collaterals[]=BTCB` for a single value. A single un-repeated `?collaterals=BTCB` arrives as a plain **string** and is spread **character by character** into the `IN (…)` list, so it silently matches the tokens `B`, `T`, `C` — a wrong result set, not an empty one and not an error. `/list` and `/history` additionally reject more than 10 values; that check is on length, so one un-repeated value longer than 10 characters is rejected too.
 
 #### Response
 
