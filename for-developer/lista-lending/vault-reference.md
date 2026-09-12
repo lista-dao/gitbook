@@ -4,7 +4,6 @@
 
 For deployed vault addresses see [Smart Contract](smart-contract.md). For the market-level contract see [Contract & Interface Reference](contract-reference.md); for the read-side REST API see [Vault API](../services/lending-api/vault.md).
 
-All facts below are derived from `src/moolah-vault/MoolahVault.sol` and its `ErrorsLib`.
 
 ---
 

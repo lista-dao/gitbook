@@ -6,7 +6,6 @@ Liquidation on Moolah is permissionless *at the contract level* but **gated per 
 
 For the product-level explanation of liquidation see [Liquidation](../../introduction/lista-lending/liquidation/README.md); for the data feeds that tell you *what* to liquidate see [Positions, Liquidation & Emission API](../services/lending-api/position-liquidation-emission.md). For the low-level core function see [Contract & Interface Reference § Liquidation](contract-reference.md).
 
-All facts below are derived from `src/liquidator/PublicLiquidator.sol`, `src/liquidator/Liquidator.sol`, and `src/moolah/Moolah.sol`.
 
 ---
 

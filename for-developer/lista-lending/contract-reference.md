@@ -4,7 +4,6 @@ This page is the interface-level reference for the **Moolah** core contract — 
 
 Moolah is powered by Morpho and built on the Morpho Blue smart contracts, then extended with Lista-specific controls. This page covers the **core market contract only** — the ERC-4626 vault layer is in [Vault Reference](vault-reference.md), the provider-gated collaterals in [Providers](providers.md), and the fixed-term broker surface in [Broker Reference](broker-reference.md). Every market — regardless of collateral, oracle, or IRM — lives inside this one contract and is addressed by a market `Id`. For deployed addresses, see the [Smart Contract](smart-contract.md) reference; this page does not restate address tables. For higher-level flows see [Integration Patterns](integration-patterns.md); for the callback interfaces and emitted events see [Events & Callbacks](events-and-callbacks.md).
 
-All facts below are derived from `src/moolah/Moolah.sol` and `src/moolah/interfaces/IMoolah.sol`.
 
 ---
 
@@ -215,7 +214,7 @@ Verified from `ConstantsLib.sol` / `MathLib.sol`. These are compile-time constan
 
 ## Lista-specific extensions
 
-These controls are additions on top of the Morpho Blue base and are what distinguishes Moolah from a vanilla deployment. See also [Protocol Extensions](protocol-extensions.md) for the conceptual overview.
+These controls are additions on top of the Morpho Blue base and are what distinguishes Moolah from a vanilla deployment.
 
 ### Minimum loan floor (`minLoanValue` / `minLoan`)
 
@@ -229,7 +228,6 @@ function minLoanValue() external view returns (uint256);
 ### Liquidation whitelist
 
 ```solidity
-function batchToggleLiquidationWhitelist(Id[] memory ids, address[][] memory accounts, bool isAddition) external; // MANAGER
 function getLiquidationWhitelist(Id id) external view returns (address[] memory);
 function isLiquidationWhitelist(Id id, address account) external view returns (bool);
 ```
@@ -241,7 +239,6 @@ Third-party liquidators should not call `liquidate` on this contract directly �
 ### Supply/borrow whitelist
 
 ```solidity
-function setWhiteList(Id id, address account, bool isAddition) external; // MANAGER
 function getWhiteList(Id id) external view returns (address[] memory);
 function isWhiteList(Id id, address account) external view returns (bool);
 ```
@@ -251,9 +248,7 @@ Optional per-market gate on `supply`, `supplyCollateral`, and `borrow` (checked 
 ### Vault & flash-loan blacklists
 
 ```solidity
-function setVaultBlacklist(address account, bool isBlacklisted) external;         // MANAGER
 function vaultBlacklist(address account) external view returns (bool);
-function setFlashLoanTokenBlacklist(address token, bool isBlacklisted) external;  // MANAGER
 function flashLoanTokenBlacklist(address token) external view returns (bool);
 ```
 
@@ -262,9 +257,7 @@ function flashLoanTokenBlacklist(address token) external view returns (bool);
 ### Providers & brokers routing
 
 ```solidity
-function setProvider(Id id, address provider, bool isAddition) external;      // MANAGER
 function providers(Id id, address token) external view returns (address);
-function setMarketBroker(Id id, address broker, bool isAddition) external;    // MANAGER
 function brokers(Id id) external view returns (address);
 ```
 
@@ -290,6 +283,5 @@ Everything else — enabling IRMs and LLTVs, setting fees, whitelists, providers
 
 - [Integration Patterns](integration-patterns.md) — provider and broker layers, and how direct calls route through them.
 - [Events & Callbacks](events-and-callbacks.md) — the `onMoolah*` callback interfaces and emitted events for indexers.
-- [Protocol Extensions](protocol-extensions.md) — conceptual overview of the Lista-specific controls.
 - [Smart Contract](smart-contract.md) — deployed contract addresses.
 - [Moolah Lending SDK](../sdk.md) — the TypeScript path that wraps these calls.

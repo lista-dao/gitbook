@@ -14,7 +14,6 @@ Users can deposit `slisBNB` or `slisBNB/BNB LP` as collateral in Moolah and stil
 
 ## Contents
 
-* [Token Lifecycle](token-lifecycle.md)
 * [Minting Ratio Logic](minting-ratio-logic.md)
 * [Delegation](delegation.md)
 * [Smart Contract](smart-contract.md)

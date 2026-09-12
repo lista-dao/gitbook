@@ -6,7 +6,6 @@ The mechanism is worth knowing because it is what fails: the migration needs Moo
 
 Deployed addresses are on [BSC Core](smart-contract-bsc-core.md) and [Ethereum](smart-contract-ethereum.md).
 
-All facts below are derived from `src/utils/PositionManager.sol`.
 
 > **No borrower-callable reverse path.** Matured fixed positions are folded back into the broker's variable ("dynamic") position by a bot role calling `refinanceMaturedFixedPositions` — you cannot trigger it. To leave a fixed term early, repay the fixed position through its broker. See [Broker Reference](broker-reference.md) for the repay surface.
 >

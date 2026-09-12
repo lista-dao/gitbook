@@ -58,6 +58,16 @@ The Resilient Oracle aggregates up to three sources per asset and cross-validate
 3. Otherwise, if both main and fallback are available and validate against each other, return the main price.
 4. Otherwise revert with `"invalid resilient oracle price"`.
 
+### PT linear discount
+
+PT collateral is priced at a linear discount to the underlying, shrinking to zero at maturity:
+
+```text
+discount = baseDiscount × (timeToMaturity / totalDuration)
+```
+
+After maturity the oracle returns the full underlying price. `PTLinearDiscountOracle` divides its 18-decimal discount input by `1e10` and declares `decimals() = 8`, so it reads like any other feed on the `IOracle` path.
+
 A source is skipped if it is disabled, missing, reverts, or is **stale** — `getPriceFromOracle` treats a Chainlink-style answer whose `updatedAt` is older than the asset's `timeDeltaTolerance` as invalid (`INVALID_PRICE = 0`). A `timeDeltaTolerance` of `0` **disables the staleness check entirely** rather than rejecting everything; both `PTLinearDiscountOracle` and `IdleOracle` return `0` here, so read the value before assuming a freshness guarantee.
 
 **BoundValidator.** Validation compares a reported price against an anchor price. With `anchorRatio = anchorPrice * 1e18 / reportedPrice`, the reported price is accepted only when:

@@ -13,7 +13,6 @@ In addition, it supports two integration patterns for external systems:
 
 ## Contents
 
-* [Protocol Extensions](protocol-extensions.md)
 * [Integration Patterns](integration-patterns.md)
 * [Liquidator Integration](liquidator-integration.md)
 * [Vault Reference](vault-reference.md)

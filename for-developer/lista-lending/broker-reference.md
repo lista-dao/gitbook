@@ -10,7 +10,6 @@ Check whether a market is broker-gated:
 function brokers(Id id) external view returns (address);
 ```
 
-All facts below are derived from `src/broker/LendingBroker.sol` and `src/broker/interfaces/IBroker.sol`.
 
 > Lista Credit uses a different broker, `CreditBroker`, with credit-scoring gates on top. It has its own page: [Loan Lifecycle](../credit-loans/loan-lifecycle.md).
 

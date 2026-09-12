@@ -1,6 +1,6 @@
 # Smart Contract
 
-slisBNB is Lista's yield-bearing liquid staking token for BNB. BNB is staked through `ListaStakeManager`, which delegates to BSC validators via the native StakeHub system contract and mints slisBNB to the staker. slisBNB can be bridged to Ethereum through LayerZero OFT contracts (lock on BSC, mint on Ethereum). See [Mechanics](mechanics.md) for the staking flow and [Cross-Chain Bridge](cross-chain-bridge.md) for the bridge architecture.
+slisBNB is Lista's yield-bearing liquid staking token for BNB. BNB is staked through `ListaStakeManager`, which delegates to BSC validators via the native StakeHub system contract and mints slisBNB to the staker. slisBNB can be bridged to Ethereum through LayerZero OFT contracts (lock on BSC, mint on Ethereum). See [Mechanics](mechanics.md) for the staking flow and Cross-Chain Bridge for the bridge architecture.
 
 > The addresses below are manually curated for this page (not auto-synced). They are cross-checked against the Lista DAO contract source and the [CDP Smart Contract](../collateral-debt-position/smart-contract.md) reference. Verify against the relevant block explorer before integrating.
 
@@ -28,3 +28,12 @@ slisBNB uses the LayerZero OFT standard. The adapter locks slisBNB on BNB Chain;
 | --- | --- | --- |
 | StakeHub | Native BSC staking hub used for delegation, redelegation, and reward claims | [0x0000000000000000000000000000000000002002](https://bscscan.com/address/0x0000000000000000000000000000000000002002) |
 | GovBNB | Native BSC governance token minted on delegation | [0x0000000000000000000000000000000000002005](https://bscscan.com/address/0x0000000000000000000000000000000000002005) |
+
+## Bridging slisBNB
+
+slisBNB moves between BNB Smart Chain and Ethereum as a **LayerZero OFT**: the adapter locks on BSC, the OFT mints on Ethereum, and the reverse burns and unlocks. Use LayerZero's own `SendParam` / `quoteSend` interface — nothing about the call shape is Lista-specific.
+
+Two Lista-side conditions make `send()` revert, and neither is visible in a LayerZero quote:
+
+* **Dust.** The OFT uses `sharedDecimals = 6`, so amounts are truncated to a 1e12 multiple. Pass an `amountLD` and `minAmountLD` that are already dust-removed, or the post-truncation amount falls below `minAmountLD` and the call reverts.
+* **Transfer limiter and pause.** The adapter enforces a per-transfer limit and carries an emergency pause.

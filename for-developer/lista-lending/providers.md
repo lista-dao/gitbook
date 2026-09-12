@@ -12,7 +12,6 @@ function providers(Id id, address token) external view returns (address);
 
 A non-zero result for the collateral token means you must route through it.
 
-All facts below are derived from `src/provider/SlisBNBProvider.sol` and `src/provider/BNBProvider.sol`.
 
 ---
 
