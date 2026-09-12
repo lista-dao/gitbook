@@ -14,7 +14,7 @@ Users call `RWAEarnPool` methods for subscription and redemption, after a one-ti
 | Method | Description |
 | --- | --- |
 | `deposit` | Mints shares to `receiver` and transfers assets from `msg.sender` to the adapter. Two gates to know: a **minimum deposit** (`minDeposit`, 1,000 USDT on both pools at the time of writing) that reverts `deposit below minimum` — a small test deposit will fail; and a receiver whitelist that is **open while the set is empty**, which is the case today, but a manager can populate it, after which unlisted deposits and share transfers revert. Read `minDeposit()` and `getWhiteList()` before assuming. |
-| `requestWithdraw` | Takes a withdrawal fee in shares (transferred to the fee receiver, **0.1%** at the time of writing, capped at 10%), burns the remainder from `msg.sender`, and records the receiver and the amount — which is re-derived from the reduced share count, so the queued payout is below a naive `convertToAssets(shares)`. |
+| `requestWithdraw` | Takes a withdrawal fee in shares (transferred to the fee receiver, **0.1%**, capped at 10% — read `withdrawFeeRate()`), burns the remainder from `msg.sender`, and records the receiver and the amount — which is re-derived from the reduced share count, so the queued payout is below a naive `convertToAssets(shares)`. |
 | `claimWithdraw` | Transfers assets to receiver after adapter-funded liquidity is available in `RWAEarnPool`. |
 
 ## Withdrawal Lifecycle

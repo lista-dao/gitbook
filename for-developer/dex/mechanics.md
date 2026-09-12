@@ -122,7 +122,7 @@ function exactOutput(ExactOutputParams calldata params) external payable returns
 
 Lista V3 is a Uniswap V3 fork and the pool maths is unmodified: ticks (`1.0001^i`, `MIN_TICK`/`MAX_TICK`), `slot0.sqrtPriceX96` in Q64.96, the `feeGrowthGlobal{0,1}X128` accumulators, tick crossing, the observation ring buffer, and the `Mint`/`Burn`/`Collect`/`Swap`/`Flash`/`Initialize` event shapes all behave as documented upstream. Use the [Uniswap V3 docs](https://docs.uniswap.org/contracts/v3/overview) and `@uniswap/v3-sdk` (`TickMath`, `SqrtPriceMath`) for the maths rather than reimplementing it.
 
-What is Lista-specific, and what the rest of this page covers, is the deployed addresses, the fee tiers actually enabled on the Lista factory, and the pool-address derivation — all of which differ from Uniswap's.
+What differs from Uniswap is the deployed addresses, the fee tiers enabled on the Lista factory, and the pool-address derivation.
 
 ## Fee tiers and tick spacing
 
