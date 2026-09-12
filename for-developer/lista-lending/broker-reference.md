@@ -26,13 +26,16 @@ struct FixedTermAndRate {
   uint256 duration;   // seconds
   uint256 apr;
 }
+// IBroker.sol. CreditBroker declares a DIFFERENT struct of the same name with a
+// fourth field, `FixedTermType termType` — decoding one with the other's ABI
+// misreads the tuple. See Credit Loan Lifecycle.
 
 function getFixedTerms() external view returns (FixedTermAndRate[] memory);
 ```
 
 `apr` is RAY-scaled as **`1e27 + rate`**, not as the rate itself. Divide by `1e27` and subtract 1 to get the annual figure: `1036821445287206735200000000` is **3.68%**, not 103.68%. A term whose `apr` is at or below `1e27` accrues nothing.
 
-Interest accrues **linearly per second** on outstanding principal and stops at the position's `end` — it is not charged upfront. Repaying before `end` adds an early-repay penalty, roughly half the remaining term's interest on the principal being repaid, which is what recovers the forgone term interest.
+On a `LendingBroker` term, interest accrues **linearly per second** on outstanding principal and stops at the position's `end` — it is not charged upfront. (`CreditBroker` terms carry a `termType` and one of its two modes *is* upfront — see [Credit Loan Lifecycle](../credit-loans/loan-lifecycle.md).) Repaying before `end` adds an early-repay penalty, roughly half the remaining term's interest on the principal being repaid, which is what recovers the forgone term interest.
 
 ## Borrowing
 

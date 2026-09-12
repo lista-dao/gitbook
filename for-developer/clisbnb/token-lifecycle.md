@@ -1,6 +1,6 @@
 # Token Lifecycle
 
-The `slisBNBx` lifecycle is strictly controlled by `SlisBNBxMinter`. Users and external contracts cannot mint directly.
+On the Moolah path the `slisBNBx` lifecycle is controlled by `SlisBNBxMinter`, and users and external contracts cannot mint directly. The legacy CDP providers are separate minters and are still live — see [Delegation](delegation.md).
 
 | Step | Action | Result |
 | --- | --- | --- |

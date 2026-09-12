@@ -88,7 +88,7 @@ Read methods are split by source: **Chain** methods read on-chain state through 
 | `getVaultUserData(chainId, address, user)` | Chain | `VaultUserData` — a user's vault position. |
 | `getSmartMarketExtraInfo(chainId, marketId)` | Chain | `SmartMarketExtraInfo` — Smart Lending (LP-collateral) market state. |
 | `getSmartMarketUserData(chainId, marketId, user)` | Chain | `SmartMarketUserData` — a user's Smart Lending position. |
-| `getBrokerFixedTerms(chainId, broker)` | Chain | `FixedTermAndRate[]` — available fixed terms/rates for a broker. |
+| `getBrokerFixedTerms(chainId, broker)` | Chain | `FixedTermAndRate[]` — available fixed terms/rates for a broker. A `LendingBroker` returns `{termId, duration, apr}`; a `CreditBroker` adds `termType`. |
 | `getBrokerUserPositions(chainId, broker, user)` | Chain | `BrokerUserPositionsData` — a user's broker positions. |
 | `getMarketInfo(chainId, marketId)` | API | `MarketInfo` — market metadata (curator, descriptions, display APY). |
 | `getMarketList(params)` | API | `ApiMarketList` — paginated market discovery. |

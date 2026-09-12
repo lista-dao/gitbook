@@ -1,6 +1,6 @@
 # Multi-Oracle: Standard Collaterals
 
-Standard (non-bStock) collaterals on BNB Chain and Ethereum Chain, priced by the [Resilient Oracle](multi-oracle.md). Tokenized-equity collaterals are listed separately — see [bStock Collaterals](multi-oracle-bstock.md).
+Collaterals on BNB Chain and Ethereum Chain priced by the [Resilient Oracle](multi-oracle.md). Most tokenized-equity collaterals are listed separately — see [bStock Collaterals](multi-oracle-bstock.md).
 
 ## Configuration
 

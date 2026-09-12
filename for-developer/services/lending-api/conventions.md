@@ -16,7 +16,7 @@ Responses from the endpoints documented in this section are wrapped in a uniform
 |-------|------|-------------|
 | `code` | string | Status code. `"000000000"` on success. Any other value indicates an error. |
 | `msg` | string | Human-readable message for `code`, localized to the request language. |
-| `data` | any | The endpoint payload — an object or an array. It is **absent** rather than `null` when there is nothing to return, so read it defensively; see the three empty shapes below. Shape is documented per endpoint. |
+| `data` | any | The endpoint payload — an object or an array. It can be **absent** rather than `null` when there is nothing to return, so read it defensively; see the empty shapes below. Shape is documented per endpoint. |
 | `timestamp` | number | Server time when the response was built, in **milliseconds** since the Unix epoch. |
 
 Success example:
@@ -103,8 +103,6 @@ The `pageSize` cap is endpoint-specific:
 Paginated endpoints return `{ total, list }`, where `total` is the full count matching the filters (before pagination) and `list` holds the current page. To detect the last page, compare `page * pageSize` against `total` rather than assuming a full page.
 
 > One exception: `GET /market/vault/:marketId` returns `total` as the **number of entries in the current page**, not the full count, so the comparison above does not work there.
-
-> Some snapshot-style endpoints use keyset (cursor) pagination instead of `page`/`pageSize` — see the individual endpoint page (e.g. the holder snapshot in [Positions, Liquidation & Emission](position-liquidation-emission.md)).
 
 ---
 

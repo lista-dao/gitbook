@@ -31,7 +31,7 @@ This page describes the on-chain lifecycle of a Lista Credit loan, from credit-l
 
 ## Fixed-term interest modes (`FixedTermType`)
 
-Each fixed-term product (`FixedTermAndRate`) carries one of two interest modes. The mode is fixed at borrow time and stored on the position; it determines how interest is computed.
+Each fixed-term product carries one of two interest modes. Note `CreditBroker`'s `FixedTermAndRate` is **not** the same struct as `LendingBroker`'s: it adds a fourth field, `termType`, so the two cannot share an ABI decoder. The mode is fixed at borrow time and stored on the position; it determines how interest is computed.
 
 | Mode | Enum | How interest is charged |
 | --- | --- | --- |

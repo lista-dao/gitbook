@@ -128,7 +128,7 @@ uint256 constant ORACLE_PRICE_SCALE = 1e36;
 
 Read `getPrice` as a **raw-unit conversion factor, not a human-readable price**: multiplying a raw collateral amount (in the collateral token's own decimals) by `getPrice` and dividing by `1e36` yields the equivalent debt in **raw loan-token units** — `rawCollateral × getPrice / 1e36 = rawLoan`. Because the scale factor carries `10**(quoteDecimals − baseDecimals)`, `getPrice / 1e36` equals the per-whole-token price *only when both tokens share the same decimals*; for a human "1 collateral = X loan tokens" price across different decimals, apply the token decimals yourself (or derive it from the two USD legs via `peek`). The health and liquidation math below works entirely in raw units, so you never need the human price for on-chain-accurate results.
 
-> Broker markets note. `getPrice(marketParams)` calls the internal price with `user = address(0)`, which always returns the plain market price. For fixed-term/credit **broker** markets, an account-specific price can deviate from the market price; the protocol uses the market price for the standard health check so liquidators can act in time. Unless you are integrating a broker product, `getPrice(marketParams)` is the number you want. See [Integration Patterns](../lista-lending/integration-patterns.md).
+> Broker markets note. `getPrice(marketParams)` calls the internal price with `user = address(0)`, which always returns the plain market price. For fixed-term/credit **broker** markets, an account-specific price can deviate from the market price; the protocol uses the market price for the standard health check so liquidators can act in time. Unless you are integrating a broker product, `getPrice(marketParams)` is the number you want. See [Broker Reference](../lista-lending/broker-reference.md).
 
 ---
 
@@ -227,5 +227,5 @@ For the liquidation mechanics themselves, note how the same scale appears when c
 
 - [Standard Collaterals](../multi-oracle-standard.md) · [bStock Collaterals](../multi-oracle-bstock.md) — per-asset oracle sources, bound-validator limits, and Resilient Oracle addresses (auto-synced).
 - [Oracle](../../introduction/lista-lending/oracle.md) — conceptual overview of oracles in Lista Lending.
-- [Integration Patterns](../lista-lending/integration-patterns.md) — provider and broker layers, including broker-specific pricing.
+- [Broker Reference](../lista-lending/broker-reference.md) — provider and broker layers, including broker-specific pricing.
 - [Moolah Lending SDK](../sdk.md) — TypeScript helpers that read market data and prices for you.

@@ -155,6 +155,6 @@ For a market that has never had a rate set, `borrowRateStored` defaults to `0`; 
 
 ## Related
 
-* [Protocol Extensions](protocol-extensions.md) — market-level controls (`minLoan`, reentrancy, upgradeability, oracle architecture).
+* [Protocol Extensions](protocol-extensions.md) — protocol-wide controls (`minLoan`, the global reentrancy guard, upgradeability, oracle architecture).
 * [Integration Patterns](integration-patterns.md) — provider and broker integration layers.
 * [Smart Contract](smart-contract.md) — deployed contract addresses (auto-synced).
