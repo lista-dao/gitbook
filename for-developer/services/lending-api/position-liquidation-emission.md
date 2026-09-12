@@ -138,7 +138,6 @@ Completed Moolah liquidations.
 | `userAddress` | string | No | Filter by borrower address. |
 | `loanInUsd` | number | No | Minimum borrow value in USD (rounded down to the nearest 1,000). |
 
-> **Send array filters as repeated parameters** — `?collaterals=BTCB&collaterals=WBNB`, or the bracket form `?collaterals[]=BTCB` for a single value. A single un-repeated `?collaterals=BTCB` arrives as a plain **string** and is spread **character by character** into the `IN (…)` list, so it silently matches the tokens `B`, `T`, `C` — a wrong result set, not an empty one and not an error. `/list` and `/history` additionally reject more than 10 values; that check is on length, so one un-repeated value longer than 10 characters is rejected too.
 
 #### Response
 
@@ -262,11 +261,7 @@ Related sub-paths on the same controller: `GET /api/v2/liquidated/:user` (liquid
 
 Lista Lending distributes emission rewards via a **weekly merkle-root** model: an off-chain job publishes a merkle root per week, and each eligible user fetches their leaf (amount + merkle proof) from the API and claims on-chain. These endpoints therefore return a **proof to claim**, not a pre-credited balance.
 
-> **Authentication (wallet signature required).** The proof endpoints require the caller to prove control of the address. Each request carries `address`, `signature`, and `message`. The `message` must be an exact **two-line** body, validated by a strict regex: an ISO-8601 UTC timestamp (e.g. `2026-06-30T12:00:00Z`) on the first line, then the literal second line `Thank you for your support of listaDAO.` — and the timestamp must be no older than 7 days. Verification is performed two ways depending on `type`:
-> - `type=safe` — the signature is validated against the address as an ERC-1271 contract wallet (Safe), via `isValidSignature`.
-> - otherwise — the signature is recovered as a standard EOA wallet signature and must match `address`.
->
-> An invalid signature returns an "invalid signature" error; an expired message returns a "token expired" error. No server-side secret or key is involved — this is a standard wallet-signature challenge.
+> **Authentication (wallet signature required).** These endpoints are signature-gated; the message format, the `type=safe` ERC-1271 path and the error names are in [Conventions](conventions.md#signature-gated-endpoints).
 >
 > **Treat the assembled URL as a credential.** `address`, `signature`, and `message` are query parameters, and the signed message is valid for 7 days with no nonce and no endpoint binding — so any copy of the URL grants read access to that address's reward data for the remainder of the window. Do not log these URLs, put them in bug reports, or pass them through third-party services; sign a fresh message per session and keep the lifetime short.
 

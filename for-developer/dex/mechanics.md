@@ -41,21 +41,7 @@ event PoolCreated(address indexed token0, address indexed token1, uint24 indexed
 Liquidity positions are minted as ERC-721 NFTs. The collection is named **`Lista V3 Positions NFT`** with symbol **`LISTA-V3`**. Unlike Uniswap's immutable position manager, the Lista deployment is an upgradeable contract (transparent proxy + `initialize()`); the ERC-721 token semantics are otherwise standard and it supports EIP-712 permit.
 
 ```solidity
-// NonfungiblePositionManager (struct fields verbatim from source)
-struct MintParams {
-    address token0;
-    address token1;
-    uint24 fee;
-    int24 tickLower;
-    int24 tickUpper;
-    uint256 amount0Desired;
-    uint256 amount1Desired;
-    uint256 amount0Min;
-    uint256 amount1Min;
-    address recipient;
-    uint256 deadline;
-}
-
+// params: upstream INonfungiblePositionManager.MintParams, unchanged
 function mint(MintParams calldata params)
     external payable
     returns (uint256 tokenId, uint128 liquidity, uint256 amount0, uint256 amount1);
@@ -99,17 +85,7 @@ Swaps are routed through the `SwapRouter`, which supports exact-input and exact-
 
 ```solidity
 // SwapRouter
-struct ExactInputSingleParams {
-    address tokenIn;
-    address tokenOut;
-    uint24 fee;
-    address recipient;
-    uint256 deadline;
-    uint256 amountIn;
-    uint256 amountOutMinimum;
-    uint160 sqrtPriceLimitX96;
-}
-
+// params: upstream ISwapRouter.ExactInputSingleParams, unchanged
 function exactInputSingle(ExactInputSingleParams calldata params) external payable returns (uint256 amountOut);
 function exactInput(ExactInputParams calldata params) external payable returns (uint256 amountOut);
 function exactOutputSingle(ExactOutputSingleParams calldata params) external payable returns (uint256 amountIn);
