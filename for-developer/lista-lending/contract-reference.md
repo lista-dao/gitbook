@@ -278,22 +278,11 @@ Markets read prices through the `oracle` in `MarketParams`, which exposes `peek(
 
 The core mutating entry points — `supply`, `withdraw`, `borrow`, `repay`, `supplyCollateral`, `withdrawCollateral`, `liquidate`, and `liquidateBrokerPosition` — are `nonReentrant`. `flashLoan` is intentionally **not** `nonReentrant` (its safety comes from the same-transaction repayment invariant). All of the above are additionally `whenNotPaused`.
 
-### Role-based access & pausing
+### Pausing, and what it means for you
 
-Moolah uses OpenZeppelin `AccessControlEnumerable`. Privileged operations are gated by role, never by a hard-coded address:
+The only privileged behaviour that affects an integration is the pause: a `PAUSER` can halt every `whenNotPaused` entry point, which is all of supply, withdraw, borrow, repay, collateral movement, liquidation and `flashLoan`. Views are unaffected. **Handle the revert** — it is the one state change you cannot predict from market data. `createMarket` is additionally gated whenever any `OPERATOR` exists.
 
-| Role | Scope (examples) |
-| --- | --- |
-| `DEFAULT_ADMIN_ROLE` | Authorizes contract upgrades; root of role administration. |
-| `MANAGER` | Enables IRMs/LLTVs, sets fees, whitelists/blacklists, providers/brokers, `minLoanValue`, unpause. |
-| `PAUSER` | Pauses the contract (halting the `whenNotPaused` functions). |
-| `OPERATOR` | When any `OPERATOR` exists, gates `createMarket`. |
-
-Pausing (`pause`/`unpause`) freezes the guarded entry points without affecting views.
-
-### Upgradeability
-
-Moolah is a UUPS-upgradeable contract (`UUPSUpgradeable`), initialized once via `initialize(admin, manager, pauser, minLoanValue)` with the constructor disabled. Upgrades are authorized only by `DEFAULT_ADMIN_ROLE` (`_authorizeUpgrade`). Operationally, upgrade authority is held behind a timelock; see [Protocol Extensions](protocol-extensions.md).
+Everything else — enabling IRMs and LLTVs, setting fees, whitelists, providers, brokers, `minLoanValue`, and contract upgrades — is role-gated and not callable by a third party, so it is not documented here. Upgrade authority sits behind a timelock.
 
 ---
 

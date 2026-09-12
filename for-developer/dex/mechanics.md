@@ -118,69 +118,11 @@ function exactOutput(ExactOutputParams calldata params) external payable returns
 
 `amountOutMinimum` / `amountInMaximum` enforce slippage limits, `deadline` bounds execution time, and `sqrtPriceLimitX96` optionally caps the price movement within the swap.
 
-## Concentrated liquidity & tick ranges
+## Uniswap V3 mechanics
 
-Liquidity is provided over a bounded price range `[tickLower, tickUpper]` rather than across the full price curve. Each position concentrates capital within its range, so liquidity is only "active" while the pool's current tick lies inside the range.
+Lista V3 is a Uniswap V3 fork and the pool maths is unmodified: ticks (`1.0001^i`, `MIN_TICK`/`MAX_TICK`), `slot0.sqrtPriceX96` in Q64.96, the `feeGrowthGlobal{0,1}X128` accumulators, tick crossing, the observation ring buffer, and the `Mint`/`Burn`/`Collect`/`Swap`/`Flash`/`Initialize` event shapes all behave as documented upstream. Use the [Uniswap V3 docs](https://docs.uniswap.org/contracts/v3/overview) and `@uniswap/v3-sdk` (`TickMath`, `SqrtPriceMath`) for the maths rather than reimplementing it.
 
-- **Ticks** discretize price. The price at tick `i` is `1.0001^i`. Valid ticks run from `MIN_TICK = -887272` to `MAX_TICK = 887272` (canonical Uniswap V3 bounds).
-- **tickSpacing** restricts which ticks may bound a position. Positions must use ticks that are multiples of the pool's `tickSpacing`. Larger spacing means coarser price granularity but cheaper tick-crossing during swaps.
-- A position only earns fees while the active price is within `[tickLower, tickUpper]`. Out-of-range positions earn nothing until price re-enters.
-
-## Price state: `sqrtPriceX96` and the current tick
-
-The pool stores its current price and tick in `slot0`:
-
-```solidity
-struct Slot0 {
-    uint160 sqrtPriceX96;          // current price as sqrt(token1/token0) in Q64.96 fixed point
-    int24 tick;                    // current tick = floor(log_1.0001(price))
-    uint16 observationIndex;
-    uint16 observationCardinality;
-    uint16 observationCardinalityNext;
-    uint8 feeProtocol;
-    bool unlocked;
-}
-Slot0 public slot0; // public getter returns the struct fields as a tuple
-```
-
-- `sqrtPriceX96` is the square root of the price (`token1` per `token0`) encoded as a Q64.96 fixed-point number. It is the canonical price representation used throughout the math libraries.
-- `tick` is the current tick, `floor(log_1.0001(price))`.
-- A pool is price-initialized once via `initialize(sqrtPriceX96)`, which sets `slot0` and emits `Initialize(sqrtPriceX96, tick)`.
-- The pool also maintains an oracle observation ring buffer (`observations`, capacity 65535); cumulative tick / seconds-per-liquidity accumulators support TWAP-style queries. `increaseObservationCardinalityNext` grows the buffer.
-
-To convert between `sqrtPriceX96`, `tick`, and a human-readable price, use the standard Uniswap V3 math (`TickMath`, `SqrtPriceMath`) or `@uniswap/v3-sdk`.
-
-## Fee accrual & fee growth
-
-Swaps charge the pool's fee tier on the input amount. Accrued fees are tracked using the global fee-growth accumulators and per-tick / per-position bookkeeping, exactly as in Uniswap V3:
-
-```solidity
-function feeGrowthGlobal0X128() external view returns (uint256);
-function feeGrowthGlobal1X128() external view returns (uint256);
-```
-
-- `feeGrowthGlobal{0,1}X128` are monotonically increasing accumulators of fees per unit of liquidity, in Q128.128 fixed point.
-- Each position records `feeGrowthInside{0,1}LastX128` at its last touch; uncollected fees are the difference between current in-range fee growth and that snapshot, scaled by the position's liquidity.
-- Fees are credited to `tokensOwed0` / `tokensOwed1` and remain claimable until withdrawn via `collect` (pool level) or the position manager's `collect`.
-- A separate protocol fee (`feeProtocol`) can be switched on per pool by the factory owner; when zero (the default at initialization), all swap fees accrue to LPs.
-
-## Swaps and tick crossing
-
-During a swap the pool walks the price along the curve, consuming liquidity tick by tick. When the price crosses an initialized tick, that tick's net liquidity is applied (added or removed) and its fee-growth-outside values flip, so positions begin or stop earning. A swap emits:
-
-```solidity
-event Swap(
-    address indexed sender,
-    address indexed recipient,
-    int256 amount0,
-    int256 amount1,
-    uint160 sqrtPriceX96,   // pool price after the swap
-    uint128 liquidity,      // active liquidity after the swap
-    int24 tick              // pool tick after the swap
-);
-```
-
-Liquidity events follow the same Uniswap V3 shapes: `Mint`, `Burn`, `Collect`, `Flash`, plus `Initialize`. Flash loans of either token are supported via `flash(...)` and repaid (with fee) in the `IUniswapV3FlashCallback`.
+What is Lista-specific, and what the rest of this page covers, is the deployed addresses, the fee tiers actually enabled on the Lista factory, and the pool-address derivation — all of which differ from Uniswap's.
 
 ## Fee tiers and tick spacing
 
