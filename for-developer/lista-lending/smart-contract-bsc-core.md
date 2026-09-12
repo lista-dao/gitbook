@@ -19,8 +19,8 @@
 | MarketFactory                  | 0xce26859127d236a61f168d2d0905f77d7E286Ab2 |
 | RevenueCollector (DEX fee and liquidation profit) | 0x86E09296aeDA129D3b0b4c134B3202b84Cd8945C |
 | RevenueCollector (receive buyback LISTA)          | 0xD08BE4Fe91E5786CeC1D3Bce58c2A16c3efcA179 |
-| LendingRewardsDistributorV2 (Lending emission) | 0x2993E9eA76f5839A20673e1B3cf6666ab5B3aE76 |
-| RewardsRouter (Lending emission) | 0xCb571b4ac0dB9c64B9ADdD2e6f3d1c7A84E5bfF4 |
+| LendingRewardsDistributorV2    | 0x2993E9eA76f5839A20673e1B3cf6666ab5B3aE76 |
+| RewardsRouter                  | 0xCb571b4ac0dB9c64B9ADdD2e6f3d1c7A84E5bfF4 |
 | PositionManager                | 0x8eBFa9e687aF71EC2e87A0380F73b9f57FDf3ec0 |
 | PositionMigrator               | 0x2b3e5b695722756130a553e9bb5a45e16d21d0a4 |
 | StableArbExecutor              | 0x05A8d0B51A2543184a18Af3Ada75F8C981143a54 |
@@ -43,6 +43,8 @@
 | MoolahVault (BTCB) | 0xE46b8E65006e6450bdd8cb7D3274AB4F76f4C705 |
 | MoolahVault (USDT) | 0x6d6783C146F2B0B2774C1725297f1845dc502525 |
 | MoolahVault (MEV WBNB) | 0xd5cfc0f894bA77e95E3325Aa53Eb3e6CBBb5A81E |
+| MoolahVault (MEV USDT) | 0x6402d64F035E18F9834591d3B994dFe41a0f162D |
+| MoolahVault (Re7 USDT) | 0x02A5ca3a749855d1002A78813E679584a96646d0 |
 | MoolahVault (Loop WBNB) | 0xaB251dc87dc313649D024bd69b34c8E7690Ce1fc |
 | MoolahVault (Puffer) | 0x2Fa11Fc42e7fdFF98e1D043992Db5e10123A41B0 |
 | MoolahVault(Pangolins USDT) | 0xEB4F6FFB1038E1cCa701e7d53083B37ec5b6Ba33 |

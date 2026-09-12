@@ -56,14 +56,6 @@ const SOURCES = {
     notionPageId: '1cf1d713729f8074ad23d47d30c2e580',
     extraPages: ['29c1d713729f803eb96bf4e57a369688'], // the "1.1 Vaults" sub-page
     excludeSections: [/token address/i, /lltv/i, /^\s*market\s*$/i],
-    // Third-party vaults the backend marks `status: 2` (gray release; `0` is
-    // delisted, `1` is live) and that production /vault/list does not return:
-    // still deployed and still holding assets, but not a surfaced product.
-    // Documenting them invites a new integration against a vault nobody is
-    // curating. `status: 2` alone is NOT a delisting marker — the live Lista
-    // Credit U Vault carries it too — so this list is by name, not by status.
-    // Remove from Notion and these entries can go.
-    excludeNames: [/MoolahVault\s*\(\s*Re7\b/i, /MoolahVault\s*\(\s*MEV\s+USDT\b/i],
     targets: ['bsc-core', 'bsc-smart-lending', 'bsc-oracles', 'bsc-credit'],
     // This Notion table is 2-col (Contract | Address) with the PT-oracle Quote EMBEDDED in the
     // name ("...(PT-USDe-07May2026 / USDT)"), while GitBook bsc-oracles splits Quote into its own
