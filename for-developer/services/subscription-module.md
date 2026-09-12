@@ -57,23 +57,4 @@ Unbinds the wallet from Telegram and stops all notifications. Sends an unbind co
 
 ## Telegram Bot
 
-The Bot receives messages via **Webhook**. Supported interactions:
-
-| Command / action      | Description |
-|-----------------------|-------------|
-| **OTP (plain text)**  | User sends the 6-character OTP from the API → Bot binds wallet to Telegram. |
-| **/unbind**           | Shows list of bound wallets (inline buttons); user selects one to unbind. |
-| **/subscribe**        | Lists markets where the user has borrow positions; user replies with market number(s) (e.g. `1,4`) to subscribe to **borrow-rate reminders**. Pushed daily at **UTC 02:00**. |
-| **/cancel**           | Lists subscribed markets; user replies with number(s) to stop rate reminders. |
-| **Mute (inline)**     | Inline buttons on alert messages to mute **liquidation alerts** or **borrow notifications** (CDP vs lending can be separate). |
-| **/change_language**  | Switch Bot language between **Chinese** and **English**. |
-
----
-
-## Notification types
-
-| Type               | When / content |
-|--------------------|----------------|
-| Liquidation alert  | Position at or over liquidation threshold; may include mute button. |
-| Borrow-rate reminder | Daily (e.g. UTC 02:00) for markets subscribed via `/subscribe`. |
-| Unbind confirmation| Sent to Telegram after successful unbind. |
+Binding, subscription management, muting and language are handled inside the Telegram bot itself; the REST API above covers status, OTP issuance and unbind. Once a wallet is bound, the bot delivers liquidation alerts and borrow-rate reminders to it.

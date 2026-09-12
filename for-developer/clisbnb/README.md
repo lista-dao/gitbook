@@ -6,11 +6,7 @@
 
 `slisBNBx` (formerly `clisBNB`) allows users to keep an active lending position while still participating in Binance Launchpool. The minter enforces token lifecycle rules for issuance, delegation, and burn, so supply stays consistent with collateral at all times.
 
-The legacy CDP system is not supported by this contract.
-
-## Key Value Proposition
-
-Users can deposit `slisBNB` or `slisBNB/BNB LP` as collateral in Moolah and still participate in Binance Launchpool without unwinding their lending position. `slisBNBx` is the non-transferable certificate that proves this collateral stake.
+The legacy CDP system is not supported by this contract. Users and external contracts cannot mint `slisBNBx` directly — only registered provider modules call the minter.
 
 ## Contents
 

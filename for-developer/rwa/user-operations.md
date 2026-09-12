@@ -19,11 +19,4 @@ Users call `RWAEarnPool` methods for subscription and redemption, after a one-ti
 
 ## Withdrawal Lifecycle
 
-Withdrawal is asynchronous:
-
-* `requestWithdraw` creates pending request
-* Redemption is settled against the external vault
-* Funds are returned to the earn pool
-* User calls `claimWithdraw`
-
-The settlement leg runs on the **external vault's redemption cycle**, not on a schedule the contract enforces, so there is no on-chain deadline by which a pending request becomes claimable. Poll for claimable liquidity rather than assuming a fixed delay. Interest accrues into share NAV as it is reported, so a share's value grows over the holding period rather than paying out separately.
+Withdrawal is asynchronous. The settlement leg runs on the **external vault's redemption cycle**, not on a schedule the contract enforces, so there is no on-chain deadline by which a pending request becomes claimable. Poll for claimable liquidity rather than assuming a fixed delay. Interest accrues into share NAV as it is reported, so a share's value grows over the holding period rather than paying out separately.
