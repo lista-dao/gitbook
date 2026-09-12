@@ -5,7 +5,17 @@
 #
 #   python3 utils/check-addrs.py .
 #
-# Explorer host in the link decides the chain; otherwise the page name does.
+# Explorer host in the link decides the chain; failing that the page name; failing
+# that the address is probed on both chains and only flagged if absent on both.
+#
+# Note which page a finding lands on: multi-oracle-standard.md, multi-oracle-bstock.md
+# and the smart-contract-*.md tables are synced from Notion, so a wrong LABEL there
+# has to be fixed upstream -- editing the markdown is reverted on the next sync.
+#
+# The symbol() section is advisory, not a defect list: most labels are descriptions
+# ("MoolahVault (BTCB)") and are expected to differ from a token symbol. Read it for
+# rows where the label names a DIFFERENT asset than the contract holds -- that is how
+# "MoolahVault (Re7 USDT)" was caught holding USD1.
 import re,os,sys,json,subprocess,collections
 
 root=sys.argv[1]; os.chdir(root)
