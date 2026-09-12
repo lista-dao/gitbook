@@ -113,6 +113,7 @@
 * [Liquid Staking(slisBNB)](for-developer/liquid-staking-slisbnb/README.md)
   * [Mechanics](for-developer/liquid-staking-slisbnb/mechanics.md)
   * [Smart Contract](for-developer/liquid-staking-slisbnb/smart-contract.md)
+  * [Cross-Chain Bridge](for-developer/liquid-staking-slisbnb/cross-chain-bridge.md)
 * [slisBNBx](for-developer/clisbnb/README.md)
   * [Minting Ratio Logic](for-developer/clisbnb/minting-ratio-logic.md)
   * [Delegation](for-developer/clisbnb/delegation.md)
