@@ -197,18 +197,6 @@
       },
       {
         "section": "Vaults",
-        "name": "MoolahVault (MEV USDT)",
-        "address": "0x6402d64F035E18F9834591d3B994dFe41a0f162D",
-        "cols": []
-      },
-      {
-        "section": "Vaults",
-        "name": "MoolahVault (Re7 USD1)",
-        "address": "0x02A5ca3a749855d1002A78813E679584a96646d0",
-        "cols": []
-      },
-      {
-        "section": "Vaults",
         "name": "MoolahVault (Loop WBNB)",
         "address": "0xaB251dc87dc313649D024bd69b34c8E7690Ce1fc",
         "cols": []
