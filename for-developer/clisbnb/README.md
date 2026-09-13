@@ -2,19 +2,9 @@
 
 ## Overview
 
-`SlisBNBxMinter` is a utility contract in Lista DAO's Moolah lending protocol. It is the mint-and-burn engine for `slisBNBx`, a non-transferable certificate token that represents a user's collateral position in Moolah.
+`slisBNBx` (formerly `clisBNB`) is a non-transferable certificate that lets you keep collateral working in a Moolah lending position and still qualify for Binance Launchpool with it.
 
-`slisBNBx` (formerly `clisBNB`) allows users to keep an active lending position while still participating in Binance Launchpool. The minter enforces token lifecycle rules for issuance, delegation, and burn, so supply stays consistent with collateral at all times.
+You never mint it directly. `SlisBNBxMinter` issues and burns it as a consequence of your collateral moving, so the supply always matches the collateral behind it — see [Token Lifecycle](token-lifecycle.md) for the five steps.
 
-The legacy CDP system is not supported by this contract.
+The legacy CDP system is not supported by this contract. Nobody mints `slisBNBx` at will — the amount is always derived from the account's collateral. `rebalance` and `syncDelegatee` are module-only, but `syncUserModuleLp` / `bulkSyncUserModules` are permissionless: anyone may force a re-sync of any account against a registered module.
 
-## Key Value Proposition
-
-Users can deposit `slisBNB` or `slisBNB/BNB LP` as collateral in Moolah and still participate in Binance Launchpool without unwinding their lending position. `slisBNBx` is the non-transferable certificate that proves this collateral stake.
-
-## Contents
-
-* [Token Lifecycle](token-lifecycle.md)
-* [Minting Ratio Logic](minting-ratio-logic.md)
-* [Delegation](delegation.md)
-* [Smart Contract](smart-contract.md)
