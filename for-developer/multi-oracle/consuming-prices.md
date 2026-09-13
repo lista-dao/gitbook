@@ -60,13 +60,22 @@ The Resilient Oracle aggregates up to three sources per asset and cross-validate
 
 ### PT linear discount
 
-PT collateral is priced at a linear discount to the underlying, shrinking to zero at maturity:
+PT collateral is priced at a linear discount that shrinks to zero at maturity. The discount is **per year**, pro-rated over the time remaining — it does not reference the PT's total term:
 
 ```text
-discount = baseDiscount × (timeToMaturity / totalDuration)
+discount = baseDiscountPerYear × timeToMaturity / 365 days      // 0 at and after maturity
 ```
 
-After maturity the oracle returns the full underlying price. `PTLinearDiscountOracle` divides its 18-decimal discount input by `1e10` and declares `decimals() = 8`, so it reads like any other feed on the `IOracle` path.
+`baseDiscountPerYear` is read from the PT's discount oracle and is 1e18-scaled: at `0.15`, a PT one year out is discounted 15%, one six months out 7.5%.
+
+Two variants are deployed and they differ in what they do with that ratio:
+
+| Contract | Returns |
+| --- | --- |
+| `PTLinearDiscountOracle` | `(1 − discount)` alone, scaled to 8 decimals. It never reads the underlying's price — it assumes a USD peg — so at and after maturity it returns a flat `1e8`, not the underlying's actual price. |
+| `PTLinearDiscountMarketOracle` | The same ratio multiplied by the base token's oracle price, so it converges on the underlying. |
+
+Both divide an 18-decimal input by `1e10` and declare `decimals() = 8`, so either reads like any other feed on the `IOracle` path.
 
 A source is skipped if it is disabled, missing, reverts, or is **stale** — `getPriceFromOracle` treats a Chainlink-style answer whose `updatedAt` is older than the asset's `timeDeltaTolerance` as invalid (`INVALID_PRICE = 0`). A `timeDeltaTolerance` of `0` **disables the staleness check entirely** rather than rejecting everything; both `PTLinearDiscountOracle` and `IdleOracle` return `0` here, so read the value before assuming a freshness guarantee.
 

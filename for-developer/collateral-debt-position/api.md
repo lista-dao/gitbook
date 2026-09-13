@@ -1,6 +1,6 @@
 # CDP API
 
-Read-side endpoints for the **lisUSD CDP**, the single-collateral borrow product. They key on `ilk` (collateral type) and collateral token address, not on a Moolah `marketId`.
+Read-side endpoints for the **lisUSD CDP**, where each position is backed by a single collateral type (`ilk`). They key on `ilk` (collateral type) and collateral token address, not on a Moolah `marketId`.
 
 > The CDP is being wound down — see [Mechanics](mechanics.md). These feeds serve existing positions. For Moolah markets use [Positions, Liquidation & Emission](../services/lending-api/position-liquidation-emission.md).
 
@@ -55,4 +55,4 @@ Liquidations for one address. `GET /api/v2/liquidated/:user/latest?collateral=` 
 
 ## Market feeds
 
-`/api/cdp/market/*` serves the CDP markets themselves: `/search`, `/list`, `/info`, `/borrowRate/history`, `/userBorrow/history`. They are keyed by `ilk`.
+`/api/cdp/market/*` serves the CDP markets themselves. `/info`, `/borrowRate/history` and `/userBorrow/history` each take a required `ilk`. `/list` is a paginated listing filtered by collateral **symbol**, returning the `ilk` per row; `/search` takes a required `typeId=collateral`.

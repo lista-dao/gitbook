@@ -102,7 +102,7 @@ function peek(address token, address user) external view returns (uint256 price)
 
 On a broker market, health is not computed the way it is elsewhere. `Moolah._isHealthy` prices the collateral at the **plain market price** but substitutes the **broker's** debt figure for the borrower's Moolah shares. The per-user `peek` price shapes the seize math once a liquidation runs.
 
-This is the reason [Liquidator Integration](liquidator-integration.md) warns that `PublicLiquidator.loanTokenAmountNeed` under-quotes on broker markets: that helper prices with `Moolah.getPrice(marketParams)`, which is the market price with `user = address(0)`, while the liquidation itself prices with the borrower. Use the broker's own `peek(token, user)` and `getUserTotalDebt(user)` to size a broker-market liquidation.
+This is the reason [Liquidator Integration](liquidator-integration.md) warns that `PublicLiquidator.loanTokenAmountNeed` over-quotes on broker markets: that helper prices with `Moolah.getPrice(marketParams)`, which is the market price with `user = address(0)`, while the liquidation itself prices with the borrower. Use the broker's own `peek(token, user)` and `getUserTotalDebt(user)` to size a broker-market liquidation.
 
 ---
 

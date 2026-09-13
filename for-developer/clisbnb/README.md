@@ -6,7 +6,7 @@
 
 `slisBNBx` (formerly `clisBNB`) allows users to keep an active lending position while still participating in Binance Launchpool. The minter enforces token lifecycle rules for issuance, delegation, and burn, so supply stays consistent with collateral at all times.
 
-The legacy CDP system is not supported by this contract. Users and external contracts cannot mint `slisBNBx` directly — only registered provider modules call the minter.
+The legacy CDP system is not supported by this contract. Nobody mints `slisBNBx` at will — the amount is always derived from the account's collateral. `rebalance` and `syncDelegatee` are module-only, but `syncUserModuleLp` / `bulkSyncUserModules` are permissionless: anyone may force a re-sync of any account against a registered module.
 
 ## Contents
 
