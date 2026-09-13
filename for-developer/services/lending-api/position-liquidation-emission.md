@@ -68,7 +68,7 @@ Three related feeds under `/api/liquidation/zone`: `/list` is the per-market bor
 
 ### GET /api/liquidation/zone/list
 
-Returns the contents of the liquidation whitelist, ordered by insertion. To monitor positions approaching the threshold, use [`/closeToLiquidate`](#get-apiliquidationzoneclosetoliquidate). This endpoint applies **no** eligibility or liquidatability predicate of its own beyond the optional filters below — treat it as a candidate feed and confirm each position's health on-chain before acting on it.
+Returns the contents of `PublicLiquidator`'s per-market **borrower** whitelist, ordered by insertion. This is a different structure from Moolah's `liquidationWhitelist`, which lists eligible *liquidators*. To monitor positions approaching the threshold, use [`/closeToLiquidate`](#get-apiliquidationzoneclosetoliquidate). This endpoint applies **no** eligibility or liquidatability predicate of its own beyond the optional filters below — treat it as a candidate feed and confirm each position's health on-chain before acting on it.
 
 | | |
 |--|--|

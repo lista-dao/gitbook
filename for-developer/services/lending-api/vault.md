@@ -216,6 +216,7 @@ Paginated breakdown of how a vault's liquidity is allocated across its lending m
 | `smartCollateralConfig` | object | Smart-collateral configuration for the market, if any. |
 | `utilization` | string | Market utilization (borrowed / supplied). |
 | `borrowRate` | string | Current borrow rate for the market. |
+| `emissionDetail` | array | Reward breakdown for this market. An **array** here, unlike the object keyed by symbol on `/vault/list`. |
 | `rewards` | array | Reward token entries attached to the market. |
 
 ---

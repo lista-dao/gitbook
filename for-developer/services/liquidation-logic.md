@@ -22,8 +22,9 @@ Re-read the oracle and position state at execution time: Moolah accrues interest
 
 ## Finding candidates
 
-* `GET /api/liquidation/zone/closeToLiquidate` — positions approaching the threshold. **Start here**: it is the feed that carries rows in normal operation.
-* `GET /api/liquidation/zone/list` — the per-market borrower whitelist with each account's latest position snapshot. It applies **no** health test, so evaluate eligibility yourself.
+* `GET /api/moolah/redPositions` — liquidatable positions on one market. **Start here for open markets**, which are the common case: enumerate markets from `/api/moolah/allMarkets` and fan out.
+* `GET /api/liquidation/zone/closeToLiquidate` — positions approaching the threshold.
+* `GET /api/liquidation/zone/list` — the per-market **borrower** whitelist with each account's latest position snapshot. It applies **no** health test, so evaluate eligibility yourself, and it only finds candidates on *gated* markets.
 * `GET /api/liquidation/zone/history` — settled liquidations.
 
 Parameters and response fields are in [Positions, Liquidation & Emission](lending-api/position-liquidation-emission.md). Indexed data can lag; treat it as a candidate feed and confirm on-chain before submitting.

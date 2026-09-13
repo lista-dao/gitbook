@@ -46,7 +46,7 @@ A provider sits between user and Moolah core for specific collateral types. Inst
 
 A broker is a loan-origination layer for curated products. Unlike providers, brokers focus on terms, rates, and borrower eligibility before routing calls into Moolah.
 
-Broker markets are created against `FixedRateIrm` rather than the adaptive curve, and the Moolah-level rate is left at zero — the broker's own term rate is what the borrower pays. Reading `borrowRateView` on such a market returns `0`; read the rate from the broker's `getFixedTerms()` instead.
+Broker markets are created against `FixedRateIrm` rather than the adaptive curve, and the Moolah-level rate is left at zero — the broker's own term rate is what the borrower pays. `borrowRateView` on such a market returns `0` (subject to any configured floor), so read the rate from the broker's `getFixedTerms()` instead — see [IRM](irm.md) for when a `FixedRateIrm` market does carry a Moolah-level rate.
 
 | Broker Type | Product | Key Differentiator |
 | --- | --- | --- |

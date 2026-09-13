@@ -16,7 +16,7 @@ Users interact with `RWAEarnPool` for deposit and withdrawal requests:
 
 `RWAEarnPool` routes funds to `RWAAdapter`, which handles asynchronous vault operations through Centrifuge `AsyncVault`.
 
-Deposits and redemptions settle on the external vault's own cycle rather than on demand — see [User Operations](user-operations.md) for what that means for a caller.
+Redemptions settle on the external vault's own cycle rather than on demand — see [User Operations](user-operations.md) for what that means for a caller.
 
 ## Contents
 

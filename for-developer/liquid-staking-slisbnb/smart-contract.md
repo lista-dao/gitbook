@@ -1,6 +1,6 @@
 # Smart Contract
 
-slisBNB is Lista's yield-bearing liquid staking token for BNB. BNB is staked through `ListaStakeManager`, which delegates to BSC validators via the native StakeHub system contract and mints slisBNB to the staker. slisBNB can be bridged to Ethereum through LayerZero OFT contracts (lock on BSC, mint on Ethereum). See [Mechanics](mechanics.md) for the staking flow and Cross-Chain Bridge for the bridge architecture.
+slisBNB is Lista's yield-bearing liquid staking token for BNB. BNB is staked through `ListaStakeManager`, which delegates to BSC validators via the native StakeHub system contract and mints slisBNB to the staker. slisBNB can be bridged to Ethereum through LayerZero OFT contracts (lock on BSC, mint on Ethereum). See [Mechanics](mechanics.md) for the staking flow and [Cross-Chain Bridge](cross-chain-bridge.md) for the bridge architecture.
 
 > The addresses below are manually curated for this page (not auto-synced). They are cross-checked against the Lista DAO contract source and the [CDP Smart Contract](../collateral-debt-position/smart-contract.md) reference. Verify against the relevant block explorer before integrating.
 
