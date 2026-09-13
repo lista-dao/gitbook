@@ -42,7 +42,7 @@ ListaStakeManager allows Bot to periodically rebalance the staked BNB across val
 
 ## Interface
 
-All four calls below are user-callable on `ListaStakeManager`; the address is on [Smart Contract](smart-contract.md).
+The three state-changing calls and four views below are all user-callable on `ListaStakeManager`; the address is on [Smart Contract](smart-contract.md).
 
 ```solidity
 function deposit() external payable;                    // stake BNB, receive slisBNB

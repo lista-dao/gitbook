@@ -138,7 +138,7 @@ Relevant reads:
 | Skip flag | `skipPriceDiff() → bool` | When `true`, the guard is not enforced. True on most live pools. One older registered pool predates this function and **reverts** when you call it — treat a revert as "guard behaviour unknown", not as `false`. |
 | Thresholds | `price0DiffThreshold()`, `price1DiffThreshold() → uint256` | Per-coin thresholds, `1e18`-scaled. Values differ per pool — read them rather than assuming the deployment default. |
 
-These thresholds and the skip flag are current on-chain values that are manager-adjustable on-chain; read them at call time rather than assuming a fixed number. For a large or price-sensitive route, call `checkPriceDiff()` as a `staticcall` before submitting so you can surface a clear error instead of a failed transaction.
+These thresholds and the skip flag are manager-adjustable on-chain values; read them at call time rather than assuming a fixed number. For a large or price-sensitive route, call `checkPriceDiff()` as a `staticcall` before submitting so you can surface a clear error instead of a failed transaction.
 
 > Because the guard runs on liquidity operations too, an LP withdrawal (including via `SmartProvider`) can revert when the pool price has drifted from the oracle. Treat "price difference exceeds threshold" as a transient, retry-when-repegged condition, not a permanent failure.
 

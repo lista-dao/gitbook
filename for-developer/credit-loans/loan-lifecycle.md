@@ -35,10 +35,10 @@ Each fixed-term product carries one of two interest modes. Note `CreditBroker`'s
 
 | Mode | Enum | How interest is charged |
 | --- | --- | --- |
-| Accrue per-second | `ACCRUE_INTEREST` (0) | Interest accrues linearly on the **remaining** principal: `(principal − principalRepaid) × aprPerSecond × elapsed`, where `aprPerSecond = (apr − 1) / 365 days`. `elapsed` runs from **`lastRepaidTime`**, not from the position start, and a partial principal repayment resets `lastRepaidTime` to the current block — so interest is not a single accrual over the whole term. Both ends are capped at the position `end`. There is no upfront charge. |
-| Upfront | `UPFRONT_INTEREST` (1) | Full term interest is owed once the no-interest window passes: `principal × (apr − 1) × term / 365 days`. Within `noInterestUntil` (set to `start + graceConfig.noInterestPeriod`, current default 1 second) the interest is 0. |
+| Accrue per-second | `ACCRUE_INTEREST` (0) | Interest accrues linearly on the **remaining** principal: `(principal − principalRepaid) × aprPerSecond × elapsed`, where `aprPerSecond = (apr − RATE_SCALE) / 365 days`. `elapsed` runs from **`lastRepaidTime`**, not from the position start, and a partial principal repayment resets `lastRepaidTime` to the current block — so interest is not a single accrual over the whole term. Both ends are capped at the position `end`. There is no upfront charge. |
+| Upfront | `UPFRONT_INTEREST` (1) | Full term interest is owed once the no-interest window passes: `principal × (apr − RATE_SCALE) × term / 365 days`. Within `noInterestUntil` (set to `start + graceConfig.noInterestPeriod`, current default 1 second) the interest is 0. |
 
-`apr` is scaled by `RATE_SCALE = 1e27`, expressed as `1 + rate` (e.g. a 10% APR is `1.10 * 1e27`).
+`apr` is scaled by `RATE_SCALE = 1e27` and encoded as `RATE_SCALE + rate` — a 10% APR is `1.10e27`. Subtract `RATE_SCALE`, not `1`, before using it in either formula above.
 
 ## Repayment rules
 

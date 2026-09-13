@@ -237,5 +237,5 @@ For the liquidation mechanics themselves, note how the same scale appears when c
 
 - [Standard Collaterals](../multi-oracle-standard.md) · [bStock Collaterals](../multi-oracle-bstock.md) — per-asset oracle sources, bound-validator limits, and Resilient Oracle addresses (auto-synced).
 - [Oracle](../../introduction/lista-lending/oracle.md) — conceptual overview of oracles in Lista Lending.
-- [Broker Reference](../lista-lending/broker-reference.md) — provider and broker layers, including broker-specific pricing.
+- [Broker Reference](../lista-lending/broker-reference.md) — the fixed-term broker surface, including broker-specific pricing.
 - [Moolah Lending SDK](../sdk.md) — TypeScript helpers that read market data and prices for you.

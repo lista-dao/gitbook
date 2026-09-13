@@ -116,7 +116,7 @@ const vaults = await sdk.getVaultList({ chain, page: 1, pageSize: 20 });
 
 ## Building transactions: the `StepParam[]` pattern
 
-Write operations are **builders**, not senders. Most `build*Params` methods read whatever they need from chain/config and returns an ordered `StepParam[]`. You iterate the steps and execute them with your own wallet client. This keeps key custody and signing entirely in your control.
+Write operations are **builders**, not senders. Most `build*Params` methods read whatever they need from chain/config and return an ordered `StepParam[]`. You iterate the steps and execute them with your own wallet client. This keeps key custody and signing entirely in your control.
 
 A `StepParam` is a plain descriptor:
 

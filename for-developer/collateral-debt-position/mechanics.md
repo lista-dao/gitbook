@@ -1,6 +1,6 @@
 # Mechanics
 
-The Collateral Debt Position (CDP) module let a user deposit collateral and mint **lisUSD** against it. It is a MakerDAO/Helio-style fork: `Vat`, `Jug`, `Spotter`, `Dog`, `Clipper`, `Abacus` and `Vow` behind the **Interaction** entrypoint.
+The Collateral Debt Position (CDP) module lets a user deposit collateral and mint **lisUSD** against it. It is a MakerDAO/Helio-style fork: `Vat`, `Jug`, `Spotter`, `Dog`, `Clipper`, `Abacus` and `Vow` behind the **Interaction** entrypoint.
 
 > ## This product is being wound down
 >

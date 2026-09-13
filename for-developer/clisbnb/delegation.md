@@ -2,7 +2,7 @@
 
 `slisBNBx` is a non-transferable certificate, so a holder cannot move it with a normal ERC-20 `transfer`. Instead, the protocol lets an account choose **which wallet holds the `slisBNBx` minted on its behalf**. This is called delegation, and it is the mechanism used to route a position's `slisBNBx` (and therefore its Binance Launchpool eligibility) to another wallet, such as a Binance Web3 MPC wallet.
 
-Delegation is managed by `SlisBNBxMinter`, the mint-and-burn engine for `slisBNBx`, deployed on BNB Smart Chain at [`0x2959c423bfe5Cc6E41516599D982A29C0773F11a`](https://bscscan.com/address/0x2959c423bfe5Cc6E41516599D982A29C0773F11a).md) for the other `slisBNBx` addresses.
+Delegation is managed by `SlisBNBxMinter`, the mint-and-burn engine for `slisBNBx`, deployed on BNB Smart Chain at [`0x2959c423bfe5Cc6E41516599D982A29C0773F11a`](https://bscscan.com/address/0x2959c423bfe5Cc6E41516599D982A29C0773F11a). See [Smart Contract](smart-contract.md) for the other `slisBNBx` addresses.
 
 ## Delegation model
 

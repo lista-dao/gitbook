@@ -239,7 +239,7 @@ Array of points:
 
 ### GET /api/moolah/allMarkets
 
-Returns active, liquidatable markets with their raw on-chain parameters. A small server-side denylist withholds specific markets, so do not treat this as a provably exhaustive list — the values needed to build Moolah transactions (`MarketParams`-equivalent) and to read totals directly. No pagination and **no query parameters**.
+Returns active, liquidatable markets with their raw on-chain parameters — the values needed to build Moolah transactions (`MarketParams`-equivalent) and to read totals directly. A small server-side denylist withholds specific markets, so do not treat this as a provably exhaustive list. No pagination and **no query parameters**.
 
 | | |
 |--|--|
@@ -267,7 +267,7 @@ Array of market parameter objects:
 | `chain` | string | Network key. |
 | `zone` | number | Market zone. |
 
-The first five fields (`loanToken`, `collateralToken`, `oracle`, `irm`, `lltv`) are the immutable market parameters; pair them with the on-chain Moolah contract to construct supply/borrow/withdraw calls. See [Smart Contract](../../lista-lending/smart-contract.md) for the contract reference.
+The five market-parameter fields (`loanToken`, `collateralToken`, `oracle`, `irm`, `lltv`) are immutable; pair them with the on-chain Moolah contract to construct supply/borrow/withdraw calls. See [Smart Contract](../../lista-lending/smart-contract.md) for the contract reference.
 
 ---
 

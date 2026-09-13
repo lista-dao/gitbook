@@ -46,6 +46,7 @@ Two separate questions, so read them separately:
 * **Can `PublicLiquidator` reach this market?** `isLiquidationWhitelist(id, <PublicLiquidator address>)`.
 
 Query both rather than assuming — an open market is the common case, not a universal one.
+
 2. **The market has been opened on `PublicLiquidator`** by the `BOT` role (`marketWhitelist[id]`). This is how a market that *is* gated at the Moolah level can still be routed through the public path.
 3. **This specific borrower has been opened** by the `BOT` role (`marketUserWhitelist[id][borrower]`).
 

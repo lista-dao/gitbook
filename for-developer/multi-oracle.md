@@ -12,7 +12,7 @@ Collateral assets are migrating onto it progressively, so the source set differs
 
 ## Collateral configuration
 
-Collateral pricing configuration is split across two pages, all priced by the same Resilient Oracle described above:
+Collateral pricing configuration is split across two pages; both sets of assets are priced by the same Resilient Oracle described above:
 
 * [Standard Collaterals](multi-oracle-standard.md) — BNB Chain and Ethereum Chain collaterals.
 * [bStock Collaterals](multi-oracle-bstock.md) — tokenized-equity (bStock) collaterals.

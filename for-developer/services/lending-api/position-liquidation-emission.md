@@ -316,4 +316,4 @@ Paginated history of an address's finalized per-token emission rewards.
 
 - [Market API](market.md) — markets, oracles, borrow-rate history, on-chain market config.
 - [Vault](vault.md) — vault list, detail, allocation.
-- [Liquidation Logic (Service)](../liquidation-logic.md) — how at-risk and liquidatable positions are determined.
+- [Liquidation (Service)](../liquidation-logic.md) — how at-risk and liquidatable positions are determined.

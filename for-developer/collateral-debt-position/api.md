@@ -8,7 +8,7 @@ Conventions (base URL, envelope, chain selector, pagination) are shared with the
 
 ## Liquidation feeds
 
-These `/api/v2/liquidations/*` and `/api/v2/liquidated` endpoints serve the **CDP (single-collateral) borrow product**, not Moolah markets. They read from the borrower index and key results by collateral token address. Use the Moolah endpoints above for Moolah-market liquidations.
+These `/api/v2/liquidations/*` and `/api/v2/liquidated` endpoints serve the **CDP (single-collateral) borrow product**, not Moolah markets. They read from the borrower index and key results by collateral token address. Use [Positions, Liquidation & Emission](../services/lending-api/position-liquidation-emission.md) for Moolah-market liquidations.
 
 ### GET /api/v2/liquidations/red
 
