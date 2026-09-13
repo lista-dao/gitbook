@@ -312,12 +312,6 @@ Paginated history of an address's finalized per-token emission rewards.
 
 ---
 
-## 5. CDP markets (separate controller)
-
-Traditional single-collateral CDP markets are keyed by an `ilk` (collateral type) rather than a Moolah `marketId`, and live in their own namespace — see [CDP API](../../collateral-debt-position/api.md). Do not query them through the Moolah position/liquidation endpoints above.
-
----
-
 ## Related pages
 
 - [Market API](market.md) — markets, oracles, borrow-rate history, on-chain market config.
