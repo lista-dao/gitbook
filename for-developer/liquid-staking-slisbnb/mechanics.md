@@ -60,6 +60,6 @@ Points worth building around:
 * **The amount is `msg.value`.** `deposit()` takes no argument.
 * **Approve `ListaStakeManager` on the slisBNB token before `requestWithdraw`.** It pulls your slisBNB with `safeTransferFrom`. The transfer is the last statement in the function, so a missing allowance surfaces only after the amount and `minBnb` checks have passed.
 * **Withdrawal is two transactions, and the gap is not yours to control.** `requestWithdraw` queues; a bot unbonds from validators; only after the 7-day unbonding period does `getUserRequestStatus` report `isClaimable`. Poll it rather than assuming a deadline.
-* **`requestWithdraw` reverts on dust.** The requested amount must convert to more than the contract's `minBnb`.
+* **`requestWithdraw` reverts on dust.** The requested amount must convert to **at least** the contract's `minBnb`.
 * **`claimWithdraw` takes an index, not an id.** It indexes the array returned by `getUserWithdrawalRequests` for the caller, so re-read that array rather than caching positions across claims.
 * **slisBNB is yield-bearing by exchange rate, not by rebase.** Your balance does not grow; `convertSnBnbToBnb` does. Quote value through it.

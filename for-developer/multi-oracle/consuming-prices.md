@@ -75,7 +75,7 @@ Two variants are deployed and they differ in what they do with that ratio:
 | `PTLinearDiscountOracle` | `(1 − discount)` alone, scaled to 8 decimals. It never reads the underlying's price — it assumes a USD peg — so at and after maturity it returns a flat `1e8`, not the underlying's actual price. |
 | `PTLinearDiscountMarketOracle` | The same ratio multiplied by the base token's oracle price, so it converges on the underlying. |
 
-Both divide an 18-decimal input by `1e10` and declare `decimals() = 8`, so either reads like any other feed on the `IOracle` path.
+Both declare `decimals() = 8`, so either reads like any other feed on the `IOracle` path — but they get there differently. `PTLinearDiscountOracle` divides the 18-decimal discount answer by `1e10`. `PTLinearDiscountMarketOracle` multiplies the 8-decimal base price by that answer and divides by `1e18`.
 
 A source is skipped if it is disabled, missing, reverts, or is **stale** — `getPriceFromOracle` treats a Chainlink-style answer whose `updatedAt` is older than the asset's `timeDeltaTolerance` as invalid (`INVALID_PRICE = 0`). A `timeDeltaTolerance` of `0` **disables the staleness check entirely** rather than rejecting everything; both `PTLinearDiscountOracle` and `IdleOracle` return `0` here, so read the value before assuming a freshness guarantee.
 

@@ -31,11 +31,11 @@ Use LayerZero's own `SendParam` / `quoteSend` interface; nothing about the call 
 | --- | --- |
 | `singleTransferUpperLimit` | the amount is above it |
 | `singleTransferLowerLimit` | the amount is **below** it — small transfers fail too |
-| `maxDailyTransferAmount` | the global rolling-24h volume is exceeded |
-| `dailyTransferAmountPerAddress` | the sender's rolling-24h volume is exceeded |
-| `dailyTransferAttemptPerAddress` | the sender has already sent that many times in 24h |
+| `maxDailyTransferAmount` | the global accumulated volume is exceeded |
+| `dailyTransferAmountPerAddress` | the sender's accumulated volume is exceeded |
+| `dailyTransferAttemptPerAddress` | the sender's accumulated attempt count is exceeded |
 
-Windows are rolling, not calendar days. Read `transferLimitConfigs(dstEid)` for the bounds and the live `dailyTransferAmount` / `userDailyTransferAmount` / `userDailyAttempt` counters for the headroom; do not cache either.
+**These counters are not a rolling 24-hour window.** Each resets to zero only on the first transfer that lands more than 24 hours after the *previous accepted transfer* — the global ones after any sender's, the per-address ones after that sender's. Under continuous use they never reset and older volume never expires. Read `transferLimitConfigs(dstEid)` for the bounds, and `dailyTransferAmount` / `userDailyTransferAmount` / `userDailyAttempt` with their matching `lastUpdatedTime` / `lastUserUpdatedTime` for the real headroom.
 
 ## See also
 

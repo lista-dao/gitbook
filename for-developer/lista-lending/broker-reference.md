@@ -53,7 +53,13 @@ function borrow(uint256 amount) external;                  // variable-rate ("dy
 function borrow(uint256 amount, uint256 termId) external;  // fixed-term position
 ```
 
-Both borrow against **`msg.sender`'s** position — there is no `onBehalf` parameter, and the loan token is sent to the caller. Both are `nonReentrant`, require the market id to be set, and revert `ZeroAmount()` on a zero amount. They are additionally pausable in two independent ways — a global pause and a borrow-specific pause — so a broker can stop new borrowing while leaving repayment open.
+Both of these borrow against **`msg.sender`'s** position and send the loan token to the caller. A third overload borrows on someone else's behalf:
+
+```solidity
+function borrow(uint256 amount, uint256 termId, address user, address receiver) external;
+```
+
+It opens the position on `user` and pays `receiver`, and requires `MOOLAH.isAuthorized(user, msg.sender)` — this is the path `PositionManager` uses. It always pays in ERC-20, never native. Both are `nonReentrant`, require the market id to be set, and revert `ZeroAmount()` on a zero amount. They are additionally pausable in two independent ways — a global pause and a borrow-specific pause — so a broker can stop new borrowing while leaving repayment open.
 
 The loan token is transferred to the caller, **unwrapped to native BNB** where the broker supports it.
 
@@ -65,7 +71,7 @@ function repay(uint256 amount, uint256 posId, address onBehalf) external payable
 function repayAll(address onBehalf) external payable;                              // everything
 ```
 
-**Approve the broker**, not Moolah: on an ERC-20 market the broker pulls the loan token from the caller with `transferFrom`. All three are `payable`, so a native-BNB market can instead be repaid by sending value — the broker wraps it for you and refunds the excess. `repayAll` pulls the whole outstanding debt, so size the allowance from `getUserTotalDebt(onBehalf)` rather than granting an unbounded one. The fixed-position form needs the `posId` from the user's positions (below).
+**Approve the broker**, not Moolah: on an ERC-20 market the broker pulls the loan token from the caller with `transferFrom`. All three are `payable`, so a native-BNB market can instead be repaid by sending value — the broker wraps it for you and refunds the excess. `repayAll` pulls principal, accrued interest **and the full early-repay penalty on every open fixed position**. `getUserTotalDebt(onBehalf)` does **not** include that penalty, so an allowance sized at it reverts for any borrower holding an un-matured fixed position — the normal case. Sum `previewRepayFixedLoanPosition` across the open positions, or allow a buffer above `getUserTotalDebt`. The fixed-position form needs the `posId` from the user's positions (below).
 
 Preview what a partial repayment settles before sending it:
 

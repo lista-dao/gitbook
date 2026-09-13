@@ -90,7 +90,7 @@ function createMarket(MarketParams memory marketParams) external;
 
 Creates a market. Reverts unless `irm` and `lltv` are enabled, `loanToken`/`collateralToken`/`oracle` are non-zero, and the market does not already exist. Records `lastUpdate = block.timestamp`, sets the market `fee` to `defaultMarketFee`, stores the reverse mapping, probes the oracle for both tokens, and initializes the IRM. Emits `CreateMarket`. When the `OPERATOR` role has members, only an `OPERATOR` may create markets; otherwise creation is permissionless.
 
-> **Approve Moolah itself.** `supply`, `repay` and `supplyCollateral` pull tokens with `transferFrom`, and the spender is the Moolah singleton — not a vault, provider or broker. Where a market is provider- or broker-gated you do not call Moolah directly at all; approve that contract instead (see [Integration Patterns](integration-patterns.md)).
+> **Approve Moolah itself.** `supply`, `repay` and `supplyCollateral` pull tokens with `transferFrom`, and the spender is the Moolah singleton — not a vault, provider or broker. Gating is per leg, not per market. A **collateral provider** takes over `supplyCollateral` / `withdrawCollateral`; a **broker** takes over `borrow` / `repay`. A broker does not gate collateral — on a broker market with no collateral provider you still call `supplyCollateral` on Moolah and approve Moolah for it. See [Integration Patterns](integration-patterns.md).
 
 ### Supply / withdraw (loan-side liquidity)
 
