@@ -6,4 +6,5 @@ The CDP is Lista's original borrowing product: deposit collateral, mint the **li
 
 * [Mechanics](mechanics.md) — the live gates, and how an existing position is unwound.
 * [Flash Loan](flash-loan.md) — ERC-3156 flash minting of lisUSD, which still works.
+* [CDP API](api.md) — read-side endpoints for existing positions.
 * [Smart Contract](smart-contract.md) — deployed addresses.

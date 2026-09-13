@@ -109,6 +109,7 @@
 * [Collateral Debt Position](for-developer/collateral-debt-position/README.md)
   * [Mechanics](for-developer/collateral-debt-position/mechanics.md)
   * [Flash Loan](for-developer/collateral-debt-position/flash-loan.md)
+  * [CDP API](for-developer/collateral-debt-position/api.md)
   * [Smart Contract](for-developer/collateral-debt-position/smart-contract.md)
 * [Liquid Staking(slisBNB)](for-developer/liquid-staking-slisbnb/README.md)
   * [Mechanics](for-developer/liquid-staking-slisbnb/mechanics.md)

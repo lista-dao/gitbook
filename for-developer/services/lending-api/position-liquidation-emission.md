@@ -9,9 +9,9 @@ These endpoints are served by the Lista API across these route namespaces:
 | Namespace | Purpose |
 |-----------|---------|
 | `/api/moolah/*` | Moolah-market position and emission data. |
-| `/api/v2/liquidations/*`, `/api/v2/liquidated`, `/api/liquidation/zone/*` | Liquidation feeds (at-risk lists, history, auction lookup). |
+| `/api/liquidation/zone/*`, `/api/v2/liquidated/lending/history` | Liquidation feeds (at-risk lists, history). |
 
-> **CDP markets are separate.** The traditional single-collateral CDP markets (keyed by `ilk`, not a Moolah `marketId`) are served by a distinct controller at `/api/cdp/market/*` and are documented on their own page (see the end of this page). They are **not** a filter on the Moolah endpoints below.
+> **CDP markets are separate.** The traditional single-collateral CDP markets (keyed by `ilk`, not a Moolah `marketId`) are served by a distinct controller and are documented on [CDP API](../../collateral-debt-position/api.md). They are **not** a filter on the Moolah endpoints below.
 
 > Amounts are returned as decimal strings. Where a field name ends in `Wei` the value is the raw on-chain integer; otherwise the value has already been scaled by the token's decimals. Token addresses and oracle/IRM addresses are returned verbatim from the indexed market config.
 
@@ -209,51 +209,15 @@ Open positions whose safety factor (`marketLiqRate / positionLiqRate`) is below 
 
 ---
 
-## 3. Liquidation feeds (legacy CDP collaterals)
+## 3. Lending liquidation history (on-chain event time)
 
-These `/api/v2/liquidations/*` and `/api/v2/liquidated` endpoints serve the **CDP (single-collateral) borrow product**, not Moolah markets. They read from the borrower index and key results by collateral token address. Use the Moolah endpoints above for Moolah-market liquidations.
+### GET /api/v2/liquidated/lending/history
 
-### GET /api/v2/liquidations/red
+Moolah lending liquidations keyed by on-chain event time, as an alternative to `/zone/history`'s indexer timestamp. Filters: `collaterals`, `loans`, `userAddress`, `loanInUsd`.
 
-Positions that are currently liquidatable (current price has crossed the position's liquidation price).
+Three things to know: results are hard-capped to the **last 30 days** despite the name; `pageSize` is snapped down to a multiple of 10, floored at 10 and capped at 50; and the item shape differs from `/zone/history` — it adds `tx` and uses the on-chain event time, but omits `liquidator`, `repaidInUsd`, `seizedInUsd`, `collateralMarketPrice`, `loan`, `loanInUsd`, the token addresses and the decimals. Its `type` is always the literal `"lending"`.
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `start` | number | **Yes** | Offset, snapped down to a multiple of 10. There is no default — omitting it makes the server compute `NaN` and the request fails. |
-| `count` | number | **Yes** | Page size, snapped down to a multiple of 20 then clamped to `[20, 100]`. No default; omitting it fails the request. |
-
-Response: `{ users: [...] }`, each entry containing `userAddress`, `tokenName`, `collateralCurrency`, `collateral`, `liquidationPrice`, `liquidationCost`, `rangeFromLiquidation`. On this endpoint `rangeFromLiquidation` is always `0` (the positions are already liquidatable), and `liquidationCost` is a high-precision decimal string of up to 20 fractional digits — parse it with a big-number library, not `parseFloat`.
-
-### GET /api/v2/liquidations/orange
-
-Positions approaching the liquidation threshold (within the danger band, but not yet liquidatable). Same parameters and response shape as `/red`, but **not the same ordering**: `/red` sorts by liquidation price descending, `/orange` by `rangeFromLiquidation` ascending. Here `rangeFromLiquidation` reflects the remaining buffer to liquidation.
-
-### GET /api/v2/liquidations/auctionUser
-
-Look up the borrower(s) and clipper (auction contract) for a given liquidation auction.
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `auctionId` | number | No\* | Auction identifier. |
-| `token` | string | No\* | Collateral token address. |
-
-> \* Both are bound unconditionally as equality filters. Omitting either returns an empty `users` array rather than an unfiltered list.
-
-Response: `{ users: [{ userAddress, clipperAddress }] }`.
-
-### GET /api/v2/liquidated
-
-Recently liquidated CDP positions.
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `start` | number | No | Offset. Defaults to `0`. |
-| `count` | number | No | Page size. Defaults to and capped at `20`. |
-
-Related sub-paths on the same controller: `GET /api/v2/liquidated/:user` (liquidations for one address), `GET /api/v2/liquidated/:user/latest?collateral=` (volume-weighted average liquidation price for an address + collateral), and `GET /api/v2/liquidated/lending/history` (Moolah lending liquidation history, with `collaterals` / `loans` / `userAddress` / `loanInUsd` filters). Three things to know about that last one: results are hard-capped to the **last 30 days** despite the name; `pageSize` is snapped down to a multiple of 10, floored at 10 and capped at 50; and the item shape differs from `/zone/history` — it adds `tx` and uses the on-chain event time, but omits `liquidator`, `repaidInUsd`, `seizedInUsd`, `collateralMarketPrice`, `loan`, `loanInUsd`, the token addresses and the decimals. Its `type` is always the literal `"lending"`.
-
-> Addresses are stored lower-cased by the indexer. `/zone/history` lower-cases the filter for you; `/closeToLiquidate` and `/liquidated/:user` pass it through verbatim — send lower-case to be safe.
-
+> Addresses are stored lower-cased by the indexer. `/zone/history` lower-cases the filter for you; `/closeToLiquidate` passes it through verbatim — send lower-case to be safe.
 
 ---
 
@@ -350,7 +314,7 @@ Paginated history of an address's finalized per-token emission rewards.
 
 ## 5. CDP markets (separate controller)
 
-Traditional single-collateral CDP markets are keyed by an `ilk` (collateral type) rather than a Moolah `marketId`, and live in their own namespace at `/api/cdp/market/*` (`/search`, `/list`, `/info`, `/borrowRate/history`, `/userBorrow/history`). They are documented separately — do not query them through the Moolah position/liquidation endpoints above.
+Traditional single-collateral CDP markets are keyed by an `ilk` (collateral type) rather than a Moolah `marketId`, and live in their own namespace — see [CDP API](../../collateral-debt-position/api.md). Do not query them through the Moolah position/liquidation endpoints above.
 
 ---
 
