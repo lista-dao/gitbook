@@ -36,6 +36,16 @@ function getFixedTerms() external view returns (FixedTermAndRate[] memory);
 
 On a `LendingBroker` term, interest accrues **linearly per second** on outstanding principal and stops at the position's `end` — it is not charged upfront. (`CreditBroker` terms carry a `termType` and one of its two modes *is* upfront — see [Credit Loan Lifecycle](../credit-loans/loan-lifecycle.md).) Repaying before `end` adds an early-repay penalty, roughly half the remaining term's interest on the principal being repaid, which is what recovers the forgone term interest.
 
+## Posting collateral first
+
+The broker gates **origination only**. Collateral goes into the underlying Moolah market directly:
+
+```solidity
+MOOLAH.supplyCollateral(marketParams, assets, onBehalf, "");   // approve Moolah for the collateral token
+```
+
+The broker table gives you a market **id**, not `MarketParams` — read the struct with `MOOLAH.idToMarketParams(id)` first. If that market's collateral token is provider-gated (`MOOLAH.providers(id, collateralToken)` is non-zero), route the collateral through that provider instead; see [Providers](providers.md).
+
 ## Borrowing
 
 ```solidity
@@ -43,7 +53,7 @@ function borrow(uint256 amount) external;                  // variable-rate ("dy
 function borrow(uint256 amount, uint256 termId) external;  // fixed-term position
 ```
 
-Both are `nonReentrant`, require the market id to be set, and revert `ZeroAmount()` on a zero amount. They are additionally pausable in two independent ways — a global pause and a borrow-specific pause — so a broker can stop new borrowing while leaving repayment open.
+Both borrow against **`msg.sender`'s** position — there is no `onBehalf` parameter, and the loan token is sent to the caller. Both are `nonReentrant`, require the market id to be set, and revert `ZeroAmount()` on a zero amount. They are additionally pausable in two independent ways — a global pause and a borrow-specific pause — so a broker can stop new borrowing while leaving repayment open.
 
 The loan token is transferred to the caller, **unwrapped to native BNB** where the broker supports it.
 
@@ -55,7 +65,7 @@ function repay(uint256 amount, uint256 posId, address onBehalf) external payable
 function repayAll(address onBehalf) external payable;                              // everything
 ```
 
-All three are `payable` so a native-BNB market can be repaid without wrapping. The fixed-position form needs the `posId` from the user's positions (below).
+**Approve the broker**, not Moolah: on an ERC-20 market the broker pulls the loan token from the caller with `transferFrom`. All three are `payable`, so a native-BNB market can instead be repaid by sending value — the broker wraps it for you and refunds the excess. `repayAll` pulls the whole outstanding debt, so size the allowance from `getUserTotalDebt(onBehalf)` rather than granting an unbounded one. The fixed-position form needs the `posId` from the user's positions (below).
 
 Preview what a partial repayment settles before sending it:
 
@@ -65,6 +75,14 @@ function previewRepayFixedLoanPosition(address user, uint256 amount, uint256 pos
 ```
 
 Note the three-way split: interest comes first, a penalty may apply, and only the remainder reduces principal.
+
+### Converting a variable position within one broker
+
+```solidity
+function convertDynamicToFixed(uint256 amount, uint256 termId) external;
+```
+
+Moves part of your variable ("dynamic") position at this broker onto one of its fixed terms. It acts on `msg.sender` only — no authorization, no flash loan. To cross from a plain Moolah market into a broker-gated one, use [`PositionManager`](position-conversion.md) instead.
 
 ## Reading positions
 

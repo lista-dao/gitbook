@@ -90,6 +90,8 @@ function createMarket(MarketParams memory marketParams) external;
 
 Creates a market. Reverts unless `irm` and `lltv` are enabled, `loanToken`/`collateralToken`/`oracle` are non-zero, and the market does not already exist. Records `lastUpdate = block.timestamp`, sets the market `fee` to `defaultMarketFee`, stores the reverse mapping, probes the oracle for both tokens, and initializes the IRM. Emits `CreateMarket`. When the `OPERATOR` role has members, only an `OPERATOR` may create markets; otherwise creation is permissionless.
 
+> **Approve Moolah itself.** `supply`, `repay` and `supplyCollateral` pull tokens with `transferFrom`, and the spender is the Moolah singleton — not a vault, provider or broker. Where a market is provider- or broker-gated you do not call Moolah directly at all; approve that contract instead (see [Integration Patterns](integration-patterns.md)).
+
 ### Supply / withdraw (loan-side liquidity)
 
 ```solidity
@@ -121,6 +123,8 @@ function repay(MarketParams memory marketParams, uint256 assets, uint256 shares,
 ```
 
 Repays `onBehalf`'s debt, burning borrow shares. Accrues interest first; if `data` is non-empty, calls back `onMoolahRepay` before pulling tokens. If a broker is set for the market, only the broker may repay. A partial repay that would leave debt below `minLoan` reverts.
+
+> **To close a position entirely, pass the full `borrowShares` and leave `assets = 0`.** Reading the debt as assets and repaying that figure leaves sub-`minLoan` dust once interest accrues between your read and execution, and the whole call reverts — a repay-all button built that way fails for every user.
 
 ### Collateral management
 

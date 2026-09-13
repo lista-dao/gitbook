@@ -42,6 +42,8 @@ On that implementation `vaults(v)` must be `true` or the call reverts `vault not
 
 The vault's own whitelist still applies to the **receiver** either way — see [Vault Reference](vault-reference.md).
 
+**On the way out, there is nothing to approve.** `withdraw` and `redeem` do not pull your shares: the provider calls the vault's `withdrawFor` / `redeemFor`, which only the registered provider may call, and the vault burns from `owner` directly. Withdrawing your own position needs no allowance at all. Withdrawing someone else's needs *that owner* to have granted **you** — the original caller, not the provider — an ERC-20 allowance on the vault's share token.
+
 ---
 
 ## SlisBNBProvider — slisBNB collateral

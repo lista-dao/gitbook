@@ -58,6 +58,7 @@ function convertSnBnbToBnb(uint256 amountInSlisBnb) external view returns (uint2
 Points worth building around:
 
 * **The amount is `msg.value`.** `deposit()` takes no argument.
+* **Approve `ListaStakeManager` on the slisBNB token before `requestWithdraw`.** It pulls your slisBNB with `safeTransferFrom`; without an allowance the call reverts before anything else is checked.
 * **Withdrawal is two transactions, and the gap is not yours to control.** `requestWithdraw` queues; a bot unbonds from validators; only after the 7-day unbonding period does `getUserRequestStatus` report `isClaimable`. Poll it rather than assuming a deadline.
 * **`requestWithdraw` reverts on dust.** The requested amount must convert to more than the contract's `minBnb`.
 * **`claimWithdraw` takes an index, not an id.** It indexes the array returned by `getUserWithdrawalRequests` for the caller, so re-read that array rather than caching positions across claims.
