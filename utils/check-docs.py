@@ -85,3 +85,15 @@ if '--external' in sys.argv:
             dead.append((u, type(e).__name__, sorted(srcs)))
     print('dead external links:', len(dead))
     for u,why,srcs in dead: print('  ', why, u, '<-', ', '.join(srcs))
+
+# Nav integrity: every SUMMARY entry resolves, and every page is reachable from it.
+# A page missing from SUMMARY is invisible; a SUMMARY entry with no file is a dead click.
+import glob as _g
+_sm = open('SUMMARY.md', encoding='utf-8').read()
+_linked = {os.path.normpath(m) for m in re.findall(r'\(([^)]*for-developer/[^)]+\.md)\)', _sm)}
+_onfs = {os.path.normpath(p) for p in _g.glob('for-developer/**/*.md', recursive=True)}
+_dead, _orphan = sorted(_linked - _onfs), sorted(_onfs - _linked)
+print('SUMMARY entries with no file:', len(_dead))
+for x in _dead: print('   ', x)
+print('pages unreachable from SUMMARY:', len(_orphan))
+for x in _orphan: print('   ', x)
