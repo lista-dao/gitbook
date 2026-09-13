@@ -106,7 +106,7 @@ Returns the contents of `PublicLiquidator`'s per-market **borrower** whitelist, 
 | `borrowShares` | string | Borrow shares. |
 | `collateralToken` | string | Collateral token address. |
 | `collateralDecimal` | number | Collateral token decimals. |
-| `collateralUiMultiplier` | string | Display multiplier for the collateral amount; `"1"` for everything except bStock collateral, which is reported in underlying units. Multiply before display. |
+| `collateralUiMultiplier` | string | Display multiplier for the collateral amount. `"1"` for all non-bStock collateral and for most bStock collateral too; where it differs it is the token's on-chain `uiMultiplier()`, which drifts above 1 over time. Multiply the raw `collateral` by it before display — do not infer it from the symbol. |
 | `collateralSymbol` | string | Collateral symbol. |
 | `collateralIcon` | string | Collateral icon URL. |
 | `loanValueUsd` | string | Borrow value in USD. |
@@ -156,7 +156,7 @@ Completed Moolah liquidations.
 | `seizedInUsd` | string | Seized value in USD. |
 | `collateralMarketPrice` | string | Collateral price at liquidation. |
 | `collateralToken` / `collateralSymbol` / `collateralDecimal` / `collateralIcon` | string / number | Collateral token metadata. |
-| `collateralUiMultiplier` | string | Display multiplier for the collateral amount; `"1"` for everything except bStock collateral, which is reported in underlying units. Multiply before display. |
+| `collateralUiMultiplier` | string | Display multiplier for the collateral amount. `"1"` for all non-bStock collateral and for most bStock collateral too; where it differs it is the token's on-chain `uiMultiplier()`, which drifts above 1 over time. Multiply the raw `collateral` by it before display — do not infer it from the symbol. |
 | `loan` | string | Loan amount. |
 | `loanInUsd` | string | Loan value in USD. |
 | `loanToken` / `loanSymbol` / `loanDecimal` | string / number | Loan token metadata. |
@@ -197,7 +197,7 @@ Open positions whose safety factor (`marketLiqRate / positionLiqRate`) is below 
 | `collateral` | string | Collateral amount. |
 | `borrowed` | string | Borrowed amount. |
 | `collateralToken` / `collateralSymbol` / `collateralIcon` | string | Collateral token metadata. |
-| `collateralUiMultiplier` | string | Display multiplier for the collateral amount; `"1"` for everything except bStock collateral, which is reported in underlying units. Multiply before display. |
+| `collateralUiMultiplier` | string | Display multiplier for the collateral amount. `"1"` for all non-bStock collateral and for most bStock collateral too; where it differs it is the token's on-chain `uiMultiplier()`, which drifts above 1 over time. Multiply the raw `collateral` by it before display — do not infer it from the symbol. |
 | `collateralPrice` | string | Collateral price. |
 | `loanToken` / `loanSymbol` / `loanIcon` | string | Loan token metadata. |
 | `loanPrice` | string | Loan price. |

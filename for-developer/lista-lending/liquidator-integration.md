@@ -168,10 +168,10 @@ Call it **after** interest has been accrued for the market, or accept that the q
 | `NoProfit()` | Self-funded paths: the contract's collateral balance did not strictly increase. Flash paths: the swap output did not **exceed** the repayment — exact break-even reverts too, since a strictly positive loan-token surplus is required. Widen slippage, reduce `seizedAssets`, or pick a deeper venue. |
 | `SwapFailed()` | The low-level call to `pair` reverted. Stale aggregator calldata is the usual cause. |
 | `"Invalid smart provider"` | `ISmartProvider(smartProvider).TOKEN() != marketParams.collateralToken`. |
-| Moolah `HEALTHY_POSITION` | The position was healthy by the time your transaction landed — someone repaid, or the price moved. The most common failure in practice; re-check immediately before submitting and expect to lose races. |
-| Moolah `INCONSISTENT_INPUT` | `exactlyOneZero(seizedAssets, repaidShares)` failed. Note the flash paths hardcode `repaidShares = 0`, so calling one with `seizedAssets = 0` reverts here. |
-| Moolah `UNHEALTHY_POSITION` | The residual position was left with debt and collateral, borrow assets below `minLoan`, and still unhealthy. Size the liquidation differently — see above. |
-| Moolah `NOT_LIQUIDATION_WHITELIST` | `PublicLiquidator` itself is not on the market's Moolah-level whitelist. Can surface when a market was gated after `marketWhitelist[id]` was set. |
+| Moolah `"position is healthy"` | The position was healthy by the time your transaction landed — someone repaid, or the price moved. The most common failure in practice; re-check immediately before submitting and expect to lose races. |
+| Moolah `"inconsistent input"` | `exactlyOneZero(seizedAssets, repaidShares)` failed. Note the flash paths hardcode `repaidShares = 0`, so calling one with `seizedAssets = 0` reverts here. |
+| Moolah `"position is unhealthy"` | The residual position was left with debt and collateral, borrow assets below `minLoan`, and still unhealthy. Size the liquidation differently — see above. |
+| Moolah `"not liquidation whitelist"` | `PublicLiquidator` itself is not on the market's Moolah-level whitelist. Can surface when a market was gated after `marketWhitelist[id]` was set. |
 
 Four entry points carry `nonReentrant` directly; `liquidate` inherits it by delegating to `liquidateWithCollTransferOpt`, which is `public nonReentrant`. `redeemSmartCollateral` is `nonReentrant` too.
 
