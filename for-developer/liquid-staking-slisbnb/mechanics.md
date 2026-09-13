@@ -18,7 +18,7 @@ Users can stake BNB through ListaStakeManager. In return, they receive a corresp
 
 ### Minting LST
 
-Upon staking, ListaStakeManager mints slisBNB. slisBNB can be freely traded, transferred, or used in DeFi applications, providing users with liquidity while their original assets remain staked.
+Upon staking, ListaStakeManager mints slisBNB. slisBNB is a transferable ERC-20, so the staked position stays liquid and can be used as collateral elsewhere — including as Moolah collateral, where it is provider-gated (see [Providers](../lista-lending/providers.md)).
 
 <br>
 
@@ -39,3 +39,27 @@ Users can initiate withdrawal requests to unstake their assets through the smart
 ### Rebalance
 
 ListaStakeManager allows Bot to periodically rebalance the staked BNB across validators to optimize reliability and reward rates.
+
+## Interface
+
+The three state-changing calls and four views below are all user-callable on `ListaStakeManager`; the address is on [Smart Contract](smart-contract.md).
+
+```solidity
+function deposit() external payable;                    // stake BNB, receive slisBNB
+function requestWithdraw(uint256 amountInSlisBnb) external;
+function claimWithdraw(uint256 idx) external;           // idx into getUserWithdrawalRequests(you)
+
+function getUserWithdrawalRequests(address user) external view returns (WithdrawalRequest[] memory);
+function getUserRequestStatus(address user, uint256 idx) external view returns (bool isClaimable, uint256 amount);
+function convertBnbToSnBnb(uint256 amount) external view returns (uint256);
+function convertSnBnbToBnb(uint256 amountInSlisBnb) external view returns (uint256);
+```
+
+Points worth building around:
+
+* **The amount is `msg.value`.** `deposit()` takes no argument.
+* **Approve `ListaStakeManager` on the slisBNB token before `requestWithdraw`.** It pulls your slisBNB with `safeTransferFrom`. The transfer is the last statement in the function, so a missing allowance surfaces only after the amount and `minBnb` checks have passed.
+* **Withdrawal is two transactions, and the gap is not yours to control.** `requestWithdraw` queues; a bot unbonds from validators; only after the 7-day unbonding period does `getUserRequestStatus` report `isClaimable`. Poll it rather than assuming a deadline.
+* **`requestWithdraw` reverts on dust.** The requested amount must convert to **at least** the contract's `minBnb`.
+* **`claimWithdraw` takes an index, not an id.** It indexes the array returned by `getUserWithdrawalRequests` for the caller, so re-read that array rather than caching positions across claims.
+* **slisBNB is yield-bearing by exchange rate, not by rebase.** Your balance does not grow; `convertSnBnbToBnb` does. Quote value through it.

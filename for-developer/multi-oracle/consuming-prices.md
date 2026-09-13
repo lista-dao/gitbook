@@ -1,0 +1,250 @@
+# Consuming Oracle Prices
+
+Two different price functions exist in the Lista stack, and they are frequently confused. They live at different layers, take different arguments, and return numbers on different scales. Reading one where the other is expected produces wrong health factors and mispriced liquidations.
+
+| Function | Layer | Signature | Returns | Scale |
+| --- | --- | --- | --- | --- |
+| `peek` | Oracle (Resilient Oracle / any `IOracle`) | `peek(address asset) → uint256` | Price of **one `asset`, quoted in USD** | `1e8` (see [Decimals](#decimals-what-peek-returns)) |
+| `getPrice` | Moolah market | `getPrice(MarketParams marketParams) → uint256` | Price of **one collateral token, quoted in the loan token** | Fixed `36 + loanDecimals − collateralDecimals` (see [The scale factor](#the-market-scale-factor)) |
+
+Rule of thumb: `peek` answers "what is this asset worth in USD?"; `getPrice` answers "how much loan token is one unit of collateral worth, on the scale Moolah's math expects?". Health checks and liquidations use `getPrice`. Use `peek` only when you genuinely need a single asset's USD value (for example, to reconstruct the two legs of a market price, or to sanity-check a feed).
+
+This page shows how to read a market's oracle, call both functions read-only, verify which feeds back an asset, and compute a position's health and liquidation price with the exact scale factor from `Moolah.sol`. For the (auto-synced) per-asset oracle address tables, see [Standard Collaterals](../multi-oracle-standard.md) and [bStock Collaterals](../multi-oracle-bstock.md).
+
+---
+
+## Layer 1 — the oracle: `peek(address asset)`
+
+Every oracle a Moolah market can use implements `IOracle`:
+
+```solidity
+struct TokenConfig {
+  address asset;
+  address[3] oracles;             // [main, pivot, fallback]
+  bool[3] enableFlagsForOracles;  // enabled state, same order
+  uint256 timeDeltaTolerance;     // staleness window in seconds; 0 DISABLES the check
+}
+
+interface IOracle {
+  function peek(address asset) external view returns (uint256);
+  function getTokenConfig(address asset) external view returns (TokenConfig memory);
+}
+```
+
+`peek(asset)` returns the USD price of one unit of `asset`. It is a `view` function — free to call, no state change. Lista's production oracle behind most collateral is the **Resilient Oracle**, whose `peek` implementation is described below, but a market curator may point a market at any contract that satisfies `IOracle`.
+
+### Decimals: what `peek` returns
+
+Every oracle Lista currently deploys on the `IOracle` path returns a USD price with **8 decimals** (the one exception being `IdleOracle`, which returns a literal `0` for its idle collateral as a sentinel rather than a price) — the same precision Moolah uses internally for `minLoanValue`, which is why `Moolah.minLoan` can mix `minLoanValue` and `peek` directly. Upstream feeds (Chainlink, Atlas, RedStone on BNB Chain) publish 8-decimal answers, and Lista's adaptors normalize *to* 8 rather than away from it: `PTLinearDiscountOracle` divides an 18-decimal discount-oracle input by `1e10` and declares `decimals() = 8`.
+
+> **This is a property of the deployed oracles, not a guarantee of the interface.** `IOracle` declares `peek(address) → uint256` and `getTokenConfig(address) → TokenConfig`, and neither carries a denomination or a scale field — and Moolah does not validate either; it simply divides the two `peek` results, so any consistent pair of scales would pass. For a market whose oracle you did not deploy, confirm the denomination and decimals of **both** legs before trusting the magnitude. Note also that the legacy CDP `peek() → (bytes32, bool)` surface (no arguments — there is one pip per collateral), which Moolah never calls, normalizes *upward* to 18 decimals — do not carry that assumption over.
+
+You do **not** need to guess these decimals when working at the market layer: `getPrice` (Layer 2) reads both legs and normalizes them against the token decimals for you. When you call `peek` directly, always confirm the decimals of the specific feed you are reading rather than assuming a fixed magnitude.
+
+### The Resilient Oracle in brief
+
+The Resilient Oracle aggregates up to three sources per asset and cross-validates them so a single bad feed cannot move a price. It configures three roles per asset:
+
+| Role | Purpose |
+| --- | --- |
+| **main** | The most trustworthy price source. Must be set (non-zero). |
+| **pivot** | A loose sanity checker used to validate the main (and fallback) price. Optional. |
+| **fallback** | Backup source used when the main price fails validation. Optional. |
+
+`peek` resolves a price by this precedence (see `ResilientOracle._getPrice`):
+
+1. If **main** is enabled and validates against **pivot** (via `BoundValidator`), return the main price. If no pivot is configured/enabled, the main price is returned directly.
+2. Otherwise, if **fallback** is enabled and validates against **pivot**, return the fallback price.
+3. Otherwise, if both main and fallback are available and validate against each other, return the main price.
+4. Otherwise revert with `"invalid resilient oracle price"`.
+
+### PT linear discount
+
+PT collateral is priced at a linear discount that shrinks to zero at maturity. The discount is **per year**, pro-rated over the time remaining — it does not reference the PT's total term:
+
+```text
+discount = baseDiscountPerYear × timeToMaturity / 365 days      // 0 at and after maturity
+```
+
+`baseDiscountPerYear` is read from the PT's discount oracle and is 1e18-scaled: at `0.15`, a PT one year out is discounted 15%, one six months out 7.5%.
+
+Two variants are deployed and they differ in what they do with that ratio:
+
+| Contract | Returns |
+| --- | --- |
+| `PTLinearDiscountOracle` | `(1 − discount)` alone, scaled to 8 decimals. It never reads the underlying's price — it assumes a USD peg — so at and after maturity it returns a flat `1e8`, not the underlying's actual price. |
+| `PTLinearDiscountMarketOracle` | The same ratio multiplied by the base token's oracle price, so it converges on the underlying. |
+
+Both declare `decimals() = 8`, so either reads like any other feed on the `IOracle` path — but they get there differently. `PTLinearDiscountOracle` divides the 18-decimal discount answer by `1e10`. `PTLinearDiscountMarketOracle` multiplies the 8-decimal base price by that answer and divides by `1e18`.
+
+A source is skipped if it is disabled, missing, reverts, or is **stale** — `getPriceFromOracle` treats a Chainlink-style answer whose `updatedAt` is older than the asset's `timeDeltaTolerance` as invalid (`INVALID_PRICE = 0`). A `timeDeltaTolerance` of `0` **disables the staleness check entirely** rather than rejecting everything; both `PTLinearDiscountOracle` and `IdleOracle` return `0` here, so read the value before assuming a freshness guarantee.
+
+**BoundValidator.** Validation compares a reported price against an anchor price. With `anchorRatio = anchorPrice * 1e18 / reportedPrice`, the reported price is accepted only when:
+
+```
+lowerBoundRatio <= anchorRatio <= upperBoundRatio
+```
+
+Bounds are configured per asset — `BoundValidator` stores no default, so consult the per-asset limits in the auto-synced [Standard Collaterals](../multi-oracle-standard.md) and [bStock Collaterals](../multi-oracle-bstock.md) tables. A reported price of `0` fails validation gracefully (returns `false`); an anchor price of `0` instead reverts (`anchor price is not valid`). An asset that reaches the bound validator with no config there reverts `validation config not exist`, and that revert propagates out of `peek`. Three routes reach it: the success branch of the main-oracle read and the success branch of the fallback-oracle read — both when a pivot is enabled **and returned a valid price** — plus an untried external call on the main-vs-fallback path, when both of those return non-zero. None is absorbed by the surrounding `catch`, which covers only the oracle read itself, not the validation that follows it. Distinguish this from `invalid resilient oracle price`, which is what you get when the asset has no usable price at all — including an asset with no resilient-oracle config, or one whose enabled pivot is stale with no fallback.
+
+> Which sources and bounds are configured for each asset (and the Resilient Oracle address per chain) are published in the auto-synced tables on [Standard Collaterals](../multi-oracle-standard.md) and [bStock Collaterals](../multi-oracle-bstock.md). Do not hard-code them.
+
+### Verifying which feeds back an asset
+
+To see the sources behind a collateral before you trust a market, read the token config from the oracle directly:
+
+```solidity
+// oracle = a market's marketParams.oracle
+TokenConfig memory cfg = IOracle(oracle).getTokenConfig(collateralToken);
+// cfg.oracles[0] = main, [1] = pivot, [2] = fallback
+// cfg.enableFlagsForOracles[i] tells you which roles are live
+// cfg.timeDeltaTolerance is the staleness window in seconds (0 = check disabled)
+```
+
+The Resilient Oracle also exposes `getOracle(asset, role) → (address oracle, bool enabled)` for reading a single role.
+
+---
+
+## Layer 2 — the market: `getPrice(MarketParams)`
+
+A Moolah market's price is the collateral asset priced **in the loan asset**, not in USD. This is the number Moolah's health and liquidation math actually consumes.
+
+```solidity
+struct MarketParams {
+  address loanToken;
+  address collateralToken;
+  address oracle;
+  address irm;
+  uint256 lltv;
+}
+
+interface IMoolah {
+  function idToMarketParams(Id id) external view returns (MarketParams memory);
+  function getPrice(MarketParams calldata marketParams) external view returns (uint256);
+  function isHealthy(MarketParams calldata marketParams, Id id, address borrower) external view returns (bool);
+}
+```
+
+`getPrice` is `view`. Under the hood it reads both legs from the market's oracle (`oracle.peek(collateralToken)` and `oracle.peek(loanToken)`) and combines them with a fixed scale factor.
+
+### The market scale factor
+
+From `Moolah.getPrice` / `_getPrice`, with `base = collateralToken` and `quote = loanToken`:
+
+```solidity
+uint256 scaleFactor = 10 ** (36 + quoteTokenDecimals - baseTokenDecimals);
+return scaleFactor.mulDivDown(basePrice, quotePrice);
+//     = scaleFactor * basePrice / quotePrice   (rounded down)
+```
+
+where `basePrice = peek(collateralToken)`, `quotePrice = peek(loanToken)`, `baseTokenDecimals = IERC20Metadata(collateralToken).decimals()`, and `quoteTokenDecimals = IERC20Metadata(loanToken).decimals()`.
+
+Because the same feed decimals appear in both `basePrice` and `quotePrice`, they cancel in the ratio, and the `36 + quoteDecimals − baseDecimals` exponent normalizes the result to Moolah's canonical price scale. The result is deliberately targeted at the constant:
+
+```solidity
+uint256 constant ORACLE_PRICE_SCALE = 1e36;
+```
+
+Read `getPrice` as a **raw-unit conversion factor, not a human-readable price**: multiplying a raw collateral amount (in the collateral token's own decimals) by `getPrice` and dividing by `1e36` yields the equivalent debt in **raw loan-token units** — `rawCollateral × getPrice / 1e36 = rawLoan`. Because the scale factor carries `10**(quoteDecimals − baseDecimals)`, `getPrice / 1e36` equals the per-whole-token price *only when both tokens share the same decimals*; for a human "1 collateral = X loan tokens" price across different decimals, apply the token decimals yourself (or derive it from the two USD legs via `peek`). The health and liquidation math below works entirely in raw units, so you never need the human price for on-chain-accurate results.
+
+> Broker markets note. `getPrice(marketParams)` calls the internal price with `user = address(0)`, which always returns the plain market price. For fixed-term/credit **broker** markets, an account-specific price can deviate from the market price; the protocol uses the market price for the standard health check so liquidators can act in time. Unless you are integrating a broker product, `getPrice(marketParams)` is the number you want. See [Broker Reference](../lista-lending/broker-reference.md).
+
+---
+
+## Computing health with the scale factor
+
+Moolah's health check (`Moolah._isHealthy`) is:
+
+```solidity
+uint256 maxBorrow = uint256(position.collateral)
+  .mulDivDown(collateralPrice, ORACLE_PRICE_SCALE)   // collateral * price / 1e36
+  .wMulDown(marketParams.lltv);                        // * lltv / 1e18
+
+bool healthy = maxBorrow >= borrowed;                  // borrowed rounded up
+```
+
+where:
+
+- `collateralPrice = getPrice(marketParams)` (the `1e36`-scaled collateral-in-loan price).
+- `position.collateral` is the raw collateral amount in the collateral token's own decimals.
+- `borrowed` is the borrower's debt in loan-token units (borrow shares converted to assets, rounded **up** in the protocol's favor).
+- `lltv` is WAD-scaled (`1e18` = 100%), and `wMulDown(x, lltv) = x * lltv / 1e18`.
+
+So the collateral's borrowing power, in loan-token units, is:
+
+```
+maxBorrow = collateral * getPrice / 1e36 * lltv / 1e18
+```
+
+The position is healthy while `maxBorrow >= borrowed`. Note the two independent scale divisions: `1e36` (the price scale) and `1e18` (the LLTV WAD). Dropping either one is the most common integration error.
+
+You do not have to reproduce this off-chain to answer "is this position healthy?" — Moolah exposes `isHealthy(marketParams, id, borrower)` as a `view` function that applies the protocol's health formula.
+
+> It is **not** execution-equivalent. The view reads the market's *stored* totals, whereas `borrow`, `withdrawCollateral`, and `liquidate` all call `_accrueInterest` first. A position can therefore pass the view and still fail on execution once accrued interest is folded into the debt. For an execution-equivalent answer, simulate the call, or accrue interest first (`accrueInterest` is permissionless) and read the view immediately after.
+
+### Read-only example (viem)
+
+```typescript
+import { createPublicClient, http } from "viem";
+
+const client = createPublicClient({ transport: http(RPC_URL) });
+
+// 1. Resolve the market's params from its id (bytes32).
+// `idToMarketParams` is a public-mapping getter, so its ABI outputs are five
+// FLATTENED values, not a struct — viem returns an array. Destructure it;
+// reading `.lltv` off the result is undefined.
+const [loanToken, collateralToken, oracle, irm, lltv] =
+  await client.readContract({
+    address: MOOLAH,
+    abi: MOOLAH_ABI,
+    functionName: "idToMarketParams",
+    args: [marketId],
+  });
+const marketParams = { loanToken, collateralToken, oracle, irm, lltv };
+
+// 2. Collateral price, quoted in the loan token, scaled by 1e36.
+const price = await client.readContract({
+  address: MOOLAH,
+  abi: MOOLAH_ABI,
+  functionName: "getPrice",
+  args: [marketParams],
+}); // bigint
+
+// 3. Borrowing power of `collateral` units, in loan-token units.
+const ORACLE_PRICE_SCALE = 10n ** 36n;
+const WAD = 10n ** 18n;
+const maxBorrow = ((collateral * price) / ORACLE_PRICE_SCALE) * lltv / WAD;
+const healthy = maxBorrow >= borrowed;
+```
+
+`collateral` and `borrowed` here are raw on-chain integers in each token's own decimals; do not pre-scale them. `getPrice` already accounts for the decimal difference between the two tokens.
+
+## Liquidation price
+
+The health boundary is where `maxBorrow == borrowed`. Solving the health inequality for the collateral price gives the **liquidation price** — the `getPrice` value at which a position with fixed `collateral` and `borrowed` becomes eligible for liquidation:
+
+```
+liquidationPrice = borrowed * 1e36 * 1e18 / (collateral * lltv)
+```
+
+(all values raw, in their native units/scales). Broadly, the position becomes liquidatable once `getPrice(marketParams)` falls below `liquidationPrice`.
+
+> Treat that as an **approximate analytical threshold, not an exact integer boundary.** The on-chain check is `maxBorrow >= borrowed`, where `maxBorrow` is floored twice and `borrowed` is rounded up — all in the protocol's favour — so a position can already be liquidatable *at* the computed price. Use this formula to rank and monitor candidates, and `isHealthy` or a simulated transaction to decide whether a specific position can actually be liquidated right now.
+
+For the liquidation mechanics themselves, note how the same scale appears when collateral is seized (`Moolah.liquidate`): the loan-token value of seized collateral is `seizedAssets.mulDivUp(collateralPrice, ORACLE_PRICE_SCALE)`. That equals `seizedAssets * getPrice / 1e36` **only on non-broker markets** — `liquidate` prices with `_getPrice(marketParams, borrower)`, which routes through the broker when one is set, so on a broker market it is not the `getPrice` value. The liquidation incentive factor and cursor are **compile-time constants** (`LIQUIDATION_CURSOR`, `MAX_LIQUIDATION_INCENTIVE_FACTOR` in `ConstantsLib`), not governance-tunable parameters, and are not covered here.
+
+---
+
+## Checklist for integrators
+
+- **Pricing a position's health / a liquidation:** use `getPrice(marketParams)` and divide by `ORACLE_PRICE_SCALE` (`1e36`), then apply `lltv` with the `1e18` WAD. Never mix in a raw `peek` value here.
+- **Need a single asset's USD value:** use `oracle.peek(asset)` and confirm that feed's decimals before scaling.
+- **Auditing a market's oracle:** read `marketParams.oracle`, then `getTokenConfig(collateralToken)` to see the main/pivot/fallback sources, enabled flags, and staleness tolerance; cross-reference the addresses on [Standard Collaterals](../multi-oracle-standard.md) / [bStock Collaterals](../multi-oracle-bstock.md).
+- **All of these are `view` calls** — no transaction needed. They are not all unconditionally callable, though: for a **bStock** collateral, `StockOracle` reverts with `StockMarketClosed()` while the market is flagged closed, so `peek` and `getPrice` revert for that asset. `isHealthy` reverts too **unless** the position has no debt, in which case it returns `true` without touching the oracle. Treat the revert as expected protocol state, not an RPC fault. Note the closed flag is not a clock — it is a manager-level global switch, a per-stock bot flag, and a pauser-level emergency close, so it will not always line up with exchange hours.
+
+## Related pages
+
+- [Standard Collaterals](../multi-oracle-standard.md) · [bStock Collaterals](../multi-oracle-bstock.md) — per-asset oracle sources, bound-validator limits, and Resilient Oracle addresses (auto-synced).
+- [Oracle](../../introduction/lista-lending/oracle.md) — conceptual overview of oracles in Lista Lending.
+- [Broker Reference](../lista-lending/broker-reference.md) — the fixed-term broker surface, including broker-specific pricing.
+- [Moolah Lending SDK](../sdk.md) — TypeScript helpers that read market data and prices for you.

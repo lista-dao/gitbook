@@ -1,194 +1,41 @@
 # Mechanics
 
-In the Lista mechanism, users can earn rewards by strategically utilizing their assets, which may include BNB, ETH, slisBNB, wBETH, and BTCB. The process begins with users depositing these assets into the Interaction (CDP) module, where they are used as collateral to borrow LisUSD.<br>
+The Collateral Debt Position (CDP) module lets a user deposit collateral and mint **lisUSD** against it. It is a MakerDAO/Helio-style fork: `Vat`, `Jug`, `Spotter`, `Dog`, `Clipper`, `Abacus` and `Vow` behind the **Interaction** entrypoint.
 
-In addition to depositing assets and borrowing LisUSD, users can earn rewards by staking LisUSD and BNB within the Lista ecosystem. By participating in these staking activities, they accrue interest and additional rewards, significantly enhancing their overall earnings.
+> ## This product is being wound down
+>
+> **Do not build new integrations against it.** Use [Lista Lending](../lista-lending/README.md) instead — it is the actively developed lending product and has a full [integration guide](../lista-lending/integration-patterns.md), [contract reference](../lista-lending/contract-reference.md) and [SDK](../sdk.md).
+>
+> Most of the CDP's user-facing surface is already closed. Verify each of these live before assuming otherwise:
+>
+> | Check | Current value | Effect |
+> | --- | --- | --- |
+> | `Vat.Line()` | `0` | **All new borrowing reverts** `Vat/ceiling-exceeded`, protocol-wide, regardless of the per-collateral `line`. |
+> | `Interaction.whitelistMode()` | `1` | Deposits are whitelisted. The gate is on the **participant**, not the caller, so an integrator cannot deposit for a non-whitelisted user. |
+> | `Interaction.auctionWhitelistMode()` | `1` | Starting, buying from and resetting auctions are restricted to `Interaction.auctionWhitelist`. This fork adds `auth` to `Clipper.take`/`redo`, so unlike upstream MakerDAO there is **no open keeper or buyer role**. |
+>
+> What still works: repaying, withdrawing collateral, and liquidation of the positions that remain. The rest of this page covers what an existing holder or an auditor needs, and nothing more.
 
-<br>
+## Unwinding an existing position
 
-### Fees
+| Call | Purpose |
+| --- | --- |
+| `Interaction.locked(token, usr)` | Collateral deposited (`ink`). |
+| `Interaction.borrowed(token, usr)` | Current lisUSD debt (`art * rate / RAY`). When the debt is non-zero this adds a flat 100-wei buffer so a repay can fully clear the position — repay the value it returns, not your own computation. |
+| `Interaction.payback(token, amount)` | Repay lisUSD. Burns via `HayJoin` and reduces `art`. |
+| `Interaction.withdraw(participant, token, dink)` | Withdraw collateral, subject to the position staying safe. Note the **three** parameters with `participant` first — there is no two-argument form. When the collateral has no provider, `msg.sender` must equal `participant`; when it does have one (slisBNB, for example), the withdrawal has to be driven through that provider so the certificate token is unwrapped. |
 
-1. Borrowing interest — an interest paid to Lista for borrowing lisUSD. The rate is a fixed number set by the Lista governance platform.
-2. Liquidation penalty — percentage subtracted in the form of lisUSD when selling user's collateral in a Dutch action during the liquidation process.
+A position is safe while `ink * spot >= art * rate`. `spot` already has the liquidation ratio applied, so it sits below the raw oracle price.
 
-### Collateral ratio
+Interest accrues into the Vat's per-collateral rate accumulator and is realized in lisUSD on repayment — nothing is charged at borrow time. The rate is set by the `DynamicDutyCalculator` AMO from the lisUSD price. The **Jug** compounds `base + duty` and the Vat only folds the resulting delta into its accumulator, so read both `Jug.base()` and the calculator's own views rather than treating any single value as the rate. `Interaction.borrowApr(token)` returns the combined figure with **20 decimals** — i.e. a *percentage* scaled by `1e18`, so `4035532478367910700` is 4.0355%; divide by `1e20` for a fraction. Despite the name it raises the per-second rate to one year of seconds, so it is a compounded annual figure (an APY).
 
-Collateral ratio is a percentage of the user's collateral value that determines the maximum borrowing limit for the user; it is calculated as follows: (total amount of lisUSD minted / total value of the collateral \* 100). Different assets will have different collateral ratios, depending on asset volatility. Collateral ratio is used as a liquidation bar to decide when a liquidation event should happen.
+For a liquidation surface that **is** open to third parties, see [Liquidator Integration](../lista-lending/liquidator-integration.md) on Lista Lending. The engine's internals (`Vat`, `Jug`, `Spotter`, `Dog`, `Clipper`, `Abacus`, `Vow`) are unchanged from the MakerDAO/Helio design and are not restated here; deployed addresses are on [Smart Contract](smart-contract.md).
 
-<br>
+## lisUSD staking
 
-### CDP Module
+The **Jar** (`jar.sol`) is deprecated. The live lisUSD saving-rate product is the **LisUSDPoolSet** / **EarnPool** stack — see [Stable Pool (PSM)](../../introduction/collateral-debt-position-lisusd/lisusd/stable-pool-price-stability-module-psm.md) and [lisUSD Saving Rate (LSR)](../../introduction/collateral-debt-position-lisusd/lisusd/lisusd-saving-rate-lsr.md). That layer is separate from the CDP borrowing engine above and is not being wound down with it.
 
-The following sections will introduce the functions of the CDP Module one by one, explaining how users can borrow LisUSD by providing collateral and the interactions between different involved contracts.
+## See also
 
-<br>
-
-**a. Deposit Collateral**
-
-<figure><img src="../../.gitbook/assets/image (41).png" alt=""><figcaption></figcaption></figure>
-
-1. User Deposits Collateral: The user initiates the deposit process by transferring their collateral to the Interaction contract.
-2. Interaction: It moves the collateral to the GemJoin (like a Treasury).
-3. GemJoin: receives the collateral from Interaction.
-4. Vat: The Vat contract, which is the core of the CDP engine. It records the user’s collateral information and ensures that the collateral enters the system.
-
-<br>
-
-This process ensures that the user’s collateral is securely deposited and recorded within the CDP Module, allowing them to proceed with borrowing LisUSD against their collateral.
-
-<br>
-
-**b. Borrow LisUSD**
-
-<figure><img src="../../.gitbook/assets/image (40).png" alt=""><figcaption></figcaption></figure>
-
-1. User Initiates Borrowing: The user requests to borrow a specific amount of LisUSD against their deposited collateral by calling borrow().
-2. Interaction: This request is processed by the Interaction, which then communicates with Vat. The user also pays interest during the process, the interest rate is a fixed number set by the Lista governance platform.
-3. Vat: records an increase in the user's debt corresponding to the borrowed LisUSD against the specific collateral.
-4. HayJoin: Interaction calls the \`exit()\` to mint the specified amount of LisUSD and sends it to the user.
-5. ListaDistributor: Interaction calls ListaDistributor contract’s snapshot method to record user’s debt value against the collateral for calculating and distributing future rewards to the user.
-
-<br>
-
-This sequence ensures that the user's debt is accurately recorded, the borrowed LisUSD is successfully minted and transferred to the user, and interest payments are made according to the fixed rate determined by Lista governance.
-
-<br>
-
-**c. Payback LisUSD**
-
-<figure><img src="../../.gitbook/assets/image (39).png" alt=""><figcaption></figcaption></figure>
-
-1. User Initiates Payback: The user initiates the payback process by specifying the amount of LisUSD to be repaid against the specific collateral.
-2. Interaction: This payback request is processed by the Interaction
-3. Vat: It updates the user’s debt, reducing it by the amount of LisUSD repaid. If the user fully repays their debt, the CDP (Collateralized Debt Position) is closed
-4. HayJoin: Interaction calls the \`join()\` method, which burns LisUSD from the user’s account
-5. ListaDistributor: Interaction calls ListaDistributor contract’s snapshot method to record user’s debt value against the collateral for calculating and distributing future rewards to the user.
-
-<br>
-
-This process ensures that the user’s debt is accurately reduced or cleared, and the corresponding amount of LisUSD is burned, effectively removing it from circulation.
-
-<br>
-
-**d. Withdraw Collateral**<br>
-
-<figure><img src="../../.gitbook/assets/image (35).png" alt=""><figcaption></figcaption></figure>
-
-1. User Initiates Withdrawal: The user initiates the withdrawal process by specifying the amount of collateral they wish to withdraw.
-2. Interaction: The withdrawal request is processed by the Interaction contract. Please note that if the user has borrowed LisUSD and has not yet paid it back, the amount of collateral they can withdraw is less than the original deposit amount, as some collateral must remain to secure the outstanding debt.
-3. GemJoin: Interaction calls the \`exit()\` method, which transfers the specified amount of collateral from GemJoin back to the user.
-4. Vat: It records the user's collateral information, updating the system to reflect that the collateral has left the system
-
-<br>
-
-This process ensures that the user's collateral is accurately withdrawn and returned, while the system records the change in collateral status.
-
-<br>
-
-**e. Stake LisUSD**
-
-<figure><img src="../../.gitbook/assets/image (34).png" alt=""><figcaption></figcaption></figure>
-
-<br>
-
-1. User Initiates Staking: The user calls the \`join()\` method to stake a specified amount of LisUSD. This amount of LisUSD is then transferred to the Jar contract.
-2. Jar: The Jar contract records the following information:
-   1. The user’s staked LisUSD balance.
-   2. Increase the total amount of LisUSD staked by all users.
-   3. The time when the user staked the LisUSD.
-3. ListaDistributor: ListaDistributor takes a snapshot of the user’s balance from the Jar. it will be used for calculating and distributing future rewards to the user.
-
-<br>
-
-**f. Unstake LisUSD**
-
-<figure><img src="../../.gitbook/assets/image (31).png" alt=""><figcaption></figcaption></figure>
-
-1. User Initiates Unstaking: The user calls the \`exit()\` method to unstake a specified amount of LisUSD.
-2. Jar: This amount of LisUSD, plus any rewarded amount, is transferred back to the user. It also records the following information:
-   1. The user’s staked LisUSD balance is reduced by the unstaked amount X.
-   2. The total staked amount of LisUSD is reduced by the unstaked amount X.
-   3. A record of the withdrawal is saved.
-3. ListaDistributor: The ListaDistributor takes a snapshot of the user’s balance and records the user's staked LisUSD balance for future reward calculations.
-
-<br>
-
-This process user will only interact with the Jar contract, it is responsible for managing and distributing interest to the participants of who stakes LisUSD.
-
-<br>
-
-**g. Liquidation**
-
-<figure><img src="../../.gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
-
-The flowchart shows how an auction is being kick started.
-
-**g.1 How an auction get started**
-
-Determine Price and Ratio:
-
-* Price of 1 unit of collateral: $2
-* Collateral ratio: 66%
-* Collateral price based on collateral ratio: 2∗0.66=$1.322
-
-User Deposit and Borrow Limit:
-
-* Assume User deposits 10 units of collateral: 10∗2=$20
-* Borrow limit: 20∗0.66=$13.2
-* Assume User borrows $13.2 of lisUSD: 13.2 lisUSD
-
-Monitor Collateral Price Decrease:
-
-* Assume the price of 1 unit of collateral decreases to: $1.8
-* Collateral unit price with safety margin: 1.8∗0.66=$1.188
-* Current worth of collateral with safety margin: 1.188∗10=$11.88
-* Determine liquidation status:
-  * 13.2−11.88=$1.32 (positive difference indicates liquidation)
-
-Liquidation Auction Preparation:
-
-* Amount of collateral that goes to Dutch auction: 10 units
-* Liquidation penalty (fixed by Lista governance): 13% of the debt
-* Debt to cover in the auction: 13.2∗1.13=$14.916
-* Buffer (percentage similar to liquidation penalty, fixed by Lista governance): 2%
-* Starting auction price (top): 1.8∗1.02=$1.836
-
-Trigger Auction:
-
-* Somebody triggers the auction and gets a tip + chip as a reward (details described later).
-
-<br>
-
-**g.2 Buy from Auction**
-
-<figure><img src="../../.gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
-
-The flowchart shows how the user buys collateral from an auction.
-
-<br>
-
-Example:
-
-Auction Start and Price Decrease:
-
-* Auction starts, and the price gradually decreases.
-* Liquidator can participate to buy a customized amount of liquidated collateral.
-* Linear decrease of price (subject to disruption by specific conditions):
-  * Formula: $$f(x) = x * e^{2 pi i \xi x}$$
-  * Example: 1.836∗((3600-600)/3600)=$1.53
-
-Conditions to Pause Auction:
-
-* The auction can pause because of one of two conditions:
-  * Tail (specific amount of time elapsed, fixed by Lista governance)
-  * Cusp (% of price drop; 40% start auction price, fixed by Lista governance)
-* Once either requirement is met, the auction will be restarted.
-
-<br>
-
-**g.3 Restart Auction**
-
-Wait until someone restarts the auction. The restarter gets a tip + chip as a reward.
-
-* Tip (flat fee, fixed by Lista governance): 5 lisUSD
-* Chip (dynamic fee, fixed by Lista governance): 0 lisUSD
+- [Flash Loan](flash-loan.md) — ERC-3156 flash minting of lisUSD.
+- [Smart Contract](smart-contract.md) — deployed CDP contract addresses.

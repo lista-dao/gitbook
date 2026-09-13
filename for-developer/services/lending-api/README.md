@@ -2,8 +2,7 @@
 
 Technical reference for the **Moolah lending protocol API** used by Lista Lending. The API exposes protocol-level, vault, market, position, liquidation, and emission data for client applications and integrators.
 
-**Base URL:** `GET/POST` under `/api/moolah`
-
+**Base URL:** most paths are `GET`/`POST` under `/api/moolah`; the liquidation and aggregated-position feeds sit under `/api/liquidation` and `/api/v2` — see [Conventions](conventions.md).
 ---
 
 ## Contents

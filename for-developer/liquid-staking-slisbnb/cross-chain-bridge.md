@@ -1,66 +1,43 @@
 # Cross-Chain Bridge
 
-The cross-chain transfer mechanism enables users to transfer tokens seamlessly between different blockchain networks. The process involves locking tokens on the source chain, verifying the transaction through a decentralised network, and minting tokens on the destination chain.&#x20;
+slisBNB moves between BNB Smart Chain and Ethereum as a **LayerZero OFT**. Deployed addresses and endpoint IDs are on [Smart Contract](smart-contract.md).
 
-Key components include the ListaOFTAdapter, ListaOFT contracts, LayerZero endpoints, and off-chain services such as the Lista Guardian, Decentralised Verification Network (DVN), and Executor. These components work together to ensure secure, reliable, and efficient cross-chain transfers.
+## Architecture
 
-**1. Main Contract Structures**
+Supply is never duplicated: the token is locked on its home chain and minted as a representation on the destination chain.
 
-* ListaOFTAdapter
-  * Transfer Limiter: Enforces transfer limits to manage liquidity, prevent spam, and ensure compliance with transfer policies.
-  * Emergency Switch: Halts all transactions at the first sign of trouble, providing a sharp measure to avert potential crises.
-  * Token Locker: Locks tokens when transferring from BSC to Ethereum and unlocks tokens when transferring from Ethereum to BSC.
-* LayerZero
-  * LayerZero Endpoint: Facilitates cross-chain communication using the MessageLib library.
-* ListaOFT
-  * Transfer Limiter: Similar to the one in ListaOFTAdapter, ensuring transfer control on the receiving end.
-  * Emergency Switch: Similar to the one in ListaOFTAdapter, providing emergency halting capabilities.
+| Contract | Chain | Role |
+| --- | --- | --- |
+| `ListaOFTAdapter` | BNB Smart Chain | Locks slisBNB on the way out, releases it on the way back. slisBNB itself is a plain ERC-20 — the adapter wraps it rather than the token being OFT-aware. |
+| `ListaOFT` | Ethereum | Mints on arrival, burns on the way back. Supply here is always backed by the amount locked in the adapter. |
+| LayerZero Endpoint | both | Message transport. |
 
-**2. Off-Chain Services**
+Both sides carry the same two controls: a **transfer limiter** and an **emergency pause**. The limiter is five separate bounds, not one — see below.
 
-* Lista Guardian
-  * An off-chain service that continuously monitors the cross-chain bridge
-  * Halts all cross-chain transactions in case any emergency situation arises
-* LayerZero
-  * Decentralised Verification Network (DVN)
-    * Verification: A network of decentralised nodes that verify cross-chain transactions before execution to ensure their validity and prevent fraudulent activities.
-  * Executor
-    * Transaction Execution: Commits the verification results from the DVN and executes the lzReceive() method to process the transaction on the destination chain.
+## Trust model
 
-\
-<br>
+A transfer is not final when the source transaction confirms. LayerZero's **DVN** verifies the message on the destination chain and an **Executor** delivers it by calling `lzReceive`; the destination mint happens only then. So the bridge inherits LayerZero's verification assumptions, plus a Lista-side pause: `pause()` is callable only by the address in `multiSig()` — the same Gnosis Safe on both chains — and `unpause()` only by `owner()`, a different address.
 
-**3. Cross-Chain Interaction Flow**
+The practical consequence is that a transfer can be accepted on the source chain and still not settle promptly — treat destination arrival as asynchronous and confirm it rather than inferring it from the send.
 
-<div data-full-width="true"><figure><img src="../../.gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure></div>
+## Calling it
 
-From BSC to Ethereum:
+Use LayerZero's own `SendParam` / `quoteSend` interface; nothing about the call shape is Lista-specific. Two Lista-side conditions make `send()` revert and neither shows up in a LayerZero quote:
 
-1. User A initiates a transfer by sending a request with amount X of tokens.
-2. The ListaOFTAdapter processes the request, applying the Transfer Limiter and Emergency Switch checks.
-3. The ListaOFTAdapter locks the amount X of tokens.
-4. The request is sent to the LayerZero Endpoint on BSC.
-5. The message is broadcast and verified by the Decentralized Verification Network (DVN).
-6. Upon verification, the Executor calls lzReceive() on the LayerZero Endpoint on Ethereum.
-7. The LayerZero Endpoint on Ethereum forwards the request to the ListaOFT contract.
-8. The ListaOFT mints the equivalent amount of tokens to User A's address on Ethereum.
+* **Dust.** The OFT uses `sharedDecimals = 6`, so amounts are truncated to a multiple of `1e12`. Pass an `amountLD` and `minAmountLD` that are already dust-removed, or the truncated amount falls below `minAmountLD` and the call reverts.
+* **Limiter or pause.** Any transfer while paused reverts. So does one that breaches any of five separate bounds, all raising `TransferLimitExceeded()` and all evaluated on the dust-removed amount:
 
-From Ethereum to BSC for User B:
+| Bound | Reverts when |
+| --- | --- |
+| `singleTransferUpperLimit` | the amount is above it |
+| `singleTransferLowerLimit` | the amount is **below** it — small transfers fail too |
+| `maxDailyTransferAmount` | the global accumulated volume is exceeded |
+| `dailyTransferAmountPerAddress` | the sender's accumulated volume is exceeded |
+| `dailyTransferAttemptPerAddress` | the sender's accumulated attempt count is exceeded |
 
-1. User B initiates the transfer with amount Y of tokens.
-2. The ListaOFT processes the request, applying the Transfer Limiter and Emergency Switch checks.
-3. The ListaOFT burns the amount Y of tokens.
-4. The request is sent to the LayerZero Endpoint on Ethereum.
-5. The message follows the same path through the DVN and Executor as described for User A.
-6. Upon verification, the Executor calls lzReceive() on the LayerZero Endpoint on BSC.
-7. The LayerZero Endpoint on BSC forwards the request to the ListaOFTAdapter contract.
-8. The ListaOFTAdapter unlocks the equivalent amount of tokens to User B's address on BSC.
+**These counters are not a rolling 24-hour window.** Each resets to zero only on the first transfer that lands more than 24 hours after the *previous accepted transfer* — the global ones after any sender's, the per-address ones after that sender's. Under continuous use they never reset and older volume never expires. Read `transferLimitConfigs(dstEid)` for the bounds, and `dailyTransferAmount` / `userDailyTransferAmount` / `userDailyAttempt` with their matching `lastUpdatedTime` / `lastUserUpdatedTime` for the real headroom.
 
-**4. Security Measures**
+## See also
 
-* Transfer Limiter: Ensures proper management of liquidity and prevents malicious transfers by enforcing strict transfer limits.
-* Emergency Switch: Acts as a critical safeguard to halt all transactions at the first sign of trouble, preventing any unauthorised minting of tokens. Both emergency switches are controlled by the Lista Guardian, which can halt transactions by switching on the emergency switch on both chains when abnormalities are detected.
-* Lista Guardian:&#x20;
-  * Emergency Switch: An off-chain service that can halt transactions during emergencies by switching on the emergency switch on both chains.
-  * Continuous Reconciliation: Ensures accurate token supply across chains through all-line reconciliation processes.
-  * Large Transfer Alert: Monitors for unusually large transfers to detect and mitigate potential attacks.
+* [Smart Contract](smart-contract.md) — adapter, OFT and endpoint IDs.
+* [LayerZero OFT documentation](https://docs.layerzero.network/v2/developers/evm/oft/quickstart) — `SendParam`, `quoteSend` and the messaging model.

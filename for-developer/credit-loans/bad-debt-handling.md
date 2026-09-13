@@ -4,7 +4,7 @@
 
 Credit Vault has a fairness issue if defaults are not explicitly recognized on-chain.
 
-Because interest is collected upfront and distributed immediately, early withdrawers may exit before default losses are reflected. If bad debt remains booked at face value, vault NAV is overstated and later withdrawers bear disproportionate liquidity risk.
+On `UPFRONT_INTEREST` positions the full term's interest is **owed from the start** rather than accruing with elapsed time (see [Loan Lifecycle](loan-lifecycle.md) for both interest modes), so it can be collected and supplied to the vault well before maturity — and early withdrawers may exit before default losses are reflected. If bad debt remains booked at face value, vault NAV is overstated and later withdrawers bear disproportionate liquidity risk.
 
 ## Write-Off Flow
 
@@ -28,4 +28,4 @@ This ensures losses are distributed to current shareholders at the time of reali
 * All current shareholders absorb loss pro-rata.
 * There is no insurance tranche or first-loss absorber in this model.
 
-Tradeoff: shareholders take this risk in exchange for higher yield from upfront interest and overdue penalties on performing loans.
+Tradeoff: shareholders take this risk in exchange for higher yield from front-loaded interest and overdue penalties on performing loans.
