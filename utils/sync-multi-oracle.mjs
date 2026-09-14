@@ -47,6 +47,7 @@
 //   NOTION_FIXTURE_ETH_RESILIENT=0xA64F... DRY_RUN=1 node utils/sync-multi-oracle.mjs
 
 import { readFileSync, writeFileSync, appendFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 // The standard-collateral config tables live on their own page under the
 // Multi-Oracle hub (for-developer/multi-oracle.md is now an overview that holds
@@ -412,7 +413,7 @@ const addrSet = (h) => (h.match(/0x[a-fA-F0-9]{40}/gi) || []).map(lc).sort().joi
 const textKey = (h) => h.replace(/<[^>]+>/g, '').replace(/0x[a-fA-F0-9]{40}/gi, '').replace(/\s+/g, '').toLowerCase();
 const isNone = (h) => h.replace(/<[^>]+>/g, '').replace(/[-\s]/g, '') === '';
 
-function merge(docRows, recs, mirror) {
+export function merge(docRows, recs, mirror) {
   // Duplicate token guard.
   const seen = new Set();
   for (const r of recs) {
@@ -428,6 +429,7 @@ function merge(docRows, recs, mirror) {
   const keptBlank = []; // Notion blank would have wiped a doc address — kept doc value
   const docOnly = []; // in doc, not in Notion — kept (non-mirror sections only)
   const removed = []; // in doc, not in Notion — removed (mirror sections)
+  const removedTokens = []; // lc tokens parallel to `removed`, for move-vs-delete triage
   const consumed = new Set();
   const kept = [];
   const label = (row, rec) => (rec && rec.asset) || row.tds[0].replace(/<[^>]+>/g, '').trim() || row.token;
@@ -458,7 +460,7 @@ function merge(docRows, recs, mirror) {
       kept.push(row);
     } else {
       // doc row not present in Notion
-      if (mirror) removed.push(label(row, null));
+      if (mirror) { removed.push(label(row, null)); removedTokens.push(lc(row.token)); }
       else { docOnly.push(label(row, null)); kept.push(row); }
     }
   }
@@ -471,13 +473,54 @@ function merge(docRows, recs, mirror) {
     added.push(rec.asset);
   }
 
-  return { rows: [...kept, ...appended], valueChanges, labelChanges, reformatted, keptBlank, added, docOnly, removed };
+  return { rows: [...kept, ...appended], valueChanges, labelChanges, reformatted, keptBlank, added, docOnly, removed, removedTokens };
 }
 
 function emit(kv) {
   if (process.env.GITHUB_OUTPUT) {
     appendFileSync(process.env.GITHUB_OUTPUT, Object.entries(kv).map(([k, v]) => `${k}=${v}`).join('\n') + '\n');
   }
+}
+
+// Split a mirror section's removed rows into TRUE deletes (token gone from all of
+// Notion) versus MOVES (token still present in some other section's partition).
+// `removed` and `removedTokens` are parallel arrays returned by merge().
+export function partitionRemovals(removed, removedTokens, notionTokens) {
+  const trueDeletes = [];
+  const moved = [];
+  for (let i = 0; i < removed.length; i++) {
+    (notionTokens.has(removedTokens[i]) ? moved : trueDeletes).push(removed[i]);
+  }
+  return { trueDeletes, moved };
+}
+
+// Classify cross-page relocations by blast radius. A relocation whose five oracle
+// address cells are identical between the current doc row and the Notion rec is a
+// pure page reassignment (safe, auto-applied). One that also changes an address is
+// ambiguous with a typo and stays fail-closed (unsafe). A move with either side
+// missing cannot be verified and is treated as unsafe.
+export function triageMoves({ beforeDocs, afterDocs, notionRecByToken, docRowByToken, assetLabel }) {
+  const safeMoves = [];
+  const unsafeMoves = [];
+  for (const [t, after] of afterDocs) {
+    const before = beforeDocs.get(t);
+    if (!before || before.size === 0) continue; // brand-new collateral, not a move
+    const moved = [...after].some((d) => !before.has(d)) || [...before].some((d) => !after.has(d));
+    if (!moved) continue;
+    const desc = `${assetLabel.get(t) || t} (${t}): ${[...before].join(' + ')} -> ${[...after].join(' + ')}`;
+    const rec = notionRecByToken.get(t);
+    const docRow = docRowByToken.get(t);
+    let addressChanged = true; // fail-closed if either side is missing
+    if (rec && docRow) {
+      const recAddr = [rec.caller, rec.main, rec.pivot, rec.fallback, rec.bound];
+      // A blank Notion cell never rewrites a doc address (merge's keptBlank rule
+      // preserves the doc value), so it is not a change — skip those cells to
+      // avoid a false "unsafe" on an otherwise pure page move.
+      addressChanged = recAddr.some((a, i) => !isNone(a) && addrSet(docRow.tds[2 + i]) !== addrSet(a));
+    }
+    (addressChanged ? unsafeMoves : safeMoves).push(desc);
+  }
+  return { safeMoves, unsafeMoves };
 }
 
 // ---------------------------------------------------------------------------
@@ -501,16 +544,24 @@ async function main() {
   let totalAdded = 0;
   // Cross-page relocation tracking. The two BNB pages are partitioned purely by
   // the Asset cell's "(bStock)" suffix, so a typo there moves a live collateral
-  // to the other page at exit 0. A wrongly-classified row is indistinguishable
-  // from a genuine reclassification, so this cannot fail closed — it surfaces
-  // every move in the run summary the workflow attaches to its commit.
-  const beforeDocs = new Map();
-  const afterDocs = new Map();
+  // to the other page at exit 0.
+  const beforeDocs = new Map(); // lc token -> set of docs it currently sits on
+  const afterDocs = new Map(); // lc token -> set of docs Notion would place it on
   const assetLabel = new Map();
+  const docRowByToken = new Map(); // lc token -> a current doc row (for move address-safety)
+  const notionTokens = new Set(); // lc token present ANYWHERE in Notion (any partition)
+  const notionRecByToken = new Map(); // lc token -> its Notion rec (for move address-safety)
   const addTo = (m, k, v) => m.set(k, (m.get(k) || new Set()).add(v));
   const out = [`## Multi-Oracle sync\n`];
   const line = (lbl, arr) => `- ${lbl}: ${arr.length}${arr.length ? ` — ${arr.join(', ')}` : ''}\n`;
 
+  // Pass 1 — gather every section's Notion partition and current doc rows WITHOUT
+  // writing or guarding. The relocation-aware removal guard in pass 2 needs the
+  // FULL set of Notion tokens before the first section is guarded: a doc row
+  // missing from one section's partition is only a real DELETE when the token
+  // exists nowhere in Notion — if another section now claims it, it's a page
+  // move, not a delist, and must not trip the delete guard.
+  const prepared = [];
   for (const sec of SECTIONS) {
     const { rows, resilient } = await sectionRows(sec, blocks);
     validateHeader(rows, sec);
@@ -520,36 +571,59 @@ async function main() {
     const all = parsed.filter((p) => p.token);
     assertUniqueTokens(all, sec);
     const recs = sec.rowFilter ? all.filter(sec.rowFilter) : all;
+    for (const x of recs) {
+      notionTokens.add(lc(x.token));
+      notionRecByToken.set(lc(x.token), x);
+    }
 
     const target = loadDoc(sec.doc);
     const loc = locateTable(target.doc, sec.docAnchor);
+    const docRows = loc ? parseDocRows(target.doc.slice(loc.start, loc.end)) : null;
+    if (loc && sec.rowFilter) {
+      for (const row of docRows) {
+        addTo(beforeDocs, lc(row.token), sec.doc);
+        if (!docRowByToken.has(lc(row.token))) docRowByToken.set(lc(row.token), row);
+      }
+      for (const x of recs) {
+        addTo(afterDocs, lc(x.token), sec.doc);
+        assetLabel.set(lc(x.token), x.asset);
+      }
+    }
+    prepared.push({ sec, rows, resilient, loc, docRows, recs, skipped, empties, all });
+  }
+
+  // Pass 2 — merge, guard, and stage each section's write.
+  for (const { sec, rows, resilient, recs, skipped, empties, all } of prepared) {
+    const target = loadDoc(sec.doc);
+    // Recompute the table location against the LIVE (possibly already-mutated) doc,
+    // NOT the pass-1 snapshot. Sections can share a file — bnb-core and eth both
+    // write multi-oracle-standard.md — and are spliced in sequence, so the first
+    // write shifts every offset below it. Reusing a hoisted pass-1 `loc` would
+    // splice the second section at a stale position and corrupt the file. Pass 1's
+    // loc/docRows exist only to build the offset-independent relocation maps.
+    const loc = locateTable(target.doc, sec.docAnchor);
+    const docRows = loc ? parseDocRows(target.doc.slice(loc.start, loc.end)) : null;
     let report = `\n### ${sec.id} (${sec.notionAnchor} -> ${sec.doc})\n- Notion rows scanned: ${rows.length}\n`;
     if (sec.rowFilter) report += `- Matched this section's partition: ${recs.length} of ${all.length} ready rows\n`;
 
     if (loc) {
-      const docRows = parseDocRows(target.doc.slice(loc.start, loc.end));
-      if (sec.rowFilter) {
-        for (const row of docRows) addTo(beforeDocs, lc(row.token), sec.doc);
-        for (const x of recs) {
-          addTo(afterDocs, lc(x.token), sec.doc);
-          assetLabel.set(lc(x.token), x.asset);
-        }
-      }
       const r = merge(docRows, recs, sec.mirror);
-      // Mass-removal cap. In mirror mode every doc row missing from Notion is
-      // deleted, unbounded — so a truncated fetch, a bad anchor, or drift in the
-      // bStock naming convention (which would relocate rows wholesale between
-      // the two pages) can silently wipe published contract addresses. Additions
-      // never increment `removed`, so this cannot false-positive on a bulk
-      // listing; it only fires on a bulk DELIST, which warrants a human anyway.
+      // Relocation-aware mass-removal cap. In mirror mode every doc row missing
+      // from Notion is deleted, unbounded — so a truncated fetch or a bad anchor
+      // could silently wipe published addresses. But a row missing from THIS
+      // section's partition that still exists in ANOTHER section is a page move
+      // (handled by the reclassification guard below), not a delist. Count only
+      // TRUE deletes (token gone from all of Notion) here, so a wholesale bStock
+      // relocation no longer fires the high-severity delete guard.
+      const { trueDeletes, moved } = partitionRemovals(r.removed, r.removedTokens, notionTokens);
       const cap = Math.max(3, Math.ceil(docRows.length * 0.15));
       // Exact '1' only — an inherited or mistyped ORACLE_ALLOW_BULK_REMOVAL=0
       // must not read as "override enabled" and disarm the guard in production.
-      if (sec.mirror && r.removed.length > cap && process.env.ORACLE_ALLOW_BULK_REMOVAL !== '1') {
+      if (sec.mirror && trueDeletes.length > cap && process.env.ORACLE_ALLOW_BULK_REMOVAL !== '1') {
         throw new Error(
-          `[${sec.id}] ${r.removed.length} of ${docRows.length} rows would be removed from ${sec.doc} ` +
-            `(cap ${cap}): ${r.removed.slice(0, 8).join(', ')}${r.removed.length > 8 ? ', …' : ''}. ` +
-            `Refusing to write. Set ORACLE_ALLOW_BULK_REMOVAL=1 to override once the delist is confirmed.` +
+          `[${sec.id}] ${trueDeletes.length} of ${docRows.length} rows would be deleted from ${sec.doc} ` +
+            `(cap ${cap}): ${trueDeletes.slice(0, 8).join(', ')}${trueDeletes.length > 8 ? ', …' : ''}. ` +
+            `These tokens exist nowhere in Notion. Refusing to write. Set ORACLE_ALLOW_BULK_REMOVAL=1 to override once the delist is confirmed.` +
             (sec.rowFilter && recs.length === 0
               ? ` NOTE: this section's partition matched 0 of ${all.length} Notion rows — the asset-naming convention has probably changed; check BSTOCK_RE.`
               : '')
@@ -561,7 +635,8 @@ async function main() {
       report +=
         line('⚠️ Oracle address changes (review)', r.valueChanges) +
         line('⚠️ Kept doc value (Notion cell blank)', r.keptBlank) +
-        line('⚠️ Removed (in doc, not in Notion)', r.removed) +
+        line('⚠️ Deleted (token nowhere in Notion)', trueDeletes) +
+        line('Left this page (see reclassification below)', moved) +
         line('Label/text changes', r.labelChanges) +
         line('Added (new collaterals)', r.added) +
         line('Reformatted only', r.reformatted) +
@@ -586,28 +661,30 @@ async function main() {
     out.push(report);
   }
 
-  // Cross-page relocations. Compare the set of pages a token sat on BEFORE with
-  // the set it sits on AFTER — not "added here / removed there", which misses
-  // the case where the destination page already carried the token.
-  const relocated = [];
-  for (const [t, after] of afterDocs) {
-    const before = beforeDocs.get(t);
-    if (!before || before.size === 0) continue; // brand-new collateral, not a move
-    const moved = [...after].some((d) => !before.has(d)) || [...before].some((d) => !after.has(d));
-    if (moved) relocated.push(`${assetLabel.get(t) || t} (${t}): ${[...before].join(' + ')} -> ${[...after].join(' + ')}`);
-  }
-  // Fail closed. A typo in the Asset cell and a genuine reclassification are
-  // textually identical, so the script cannot tell them apart — and a warning
-  // in the job summary only reaches a human AFTER the address is published and
-  // the translation/RAG cascade has run. Stop instead, and make a real
-  // reclassification an explicit one-run decision.
-  if (relocated.length && process.env.ORACLE_ALLOW_RECLASSIFY !== '1') {
+  // Cross-page relocations, split by blast radius. Compare the set of pages a
+  // token sat on BEFORE with the set it sits on AFTER — not "added here / removed
+  // there", which misses the case where the destination page already carried it.
+  //
+  // A move that keeps every oracle address identical is a pure page reassignment
+  // (the Asset cell's "(bStock)" suffix changed): the published data is still
+  // correct, only its page is different — low harm, easily spotted, reversible.
+  // Auto-apply those and just record them. A move that ALSO rewrites an address
+  // is the dangerous, ambiguous case (a typo that both misfiles a row and changes
+  // a live address is indistinguishable from a real reclassification), so keep
+  // it fail-closed behind ORACLE_ALLOW_RECLASSIFY.
+  const { safeMoves, unsafeMoves } = triageMoves({ beforeDocs, afterDocs, notionRecByToken, docRowByToken, assetLabel });
+  out.push(
+    line('Reclassified pages — auto-applied (addresses unchanged)', safeMoves) +
+    line('⚠️ Reclassified pages WITH address change (needs review)', unsafeMoves)
+  );
+  // Exact '1' only, same rationale as the delete guard.
+  if (unsafeMoves.length && process.env.ORACLE_ALLOW_RECLASSIFY !== '1') {
     throw new Error(
-      `${relocated.length} collateral(s) would change page:\n` +
-        relocated.map((s) => `  - ${s}\n`).join('') +
-        `A page change comes purely from the Asset cell gaining or losing the "(bStock)" suffix, so a typo ` +
-        `looks exactly like a real reclassification. Refusing to write. Confirm in Notion, then re-run with ` +
-        `ORACLE_ALLOW_RECLASSIFY=1.`
+      `${unsafeMoves.length} collateral(s) would change page AND change an oracle address:\n` +
+        unsafeMoves.map((s) => `  - ${s}\n`).join('') +
+        `A page change comes purely from the Asset cell's "(bStock)" suffix, so a typo that also rewrites an ` +
+        `address is indistinguishable from a real reclassification. Refusing to write. Confirm in Notion, then ` +
+        `re-run with ORACLE_ALLOW_RECLASSIFY=1.`
     );
   }
 
@@ -627,4 +704,8 @@ async function main() {
   emit({ has_changes: String(changed), value_changes: totalValueChanges, added: totalAdded, changed_files: dirty.join(' ') });
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+// Only run when executed directly (`node utils/sync-multi-oracle.mjs`), not when
+// imported by the test suite.
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  main().catch((e) => { console.error(e); process.exit(1); });
+}
