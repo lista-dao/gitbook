@@ -1,55 +1,38 @@
-# Liquidation Logic (Service)
+# Liquidation (Service)
 
-This page describes how the **platform service** determines liquidatable positions and executes or supports liquidation: batch flow, eligibility checks, risk controls, and interaction with the liquidation contract.
+Lista operates its own liquidation keeper. Its scheduling, thresholds, and retry behaviour are internal and are not documented here.
 
-## Inputs and dependencies
-
-- **Execution context** — Chain(s), run config, list of markets to process.
-- **Market data** — Collateral/loan assets, oracles, market params (LLTV, etc.).
-- **Risk config** — Eligibility rules, minimum size threshold, delay rules, stable-asset handling.
-- **Prices and state** — Oracle prices, market state, recent processing state / cache for dedup.
+Third-party liquidators do not need them. What you do need:
 
 ## Eligibility
 
-- **Condition** — Position is liquidatable when `LTV > LLTV` for that market (LLTV from market params). Equivalently: **liquidation trigger price > current market price** (trigger price is the collateral/loan price ratio at which the position becomes liquidatable).
-- **LTV** — `LTV = (Borrowed × Loan Oracle Price) / (Collateral × Collateral Oracle Price)` with contract’s scaling (e.g. 1e36).
-- **Data** — Use the same oracle and market params as the contract; re-fetch oracle and position state at execution time to avoid staleness or front-running.
+A position is liquidatable when its loan-to-value exceeds the market's `lltv`:
 
-## Batch flow
+```
+borrowed  = convertBorrowSharesToAssets(borrowShares, totalBorrowAssets, totalBorrowShares)
+maxBorrow = collateral × price × lltv      // price = collateral denominated in the loan asset
+isHealthy = maxBorrow ≥ borrowed
+```
 
-1. **Run prep** — Validate environment and market list.
-2. **Scan** — Query positions (e.g. from `MoolahUserPosition`) with `borrowedAmount > 0`.
-3. **Risk identification** — For each position’s market, fetch current prices; compute liquidation trigger price and compare to current market price; keep positions where trigger price > current price.
-4. **Delay and thresholds** — Apply configurable delay and minimum-size filters (see Risk controls below).
-5. **Execution** — For each eligible position, select liquidation path (main Liquidator or pre-liquidation contract) and execute; use repaid amount and LIF to compute collateral to seize.
-6. **Result and dedup** — Record outcomes; short-term dedup so the same position is not processed again within the configured window.
+A position with no debt is always healthy. On a broker market the borrower's debt is replaced by the broker's total debt (Moolah principal plus interest accrued at the broker), while the collateral is still priced at the plain market price.
 
-## Risk controls
+Use the same oracle and market parameters the contract uses, and match its rounding — `maxBorrow` is floored and `borrowed` rounded up, both in the protocol's favour. The exact scale factors, the `isHealthy` view and its caveats, and the liquidation-price formula are in [Consuming Oracle Prices](../multi-oracle/consuming-prices.md).
 
-- **Price validity** — Skip markets with missing or abnormal prices to avoid false liquidations.
-- **Delay** — Optional delay for certain positions to reduce false positives from volatility.
-- **Size threshold** — Do not trigger liquidation for positions below a minimum size (e.g. gas or economic threshold).
-- **Dedup** — After processing a position, mark it (e.g. in cache) so it is not re-submitted for a short period.
+Re-read the oracle and position state at execution time: Moolah accrues interest and re-checks health when your transaction lands, and reverts with the string `"position is healthy"` if the position has recovered — Moolah uses `require` strings, not typed errors.
 
-## Observability
+## Finding candidates
 
-- Logs should cover: batch run, per-market processing, per-position eligibility, and result (executed / skipped / reason).
-- Outputs: count processed, duration, skip reasons (e.g. price invalid, below threshold, dedup).
+* `GET /api/moolah/redPositions` — liquidatable positions on one market. **Start here for open markets**, which are the common case: enumerate markets from `/api/moolah/allMarkets` and fan out.
+* `GET /api/liquidation/zone/closeToLiquidate` — positions approaching the threshold.
+* `GET /api/liquidation/zone/list` — the per-market **borrower** whitelist with each account's latest position snapshot. It applies **no** health test, so evaluate eligibility yourself, and it only finds candidates on *gated* markets.
+* `GET /api/liquidation/zone/history` — settled liquidations.
 
-## Contract-side formulas (reference)
+Parameters and response fields are in [Positions, Liquidation & Emission](lending-api/position-liquidation-emission.md). Indexed data can lag; treat it as a candidate feed and confirm on-chain before submitting.
 
-Service eligibility should match the contract’s health logic. Abstract formulas:
+## Executing
 
-- **No debt** — `isHealthy = true`.
-- **Borrowed amount** — Standard market: `borrowed = convertBorrowSharesToAssets(shares, totalBorrowAssets, totalBorrowShares)`. Broker market: `borrowed = getBrokerTotalDebt(borrower, market)`.
-- **Max borrow** — `maxBorrow = collateral × price × lltv` (price = collateral/loan relative price).
-- **Health** — `isHealthy = (maxBorrow ≥ borrowed)`.
-- **Risky** — `isRisky = ¬isHealthy`; these are the candidates for liquidation (subject to service risk controls above).
+Liquidations are executed through the `PublicLiquidator` contract. It has no role gate, but reachability is **per market** — an under-water position is not necessarily liquidatable by you, and there are both self-funded and flash-swap paths. Entry points, sizing, the eligibility gate, and the revert reference are in [Liquidator Integration](../lista-lending/liquidator-integration.md).
 
-## Implementation notes
+Lista's keeper competes on the same public paths as anyone else. Running your own liquidator does not require, and does not receive, any knowledge of its configuration.
 
-- **Rounding** — Match contract rounding (typically down for user amounts) to avoid off-by-one in eligibility.
-- **Gas / batching** — Liquidations are often executed by keeper bots; the service may only provide a liquidatable list API (e.g. `GET /api/moolah/liquidation/liquidatable`) and history.
-- **Pre-liquidation** — When a market uses an external pre-liquidation contract, identify positions in the band `preLLTV ≤ LTV < LLTV` and route callers to that contract where applicable.
-
-For product-level liquidation explanation and examples, see [Liquidation](../../introduction/lista-lending/liquidation/README.md).
+For the product-level explanation of liquidation, see [Liquidation](../../introduction/lista-lending/liquidation/README.md).
