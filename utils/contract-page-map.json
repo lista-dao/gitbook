@@ -136,6 +136,30 @@
         "cols": []
       },
       {
+        "section": "",
+        "name": "BuyBack (USDT → SPCXB)",
+        "address": "0x3C5Fe2e3EC0CD37e4AC86e08AEba5A90bBd742b5",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LiquidationVault",
+        "address": "0xEe3aa1AF4Ee231f2e1277A48fc4A2f29A3D7C028",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "PreIPODistributor",
+        "address": "0x9f7526EDAa18278D4bC1fA6b63B749A649Cb1844",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVaultAccount",
+        "address": "0xA0b8b78208Cfe45dDC7AC7B51B108B2742B32652",
+        "cols": []
+      },
+      {
         "section": "Vaults",
         "name": "MoolahVault(WBNB)",
         "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
@@ -274,6 +298,18 @@
         "cols": []
       },
       {
+        "section": "Vaults",
+        "name": "MoolahVault (XAUt)",
+        "address": "0x4109415de2271097fb5fa16af8a753aab8c46d6f",
+        "cols": []
+      },
+      {
+        "section": "Vaults",
+        "name": "MoolahVault(Fourmeme U Vault)",
+        "address": "0xaDa9dab14Ddd115F02a044cD61fFeb5c5E82653D",
+        "cols": []
+      },
+      {
         "section": "Providers",
         "name": "SlisBNBProvider",
         "address": "0x33f7A980a246f9B8FEA2254E3065576E127D4D5f",
@@ -343,6 +379,30 @@
         "section": "slisBNB / BNB",
         "name": "SmartProvider",
         "address": "0xC3be83DE4b19aFC4F6021Ea5011B75a3542024dE",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "StableSwapPool (lisAster/ASTER)",
+        "address": "0x510D69b25A2177EDdCe9becdB0A66a511C944840",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "StableSwapLP (lisAster/ASTER)",
+        "address": "0x0f84dD5EBfceb6fE65B1552A310a000349278068",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "StableSwapLPCollateral (lisAster & ASTER-SmartLP)",
+        "address": "0xC970dc3aF680C2F316b821842E5782a05e886a90",
+        "cols": []
+      },
+      {
+        "section": "slisBNB / BNB",
+        "name": "SmartProvider (lisAster & ASTER-SmartLP)",
+        "address": "0x1cc913Cde4dF80d271230F615482c1270c0a56C8",
         "cols": []
       },
       {
@@ -642,6 +702,12 @@
         "cols": [
           "U"
         ]
+      },
+      {
+        "section": "PT-USDe-09Apr2026 (Plasma)",
+        "name": "PTLinearDiscountOracle (PT-USDat-14JAN2027 x USDT)",
+        "address": "0x037d47A20c965C68Fcc7f06D1C9890b844183B82",
+        "cols": []
       },
       {
         "section": "PT-USDe-07May2026",
@@ -1000,6 +1066,42 @@
         ]
       },
       {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (lisUSD vault)",
+        "address": "0x7FC3223081c5Dd9159781E6EB28Af3012138A323",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (USD1 vault)",
+        "address": "0xA5AAEAA7AC64d33c0C609686777d72C244C97578",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (U vault)",
+        "address": "0x8c51220e29684BbAE2bF4412952C47d090BC6B3E",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (USDT vault)",
+        "address": "0x23c3E7f13C97011b84dAB247587425F55ffeD137",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "BrokerInterestLockBuffer (WBNB vault)",
+        "address": "0xCa5D2d07243a3E9ab58A2b6C924a67F060EC6371",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker (asUSDF/U)",
+        "address": "0x34dd80f8cAdF200e239c054E3D9fC53528A9Ed9a",
+        "cols": []
+      },
+      {
         "section": "Broker Auxiliary Contracts",
         "name": "BrokerInterestRelayer (lisUSD)",
         "address": "0xcb2590F10728e3ffc725d7ECf88EcFd0d92c9d6a",
@@ -1304,6 +1406,168 @@
         "name": "MoolahVaultFactory",
         "address": "0xa91D9E7343d7EEe8Ed2C8f55e9162827850A7F17",
         "cols": []
+      },
+      {
+        "section": "",
+        "name": "MarketFactory",
+        "address": "0xA2ff080D4c0b71B6c8796129DD4aCc0B09D7592c",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RateCalculator",
+        "address": "0xeA00cE2992656A0F1DeDf3bBF082A3c725477796",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerLiquidator",
+        "address": "0x0aEfEC58e6339c663E80306e38fFEBbAe0820C70",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "MoolahVault (WETH)",
+        "address": "0x2E3BbD03DbC6D890c8c7e06BE4e065c5c0EeE7e8",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaRevenueDistributor",
+        "address": "0x0fe5741e8dFe53618c4056F745fad531118640D9",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestRelayer",
+        "address": "0xeBf4A1f9EF14De6C69F3F60881314372A31C056a",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingBroker (wBETH/WETH)",
+        "address": "0x2B7cb7Fe6C545e23cb96f2B8E7e5120fF9e16444",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingBroker (wstETH/WETH)",
+        "address": "0x39acab377A7cA24c1BF4B2AE5294F57519d8719B",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BatchManagementUtils",
+        "address": "0xe0830369D616410B80f8591267771D76E244d419",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestLockBuffer",
+        "address": "0x85616B54C80fA11285567DFCD073BF24cA6aD7fa",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LiquidationVault",
+        "address": "0xC1D8F6072D8a987BCbB675dc4805E8A2dE604899",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "RevenueCollector",
+        "address": "0x8a6e34A7860dD9C46770635fe3Da4073C56f8131",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestLockBuffer (USDT vault)",
+        "address": "0xf307A2DFcE4A64ceA2960241d387e3e671eE6762",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestLockBuffer (USDC vault)",
+        "address": "0xf9eb9EDCe360D98240dB4F72B9665a37789593Dc",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestRelayer (USDT vault)",
+        "address": "0x2d3097F1dd408be90dBF8200b08d9F5f7a43F764",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BrokerInterestRelayer (USDC vault)",
+        "address": "0xDBd85270726a03d8cFb086Ca4B35B0715d16F358",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingBroker (sUSDS/USDT)",
+        "address": "0x1961ef66C252cDCB09FaF464Ea1360Ca4bb4269C",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "LendingBroker (sUSDS/USDC)",
+        "address": "0x0780b0E16C6d60798AFee808633f1E91665b403a",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool",
+        "address": "0x0a935ea575bf50CE8DC0FF61ae24B21BbcCfc554",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP",
+        "address": "0x12d0218A282Fc449Eb910B39b47527296664A522",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapPool",
+        "address": "0x2Bc918B6D3CB09cD415fA3AC74CE582F4Cd853e4",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLP",
+        "address": "0x65cB8747a87AFD4AEF50221F97DEC0F058F185Ba",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral",
+        "address": "0xB2ebbe4FC0c37425cFDE99c7693a87e6c902987D",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider",
+        "address": "0x7F9DbdD3941FB9d33cfFeCf75F1bEfF147863021",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableSwapLPCollateral",
+        "address": "0x4772B3356791F8e584200429909f7295EF16E9Fd",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SmartProvider",
+        "address": "0x94A58615a100604fDE7fcac44258A5cD4B7c79e7",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "PositionManager",
+        "address": "0x6d9eD2A68c2759DA53A74D6a85Cd486737257A82",
+        "cols": []
       }
     ]
   },
@@ -1394,6 +1658,67 @@
   "dex-bsc": {
     "file": "for-developer/dex/smart-contract.md",
     "format": "markdown",
-    "contracts": []
+    "contracts": [
+      {
+        "section": "",
+        "name": "ProxyAdmin",
+        "address": "0x97458aE48Fc8362077c30930bc6C004B46a9312f",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV3Factory",
+        "address": "0xcb010ed373523942706F730b89792aA1C1597b20",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "NonfungibleTokenPositionDescriptor",
+        "address": "0xfa9f54098C64e7Dc48B9B6402F26441159bA83c7",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "NonfungiblePositionManager",
+        "address": "0x31677537685EBDF1B695eDa46eC385845395f5dD",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SwapRouter",
+        "address": "0xc43D58722f29390e683c0721285A6c11B8aCD4DE",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0xd50154428912A887d9a405Bb515d2Ef11307228d",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0x46eE2C5F2b9De7C6e08Ffe3Bde8Dd88A46D6f568",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV2Factory",
+        "address": "0x28F5E6C71C7541b1C6523351AE331CcAfC443626",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV2Router02",
+        "address": "0x3CcbB50C93ffCdA64e58Cc9E299791Fd85A41941",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "QuoterV2",
+        "address": "0x6B61a2C67c45B40d754e4e7c1c565590685C03E2",
+        "cols": []
+      }
+    ]
   }
 }
