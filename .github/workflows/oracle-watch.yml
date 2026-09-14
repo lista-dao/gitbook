@@ -28,6 +28,19 @@ on:
   schedule:
     - cron: '43 6 * * 1' # every Monday 06:43 UTC (after audit-watch at 06:23)
   workflow_dispatch: # allow manual runs (recommended for the first run)
+    inputs:
+      dry_run:
+        description: 'Compute and print the sync summary without writing/committing'
+        type: boolean
+        default: false
+      allow_bulk_removal:
+        description: 'Override the mass-removal guard (confirm a real delist or a wholesale bStock relocation first)'
+        type: boolean
+        default: false
+      allow_reclassify:
+        description: 'Override the cross-page reclassification guard (confirm the (bStock) suffix change in Notion first)'
+        type: boolean
+        default: false
 
 concurrency:
   group: oracle-watch
@@ -60,10 +73,17 @@ jobs:
         id: sync
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          # Empty on scheduled runs (inputs is null) -> '0', so the guards stay armed
+          # and scheduled behaviour is unchanged. Operators set these on manual runs.
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+          ORACLE_ALLOW_BULK_REMOVAL: ${{ inputs.allow_bulk_removal && '1' || '0' }}
+          ORACLE_ALLOW_RECLASSIFY: ${{ inputs.allow_reclassify && '1' || '0' }}
         run: node utils/sync-multi-oracle.mjs
 
       - name: Commit changes to en
-        if: steps.sync.outputs.has_changes == 'true'
+        # has_changes is emitted even under DRY_RUN (docs are computed but not written),
+        # so also skip the commit when this is a dry run.
+        if: steps.sync.outputs.has_changes == 'true' && inputs.dry_run != true
         env:
           CHANGED_FILES: ${{ steps.sync.outputs.changed_files }}
           VALUE_CHANGES: ${{ steps.sync.outputs.value_changes }}
