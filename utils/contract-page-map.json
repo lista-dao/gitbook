@@ -704,6 +704,12 @@
         ]
       },
       {
+        "section": "PT-USDe-09Apr2026 (Plasma)",
+        "name": "PTLinearDiscountOracle (PT-USDat-14JAN2027 x USDT)",
+        "address": "0x037d47A20c965C68Fcc7f06D1C9890b844183B82",
+        "cols": []
+      },
+      {
         "section": "PT-USDe-07May2026",
         "name": "PTLinearDiscountOracle (PT-USDe-07May2026)",
         "address": "0xB2477a5c274d1E23111Bf86fD9130dd411E522B8",
@@ -1087,6 +1093,12 @@
         "section": "LendingBroker Markets",
         "name": "BrokerInterestLockBuffer (WBNB vault)",
         "address": "0xCa5D2d07243a3E9ab58A2b6C924a67F060EC6371",
+        "cols": []
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker (asUSDF/U)",
+        "address": "0x34dd80f8cAdF200e239c054E3D9fC53528A9Ed9a",
         "cols": []
       },
       {
