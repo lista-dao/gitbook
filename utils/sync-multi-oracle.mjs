@@ -513,7 +513,10 @@ export function triageMoves({ beforeDocs, afterDocs, notionRecByToken, docRowByT
     let addressChanged = true; // fail-closed if either side is missing
     if (rec && docRow) {
       const recAddr = [rec.caller, rec.main, rec.pivot, rec.fallback, rec.bound];
-      addressChanged = recAddr.some((a, i) => addrSet(docRow.tds[2 + i]) !== addrSet(a));
+      // A blank Notion cell never rewrites a doc address (merge's keptBlank rule
+      // preserves the doc value), so it is not a change — skip those cells to
+      // avoid a false "unsafe" on an otherwise pure page move.
+      addressChanged = recAddr.some((a, i) => !isNone(a) && addrSet(docRow.tds[2 + i]) !== addrSet(a));
     }
     (addressChanged ? unsafeMoves : safeMoves).push(desc);
   }
@@ -590,8 +593,16 @@ async function main() {
   }
 
   // Pass 2 — merge, guard, and stage each section's write.
-  for (const { sec, rows, resilient, loc, docRows, recs, skipped, empties, all } of prepared) {
+  for (const { sec, rows, resilient, recs, skipped, empties, all } of prepared) {
     const target = loadDoc(sec.doc);
+    // Recompute the table location against the LIVE (possibly already-mutated) doc,
+    // NOT the pass-1 snapshot. Sections can share a file — bnb-core and eth both
+    // write multi-oracle-standard.md — and are spliced in sequence, so the first
+    // write shifts every offset below it. Reusing a hoisted pass-1 `loc` would
+    // splice the second section at a stale position and corrupt the file. Pass 1's
+    // loc/docRows exist only to build the offset-independent relocation maps.
+    const loc = locateTable(target.doc, sec.docAnchor);
+    const docRows = loc ? parseDocRows(target.doc.slice(loc.start, loc.end)) : null;
     let report = `\n### ${sec.id} (${sec.notionAnchor} -> ${sec.doc})\n- Notion rows scanned: ${rows.length}\n`;
     if (sec.rowFilter) report += `- Matched this section's partition: ${recs.length} of ${all.length} ready rows\n`;
 

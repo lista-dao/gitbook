@@ -118,3 +118,86 @@ test("triageMoves: a brand-new collateral (no before) is not a move", () => {
   assert.deepEqual(safeMoves, []);
   assert.deepEqual(unsafeMoves, []);
 });
+
+// ---------------------------------------------------------------------------
+// Integration test for main()'s multi-section write path. bnb-core and eth both
+// write multi-oracle-standard.md; when bnb-core resizes the BNB table, eth's
+// table below it shifts. This locks in that both tables survive (regression test
+// for the two-pass stale-offset corruption bug).
+const fs = require("node:fs");
+const os = require("node:os");
+const path = require("node:path");
+const { execFileSync } = require("node:child_process");
+
+const SCRIPT = path.join(__dirname, "sync-multi-oracle.mjs");
+const S = "0x" + "5".repeat(40); // bStock token
+const E = "0x" + "e".repeat(40); // eth token
+const OLD = "0x" + "1".repeat(40);
+const NEW = "0x" + "2".repeat(40);
+const MAIN = "0x" + "9".repeat(40);
+
+const ncell = (text) => [{ plain_text: text }];
+const nrow = (cells) => ({ type: "table_row", table_row: { cells: cells.map(ncell) } });
+const HEADER = nrow(["Asset", "Token", "Oracle/caller", "Main oracle", "Pivot", "Fallback", "BoundValidator"]);
+const fixtureFile = (dir, name, rows) => {
+  const p = path.join(dir, name);
+  fs.writeFileSync(p, JSON.stringify({ results: [HEADER, ...rows] }));
+  return p;
+};
+
+const THEAD =
+  '<table data-full-width="true"><thead><tr><th>Asset</th><th>Token</th>' +
+  "<th>Oracle/caller</th><th>Main oracle</th><th>Pivot oracle</th>" +
+  "<th>Fallback oracle</th><th>BoundValidator</th></tr></thead><tbody>";
+const drow = (tds) => `<tr>${tds.map((t) => `<td>${t}</td>`).join("")}</tr>`;
+const dtable = (rows) => THEAD + rows.map(drow).join("") + "</tbody></table>";
+
+test("main(): resizing the BNB table keeps the Ethereum table intact (shared file)", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "oracle-int-"));
+  fs.mkdirSync(path.join(dir, "for-developer"));
+
+  // standard.md: a 2-row BNB (core) table followed by a 1-row Ethereum table.
+  const bnbDoc = dtable([
+    ["CoreKeep", A, "-", MAIN, "-", "-", "-"],
+    ["CoreGone", B, "-", MAIN, "-", "-", "-"],
+  ]);
+  const ethDoc = dtable([["EthA", E, "-", OLD, "-", "-", "-"]]);
+  fs.writeFileSync(
+    path.join(dir, "for-developer/multi-oracle-standard.md"),
+    `# Standard\n\n**BNB Chain**\n\n${bnbDoc}\n\n**Ethereum Chain**\n\n${ethDoc}\n`
+  );
+  // bstock.md: one bStock row that matches the fixture (so it stays unchanged).
+  fs.writeFileSync(
+    path.join(dir, "for-developer/multi-oracle-bstock.md"),
+    `# bStock\n\n**BNB Chain**\n\n${dtable([["StockX (bStock)", S, "-", MAIN, "-", "-", "-"]])}\n`
+  );
+
+  // BNB fixture drops CoreGone (a true delete) and keeps CoreKeep + the bStock.
+  const bnbFx = fixtureFile(dir, "bnb.json", [
+    nrow(["CoreKeep", A, "-", MAIN, "-", "-", "-"]),
+    nrow(["StockX (bStock)", S, "-", MAIN, "-", "-", "-"]),
+  ]);
+  // ETH fixture changes EthA's main oracle address.
+  const ethFx = fixtureFile(dir, "eth.json", [nrow(["EthA", E, "-", NEW, "-", "-", "-"])]);
+
+  execFileSync("node", [SCRIPT], {
+    cwd: dir,
+    env: { ...process.env, NOTION_FIXTURE_ROWS: bnbFx, NOTION_FIXTURE_ROWS_ETH: ethFx },
+    encoding: "utf8",
+  });
+
+  const outStd = fs.readFileSync(path.join(dir, "for-developer/multi-oracle-standard.md"), "utf8");
+  // Exactly two well-formed tables — the corruption produced three with a mangled boundary.
+  assert.equal((outStd.match(/<table/g) || []).length, 2, "standard.md must keep exactly two tables");
+  assert.equal((outStd.match(/<\/table>/g) || []).length, 2);
+  assert.ok(!/<\/table>\s*<table/.test(outStd.replace(/\n\n\*\*Ethereum Chain\*\*\n\n/g, "|SEP|")), "no back-to-back tables");
+  assert.ok(outStd.includes(NEW), "Ethereum table updated with the new address");
+  assert.ok(outStd.includes(E), "Ethereum token preserved");
+  assert.ok(!outStd.includes(B), "deleted core row is gone");
+  assert.ok(outStd.includes(A), "kept core row survives");
+
+  const outB = fs.readFileSync(path.join(dir, "for-developer/multi-oracle-bstock.md"), "utf8");
+  assert.ok(outB.includes(S), "bStock row preserved on its own page");
+
+  fs.rmSync(dir, { recursive: true, force: true });
+});
