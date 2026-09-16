@@ -1,0 +1,157 @@
+import re,os,sys
+args=sys.argv[1:]
+if not args:
+    sys.exit('usage: check-docs.py ROOT [BASE_REF] [--external]')
+root=args.pop(0)
+external='--external' in args
+unknown=[arg for arg in args if arg.startswith('-') and arg != '--external']
+base_refs=[arg for arg in args if not arg.startswith('-')]
+if unknown or len(base_refs)>1:
+    sys.exit('usage: check-docs.py ROOT [BASE_REF] [--external]')
+base_ref=base_refs[0] if base_refs else None
+os.chdir(root)
+def anch(p):
+    o=set()
+    for l in open(p,encoding='utf-8'):
+        if l.startswith('#'):
+            o.add(re.sub(r'[^\w\s-]','',l.lstrip('#').strip().lower()).replace(' ','-'))
+    return o
+md=[]
+for dp,dn,fn in os.walk('.'):
+    dn[:]=[d for d in dn if d not in {'.git','.gitbook','node_modules','vendor'}]
+    md += [os.path.join(dp,f) for f in fn if f.endswith('.md')]
+
+bad=[]
+for f in md:
+    d=os.path.dirname(f); s=open(f,encoding='utf-8').read()
+    for m in re.finditer(r'\]\((?!https?:|mailto:)([^)#]*)(#[^)]*)?\)',s):
+        t,a=m.group(1),m.group(2)
+        if t and ('<' in t or ' ' in t): continue
+        tgt=os.path.normpath(os.path.join(d,t)) if t else f
+        if t and not os.path.exists(tgt): bad.append((f,'MISSING',t)); continue
+        if a and tgt.endswith('.md') and os.path.exists(tgt) and a[1:] not in anch(tgt):
+            bad.append((f,'ANCHOR',t+a))
+print('link/anchor issues:',len(bad))
+for b in bad[:15]: print('  ',*b)
+
+sep=re.compile(r'^\s*\|[\s:|-]+\|\s*$')
+def cols(l): return len(re.sub(r'\\\|','',l).strip().strip('|').split('|'))
+tb=[]; orphan=[]
+for f in md:
+    L=open(f,encoding='utf-8').read().split('\n'); i=0; intable=False; ncol=0; fence=False
+    while i<len(L):
+        line=L[i]
+        if line.lstrip().startswith('```'):
+            fence = not fence; intable=False; i+=1; continue
+        if fence:
+            i+=1; continue
+        if line.strip().startswith('|') and i+1<len(L) and sep.match(L[i+1]):
+            ncol=cols(line); intable=True; i+=2; continue
+        if intable:
+            if line.strip().startswith('|'):
+                if cols(line)!=ncol: tb.append((f,i+1,cols(line),ncol))
+                i+=1; continue
+            intable=False
+        # ORPHAN ROW: a pipe row with no header above it
+        if line.strip().startswith('|') and not sep.match(line):
+            prev=L[i-1].strip() if i>0 else ''
+            if not prev.startswith('|'):
+                orphan.append((f,i+1,line.strip()[:50]))
+        i+=1
+print('table column mismatches:',len(tb))
+for b in tb[:10]: print('  ',*b)
+print('ORPHANED table rows (header lost — renders as literal text):',len(orphan))
+glued=[]
+for f in md:
+    L=open(f,encoding='utf-8').read().split('\n'); fence=False
+    for i in range(1,len(L)):
+        if L[i].lstrip().startswith('```'): fence = not fence; continue
+        if fence: continue
+        prev,cur=L[i-1].strip(),L[i].strip()
+        if prev.startswith('|') and cur and not cur.startswith('|'):
+            glued.append((f,i+1,cur[:60]))
+print('TEXT GLUED to a table (renders as a table cell):',len(glued))
+for b in glued[:10]: print('  ',*b)
+for b in orphan[:15]: print('  ',*b)
+
+# --- external links (opt-in: --external) -----------------------------------
+dead=[]
+if external:
+    import urllib.request, urllib.error
+    ext={}
+    for f in md:
+        for m in re.finditer(r'\]\((https?://[^)\s]+)\)', open(f,encoding='utf-8').read()):
+            ext.setdefault(m.group(1).rstrip('.,'), set()).add(f)
+    print(f'external links: {len(ext)} unique')
+    for u,srcs in sorted(ext.items()):
+        try:
+            rq=urllib.request.Request(u, method='HEAD', headers={'User-Agent':'Mozilla/5.0'})
+            urllib.request.urlopen(rq, timeout=12)
+        except urllib.error.HTTPError as e:
+            if e.code in (403,405,429):
+                continue          # bot-walls / HEAD not allowed — inconclusive, not dead
+            dead.append((u, e.code, sorted(srcs)))
+        except Exception as e:
+            dead.append((u, type(e).__name__, sorted(srcs)))
+    print('dead external links:', len(dead))
+    for u,why,srcs in dead: print('  ', why, u, '<-', ', '.join(srcs))
+
+# Nav integrity: every SUMMARY entry resolves, and every page is reachable from it.
+# A page missing from SUMMARY is invisible; a SUMMARY entry with no file is a dead click.
+import glob as _g
+_sm = open('SUMMARY.md', encoding='utf-8').read()
+_linked = {os.path.normpath(m) for m in re.findall(r'\(([^)]*for-developer/[^)]+\.md)\)', _sm)}
+_onfs = {os.path.normpath(p) for p in _g.glob('for-developer/**/*.md', recursive=True)}
+_dead, _orphan = sorted(_linked - _onfs), sorted(_onfs - _linked)
+# Assets this change orphaned: referenced by some page at BASE_REF, referenced by
+# none now. Pass BASE_REF to enable; the repo carries a long tail of
+# assets that were already unreferenced, so only the delta is actionable.
+# Filenames contain spaces and parentheses — anchor the match on the extension.
+if base_ref:
+    import subprocess as _sp
+    _base = base_ref
+    _verify = _sp.run(['git','rev-parse','--verify',f'{_base}^{{tree}}'], capture_output=True, text=True)
+    if _verify.returncode:
+        sys.exit(f'invalid base ref: {_base}')
+    _ax = re.compile(r'\.gitbook/assets/(.+?\.(?:png|jpg|jpeg|gif|svg|webp))', re.I)
+    def _refs(tree):
+        seen = {}
+        ls_proc = _sp.run(['git','ls-tree','-r','--name-only',tree], capture_output=True, text=True)
+        if ls_proc.returncode:
+            sys.exit(f'could not list tree: {tree}')
+        ls = ls_proc.stdout
+        for f in ls.split('\n'):
+            if not f.endswith('.md'): continue
+            show_proc = _sp.run(['git','show',f'{tree}:{f}'], capture_output=True, text=True)
+            if show_proc.returncode:
+                sys.exit(f'could not read {tree}:{f}')
+            t = show_proc.stdout
+            for m in _ax.findall(t): seen.setdefault(m.strip(), set()).add(f)
+        return seen
+    # "now" is the WORKING TREE, so this catches an orphan before it is committed
+    _now = {}
+    for _f in _g.glob('**/*.md', recursive=True):
+        if _f.startswith('.git/'): continue
+        try: _t = open(_f, encoding='utf-8', errors='ignore').read()
+        except OSError: continue
+        for _m in _ax.findall(_t): _now.setdefault(_m.strip(), set()).add(_f)
+    _b, _h = _refs(_base), _now
+    # A deleted asset is intentionally gone, not orphaned. Report only files
+    # that remain in the working tree after their last markdown reference was removed.
+    _lost = sorted(
+        asset for asset in set(_b) - set(_h)
+        if os.path.exists(os.path.join('.gitbook', 'assets', asset))
+    )
+    print('assets ORPHANED vs %s:' % _base, len(_lost))
+    for _a in _lost: print('   %s  (was on %s)' % (_a, ', '.join(sorted(_b[_a]))))
+
+print('SUMMARY entries with no file:', len(_dead))
+for x in _dead: print('   ', x)
+print('pages unreachable from SUMMARY:', len(_orphan))
+for x in _orphan: print('   ', x)
+
+problems=len(bad)+len(tb)+len(orphan)+len(glued)+len(_dead)+len(_orphan)+len(dead)
+if base_ref:
+    problems+=len(_lost)
+if problems:
+    sys.exit(1)
