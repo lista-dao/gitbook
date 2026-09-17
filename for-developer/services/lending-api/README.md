@@ -10,6 +10,7 @@ Technical reference for the **Moolah lending protocol API** used by Lista Lendin
 
 | Page | Description |
 |------|-------------|
+| [API Conventions](conventions.md) | Base URL, response envelope, chain selector, pagination, signature-gated endpoints, caching |
 | [Overall](overall.md) | Protocol-level snapshot |
 | [Vault](vault.md) | Vault list, detail, deposit/APY history, allocation |
 | [Market](market.md) | Market list, detail, vaults by market, borrow rate history, allMarkets, search |

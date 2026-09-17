@@ -89,5 +89,8 @@ for f,ln,n,a,s in arity: print('   %s:%d  %s  doc=%d args, source=%s' % (f,ln,n,
 # A "not found" here is also what an unlisted/mistyped source repo looks like
 # (see header), so it's inconclusive rather than a confirmed defect -- mirrors
 # check-addrs.py's rpcfail/notcontract split. An arity mismatch means the name
-# WAS found in a passed repo with a different signature, so it's confirmed.
+# WAS found in a passed repo with a different signature -- confirmed IF the
+# passed repo is current. A stale clone can still produce a false arity
+# mismatch (the doc was right, the local checkout just hadn't caught up), so
+# treat exit 1 as "check this against the real repo," not as ground truth.
 sys.exit(1 if arity else 2 if miss else 0)

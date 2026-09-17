@@ -10,7 +10,7 @@ A position is liquidatable when its loan-to-value exceeds the market's `lltv`:
 
 ```
 borrowed  = convertBorrowSharesToAssets(borrowShares, totalBorrowAssets, totalBorrowShares)
-maxBorrow = collateral × price × lltv      // price = collateral denominated in the loan asset
+maxBorrow = collateral × price / 1e36 × lltv / 1e18      // price = collateral denominated in the loan asset, 1e36-scaled; lltv is 1e18-scaled
 isHealthy = maxBorrow ≥ borrowed
 ```
 

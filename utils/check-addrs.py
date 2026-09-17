@@ -9,8 +9,18 @@
 # that the address is probed on both chains and only flagged if absent on both.
 #
 # Note which page a finding lands on: multi-oracle-standard.md, multi-oracle-bstock.md
-# and the smart-contract-*.md tables are synced from Notion, so a wrong LABEL there
-# has to be fixed upstream -- editing the markdown is reverted on the next sync.
+# and the smart-contract-bsc-*.md tables are synced from Notion -- but the sync
+# only touches ADDRESSES (sync-contracts.mjs's applyReplacements swaps the address
+# string only; sync-multi-oracle.mjs's merge() overwrites the five value columns
+# and explicitly preserves the doc's Asset cell). A wrong LABEL/name on an
+# existing row is safe to fix directly in the markdown -- it will not be reverted.
+# What IS Notion-controlled and can't be fixed here: which ROWS exist. The
+# multi-oracle sections are `mirror: true` -- a row absent from Notion gets
+# removed on the next sync regardless of what the markdown says, and a row
+# present in Notion but missing here gets added back. Row deletions on the
+# smart-contract-bsc-*.md pages are not synced away at all -- sync-contracts.mjs
+# never deletes a row, so a row missing here that's still live on-chain was
+# removed by a human edit, not sync, and restoring it in markdown sticks.
 #
 # The symbol() section is advisory, not a defect list: most labels are descriptions
 # ("MoolahVault (BTCB)") and are expected to differ from a token symbol. Read it for
