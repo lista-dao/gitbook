@@ -33,6 +33,7 @@ for f in md:
             bad.append((f,'ANCHOR',t+a))
 print('link/anchor issues:',len(bad))
 for b in bad[:15]: print('  ',*b)
+if len(bad)>15: print('  ... and %d more'%(len(bad)-15))
 
 sep=re.compile(r'^\s*\|[\s:|-]+\|\s*$')
 def cols(l): return len(re.sub(r'\\\|','',l).strip().strip('|').split('|'))
@@ -60,7 +61,10 @@ for f in md:
         i+=1
 print('table column mismatches:',len(tb))
 for b in tb[:10]: print('  ',*b)
+if len(tb)>10: print('  ... and %d more'%(len(tb)-10))
 print('ORPHANED table rows (header lost — renders as literal text):',len(orphan))
+for b in orphan[:15]: print('  ',*b)
+if len(orphan)>15: print('  ... and %d more'%(len(orphan)-15))
 glued=[]
 for f in md:
     L=open(f,encoding='utf-8').read().split('\n'); fence=False
@@ -72,7 +76,7 @@ for f in md:
             glued.append((f,i+1,cur[:60]))
 print('TEXT GLUED to a table (renders as a table cell):',len(glued))
 for b in glued[:10]: print('  ',*b)
-for b in orphan[:15]: print('  ',*b)
+if len(glued)>10: print('  ... and %d more'%(len(glued)-10))
 
 # --- external links (opt-in: --external) -----------------------------------
 dead=[]

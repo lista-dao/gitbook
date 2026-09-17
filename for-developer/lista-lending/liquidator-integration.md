@@ -154,7 +154,7 @@ function loanTokenAmountNeed(bytes32 id, uint256 seizedAssets, uint256 repaidSha
 
 Sizing a *partial* liquidation carries one more constraint:
 
-**A residual below `minLoan` must be healthy.** After the repayment, Moolah requires `_isHealthyAfterLiquidate`: if the borrower still has both debt and collateral and the remaining borrow assets fall **below** `minLoan(marketParams)`, the position must be healthy or the whole transaction reverts `UNHEALTHY_POSITION`. So you cannot leave a small unhealthy dust position behind: either size the liquidation to restore health, keep the residual at or above `minLoan`, or clear the debt or collateral entirely.
+**A residual below `minLoan` must be healthy.** After the repayment, Moolah requires `_isHealthyAfterLiquidate`: if the borrower still has both debt and collateral and the remaining borrow assets fall **below** `minLoan(marketParams)`, the position must be healthy or the whole transaction reverts Moolah's `"position is unhealthy"` (see the Reverts table below). So you cannot leave a small unhealthy dust position behind: either size the liquidation to restore health, keep the residual at or above `minLoan`, or clear the debt or collateral entirely.
 
 Call it **after** interest has been accrued for the market, or accept that the quote drifts: every entry point calls `Moolah.accrueInterest(params)` before computing the amount, and `accrueInterest` is permissionless, so a fresh quote is best obtained by simulating against current state rather than reading a value cached from an earlier block.
 

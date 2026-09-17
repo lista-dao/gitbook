@@ -18,7 +18,7 @@ A position with no debt is always healthy. On a broker market the borrower's deb
 
 Use the same oracle and market parameters the contract uses, and match its rounding — `maxBorrow` is floored and `borrowed` rounded up, both in the protocol's favour. The exact scale factors, the `isHealthy` view and its caveats, and the liquidation-price formula are in [Consuming Oracle Prices](../multi-oracle/consuming-prices.md).
 
-Re-read the oracle and position state at execution time: Moolah accrues interest and re-checks health when your transaction lands, and reverts with the string `"position is healthy"` if the position has recovered — Moolah uses `require` strings, not typed errors.
+Re-read the oracle and position state at execution time: Moolah accrues interest and re-checks health when your transaction lands, and reverts with the string `"position is healthy"` if the position has recovered — Moolah's health and input checks use `require` strings, not typed errors. (The inherited reentrancy guard is the exception: it reverts a typed `ReentrancyGuardReentrantCall()` — see [Events & Callbacks](../lista-lending/events-and-callbacks.md).)
 
 ## Finding candidates
 

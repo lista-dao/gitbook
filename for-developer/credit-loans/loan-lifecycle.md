@@ -35,10 +35,10 @@ Each fixed-term product carries one of two interest modes. `CreditBroker`'s `Fix
 
 | Mode | Enum | How interest is charged |
 | --- | --- | --- |
-| Accrue per-second | `ACCRUE_INTEREST` (0) | Interest accrues linearly on the **remaining** principal: `(principal − principalRepaid) × aprPerSecond × elapsed`, where `aprPerSecond = (apr − RATE_SCALE) / 365 days`. `elapsed` runs from **`lastRepaidTime`**, not from the position start, and a partial principal repayment resets `lastRepaidTime` to the current block — so interest is not a single accrual over the whole term. Both ends are capped at the position `end`. There is no upfront charge. |
-| Upfront | `UPFRONT_INTEREST` (1) | Full term interest is owed once the no-interest window passes: `principal × (apr − RATE_SCALE) × term / 365 days`. Within `noInterestUntil` (set to `start + graceConfig.noInterestPeriod`) the interest is 0. |
+| Accrue per-second | `ACCRUE_INTEREST` (0) | Interest accrues linearly on the **remaining** principal: `(principal − principalRepaid) × aprPerSecond × elapsed / RATE_SCALE`, where `aprPerSecond = (apr − RATE_SCALE) / 365 days`. `elapsed` runs from **`lastRepaidTime`**, not from the position start, and a partial principal repayment resets `lastRepaidTime` to the current block — so interest is not a single accrual over the whole term. Both ends are capped at the position `end`. There is no upfront charge. |
+| Upfront | `UPFRONT_INTEREST` (1) | Full term interest is owed once the no-interest window passes: `principal × (apr − RATE_SCALE) × term / (365 days × RATE_SCALE)`. Within `noInterestUntil` (set to `start + graceConfig.noInterestPeriod`) the interest is 0. |
 
-`apr` is scaled by `RATE_SCALE = 1e27` and encoded as `RATE_SCALE + rate` — a 10% APR is `1.10e27`. Subtract `RATE_SCALE`, not `1`, before using it in either formula above.
+`apr` is scaled by `RATE_SCALE = 1e27` and encoded as `RATE_SCALE + rate` — a 10% APR is `1.10e27`. Subtract `RATE_SCALE`, not `1`, before using it in either formula above. `apr − RATE_SCALE` is itself still `RATE_SCALE`-scaled (10% APR → `1e26`, not `0.1`) — both formulas divide by `RATE_SCALE` a second time to remove that scale, or the result is 1e27× too large.
 
 ## Repayment rules
 

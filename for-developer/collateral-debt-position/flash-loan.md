@@ -4,7 +4,7 @@
 
 `flash.sol` is a standard **ERC-3156** flash *minter*: it mints lisUSD to your contract, calls you back, and burns it again at the end of the same transaction. There is no collateral and no position — if the loan plus fee is not returned before the call ends, everything reverts.
 
-**Mainnet lender:** [`0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa`](https://bscscan.com/address/0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa)
+**Mainnet lender:** [`0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa`](https://bscscan.com/address/0x64d94e715B6c03A5D8ebc6B2144fcef278EC6aAa) (`FlashMinter` on the [Smart Contract](smart-contract.md) page)
 
 ## The interface
 

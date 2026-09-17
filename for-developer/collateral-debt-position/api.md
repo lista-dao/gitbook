@@ -4,7 +4,7 @@ Read-side endpoints for the **lisUSD CDP**, where each position is backed by a s
 
 > The CDP is being wound down — see [Mechanics](mechanics.md). These feeds serve existing positions. For Moolah markets use [Positions, Liquidation & Emission](../services/lending-api/position-liquidation-emission.md).
 
-Conventions (base URL, envelope, chain selector, pagination) are shared with the rest of the API — see [Conventions](../services/lending-api/conventions.md).
+Base URL, response envelope, and chain selector follow the same conventions as the rest of the API — see [Conventions](../services/lending-api/conventions.md). Pagination on these CDP feeds is its own scheme, `start`/`count` (documented per endpoint below), **not** the `page`/`pageSize` scheme conventions.md documents for the Moolah-market endpoints.
 
 ## Liquidation feeds
 
@@ -19,7 +19,7 @@ Positions that are currently liquidatable (current price has crossed the positio
 | `start` | number | No | Offset, snapped down to a multiple of 10 and floored at `0`. Omitting it (or sending garbage) defaults to `0`, not an error. |
 | `count` | number | No | Page size, snapped down to a multiple of 20 then clamped to `[20, 100]`. Omitting it defaults to `20`. |
 
-Response: `{ users: [...] }`, each entry containing `userAddress`, `tokenName`, `collateralCurrency`, `collateral`, `liquidationPrice`, `liquidationCost`, `rangeFromLiquidation`. On this endpoint `rangeFromLiquidation` is always `0` (the positions are already liquidatable), and `liquidationCost` is a high-precision decimal string of up to 20 fractional digits — parse it with a big-number library, not `parseFloat`.
+Response `data`: `{ users: [...] }`, each entry containing `userAddress`, `tokenName`, `collateralCurrency`, `collateral`, `liquidationPrice`, `liquidationCost`, `rangeFromLiquidation`. On this endpoint `rangeFromLiquidation` is always `0` (the positions are already liquidatable), and `liquidationCost` is a high-precision decimal string of up to 20 fractional digits — parse it with a big-number library, not `parseFloat`.
 
 ### GET /api/v2/liquidations/orange
 
@@ -36,7 +36,7 @@ Look up the borrower(s) and clipper (auction contract) for a given liquidation a
 
 > \* Both are bound unconditionally as equality filters. Omitting either returns an empty `users` array rather than an unfiltered list.
 
-Response: `{ users: [{ userAddress, clipperAddress }] }`.
+Response `data`: `{ users: [{ userAddress, clipperAddress }] }`.
 
 ### GET /api/v2/liquidated
 

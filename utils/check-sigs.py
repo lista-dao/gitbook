@@ -87,6 +87,7 @@ print('ARITY MISMATCH (documented call may not exist):',len(arity))
 for f,ln,n,a,s in arity: print('   %s:%d  %s  doc=%d args, source=%s' % (f,ln,n,a,s))
 
 # A "not found" here is also what an unlisted/mistyped source repo looks like
-# (see header) -- either way the count must gate CI, not rely on someone
-# reading the printed numbers.
-sys.exit(1 if (miss or arity) else 0)
+# (see header), so it's inconclusive rather than a confirmed defect -- mirrors
+# check-addrs.py's rpcfail/notcontract split. An arity mismatch means the name
+# WAS found in a passed repo with a different signature, so it's confirmed.
+sys.exit(1 if arity else 2 if miss else 0)

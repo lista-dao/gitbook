@@ -24,7 +24,7 @@ pnpm add viem@^2.22.10
 
 ## Writing transactions: builders, not senders
 
-`build*Params` methods return an ordered array of step descriptors. Each carries `{ to, abi, functionName, args, value, chainId, data }` plus an optional `meta`. Execute them in order with your own wallet client.
+`build*Params` methods return an ordered array of step descriptors. Each carries a `params` object with `{ to, abi, functionName, args, value, chainId, data }`, plus an optional `meta`. Execute them in order with your own wallet client.
 
 ```typescript
 import { parseUnits } from "viem";

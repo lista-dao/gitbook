@@ -200,7 +200,7 @@ Array of market parameter objects:
 |-------|------|-------------|
 | `lltv` | string | Liquidation LTV **scaled to 1e18** here — the list and detail endpoints return the same field as a decimal fraction. |
 | `lastUpdate` | number | Last on-chain accrual timestamp. |
-| `id`, `loanToken`, `collateralToken`, `oracle`, `irm` | string | The market id and the five `MarketParams` addresses. |
+| `id`, `loanToken`, `collateralToken`, `oracle`, `irm` | string | The market id, and four of the five `MarketParams` fields (the fifth, `lltv`, is in the row above). |
 | `totalSupplyAssets`, `totalSupplyShares`, `totalBorrowAssets`, `totalBorrowShares`, `fee` | string | The `Market` struct's accounting fields, verbatim from chain. |
 | `chain`, `zone` | string / number | Network key and market zone. |
 

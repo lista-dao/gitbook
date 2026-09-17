@@ -52,12 +52,14 @@ def dec_str(hexdata):
     except Exception: return None
 
 SEL={'symbol()':'0x95d89b41','name()':'0x06fdde03','decimals()':'0x313ce567',
-     'MAX_BORROW_RATE()':'0x6e553f65'}
-# discriminators: label substring -> (selector, must_answer)
-PROBES=[('interestratemodel','0x'+ 'a1b2',None)]
+     'MAX_BORROW_RATE()':'0x7a0c5ebf'}
 
 rows=[]
 ADDR=re.compile(r'(?<![0-9a-fA-F])0x[0-9a-fA-F]{40}(?![0-9a-fA-F])')   # exactly 40: a 64-char market id must not match
+# never real contracts -- native-asset sentinel and the zero address are documented
+# placeholders, not deployments, so probing them for bytecode always false-positives
+# as "not a contract".
+SENTINELS={'0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee','0x'+'0'*40}
 
 for dp,dn,fn in os.walk('for-developer'):
     for f in fn:
@@ -69,6 +71,7 @@ for dp,dn,fn in os.walk('for-developer'):
             for unit in (re.split(r'</tr>',line) if '<tr' in line else [line]):
                 for m in ADDR.finditer(unit):
                     a=m.group(0)
+                    if a.lower() in SENTINELS: continue
                     host=re.search(r'(bscscan|etherscan)\.[a-z]+/address/'+a,unit,re.I)
                     if host: chain='eth' if 'ether' in host.group(1).lower() else 'bsc'
                     elif 'ethereum' in p.lower(): chain='eth'
