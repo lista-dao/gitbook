@@ -8,6 +8,9 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 
 | Feature | Audits |
 | ------- | ------ |
+| Atlas Multi Feed Adaptor | [HashDit · 2026-09](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AtlasMultiFeedAdaptor-20260916.pdf) |
+| Credit Broker Fix | [HashDit · 2026-09](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-CreditBrokerFix-AuditReport-20260911.pdf) |
+| Yield Account | [HashDit · 2026-09](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-YieldAccount-AuditReport-20260911.pdf) |
 | Lista Dao ClisBNBLaunch Pool Distributor Update | [2026-08](https://github.com/lista-dao/lista-token/blob/master/audits/ListaDao_ClisBNBLaunchPoolDistributor_Update_Audit_Report_Final.pdf) |
 | Moolah Vault Account | [HashDit · 2026-08](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-MoolahVaultAccount-AuditReport-20260825.pdf) |
 | Liquidation Vault | [HashDit · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-LiquidationVault-20260709.pdf) |
