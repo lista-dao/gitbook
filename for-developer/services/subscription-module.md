@@ -8,7 +8,7 @@ The subscription module lets users bind a wallet to **Telegram** and receive not
 
 ## Binding flow
 
-1. Client application calls **POST /api/v2/subscription/:user/otp** (with wallet signature) -> service returns a **6-digit OTP**, valid for **5 minutes**.
+1. Client application calls **POST /api/v2/subscription/:user/otp** (with wallet signature) -> service returns a **6-character alphanumeric OTP** (`A-Z`, `a-z`, `0-9`), valid for **5 minutes**.
 2. User opens the Telegram Bot and sends that OTP in the chat.
 3. Bot verifies the OTP and binds the wallet address to the user’s Telegram ID.
 4. After binding, the user can receive **liquidation alerts** and **borrow-rate reminders**.
@@ -31,15 +31,15 @@ Returns whether the given wallet is bound to Telegram and related subscription s
 
 **POST /api/v2/subscription/:user/otp**
 
-Generates a one-time 6-digit code for the user to send in the Telegram Bot to complete binding. Requires **wallet signature** to prove ownership.
+Generates a one-time 6-character alphanumeric code for the user to send in the Telegram Bot to complete binding. Requires **wallet signature** to prove ownership.
 
 | Path param | Description |
 |------------|-------------|
 | `user`    | Wallet address |
 
-**Request body:** `signature`, `message` (or equivalent). Server recovers address from signature + message; it must match path `user`.
+**Request body:** `signature` and `message`. `message` must be exactly the literal string `one-time-password` — this is a **different** challenge from the emission endpoints' timestamped message, and anything else returns envelope code `1005`. The server recovers the address from the signature and it must match the path `user`.
 
-**Response:** e.g. `{ "otp": "123456" }` or similar (OTP valid 5 minutes).
+**Response:** `{ user, password, otpValidUntil }` — the code is under **`password`**, not `otp`, and `otpValidUntil` is a Unix-seconds expiry. Pass the code to the user verbatim. The bot accepts `[0-9a-zA-Z]{6}`, and it validates the trimmed message but looks up the untrimmed one — so trailing whitespace fails even though the code is right.
 
 ### 3. Unsubscribe (unbind)
 
@@ -51,37 +51,10 @@ Unbinds the wallet from Telegram and stops all notifications. Sends an unbind co
 |------------|-------------|
 | `user`    | Wallet address |
 
-**Request body:** `signature`, `message` (or equivalent).
+**Request body:** `signature` and `message`.
 
 ---
 
 ## Telegram Bot
 
-The Bot receives messages via **Webhook** (internal endpoint). Supported interactions:
-
-| Command / action      | Description |
-|-----------------------|-------------|
-| **OTP (plain text)**  | User sends the 6-digit OTP from the API → Bot binds wallet to Telegram. |
-| **/unbind**           | Shows list of bound wallets (inline buttons); user selects one to unbind. |
-| **/subscribe**        | Lists markets where the user has borrow positions; user replies with market number(s) (e.g. `1,4`) to subscribe to **borrow-rate reminders**. Pushed daily at **UTC 02:00**. |
-| **/cancel**           | Lists subscribed markets; user replies with number(s) to stop rate reminders. |
-| **Mute (inline)**     | Inline buttons on alert messages to mute **liquidation alerts** or **borrow notifications** (CDP vs lending can be separate). |
-| **/change_language**  | Switch Bot language between **Chinese** and **English**. |
-
----
-
-## Notification types
-
-| Type               | When / content |
-|--------------------|----------------|
-| Liquidation alert  | Position at or over liquidation threshold; may include mute button. |
-| Borrow-rate reminder | Daily (e.g. UTC 02:00) for markets subscribed via `/subscribe`. |
-| Unbind confirmation| Sent to Telegram after successful unbind. |
-
----
-
-## Security and privacy
-
-* Verify wallet signature on OTP and unsubscribe; do not trust client-supplied Telegram ID without going through the Bot OTP flow.
-* Only include the subscribed user’s own positions/vaults in messages.
-* Store minimal data (e.g. Telegram ID, subscription state, muted flags); consider retention and deletion policy.
+Binding, subscription management, muting and language are handled inside the Telegram bot itself; the REST API above covers status, OTP issuance and unbind. Once a wallet is bound, the bot delivers liquidation alerts and borrow-rate reminders to it.
