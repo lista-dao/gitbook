@@ -160,6 +160,12 @@
         "cols": []
       },
       {
+        "section": "",
+        "name": "YieldAccount",
+        "address": "0xFD4057Cd72A31A080A0f6CF234a922F2f647C608",
+        "cols": []
+      },
+      {
         "section": "Vaults",
         "name": "MoolahVault(WBNB)",
         "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
