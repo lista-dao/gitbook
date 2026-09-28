@@ -8,6 +8,7 @@ Lista 的所有核心智能合约均经过知名第三方安全公司的严格�
 | ------- | ------ |
 | Atlas Multi Feed Adaptor | [HashDit · 2026-09](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AtlasMultiFeedAdaptor-20260916.pdf) |
 | Credit Broker Fix | [HashDit · 2026-09](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-CreditBrokerFix-AuditReport-20260911.pdf) |
+| Sub Staker | [Bailsec · 2026-09](https://github.com/lista-dao/synclub-contracts/blob/master/audit/Bailsec-SubStaker-Final-Report-20260928.pdf) |
 | Yield Account | [HashDit · 2026-09](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-YieldAccount-AuditReport-20260911.pdf) |
 | Lista Dao ClisBNBLaunch Pool Distributor Update | [2026-08](https://github.com/lista-dao/lista-token/blob/master/audits/ListaDao_ClisBNBLaunchPoolDistributor_Update_Audit_Report_Final.pdf) |
 | Moolah Vault Account | [HashDit · 2026-08](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-MoolahVaultAccount-AuditReport-20260825.pdf) |
