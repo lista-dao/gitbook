@@ -77,11 +77,22 @@ function deleteFile(file) {
 }
 
 function resolveRange() {
+  const sha = process.env.GITHUB_SHA || "HEAD";
+
+  // Manual override for backfilling a range no push event can express --
+  // e.g. commits that landed while this script's validation still swallowed
+  // errors (see the note at the bottom of this file), so nothing ever
+  // reprocessed them on a later push.
+  const baseOverride = process.env.BASE_SHA_OVERRIDE;
+  if (baseOverride) {
+    git(["cat-file", "-e", `${baseOverride}^{commit}`], { stdio: "pipe" });
+    return [baseOverride, sha];
+  }
+
   // github.event.before is the pre-push SHA. It is all-zeroes for a new
   // branch and may point at a rewritten commit after a force-push, so fall
   // back to the tip commit only when it is unusable.
   const before = process.env.GITHUB_EVENT_BEFORE;
-  const sha = process.env.GITHUB_SHA || "HEAD";
   if (before && !/^0+$/.test(before)) {
     try {
       git(["cat-file", "-e", `${before}^{commit}`], { stdio: "pipe" });
