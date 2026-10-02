@@ -59,7 +59,6 @@ Oracle contracts for tokenized stock price feeds.
 | PTLinearDiscountOracle (PT-sUSDe-09Apr2026(Plasma)) | USD1  | 0x9B7FAE34238E37dF77d35559eF62995c066B5e11 |
 | PTLinearDiscountOracle (PT-sUSDe-09Apr2026(Plasma)) | USDT  | 0xd69E4BF784185139994eeb3F0Db9Ea307d31FDdB |
 | PTLinearDiscountOracle (PT-sUSDe-09Apr2026(Plasma)) | U     | 0x09E664516C91461d8ed58C934Af48048D2534fe9 |
-| PTLinearDiscountOracle (PT-USDat-14JAN2027 x USDT) | | 0x037d47A20c965C68Fcc7f06D1C9890b844183B82 |
 
 ## PT-USDe-07May2026
 
