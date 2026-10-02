@@ -40,7 +40,7 @@ To deploy a vault, specify the following parameters:
 
 #### Step 2.1: Prepare the Parameters
 
-#### Before deployment, you need to prepare the following parameters:
+**Before deployment, you need to prepare the following parameters:**
 
 * **manager: Manager address (must be a timelock contract), this will be the same as the owner role**
 * **asset: Asset address**
@@ -50,13 +50,13 @@ To deploy a vault, specify the following parameters:
 * **curator: Curator address (must be a timelock contract)**
 * **allocator: Allocator address (does not need to be a timelock contract)**
 
-#### All these parameters need values (marked as "TODO" in your reference image).
+**All these parameters need values (marked as "TODO" in your reference image).**
 
 #### Step 2.2: Clone the Repository
 
-#### Navigate to the specific branch of the Moolah repository:
+**Navigate to the specific branch of the Moolah repository:**
 
-#### `git clone https://github.com/lista-dao/moolah.git`
+`git clone https://github.com/lista-dao/moolah.git`
 
 `cd moolah`
 
@@ -80,7 +80,7 @@ This command will:
 * **Verify the contract on the blockchain explorer**
 * **Provide verbose output (-vvv) for detailed logs**
 
-#### Make sure you have sufficient funds in your wallet to cover gas fees and that your environment is properly configured for Foundry.
+**Make sure you have sufficient funds in your wallet to cover gas fees and that your environment is properly configured for Foundry.**
 
 ***
 
