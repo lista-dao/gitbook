@@ -2,6 +2,11 @@ name: Translate Markdown Files
 
 on:
   workflow_dispatch: # allow manual runs / backfill
+    inputs:
+      base_sha:
+        description: "Backfill from this commit (exclusive) through HEAD, instead of just the latest commit. Use for a range a push event can't express."
+        required: false
+        type: string
   push:
     branches:
       - en
@@ -51,3 +56,4 @@ jobs:
           # Full push range, so a push of N commits translates all N.
           GITHUB_EVENT_BEFORE: ${{ github.event.before }}
           GITHUB_SHA: ${{ github.sha }}
+          BASE_SHA_OVERRIDE: ${{ github.event.inputs.base_sha }}
