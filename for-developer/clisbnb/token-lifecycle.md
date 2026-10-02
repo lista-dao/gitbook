@@ -1,17 +1,19 @@
-# 代币生命周期
+# Token Lifecycle
 
-`slisBNBx` 的生命周期由 `SlisBNBxMinter` 严格控制。用户和外部合约不能直接铸造。
+`slisBNBx` 是由 `SlisBNBxMinter` 在 Moolah 中因抵押品移动而铸造和销毁的。没有用户可调用的铸造功能。然而，`SlisBNBxMinter` 并不是唯一的活跃铸造者，传统的 CDP 的 `HelioProvider` 仍然拥有铸造权；请参阅下面的说明。
 
-| 步骤 | 操作 | 结果 |
+| 步骤 | 您的操作 | 链上发生的事情 |
 | --- | --- | --- |
-| 1. 存款 | 用户将 `slisBNB` 或 `slisBNB/BNB LP` 存入 Moolah，通过相关的提供者/抵押合约。 | 抵押记录下来，提供者调用 `SlisBNBxMinter`。 |
-| 2. 铸造 | 铸币厂根据 BNB 等值抵押价值计算 `slisBNBx` 并调用 `slisBNBx.mint()`。 | `slisBNBx` 记入用户或委托地址。 |
-| 3. 持有 | 用户持有 `slisBNBx`（不可转让）。 | 持有者有资格参与 Launchpool。 |
-| 4. 提取 | 用户从 Moolah 提取全部或部分抵押品。 | 调用 `SlisBNBxMinter` 进行比例燃烧。 |
-| 5. 燃烧 | 铸币厂根据移除的抵押品燃烧相应的 `slisBNBx`。 | `slisBNBx` 供应减少且始终保持抵押支持。 |
+| 1. 存款 | 通过其提供者向 Moolah 提供 `slisBNB` 或 `slisBNB/BNB` LP 头寸。 | 抵押品被记录，提供者调用 `SlisBNBxMinter`。 |
+| 2. 铸造 | — | 铸造者根据抵押品的 BNB 等值价值推导出 `slisBNBx` 数量，并将其铸造给您或您的代理人。 |
+| 3. 持有 | 持有证书。它是不可转让的。 | 持有人有资格参与 Binance Launchpool。 |
+| 4. 提取 | 从 Moolah 提取全部或部分抵押品。 | 提供者调用铸造者进行销毁。 |
+| 5. 销毁 | — | 铸造者销毁与移除的抵押品相匹配的 `slisBNBx` 份额，因此供应始终完全由抵押品支持。 |
 
-## 注意事项
+计划围绕三个后果：
 
-* 铸造和燃烧总是跟随抵押状态。
-* 部分提款只燃烧相应比例的金额。
-* 此生命周期适用于 Moolah 集成，不适用于传统的 CDP。
+* **部分提取仅销毁比例数量** — 证书的其余部分仍然被铸造。剩余余额是否仍然符合特定 Launchpool 的资格由该活动的自身规则决定，而不是由此合约决定。
+* **您不能持有没有抵押品支持的 `slisBNBx`。** 任何移除抵押品的路径都会移除证书。
+* **此生命周期是 Moolah 集成。** 传统的 CDP 是通过其自身的 `HelioProvider` 的一个独立的、仍然活跃的铸造/销毁路径 — 这不是本页面记录的内容。有关这两条路径如何不同，请参阅 [Delegation](delegation.md)。
+
+有关将铸造指向另一个地址的信息，请参阅 [Delegation](delegation.md)，有关数量如何推导的信息，请参阅 [Minting Ratio Logic](minting-ratio-logic.md)。

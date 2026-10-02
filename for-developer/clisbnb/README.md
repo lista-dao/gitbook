@@ -1,20 +1,9 @@
 # slisBNBx
 
-## 概览
+## 概述
 
-`SlisBNBxMinter` 是 Lista DAO 的 Moolah 借贷协议中的一个实用合约。它是 `slisBNBx` 的铸造和销毁引擎，`slisBNBx` 是一个不可转让的证书代币，代表用户在 Moolah 中的抵押品位置。
+`slisBNBx`（前称为 `clisBNB`）是一种不可转让的凭证，它允许您在 Moolah 借贷头寸中保持抵押品的运作，同时仍然有资格参与 Binance Launchpool。
 
-`slisBNBx`（原名 `clisBNB`）允许用户在保持活跃的借贷位置的同时，继续参与 Binance Launchpool。铸币机执行代币生命周期的规则，包括发行、委托和销毁，因此供应始终与抵押品保持一致。
+您从未直接铸造它。`SlisBNBxMinter` 会在您的抵押品移动时发行和销毁它，因此供应始终与其背后的抵押品相匹配——请参阅[代币生命周期](token-lifecycle.md)了解五个步骤。
 
-此合约不支持传统的 CDP 系统。
-
-## 关键价值主张
-
-用户可以在 Moolah 中存入 `slisBNB` 或 `slisBNB/BNB LP` 作为抵押品，并且仍然可以参与 Binance Launchpool 而不需要解除他们的借贷位置。`slisBNBx` 是证明这种抵押品的不可转让证书。
-
-## 内容
-
-* [代币生命周期](token-lifecycle.md)
-* [铸币比率逻辑](minting-ratio-logic.md)
-* [委托](delegation.md)
-* [智能合约](smart-contract.md)
+传统 CDP 自身的 `HelioProvider` 是一个独立的、仍然活跃的铸造者，与 `SlisBNBxMinter` 并行（请参阅[代币生命周期](token-lifecycle.md)）——此页面仅记录 Moolah 路径。没有人可以随意铸造 `slisBNBx`——数量总是源自账户的抵押品。`rebalance` 和 `syncDelegatee` 仅限模块使用，但 `syncUserModuleLp` / `bulkSyncUserModules` 是无权限的：任何人都可以强制对任何账户进行重新同步，针对注册的模块。

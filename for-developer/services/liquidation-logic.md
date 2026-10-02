@@ -1,55 +1,38 @@
-# 清算逻辑（服务）
+# 清算（服务）
 
-本页说明**平台服务**如何判定可清算仓位，以及如何执行或支持清算：批处理流程、资格检查、风险控制，以及与清算合约的交互。
+Lista 运营其自己的清算守护程序。其调度、阈值和重试行为是内部的，并未在此处记录。
 
-## 输入与依赖
+第三方清算者不需要这些信息。您需要的是：
 
-- **执行上下文** — 链、运行配置、待处理的市场列表。
-- **市场数据** — 抵押品/借款资产、预言机、市场参数（LLTV 等）。
-- **风险配置** — 资格规则、最小规模阈值、延迟规则、稳定资产处理方式。
-- **价格与状态** — 预言机价格、市场状态、用于去重的近期处理状态 / 缓存。
+## 资格
 
-## 资格判定
+当一个头寸的贷款价值比超过市场的 `lltv` 时，该头寸是可清算的：
 
-- **条件** — 当某仓位在其所属市场满足 `LTV > LLTV` 时可被清算（LLTV 取自市场参数）。等价表述为：**清算触发价格 > 当前市场价格**（触发价格即该仓位变为可清算时的抵押品/借款资产价格比）。
-- **LTV** — `LTV = (借款量 × 借款资产预言机价格) / (抵押品数量 × 抵押品预言机价格)`，并采用合约的精度缩放（例如 1e36）。
-- **数据** — 使用与合约一致的预言机与市场参数；在执行时重新获取预言机与仓位状态，以避免数据陈旧或被抢跑。
+```
+borrowed  = convertBorrowSharesToAssets(borrowShares, totalBorrowAssets, totalBorrowShares)
+maxBorrow = collateral × price / 1e36 × lltv / 1e18      // price = 以贷款资产计价的抵押品价格，1e36 缩放；lltv 是 1e18 缩放
+isHealthy = maxBorrow ≥ borrowed
+```
 
-## 批处理流程
+没有债务的头寸始终是健康的。在一个经纪市场中，借款人的债务被经纪人的总债务（Moolah 本金加上在经纪人处累积的利息）所取代，而抵押品仍以普通市场价格计价。
 
-1. **运行准备** — 校验运行环境与市场列表。
-2. **扫描** — 查询 `borrowedAmount > 0` 的仓位（例如从 `MoolahUserPosition` 获取）。
-3. **风险识别** — 针对每个仓位所属市场获取当前价格；计算清算触发价格并与当前市场价格比较；保留触发价格 > 当前价格的仓位。
-4. **延迟与阈值** — 应用可配置的延迟与最小规模过滤（见下方风险控制）。
-5. **执行** — 对每个符合条件的仓位选择清算路径（主 Liquidator 或预清算合约）并执行；根据已偿还金额与 LIF 计算应扣押的抵押品。
-6. **结果与去重** — 记录结果；进行短期去重，使同一仓位在配置的时间窗口内不会被重复处理。
+使用合约使用的相同预言机和市场参数，并匹配其舍入方式——`maxBorrow` 向下取整，`borrowed` 向上取整，均对协议有利。确切的缩放因子、`isHealthy` 视图及其注意事项，以及清算价格公式在[消费预言机价格](../multi-oracle/consuming-prices.md)中。
 
-## 风险控制
+在执行时重新读取预言机和头寸状态：Moolah 在您的交易落地时累积利息并重新检查健康状况，如果头寸已恢复，则以字符串 `"position is healthy"` 进行回滚——Moolah 的健康和输入检查使用 `require` 字符串，而不是类型化错误。（继承的重入保护是例外：它回滚一个类型化的 `ReentrancyGuardReentrantCall()`——参见[事件与回调](../lista-lending/events-and-callbacks.md)。）
 
-- **价格有效性** — 跳过价格缺失或异常的市场，避免误清算。
-- **延迟** — 对特定仓位可选择延迟处理，以降低波动带来的误判。
-- **规模阈值** — 对低于最小规模（例如 gas 或经济性阈值）的仓位不触发清算。
-- **去重** — 处理完一个仓位后进行标记（例如写入缓存），使其在短时间内不会被重复提交。
+## 寻找候选者
 
-## 可观测性
+* `GET /api/moolah/redPositions` — 单个市场上的可清算头寸。**从这里开始开放市场**，这是常见情况：从 `/api/moolah/allMarkets` 枚举市场并展开。
+* `GET /api/liquidation/zone/closeToLiquidate` — 接近阈值的头寸。
+* `GET /api/liquidation/zone/list` — 每个市场的**借款人**白名单及每个账户的最新头寸快照。它**不**进行健康测试，因此请自行评估资格，并且它仅在*受限*市场上找到候选者。
+* `GET /api/liquidation/zone/history` — 已结算的清算。
 
-- 日志应覆盖：批次运行、逐市场处理、逐仓位资格判定，以及结果（已执行 / 已跳过 / 原因）。
-- 输出：处理数量、耗时、跳过原因（例如价格无效、低于阈值、去重）。
+参数和响应字段在[头寸、清算与发放](lending-api/position-liquidation-emission.md)中。索引数据可能滞后；将其视为候选者提要，并在提交前在链上确认。
 
-## 合约侧公式（参考）
+## 执行
 
-服务侧的资格判定应与合约的健康度逻辑保持一致。抽象公式如下：
+清算通过 `PublicLiquidator` 合约执行。它没有角色门槛，但可达性是**每个市场**的——一个水下头寸不一定由您清算，并且有自筹资金和闪电交换路径。入口点、大小、资格门槛和回滚参考在[清算者集成](../lista-lending/liquidator-integration.md)中。
 
-- **无债务** — `isHealthy = true`。
-- **借款量** — 标准市场：`borrowed = convertBorrowSharesToAssets(shares, totalBorrowAssets, totalBorrowShares)`。经纪人市场：`borrowed = getBrokerTotalDebt(borrower, market)`。
-- **最大可借** — `maxBorrow = collateral × price × lltv`（price 为抵押品/借款资产的相对价格）。
-- **健康度** — `isHealthy = (maxBorrow ≥ borrowed)`。
-- **风险仓位** — `isRisky = ¬isHealthy`；这些即为清算候选（仍需通过上述服务侧风险控制）。
+Lista 的守护程序与其他人竞争相同的公共路径。运行您自己的清算者不需要，也不会收到其配置的任何信息。
 
-## 实现要点
-
-- **舍入** — 与合约的舍入方式保持一致（对用户金额通常向下舍入），避免资格判定出现 off-by-one。
-- **Gas / 批处理** — 清算通常由 keeper bot 执行；服务可以只提供可清算列表 API（例如 `GET /api/moolah/liquidation/liquidatable`）与历史记录。
-- **预清算** — 当某市场使用外部预清算合约时，识别处于 `preLLTV ≤ LTV < LLTV` 区间的仓位，并在适用情况下将调用方路由至该合约。
-
-关于产品层面的清算说明与示例，请参见[清算](../../introduction/lista-lending/liquidation/README.md)。
+有关清算的产品级解释，请参见[清算](../../introduction/lista-lending/liquidation/README.md)。

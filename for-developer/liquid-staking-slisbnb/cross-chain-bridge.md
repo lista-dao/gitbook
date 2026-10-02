@@ -1,61 +1,52 @@
-# 跨链桥
+# Cross-Chain Bridge
 
-跨链转移机制使用户能够在不同的区块链网络之间无缝转移代币。该过程涉及在源链上锁定代币，通过去中心化网络验证交易，并在目的链上铸造代币。
+slisBNB 在 BNB Smart Chain 和 Ethereum 之间作为 **LayerZero OFT** 移动。部署的地址和端点 ID 在 [Smart Contract](smart-contract.md) 上。
 
-关键组件包括 ListaOFTAdapter、ListaOFT 合约、LayerZero 端点以及如 Lista Guardian、去中心化验证网络（DVN）和执行器等链下服务。这些组件共同工作，以确保跨链转移的安全、可靠和高效。
+## 架构
 
-**1. 主要合约结构**
+供应永不重复：代币在其主链上被锁定，并在目标链上铸造为代表。
 
-* ListaOFTAdapter
-  * 转移限制器：执行转移限制以管理流动性，防止垃圾邮件，并确保遵守转移政策。
-  * 紧急开关：在首次出现问题时停止所有交易，提供一个迅速的措施以避免潜在的危机。
-  * 代币锁定器：在从 BSC 到 Ethereum 转移时锁定代币，在从 Ethereum 到 BSC 转移时解锁代币。
-* LayerZero
-  * LayerZero 端点：使用 MessageLib 库促进跨链通信。
-* ListaOFT
-  * 转移限制器：与 ListaOFTAdapter 中的类似，确保接收端的转移控制。
-  * 紧急开关：与 ListaOFTAdapter 中的类似，提供紧急停止能力。
+| Contract | Chain | Role |
+| --- | --- | --- |
+| `ListaOFTAdapter` | BNB Smart Chain | 在转出时锁定 slisBNB，在返回时释放。slisBNB 本身是一个普通的 ERC-20——适配器将其包装，而不是代币本身具有 OFT 感知。 |
+| `ListaOFT` | Ethereum | 到达时铸造，返回时销毁。这里的供应始终由适配器中锁定的数量支持。 |
+| LayerZero Endpoint | both | 消息传输。 |
 
-**2. 链下服务**
+双方都有两个相同的控制：一个 **transfer limiter** 和一个 **emergency pause**。限制器是五个独立的界限，而不是一个——见下文。
 
-* Lista Guardian
-  * 一个连续监控跨链桥的链下服务
-  * 在任何紧急情况出现时停止所有跨链交易
-* LayerZero
-  * 去中心化验证网络（DVN）
-    * 验证：一个去中心化节点网络，在执行前验证跨链交易以确保其有效性并防止欺诈活动。
-  * 执行器
-    * 交易执行：提交 DVN 的验证结果并执行 lzReceive() 方法以在目的链上处理交易。
+## 转移路径
 
-**3. 跨链交互流程**
+<div data-full-width="true"><figure><img src="../../.gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure></div>
 
-从 BSC 到 Ethereum：
+**BSC → Ethereum.** 您将 `amount` 发送到 `ListaOFTAdapter`；它应用转移限制器和暂停检查，**锁定**代币，并将消息传递给 BSC 上的 LayerZero Endpoint。DVN 验证它，Executor 在 Ethereum 上的 Endpoint 上调用 `lzReceive()`，然后 `ListaOFT` **铸造**等值代币到您的地址。
 
-1. 用户 A 发起转移，发送请求并附带 X 数量的代币。
-2. ListaOFTAdapter 处理请求，应用转移限制器和紧急开关检查。
-3. ListaOFTAdapter 锁定 X 数量的代币。
-4. 请求被发送到 BSC 上的 LayerZero 端点。
-5. 消息通过去中心化验证网络（DVN）广播并验证。
-6. 验证后，执行器在 Ethereum 上的 LayerZero 端点调用 lzReceive()。
-7. Ethereum 上的 LayerZero 端点将请求转发给 ListaOFT 合约。
-8. ListaOFT 在 Ethereum 上为用户 A 的地址铸造等量的代币。
+**Ethereum → BSC.** 镜像：`ListaOFT` 检查其自身的限制器和暂停，**销毁**代币，消息沿相同的 DVN/Executor 路径反向传输，`ListaOFTAdapter` **解锁** BSC 上的等值代币。
 
-从 Ethereum 到 BSC 对于用户 B：
+两个方向都通过相同的两个 Lista 侧门——限制器和暂停——因此任何会违反其中之一的转移都会在源链上失败，然后才发送任何消息。
 
-1. 用户 B 发起转移，附带 Y 数量的代币。
-2. ListaOFT 处理请求，应用转移限制器和紧急开关检查。
-3. ListaOFT 销毁 Y 数量的代币。
-4. 请求被发送到 Ethereum 上的 LayerZero 端点。
-5. 消息通过与用户 A 相同的 DVN 和执行器路径。
-6. 验证后，执行器在 BSC 上的 LayerZero 端点调用 lzReceive()。
-7. BSC 上的 LayerZero 端点将请求转发给 ListaOFTAdapter 合约。
-8. ListaOFTAdapter 为用户 B 的地址在 BSC 上解锁等量的代币。
+## 信任模型
 
-**4. 安全措施**
+当源交易确认时，转移并不是最终的。LayerZero 的 **DVN** 验证目标链上的消息，并通过调用 `lzReceive` 由 **Executor** 传递；目标铸造仅在那时发生。因此，桥继承了 LayerZero 的验证假设，加上一个 Lista 侧暂停：`pause()` 只能由 `multiSig()` 中的地址调用——两个链上相同的 Gnosis Safe——而 `unpause()` 只能由 `owner()` 调用，这是一个不同的地址。
 
-* 转移限制器：通过执行严格的转移限制来确保适当的流动性管理并防止恶意转移。
-* 紧急开关：在首次出现问题时作为关键的安全措施停止所有交易，防止任何未经授权的代币铸造。两个紧急开关都由 Lista Guardian 控制，当检测到异常时，它可以通过在两条链上启动紧急开关来停止交易。
-* Lista Guardian：
-  * 紧急开关：一个在紧急情况下可以通过在两条链上启动紧急开关来停止交易的链下服务。
-  * 持续对账：通过全线对账过程确保链间的代币供应准确无误。
-  * 大额转移警报：监控异常大的转移以检测和缓解潜在攻击。
+实际的结果是，转移可以在源链上被接受，但仍然不能立即结算——将目标到达视为异步，并确认它，而不是从发送中推断。
+
+## 调用
+
+使用 LayerZero 自己的 `SendParam` / `quoteSend` 接口；调用形状没有任何 Lista 特定的内容。两个 Lista 侧条件使 `send()` 回滚，并且都不会出现在 LayerZero 报价中：
+
+* **Dust.** OFT 使用 `sharedDecimals = 6`，因此原始金额被截断为 `1e12` 的倍数。传递一个已经去除尘埃的 `amountLD` 和 `minAmountLD`，否则截断的金额低于 `minAmountLD`，调用将回滚。
+* **Limiter or pause.** 任何在暂停期间的转移都会回滚。任何违反五个独立界限之一的转移也会回滚，所有这些都会引发 `TransferLimitExceeded()`，并且都在去除尘埃的金额上进行评估：
+
+| Bound | Reverts when |
+| --- | --- |
+| `singleTransferUpperLimit` | 金额高于此 |
+| `singleTransferLowerLimit` | 金额**低于**此——小额转移也会失败 |
+| `maxDailyTransferAmount` | 超过全局累计量 |
+| `dailyTransferAmountPerAddress` | 超过发送者的累计量 |
+| `dailyTransferAttemptPerAddress` | 超过发送者的累计尝试次数 |
+
+不要自己建模计数器——它们的重置规则不是固定窗口。在报价之前立即读取 `transferLimitConfigs(dstEid)` 以获取界限和 `dailyTransferAmount` / `userDailyTransferAmount` / `userDailyAttempt` 以获取当前使用情况。
+
+## 另请参阅
+
+* [LayerZero OFT 文档](https://docs.layerzero.network/v2/developers/evm/oft/quickstart) — `SendParam`，`quoteSend` 和消息模型。

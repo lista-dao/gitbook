@@ -1,142 +1,104 @@
 # 机制
 
-在Lista机制中，用户可以通过战略性地利用他们的资产来赚取奖励，这些资产可能包括BNB、ETH、slisBNB、wBETH和BTCB。过程从用户将这些资产存入交互（CDP）模块开始，这些资产被用作借用LisUSD的抵押品。
+抵押债务头寸（CDP）模块允许用户存入抵押品并以此铸造**lisUSD**。这是一个类似于MakerDAO/Helio的分叉：`Vat`、`Jug`、`Spotter`、`Dog`、`Clipper`、`Abacus`和`Vow`在**Interaction**入口点后面。
 
-除了存入资产和借用LisUSD外，用户还可以通过在Lista生态系统中质押LisUSD和BNB来赚取奖励。通过参与这些质押活动，他们会累积利息和额外奖励，显著增加他们的总收益。
+> ## 此产品正在逐步关闭
+>
+> **请勿针对其构建新的集成。** 请使用[Lista Lending](../lista-lending/README.md)——这是一个正在积极开发的借贷产品，并且有完整的[集成指南](../lista-lending/integration-patterns.md)、[合约参考](../lista-lending/contract-reference.md)和[SDK](../sdk.md)。
+>
+> CDP的大部分用户界面已经关闭。在假设之前，请验证以下每一项是否仍然有效：
+>
+> | 检查 | 当前值 | 影响 |
+> | --- | --- | --- |
+> | `Vat.Line()` | `0` | **所有新的借款将被拒绝** `Vat/ceiling-exceeded`，协议范围内，无论每个抵押品的`line`如何。 |
+> | `Interaction.whitelistMode()` | `1` | 存款被列入白名单。限制在**参与者**，而不是调用者，因此集成者不能为未列入白名单的用户存款。 |
+> | `Interaction.auctionWhitelistMode()` | `1` | 启动、购买和重置拍卖仅限于`Interaction.auctionWhitelist`。此分叉在`Clipper.take`/`redo`中添加了`auth`，因此与上游MakerDAO不同，没有开放的keeper或买家角色。 |
+>
+> 仍然有效的操作：偿还、提取抵押品，以及剩余头寸的清算。
 
-### 费用
+## 清算现有头寸
 
-1. 借款利息 —— 向Lista支付的借用lisUSD的利息。该利率是由Lista治理平台设定的固定数字。
-2. 清算罚款 —— 在清算过程中通过荷兰拍卖出售用户抵押品时，以lisUSD形式扣除的百分比。
+| 调用 | 目的 |
+| --- | --- |
+| `Interaction.locked(token, usr)` | 存入的抵押品（`ink`）。 |
+| `Interaction.borrowed(token, usr)` | 当前的lisUSD债务（`art * rate / RAY`）。当债务非零时，这会增加一个固定的100-wei缓冲，以便偿还可以完全清除头寸——偿还它返回的值，而不是您自己的计算。 |
+| `Interaction.payback(token, amount)` | 偿还lisUSD。通过`HayJoin`燃烧并减少`art`。 |
+| `Interaction.withdraw(participant, token, dink)` | 提取抵押品，前提是头寸保持安全。注意**三个**参数，第一个是`participant`——没有两个参数的形式。当抵押品没有提供者时，`msg.sender`必须等于`participant`；当有提供者时（例如slisBNB），提取必须通过该提供者进行，以便证书代币被解包——除非`MANAGER`为该抵押品启用了`providerCompatibilityMode[token]`，这还允许`participant`直接调用。请阅读映射而不是假设；目前slisBNB的值为`false`。|
 
-### 抵押比率
+当`ink * spot >= art * rate`时，头寸是安全的。`spot`已经应用了清算比率，因此它低于原始预言机价格。
 
-抵押比率是决定用户最大借款限额的用户抵押价值的百分比；其计算方式如下：(lisUSD铸造总量 / 抵押品总值 * 100)。不同资产将有不同的抵押比率，这取决于资产的波动性。抵押比率用作清算栏，以决定何时应发生清算事件。
+利息累积到Vat的每个抵押品的利率累加器中，并在偿还时以lisUSD实现——借款时不收取任何费用。利率由lisUSD价格的`DynamicDutyCalculator` AMO设置。**Jug**将`base + duty`复利，Vat仅将结果增量折入其累加器，因此请阅读`Jug.base()`和计算器自己的视图，而不是将任何单一值视为利率。`Interaction.borrowApr(token)`返回具有**20个小数位**的组合数字——即一个*百分比*，以`1e18`为比例，因此`4035532478367910700`是4.0355%；除以`1e20`得到一个分数。尽管名称如此，它将每秒利率提高到一年的秒数，因此它是一个复利年利率（APY）。
 
-### CDP模块
+对于开放给第三方的清算界面，请参阅Lista Lending上的[Liquidator Integration](../lista-lending/liquidator-integration.md)。引擎的内部结构（`Vat`、`Jug`、`Spotter`、`Dog`、`Clipper`、`Abacus`、`Vow`）的行为与它们从中分叉的MakerDAO设计相同——请使用MakerDAO文档，并参阅[Smart Contract](smart-contract.md)以获取已部署地址。
 
-以下部分将逐一介绍CDP模块的功能，解释用户如何通过提供抵押品借用LisUSD以及不同合约之间的交互。
+## 模块如何工作
 
-**a. 存入抵押品**
+这些流程与原始设计没有变化，并且是剩余头寸仍在运行的流程。每个步骤都命名了执行它的合约。
 
-1. 用户存入抵押品：用户通过将其抵押品转移到交互合约来启动存款过程。
-2. 交互：它将抵押品移动到GemJoin（类似于财政部）。
-3. GemJoin：从交互接收抵押品。
-4. Vat：Vat合约是CDP引擎的核心。它记录用户的抵押信息，并确保抵押品进入系统。
+### 存入抵押品
 
-这个过程确保用户的抵押品被安全地存入并记录在CDP模块中，允许他们继续借用LisUSD对抗他们的抵押品。
+<figure><img src="../../.gitbook/assets/image (41).png" alt=""><figcaption></figcaption></figure>
 
-**b. 借用LisUSD**
+1. 用户将抵押品转移到**Interaction**合约。
+2. **Interaction**将其转移到**GemJoin**，后者保管它。
+3. **Vat**——核心CDP引擎——记录用户的抵押品。
 
-1. 用户启动借款：用户请求借用特定金额的LisUSD对抗其存入的抵押品，通过调用borrow()。
-2. 交互：此请求由交互处理，然后与Vat通信。用户在此过程中还需支付利息，利率由Lista治理平台设定的固定数字。
-3. Vat：记录用户债务的增加，对应于借用的LisUSD和特定的抵押品。
-4. HayJoin：交互调用`exit()`来铸造指定金额的LisUSD并将其发送给用户。
-5. ListaDistributor：交互调用ListaDistributor合约的snapshot方法，记录用户对抵押品的债务值，用于计算和分配未来的奖励给用户。
+### 借入lisUSD
 
-这一系列确保用户的债务被准确记录，借用的LisUSD成功铸造并转移给用户，且按照Lista治理确定的固定利率支付利息。
+<figure><img src="../../.gitbook/assets/image (40).png" alt=""><figcaption></figcaption></figure>
 
-**c. 还款LisUSD**
+1. 用户在**Interaction**上调用`borrow()`。
+2. **Vat**记录该抵押品的债务增加。
+3. **HayJoin**铸造lisUSD并将其发送给用户。
+4. **Interaction**在**ListaDistributor**上快照头寸以进行奖励计算。
 
-1. 用户启动还款：用户通过指定要偿还的LisUSD金额对特定抵押品启动还款过程。
-2. 交互：此还款请求由交互处理。
-3. Vat：它更新用户的债务，通过偿还的LisUSD金额减少。如果用户完全偿还了他们的债务，CDP（抵押债务位置）将被关闭。
-4. HayJoin：交互调用`join()`方法，从用户账户中烧毁LisUSD。
-5. ListaDistributor：交互调用ListaDistributor合约的snapshot方法，记录用户对抵押品的债务值，用于计算和分配未来的奖励给用户。
+此处不收取利息——它在Vat中累积，并在偿还时实现。
 
-这个过程确保用户的债务被准确减少或清除，且相应金额的LisUSD被烧毁，有效地从流通中移除。
+### 偿还lisUSD
 
-**d. 提取抵押品**
+<figure><img src="../../.gitbook/assets/image (39).png" alt=""><figcaption></figcaption></figure>
 
-1. 用户启动提款：用户通过指定他们希望提取的抵押品金额来启动提款过程。
-2. 交互：提款请求由交互合约处理。请注意，如果用户已借用LisUSD并尚未还款，他们可以提取的抵押品金额将少于原始存款金额，因为一些抵押品必须保留以确保未偿还债务的安全。
-3. GemJoin：交互调用`exit()`方法，将指定金额的抵押品从GemJoin转移回用户。
-4. Vat：它记录用户的抵押信息，更新系统以反映抵押品已离开系统。
+1. 用户指定要偿还的抵押品金额。
+2. **Vat**减少记录的债务；全额偿还关闭头寸。
+3. **HayJoin**燃烧lisUSD。
+4. **Interaction**在**ListaDistributor**上快照新的余额。
 
-这个过程确保用户的抵押品被准确提取并返回，同时系统记录抵押状态的变化。
+### 提取抵押品
 
-**e. 质押LisUSD**
+<figure><img src="../../.gitbook/assets/image (35).png" alt=""><figcaption></figcaption></figure>
 
-1. 用户启动质押：用户调用`join()`方法来质押指定金额的LisUSD。这笔LisUSD随后被转移到Jar合约。
-2. Jar：Jar合约记录以下信息：
-   1. 用户的质押LisUSD余额。
-   2. 增加所有用户质押的LisUSD总量。
-   3. 用户质押LisUSD的时间。
-3. ListaDistributor：ListaDistributor从Jar中获取用户的余额快照。它将用于计算和分配未来的奖励给用户。
+1. 用户指定要提取的金额。
+2. **Interaction**检查头寸是否保持安全——在有未偿债务的情况下，只有部分存款可以提取。
+3. **GemJoin**将抵押品转回。
+4. **Vat**记录抵押品离开系统。
 
-**f. 取消质押LisUSD**
+### 清算
 
-1. 用户启动取消质押：用户调用`exit()`方法来取消质押指定金额的LisUSD。
-2. Jar：这笔LisUSD及任何奖励金额被转回用户。它还记录以下信息：
-   1. 用户的质押LisUSD余额减少了未质押的金额X。
-   2. 所有用户质押的LisUSD总量减少了未质押的金额X。
-   3. 保存提款记录。
-3. ListaDistributor：ListaDistributor获取用户的余额快照并记录用户的质押LisUSD余额，用于未来奖励计算。
+<figure><img src="../../.gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-这个过程用户将只与Jar合约互动，它负责管理和分配利息给质押LisUSD的参与者。
+> **此分叉中的拍卖买方是有权限的。** `Clipper.take`和`Clipper.redo`携带`auth`，`Interaction.buyFromAuction`被列入白名单，因此与上游MakerDAO不同，第三方不能启动、竞标或重启拍卖。下面的示例解释了机制；这不是集成路径。对于开放给第三方的清算界面，请参阅[Liquidator Integration](../lista-lending/liquidator-integration.md)。
 
-**g. 清算**
+一旦抵押品价值在应用抵押比率后低于债务，头寸就变得可清算：
 
-流程图显示了如何启动拍卖。
+* 抵押品价格$2，抵押比率66% → 有效单价`2 × 0.66 = $1.32`
+* 存入10单位（`$20`），借款限额`20 × 0.66 = $13.2`，借入`13.2 lisUSD`
+* 价格降至`$1.80` → 有效单价`1.8 × 0.66 = $1.188`，头寸价值`1.188 × 10 = $11.88`
+* `13.2 − 11.88 = $1.32`——短缺使其可清算
 
-**g.1 如何启动拍卖**
+拍卖然后从这些数字准备：
 
-确定价格和比率：
+* 所有10单位的抵押品进入荷兰拍卖
+* 清算罚金（治理设置）：债务的13% → 覆盖`13.2 × 1.13 = $14.916`
+* 缓冲（治理设置）：2% → 起始价格`1.8 × 1.02 = $1.836`
 
-* 单位抵押品的价格：$2
-* 抵押比率：66%
-* 基于抵押比率的抵押品价格：2*0.66=$1.322
+<figure><img src="../../.gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-用户存款和借款限额：
+然后价格随时间下降——在3600秒窗口的600秒时，`1.836 × ((3600 − 600) / 3600) = $1.53`。拍卖在达到治理设置的任一界限时暂停：**tail**（经过时间）或**cusp**（剩余起始价格的份额）。暂停的拍卖必须重启，重启者获得一个固定的**tip**加上一个动态的**chip**。请从`Clipper`读取抵押品的实时值，而不是假设它们。
 
-* 假设用户存入10单位的抵押品：10*2=$20
-* 借款限额：20*0.66=$13.2
-* 假设用户借用$13.2的lisUSD：13.2 lisUSD
+## lisUSD质押
 
-监控抵押品价格下降：
+**Jar**（`jar.sol`）已弃用。活跃的lisUSD储蓄率产品是**LisUSDPoolSet** / **EarnPool**堆栈——请参阅[Stable Pool (PSM)](../../introduction/collateral-debt-position-lisusd/lisusd/stable-pool-price-stability-module-psm.md)和[lisUSD Saving Rate (LSR)](../../introduction/collateral-debt-position-lisusd/lisusd/lisusd-saving-rate-lsr.md)。该层与上述CDP借贷引擎分开，并未与其一起关闭。
 
-* 假设1单位抵押品的价格下降到：$1.8
-* 带安全边际的抵押单位价格：1.8*0.66=$1.188
-* 带安全边际的当前抵押品价值：1.188*10=$11.88
-* 确定清算状态：
-  * 13.2-11.88=$1.32（正差值表明需要清算）
+## 另请参阅
 
-准备清算拍卖：
-
-* 进入荷兰拍卖的抵押品数量：10单位
-* 清算罚款（由Lista治理固定）：债务的13%
-* 拍卖中需覆盖的债务：13.2*1.13=$14.916
-* 缓冲（与清算罚款类似的百分比，由Lista治理固定）：2%
-* 拍卖起始价格（顶部）：1.8*1.02=$1.836
-
-触发拍卖：
-
-* 有人触发拍卖并获得小费+筹码作为奖励（稍后详述）。
-
-**g.2 从拍卖购买**
-
-流程图显示用户如何从拍卖中购买抵押品。
-
-示例：
-
-拍卖开始和价格下降：
-
-* 拍卖开始，价格逐渐下降。
-* 清算人可以参与购买定制数量的清算抵押品。
-* 价格线性下降（受特定条件的干扰）：
-  * 公式：$$f(x) = x * e^{2 pi i \xi x}$$
-  * 示例：1.836*((3600-600)/3600)=$1.53
-
-暂停拍卖的条件：
-
-* 拍卖可以因为以下两个条件之一而暂停：
-  * 尾部（经过特定时间，由Lista治理固定）
-  * 尖峰（价格下降的百分比；拍卖起始价格的40%，由Lista治理固定）
-* 一旦满足任一要求，拍卖将被重新启动。
-
-**g.3 重新启动拍卖**
-
-等待有人重新启动拍卖。重新启动者获得小费+筹码作为奖励。
-
-* 小费（固定费用，由Lista治理固定）：5 lisUSD
-* 筹码（动态费用，由Lista治理固定）：0 lisUSD
+- [Flash Loan](flash-loan.md) — lisUSD的ERC-3156闪电铸造。

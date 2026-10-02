@@ -6,6 +6,6 @@ Lista Lending 支持将代币化股票 (bStocks) 作为抵押品，允许用户�
 
 针对这些资产可用的贷款包括：USDT, USD1, U 和 USDC（适用于某些市场）。
 
-bStocks Lending 的工作方式与 Lista Lending 相同，提供 7/24 全天候服务。bStocks Lending 的价格数据来自 Atlas Oracle。
+bStocks Lending 的工作原理与 Lista Lending 相同，提供 7/24 的服务。bStocks Lending 的价格信息来自 Atlas Oracle。
 
-请注意，Lista 保留在紧急情况下暂停某些市场的某些功能的权利。
+请注意，Lista 保留在紧急情况下暂停某些市场某些功能的权利。

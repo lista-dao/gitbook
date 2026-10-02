@@ -1,18 +1,13 @@
 # 信用贷款
 
-## 概览
+## 概述
 
-`CreditBroker` 是一个基于 LendingBroker 模式构建的专门的固定期限、固定利率借贷经纪人，并通过信用限额门控进行了扩展。
+Lista Credit 提供固定期限、固定利率的贷款，其规模由信用额度而非抵押品决定。资格和能力在链下评估，并作为 Merkle 根发布在链上。
 
-它使 Lista DAO 能够提供贷款，其中用户资格和借款能力来自于链下信用评分，通过 Merkle 根在链上表示。
+合约是 `CreditBroker`，一个扩展了信用额度门槛的 `LendingBroker`。
 
-与标准的以抵押品为基础的 Moolah 市场不同，信用贷款使用 `CreditToken` 作为抵押品表示：
+与标准的基于抵押品的 Moolah 市场不同，信用贷款使用 `CreditToken` 作为抵押品的表示：
 
-* `CreditToken` 是不可转让的。
-* `1 CreditToken = 1 单位的信用限额 = 1 USD 借款能力`。
-
-## 内容
-
-* [贷款生命周期](loan-lifecycle.md)
-* [坏账处理](bad-debt-handling.md)
-* [智能合约](smart-contract.md)
+* `CreditToken` 有 **18 位小数**，因此 $10,000 的额度是 `10000e18`，而不是 `10000`。
+* `CreditToken` 除了被列入白名单的 `TRANSFERER`（经纪人和 Moolah）外是不可转让的。请参阅 [贷款生命周期](loan-lifecycle.md)。
+* `1 CreditToken = 1 单位信用额度 = 1 美元借款能力`。
