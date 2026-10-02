@@ -160,6 +160,18 @@
         "cols": []
       },
       {
+        "section": "",
+        "name": "YieldAccount",
+        "address": "0xFD4057Cd72A31A080A0f6CF234a922F2f647C608",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SubStaker",
+        "address": "0x571a25497A28A3424ad652f665e63219070195E1",
+        "cols": []
+      },
+      {
         "section": "Vaults",
         "name": "MoolahVault(WBNB)",
         "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
@@ -1717,6 +1729,18 @@
         "section": "",
         "name": "QuoterV2",
         "address": "0x6B61a2C67c45B40d754e4e7c1c565590685C03E2",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0x8b94363fbBbBcdae25832807BE39e8e2c60a6e15",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0x9f0E53D3aC0dc7aEaAF36866cD1A9EEbE16Bf4a1",
         "cols": []
       }
     ]
