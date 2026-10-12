@@ -1,11 +1,13 @@
 # 审计报告
 
-Lista 的所有核心智能合约都经过知名第三方安全公司的严格审计。这些独立评估确保了我们协议的完整性和抵御潜在漏洞的能力。
+Lista 的所有核心智能合约均经过知名第三方安全公司的严格审计。这些独立评估确保了我们协议的完整性和抵御潜在漏洞的能力。
 
 **2024 - 至今**
 
 | 功能 | 审计 |
 | ------- | ------ |
+| Lista Dao Revenue Collector ss Factory Provenance | [2026-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/ListaDao-RevenueCollector-ssFactoryProvenance-AuditReport-20261009.pdf) |
+| Lista V3 Factory Owner | [HashDit · 2026-10](https://github.com/lista-dao/lista-v3/blob/master/audits/261006-HashDit-Lista-V3-FactoryOwner-Report.pdf) |
 | Atlas Multi Feed Adaptor | [HashDit · 2026-09](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AtlasMultiFeedAdaptor-20260916.pdf) |
 | Credit Broker Fix | [HashDit · 2026-09](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-CreditBrokerFix-AuditReport-20260911.pdf) |
 | Sub Staker | [Bailsec · 2026-09](https://github.com/lista-dao/synclub-contracts/blob/master/audit/Bailsec-SubStaker-Final-Report-20260928.pdf) |
