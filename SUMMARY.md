@@ -35,7 +35,7 @@
     * [lisUSD 储蓄率 (LSR)](introduction/collateral-debt-position-lisusd/lisusd/lisusd-saving-rate-lsr.md)
     * [D3M - 直接存款模块](introduction/collateral-debt-position-lisusd/lisusd/d3m-direct-deposit-module.md)
     * [算法市场操作 (AMO)](introduction/collateral-debt-position-lisusd/lisusd/algorithmic-market-operations-amo/README.md)
-      * [当前 vs 预期借款利率](introduction/collateral-debt-position-lisusd/lisusd/algorithmic-market-operations-amo/current-vs-expected-borrow-rates.md)
+      * [当前与预期借款利率](introduction/collateral-debt-position-lisusd/lisusd/algorithmic-market-operations-amo/current-vs-expected-borrow-rates.md)
     * [lisUSD 的流动性](introduction/collateral-debt-position-lisusd/lisusd/lisusds-liquidity.md)
   * [技术指南](introduction/collateral-debt-position-lisusd/technical-guide.md)
 * [RWA 市场](introduction/rwa-markets/README.md)
@@ -56,7 +56,8 @@
 
 * [LISTA](governance/lista/README.md)
   * [LISTA 分配](governance/lista/lista-distribution.md)
-  * [LISTA 持有者权益](governance/lista/lista-holder-benefits.md)
+  * [LISTA 持有者福利](governance/lista/lista-holder-benefits/README.md)
+    * [LISTA 持有者 VIP](governance/lista/lista-holder-benefits/lista-holder-vip.md)
   * [治理](governance/lista/governance/README.md)
     * [治理提案模板](governance/lista/governance/governance-proposal-template.md)
   * [LISTA 永久锁定 (LIP-016)](governance/lista/permanent-locking-of-lista-lip-016.md)
@@ -78,7 +79,7 @@
   * [如何交换 slisBNB](user-guide/liquid-staking-slisbnb/how-to-swap-for-slisbnb.md)
   * [铸造 slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
   * [从 slisBNB 赎回 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
-  * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
+  * [将 slisBNB 桥接到 Ethereum](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
 * [智能借贷](user-guide/smart-lending.md)
 * [Lista Lending](user-guide/lista-lending/README.md)
   * [借款和还款](user-guide/lista-lending/borrowing-and-repaying.md)
@@ -116,7 +117,7 @@
   * [智能合约](for-developer/liquid-staking-slisbnb/smart-contract.md)
   * [跨链桥](for-developer/liquid-staking-slisbnb/cross-chain-bridge.md)
 * [slisBNBx](for-developer/clisbnb/README.md)
-  * [铸造比率逻辑](for-developer/clisbnb/minting-ratio-logic.md)
+  * [铸造比例逻辑](for-developer/clisbnb/minting-ratio-logic.md)
   * [代币生命周期](for-developer/clisbnb/token-lifecycle.md)
   * [委托](for-developer/clisbnb/delegation.md)
   * [智能合约](for-developer/clisbnb/smart-contract.md)
@@ -138,7 +139,7 @@
     * [BSC 智能借贷](for-developer/lista-lending/smart-contract-bsc-smart-lending.md)
     * [BSC Oracles](for-developer/lista-lending/smart-contract-bsc-oracles.md)
     * [BSC 信用](for-developer/lista-lending/smart-contract-bsc-credit.md)
-    * [以太坊](for-developer/lista-lending/smart-contract-ethereum.md)
+    * [Ethereum](for-developer/lista-lending/smart-contract-ethereum.md)
 * [V3 Dex](for-developer/dex/README.md)
   * [架构与机制](for-developer/dex/mechanics.md)
   * [智能合约](for-developer/dex/smart-contract.md)
@@ -163,7 +164,7 @@
 * [lisAster](for-developer/lisaster/README.md)
   * [智能合约](for-developer/lisaster/smart-contract.md)
 
-## 合作伙伴
+## 合作伙伴关系
 
 * [品牌工具包](partnerships/brand-kit.md)
 * [我们的渠道](partnerships/our-channels.md)
