@@ -35,6 +35,7 @@
 | BrokerInterestLockBuffer (U vault) | | | | | 0x8c51220e29684BbAE2bF4412952C47d090BC6B3E |
 | BrokerInterestLockBuffer (USDT vault) | | | | | 0x23c3E7f13C97011b84dAB247587425F55ffeD137 |
 | BrokerInterestLockBuffer (WBNB vault) | | | | | 0xCa5D2d07243a3E9ab58A2b6C924a67F060EC6371 |
+| LendingBroker (asUSDF/U) | asUSDF/U | 94.50% | 3M | 0x2a89ccbb362848532f189cf2b51e794a16db53d2a06ec863827cf2eea48c2da4 | 0x34dd80f8cAdF200e239c054E3D9fC53528A9Ed9a |
 
 ## Broker Auxiliary Contracts
 
