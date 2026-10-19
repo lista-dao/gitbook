@@ -1671,37 +1671,49 @@
         "section": "",
         "name": "ListaV3Factory",
         "address": "0xcb010ed373523942706F730b89792aA1C1597b20",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "ListaV3FactoryOwner",
         "address": "0x2BBa5BdED4DD4A597f7BAdC256005C9Aa662Df06",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "NonfungibleTokenPositionDescriptor",
         "address": "0xfa9f54098C64e7Dc48B9B6402F26441159bA83c7",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "NonfungiblePositionManager",
         "address": "0x31677537685EBDF1B695eDa46eC385845395f5dD",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "SwapRouter",
         "address": "0xc43D58722f29390e683c0721285A6c11B8aCD4DE",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "QuoterV2",
         "address": "0x6B61a2C67c45B40d754e4e7c1c565590685C03E2",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
@@ -1739,13 +1751,17 @@
         "section": "",
         "name": "ListaV2Factory",
         "address": "0x28F5E6C71C7541b1C6523351AE331CcAfC443626",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "ListaV2Router02",
         "address": "0x3CcbB50C93ffCdA64e58Cc9E299791Fd85A41941",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       }
     ]
   }
