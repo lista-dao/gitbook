@@ -5,15 +5,15 @@ All contracts below are deployed on **BNB Smart Chain** (chain ID `56`).
 | Contract | Address | Pair / Fee / Notes |
 | -------- | ------- | ------------------ |
 | ProxyAdmin | 0x97458aE48Fc8362077c30930bc6C004B46a9312f | NPM proxy admin |
-| ListaV3Factory | 0xcb010ed373523942706F730b89792aA1C1597b20 |  |
-| ListaV3FactoryOwner | 0x2BBa5BdED4DD4A597f7BAdC256005C9Aa662Df06 |  |
-| NonfungibleTokenPositionDescriptor | 0xfa9f54098C64e7Dc48B9B6402F26441159bA83c7 |  |
-| NonfungiblePositionManager | 0x31677537685EBDF1B695eDa46eC385845395f5dD |  |
-| SwapRouter | 0xc43D58722f29390e683c0721285A6c11B8aCD4DE |  |
-| QuoterV2 | 0x6B61a2C67c45B40d754e4e7c1c565590685C03E2 |  |
+| ListaV3Factory | 0xcb010ed373523942706F730b89792aA1C1597b20 | - |
+| ListaV3FactoryOwner | 0x2BBa5BdED4DD4A597f7BAdC256005C9Aa662Df06 | - |
+| NonfungibleTokenPositionDescriptor | 0xfa9f54098C64e7Dc48B9B6402F26441159bA83c7 | - |
+| NonfungiblePositionManager | 0x31677537685EBDF1B695eDa46eC385845395f5dD | - |
+| SwapRouter | 0xc43D58722f29390e683c0721285A6c11B8aCD4DE | - |
+| QuoterV2 | 0x6B61a2C67c45B40d754e4e7c1c565590685C03E2 | - |
 | ListaV3Pool | 0xd50154428912A887d9a405Bb515d2Ef11307228d | WBNB/slisBNB fee= 1BP |
 | ListaV3Pool | 0x9f0E53D3aC0dc7aEaAF36866cD1A9EEbE16Bf4a1 | slisBNB/WBNB fee = 5BP |
 | ListaV3Pool | 0x46eE2C5F2b9De7C6e08Ffe3Bde8Dd88A46D6f568 | USDT/USDC fee= 0.02BP |
 | ListaV3Pool | 0x8b94363fbBbBcdae25832807BE39e8e2c60a6e15 | lisUSD/USDT fee= 1BP |
-| ListaV2Factory | 0x28F5E6C71C7541b1C6523351AE331CcAfC443626 |  |
-| ListaV2Router02 | 0x3CcbB50C93ffCdA64e58Cc9E299791Fd85A41941 |  |
+| ListaV2Factory | 0x28F5E6C71C7541b1C6523351AE331CcAfC443626 | - |
+| ListaV2Router02 | 0x3CcbB50C93ffCdA64e58Cc9E299791Fd85A41941 | - |
