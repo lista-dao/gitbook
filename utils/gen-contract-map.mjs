@@ -59,7 +59,10 @@ function parseMarkdown(text) {
     if (!/^\s*\|/.test(line)) continue;
     const cells = line.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map((c) => c.trim());
     if (cells.every((c) => /^-{2,}$/.test(c) || c === '')) continue; // separator
-    const addr = lastAddr(line);
+    // FIRST address-bearing cell, not the last on the line: with a trailing notes column
+    // (V3 Dex's "Pair / Fee / Notes") a note mentioning a 0x… must not become the address.
+    // Mirrors rowAddress() in sync-contracts.mjs.
+    const addr = cells.map(lastAddr).find(Boolean) || null;
     if (!addr) continue; // header or non-data row (no address)
     const name = cleanName(cells[0]);
     if (!name) continue;

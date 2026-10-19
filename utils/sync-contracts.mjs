@@ -82,13 +82,17 @@ const SOURCES = {
   'rwa-eth':         { notionPageId: '3791d713729f8193ac18dd1f7e54fce9', targets: ['rwa'], default: 'rwa',
                        excludeNames: [/\b(DEFAULT_ADMIN|MANAGER|BOT|PAUSER|feeReceiver)\b/i, /tether gold|cobofund|fundtoken/i] },
   'lisaster':        { notionPageId: '36d1d713729f802ea39bef0849eb39a3', targets: ['lisaster'],     default: 'lisaster' },
-  // V3 Dex (BSC): a flat 2-col list (Contract | Address) with a free-text note in a 3rd column.
-  // No fullRow — the address is the MIDDLE column in Notion (note is last), so a full-row insert
-  // would never align (insertRow needs the address in the table's last column); name+address only.
-  // Note: two "ListaV3Pool" rows share a name (different pools/addresses) — fine on insert (keyed
-  // by address); gen-contract-map will warn on the dup, and a future address CHANGE there is
-  // reported for review rather than guessed. The pool-pair note is dropped (not a synced column).
-  'v3-dex-bsc':      { notionPageId: '3871d713729f803da800f505ae8c78dc', targets: ['dex-bsc'],      default: 'dex-bsc' },
+  // V3 Dex (BSC): Contract | Address | note, where the note is the pool's pair + fee tier
+  // ("WBNB/slisBNB fee= 1BP"). GitBook mirrors that layout as | Contract | Address | Pair / Fee |,
+  // so fullRow is safe here even though the address is the MIDDLE column — insertRow finds the
+  // doc's address column from the existing rows instead of assuming it's last.
+  // syncCols additionally keeps that column in step on EXISTING rows (see applyColumns). It is
+  // opt-in and separate from fullRow: bsc-brokers is fullRow but its Notion rows don't line up
+  // row-for-row with the doc (2-col vault rows vs the 6-col table), so enabling it there would
+  // only produce review noise.
+  // Note: several "ListaV3Pool" rows share a name (different pools) — fine on insert (keyed by
+  // address), and the Pair / Fee column is what disambiguates them for a later address CHANGE.
+  'v3-dex-bsc':      { notionPageId: '3871d713729f803da800f505ae8c78dc', targets: ['dex-bsc'],      default: 'dex-bsc', fullRow: true, syncCols: true },
   // clisbnb/slisBNBx page is OUT OF SCOPE: those contracts live in the frozen CDP section of
   // Lista Mainnet Contracts and will not change. No Notion sync source is configured for that page.
 };
@@ -120,6 +124,37 @@ export function applyReplacements(text, repls) {
     changed.push({ name: r.name, from: r.current, to: r.fresh });
   }
   return { text: out, changed };
+}
+
+// --- keep the EXTRA columns of existing rows in step with the source --------
+// Address replacement alone leaves a row's other columns (e.g. the V3 Dex "Pair / Fee"
+// note, the brokers LLTV/Cap) frozen at whatever was first written. For fullRow sources
+// the Notion row IS the doc row, so copy the other cells over — but only when the two
+// line up exactly: same column count, same address column, same name. Anything else is
+// reported for review, never guessed. Name and address cells are never touched here
+// (the address is applyReplacements' job, and the name anchors the match).
+const splitRow = (l) => l.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map((c) => c.trim());
+export function applyColumns(text, updates) {
+  const lines = text.split('\n');
+  const changed = [], review = [];
+  for (const u of updates) {
+    const re = new RegExp(u.address, 'i');
+    const hits = lines.reduce((a, l, i) => (/^\s*\|/.test(l) && re.test(l) ? [...a, i] : a), []);
+    if (hits.length !== 1) { review.push(`${u.name}: address matches ${hits.length} table row(s), not 1`); continue; }
+    const doc = splitRow(lines[hits[0]]);
+    const src = u.cells.map((c) => String(c).replace(/\|/g, '\\|').replace(/\s+/g, ' ').trim());
+    const docAddrCol = doc.findIndex((c) => lastAddr(c)); // lastAddr: a 64-hex Market ID is not the address column
+    const srcAddrCol = src.findIndex((c) => lastAddr(c));
+    if (doc.length !== src.length || docAddrCol !== srcAddrCol || lc(doc[0]) !== lc(src[0])) {
+      review.push(`${u.name}: layout mismatch (doc ${doc.length} col/addr@${docAddrCol}, source ${src.length} col/addr@${srcAddrCol})`);
+      continue;
+    }
+    const out = doc.map((c, j) => (j === 0 || j === docAddrCol || c === src[j] ? c : src[j]));
+    if (out.every((c, j) => c === doc[j])) continue; // already in step
+    lines[hits[0]] = `| ${out.join(' | ')} |`;
+    changed.push({ name: u.name, from: doc.join(' | '), to: out.join(' | ') });
+  }
+  return { text: lines.join('\n'), changed, review };
 }
 
 // Pick which section a new contract belongs in: the section whose existing rows
@@ -189,13 +224,23 @@ export function insertRow(text, format, name, address, section = '', cells = nul
   while (end < lines.length && /^\s*\|/.test(lines[end])) end++;
   const clean = (s) => ` ${String(s).replace(/\|/g, '\\|').replace(/\s+/g, ' ').trim()} `; // a raw '|' would break the table
   // fullRow: write ALL columns from the source row — but ONLY when it lines up with this
-  // table (same column count, name in the first column, address in the last). Otherwise
+  // table (same column count, name in the first column, address in the address column). Otherwise
   // fall back to name+address so a misaligned source can never scatter data into wrong columns.
+  // Which column holds the address in THIS table: usually the last, but e.g. the V3 Dex
+  // table is | Contract | Address | Pair / Fee |. Read it off an existing data row — and if
+  // no row has one, the layout is unknown, so throw rather than assume the last column
+  // (on a 3-col dex table that assumption would write the address into the notes column).
+  let addrCol = -1;
+  for (let i = sep + 1; i < end; i++) {
+    const j = splitRow(lines[i]).findIndex((c) => lastAddr(c)); // lastAddr, not ADDR: a 64-hex Market ID must not count as the address column
+    if (j >= 0) { addrCol = j; break; }
+  }
+  if (addrCol === -1) throw new Error(`insertRow: no existing row with an address, cannot tell which column holds it (section="${section}", name="${name}")`);
   const aligned = Array.isArray(cells) && cells.length === cols
     && cells[0]?.trim() === name.trim()
-    && lc(lastAddr(cells[cols - 1]) || '') === lc(address);
+    && lc(lastAddr(cells[addrCol]) || '') === lc(address);
   const out = aligned ? cells.map(clean) : Array(cols).fill(' ');
-  if (!aligned) { out[0] = clean(name); out[cols - 1] = clean(address); }
+  if (!aligned) { out[0] = clean(name); out[addrCol] = clean(address); }
   lines.splice(end, 0, `|${out.join('|')}|`);
   return lines.join('\n');
 }
@@ -262,17 +307,29 @@ function plan(map, sources) {
   const pageEdits = {};       // page -> { repls:[], inserts:[] }
 
   for (const [page, v] of Object.entries(map)) {
-    const entries = (PAGE_SOURCES[page] || []).flatMap((s) => sources[s] || []); // a page may have >1 source
-    const byAddr = new Set(entries.map((e) => lc(e.address)));
-    const repls = [], changeReview = [];
+    // tag each entry with its source so the fullRow (column-sync) sources can be told apart
+    const entries = (PAGE_SOURCES[page] || []).flatMap((s) => (sources[s] || []).map((e) => ({ ...e, _src: s }))); // a page may have >1 source
+    const byAddr = new Map(entries.map((e) => [lc(e.address), e]));
+    // An address listed on MORE THAN ONE source row can't say which row's columns are the
+    // truth (Map keeps the last). Address matching is unaffected, but column sync must not
+    // guess — skip and report. (Not possible for the address itself: duplicates are the
+    // same address by definition.)
+    const dupSrc = new Set(entries.map((e) => lc(e.address)).filter((a, i, all) => all.indexOf(a) !== i));
+    const colUpdate = (c, e) => {
+      if (!SOURCES[e._src]?.syncCols || !e.cells) return;
+      if (dupSrc.has(lc(e.address))) { colReview.push(`${c.name}: ${e.address} is on >1 source row (ambiguous columns)`); return; }
+      colUpdates.push({ name: c.name, address: e.address, cells: e.cells });
+    };
+    const repls = [], changeReview = [], colUpdates = [], colReview = [];
     for (const c of v.contracts) {
-      if (byAddr.has(lc(c.address))) { consumed.add(lc(c.address)); continue; } // steady
+      const steady = byAddr.get(lc(c.address));
+      if (steady) { consumed.add(lc(c.address)); colUpdate(c, steady); continue; }
       const gitTok = tokens(`${c.section} ${c.name} ${(c.cols || []).join(' ')}`);
       const cand = entries.filter((e) => !docAddrs.has(lc(e.address)) && !consumed.has(lc(e.address)) && subset(tokens(e.name), gitTok));
-      if (cand.length === 1) { repls.push({ name: c.name, current: c.address, fresh: cand[0].address }); consumed.add(lc(cand[0].address)); }
+      if (cand.length === 1) { repls.push({ name: c.name, current: c.address, fresh: cand[0].address }); consumed.add(lc(cand[0].address)); colUpdate(c, cand[0]); }
       else changeReview.push(`${c.name} (${cand.length} candidates)`);
     }
-    (pageEdits[page] ??= { repls: [], inserts: [] }).repls = repls;
+    Object.assign(pageEdits[page] ??= { repls: [], inserts: [] }, { repls, colUpdates, colReview });
     if (repls.length || changeReview.length) {
       report.push(`\n### ${page}\n- address changes: ${repls.length}${repls.length ? ' — ' + repls.map((r) => r.name).join(', ') : ''}`);
       if (changeReview.length) report.push(`- ⚠️ address gone from Notion, needs review: ${changeReview.join(', ')}`);
@@ -426,6 +483,64 @@ function selftest() {
     const o6j = insertRow(tbl6, 'markdown', 'Safe', A6, '', ['Safe', 'junk', A6]); // only 3 cells for a 6-col table
     const row6j = o6j.split('\n').find((l) => l.includes('Safe') && l.includes(A6));
     ok(row6j && !row6j.includes('junk'), 'misaligned fullRow cells are ignored (safe fallback to name+address)');
+
+    // 6j2: the address column is found with lastAddr, so the brokers' 64-hex Market ID column
+    // is NOT mistaken for it (a plain name+address insert must still land in the last column)
+    const o6j2 = insertRow(tbl6, 'markdown', 'Plain', A6).split('\n').find((l) => l.includes('Plain'));
+    ok(splitRow(o6j2).findIndex((c) => c === A6) === 5, 'address lands in the real address column, not the Market ID column');
+
+    // 6k: V3 Dex shape — address is the MIDDLE column; fullRow must still align and carry the note
+    const tbl6k = '| Contract | Address | Pair / Fee |\n| --- | --- | --- |\n| ListaV3Pool | 0x' + '7'.repeat(40) + ' | WBNB / slisBNB, fee 1BP |';
+    const o6k = insertRow(tbl6k, 'markdown', 'ListaV3Pool', A6, '', ['ListaV3Pool', A6, 'lisUSD/USDT fee= 1BP']);
+    const row6k = o6k.split('\n').find((l) => l.includes(A6));
+    ok(row6k === `| ListaV3Pool | ${A6} | lisUSD/USDT fee= 1BP |`, 'fullRow with address in the middle column keeps the Pair / Fee note');
+  }
+
+  console.log('\n[6b] applyColumns: existing rows keep their extra columns in step with the source');
+  {
+    const A = '0x' + 'a'.repeat(40), B = '0x' + 'b'.repeat(40);
+    const tbl = `| Contract | Address | Pair / Fee / Notes |\n| --- | --- | --- |\n| ListaV3Pool | ${A} | WBNB/slisBNB fee= 1BP |\n| ListaV3Pool | ${B} | USDT/USDC fee= 1BP |`;
+
+    // 6b-a: a changed note is rewritten; the untouched row stays byte-identical
+    const r1 = applyColumns(tbl, [{ name: 'ListaV3Pool', address: B, cells: ['ListaV3Pool', B, 'USDT/USDC fee= 0.02BP'] }]);
+    ok(r1.changed.length === 1 && r1.text.includes('USDT/USDC fee= 0.02BP') && r1.text.includes(`| ListaV3Pool | ${A} | WBNB/slisBNB fee= 1BP |`),
+       'changed note is rewritten, sibling row untouched');
+
+    // 6b-b: already in step => no edit at all (the steady-state 99% case, no churn)
+    const r2 = applyColumns(tbl, [{ name: 'ListaV3Pool', address: A, cells: ['ListaV3Pool', A, 'WBNB/slisBNB fee= 1BP'] }]);
+    ok(r2.changed.length === 0 && r2.text === tbl, 'in-step row produces no edit');
+
+    // 6b-c: the doc's address cell is never overwritten by the source's (applyReplacements owns it)
+    const r3 = applyColumns(tbl, [{ name: 'ListaV3Pool', address: A, cells: ['ListaV3Pool', '0x' + 'c'.repeat(40), 'new note'] }]);
+    ok(r3.text.includes(`| ListaV3Pool | ${A} | new note |`), 'address cell is left alone (only extra columns sync)');
+
+    // 6b-f: a renamed source row no longer anchors to the doc row => reported, never written
+    const r6 = applyColumns(tbl, [{ name: 'ListaV3Pool', address: A, cells: ['RenamedPool', A, 'new note'] }]);
+    ok(r6.changed.length === 0 && r6.review.length === 1 && r6.text === tbl, 'name mismatch is reported, not guessed');
+
+    // 6b-g: a source row with an address appearing TWICE in the source can't say which
+    // columns are the truth -> no colUpdate is scheduled, it's reported instead
+    const dupMap = { 'dex-bsc': { file: map['dex-bsc'].file, format: 'markdown', contracts: [{ section: '', name: 'ListaV3Pool', address: A, cols: ['x'] }] } };
+    const dupSrc = { 'v3-dex-bsc': [
+      { name: 'ListaV3Pool', address: A, cells: ['ListaV3Pool', A, 'note one'] },
+      { name: 'ListaV3Pool', address: A, cells: ['ListaV3Pool', A, 'note two'] },
+    ] };
+    const dp = plan(dupMap, dupSrc).pageEdits['dex-bsc'];
+    ok((dp.colUpdates || []).length === 0 && (dp.colReview || []).length === 1, 'an address on >1 source row is reported, no column guessed');
+
+    // 6b-h: a table whose rows hold no address at all -> layout unknown -> insert throws
+    let threwNoAddr = false;
+    try { insertRow('| Contract | Address | Notes |\n| --- | --- | --- |\n| Foo |  | bar |', 'markdown', 'New', A); } catch { threwNoAddr = true; }
+    ok(threwNoAddr, 'no existing address => address column unknown => throws (never assumes the last column)');
+
+    // 6b-d: layout mismatch (different column count) => reported, never written
+    const r4 = applyColumns(tbl, [{ name: 'ListaV3Pool', address: A, cells: ['ListaV3Pool', 'x', A] }]);
+    ok(r4.changed.length === 0 && r4.review.length === 1 && r4.text === tbl, 'layout mismatch is reported, not guessed');
+
+    // 6b-e: an address on 2 table rows is ambiguous => reported, never written
+    const dup = tbl + `\n| OtherThing | ${A} | something |`;
+    const r5 = applyColumns(dup, [{ name: 'ListaV3Pool', address: A, cells: ['ListaV3Pool', A, 'new'] }]);
+    ok(r5.changed.length === 0 && r5.review.length === 1 && r5.text === dup, 'ambiguous address is reported, not guessed');
   }
 
   console.log('\n[7] oracle quote-split + base-name section routing');
@@ -493,19 +608,28 @@ async function main() {
   const sources = await loadSources(verify);
   const { pageEdits, report } = plan(map, sources);
 
-  let changed = 0, added = 0;
+  let changed = 0, added = 0, cols = 0;
   for (const [page, ed] of Object.entries(pageEdits)) {
     const v = map[page]; if (!v) throw new Error(`route to unknown page "${page}" — refusing to silently drop its edits`);
     let text = readFileSync(v.file, 'utf8');
     const r = applyReplacements(text, ed.repls); text = r.text; changed += r.changed.length;
+    // after the address swap, so a just-changed row is matched by its FRESH address
+    const cu = v.format === 'markdown' ? applyColumns(text, ed.colUpdates || []) : { text, changed: [], review: [] };
+    const colReview = [...(ed.colReview || []), ...cu.review];
+    // All-or-nothing per page: if ANY intended column update couldn't be applied, apply NONE
+    // of them. A half-synced table is worse than an untouched one, and the report says why.
+    if (!colReview.length) { text = cu.text; cols += cu.changed.length; }
+    const applied = colReview.length ? 0 : cu.changed.length;
+    if (applied) report.push(`\n### ${page} columns\n` + cu.changed.map((c) => `- ${c.name}: \`${c.from}\` -> \`${c.to}\``).join('\n'));
+    if (colReview.length) report.push(`\n### ${page} columns\n- ⚠️ column sync HELD BACK for the whole page (${cu.changed.length} ready, ${colReview.length} blocked): ${colReview.join('; ')}`);
     for (const ins of ed.inserts) { text = insertRow(text, v.format, ins.name, ins.address, ins.section, ins.cells); added += 1; }
-    if ((r.changed.length || ed.inserts.length) && !DRY) writeFileSync(v.file, text);
+    if ((r.changed.length || applied || ed.inserts.length) && !DRY) writeFileSync(v.file, text);
   }
 
-  const summary = '## Contract sync\n' + report.join('') + `\n\n**Result:** ${changed} address change(s), ${added} new contract(s).${DRY ? ' [no writes]' : ''}\n`;
+  const summary = '## Contract sync\n' + report.join('') + `\n\n**Result:** ${changed} address change(s), ${cols} column update(s), ${added} new contract(s).${DRY ? ' [no writes]' : ''}\n`;
   console.log(summary);
   if (!DRY) writeFileSync('contract-sync-summary.md', summary);
-  emit({ changed, added, has_changes: String(changed > 0 || added > 0) });
+  emit({ changed, added, cols, has_changes: String(changed > 0 || cols > 0 || added > 0) });
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

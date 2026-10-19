@@ -1663,12 +1663,20 @@
         "section": "",
         "name": "ProxyAdmin",
         "address": "0x97458aE48Fc8362077c30930bc6C004B46a9312f",
-        "cols": []
+        "cols": [
+          "NPM proxy admin"
+        ]
       },
       {
         "section": "",
         "name": "ListaV3Factory",
         "address": "0xcb010ed373523942706F730b89792aA1C1597b20",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "ListaV3FactoryOwner",
+        "address": "0x2BBa5BdED4DD4A597f7BAdC256005C9Aa662Df06",
         "cols": []
       },
       {
@@ -1691,15 +1699,41 @@
       },
       {
         "section": "",
-        "name": "ListaV3Pool",
-        "address": "0xd50154428912A887d9a405Bb515d2Ef11307228d",
+        "name": "QuoterV2",
+        "address": "0x6B61a2C67c45B40d754e4e7c1c565590685C03E2",
         "cols": []
       },
       {
         "section": "",
         "name": "ListaV3Pool",
+        "address": "0xd50154428912A887d9a405Bb515d2Ef11307228d",
+        "cols": [
+          "WBNB/slisBNB fee= 1BP"
+        ]
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0x9f0E53D3aC0dc7aEaAF36866cD1A9EEbE16Bf4a1",
+        "cols": [
+          "slisBNB/WBNB fee = 5BP"
+        ]
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
         "address": "0x46eE2C5F2b9De7C6e08Ffe3Bde8Dd88A46D6f568",
-        "cols": []
+        "cols": [
+          "USDT/USDC fee= 0.02BP"
+        ]
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0x8b94363fbBbBcdae25832807BE39e8e2c60a6e15",
+        "cols": [
+          "lisUSD/USDT fee= 1BP"
+        ]
       },
       {
         "section": "",
@@ -1711,30 +1745,6 @@
         "section": "",
         "name": "ListaV2Router02",
         "address": "0x3CcbB50C93ffCdA64e58Cc9E299791Fd85A41941",
-        "cols": []
-      },
-      {
-        "section": "",
-        "name": "QuoterV2",
-        "address": "0x6B61a2C67c45B40d754e4e7c1c565590685C03E2",
-        "cols": []
-      },
-      {
-        "section": "",
-        "name": "ListaV3Pool",
-        "address": "0x8b94363fbBbBcdae25832807BE39e8e2c60a6e15",
-        "cols": []
-      },
-      {
-        "section": "",
-        "name": "ListaV3Pool",
-        "address": "0x9f0E53D3aC0dc7aEaAF36866cD1A9EEbE16Bf4a1",
-        "cols": []
-      },
-      {
-        "section": "",
-        "name": "ListaV3FactoryOwner",
-        "address": "0x2BBa5BdED4DD4A597f7BAdC256005C9Aa662Df06",
         "cols": []
       }
     ]
