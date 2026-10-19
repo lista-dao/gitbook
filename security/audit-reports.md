@@ -8,6 +8,8 @@ Lista 的所有核心智能合约均经过知名第三方安全公司的严格�
 | ------- | ------ |
 | Lista Dao Revenue Collector ss Factory Provenance | [2026-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/ListaDao-RevenueCollector-ssFactoryProvenance-AuditReport-20261009.pdf) |
 | Lista V3 Factory Owner | [HashDit · 2026-10](https://github.com/lista-dao/lista-v3/blob/master/audits/261006-HashDit-Lista-V3-FactoryOwner-Report.pdf) |
+| Position Migrator Batch Force Migration | [HashDit · 2026-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-PositionMigrator-BatchForceMigration-AuditReport-20261015.pdf) |
+| V3 Collateral | [Bailsec · 2026-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-V3-Collateral-20261018.pdf) · [Bailsec · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-V3-Collateral-20260726.pdf) |
 | Atlas Multi Feed Adaptor | [HashDit · 2026-09](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AtlasMultiFeedAdaptor-20260916.pdf) |
 | Credit Broker Fix | [HashDit · 2026-09](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-CreditBrokerFix-AuditReport-20260911.pdf) |
 | Sub Staker | [Bailsec · 2026-09](https://github.com/lista-dao/synclub-contracts/blob/master/audit/Bailsec-SubStaker-Final-Report-20260928.pdf) |
@@ -17,7 +19,10 @@ Lista 的所有核心智能合约均经过知名第三方安全公司的严格�
 | Liquidation Vault | [HashDit · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-LiquidationVault-20260709.pdf) |
 | Lista Dao Market Factory Lista Revenue Distributor | [2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/ListaDao-MarketFactory-ListaRevenueDistributor-Audit-Final-20260714.pdf) · [2026-07](https://github.com/lista-dao/lista-token/blob/master/audits/ListaDao-MarketFactory-ListaRevenueDistributor-Audit-Final-20260714.pdf) |
 | Moolah Vault EIP170 | [HashDit · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-MoolahVault-EIP170-20260703.pdf) |
+| PRE Lista Dao V3Provider | [CertiK · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-PRE-Lista-Dao-V3Provider-20260708.pdf) |
 | PreIPODistributor | [HashDit · 2026-07](https://github.com/lista-dao/lista-token/blob/master/audits/HashDit-PreIPODistributor-20260727.pdf) |
+| V3 LP Collateral | [HashDit · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-V3-LP-Collateral-20260714.pdf) |
+| V3 LP Collateral Update | [HashDit · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-V3-LP-Collateral-Update-20260728.pdf) |
 | Aster Rewards | [HashDit · 2026-06](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AsterRewards-20260615.pdf) |
 | Collateral Yield Vault | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-CollateralYieldVault-20260618.pdf) · [CertiK · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/CertiK-CollateralYieldVault-20260618.pdf) · [HashDit · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-CollateralYieldVault-20260618.pdf) |
 | Fixed Term | [Bailsec · 2026-06](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-FixedTerm-20260628.pdf) |
