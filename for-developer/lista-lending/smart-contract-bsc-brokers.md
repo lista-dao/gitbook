@@ -1,8 +1,8 @@
-# BNB智能链 - 借贷经纪商
+# BNB Smart Chain - 借贷经纪人
 
 ## LendingBroker 市场
 
-| 合约                                          | 经纪商                         | LLTV  | 上限  | 市场 ID                                                          | 地址                                      |
+| 合约                                          | 经纪人                         | LLTV  | 上限  | 市场 ID                                                          | 地址                                    |
 | --------------------------------------------- | ------------------------------ | ----- | ---- | ------------------------------------------------------------------ | ------------------------------------------ |
 | LendingBroker(WBNB/LisUSD)                    | WBNB/LisUSD                    | 86%   | 100k | 0x2a679d85b2c64c6e72dc6d98c63f4ddbdae44dda0be4f93a87391192023f733b | 0x6BAF9648cffB7C9c4cB7275000a27b9a7dBD59Bc |
 | LendingBroker(slisBNB/LisUSD)                 | slisBNB/LisUSD                 | 86%   | 100k | 0x078d06a2c852f94c05f291b7288e5120d104ef0e9aa27632df4cb0b6f03cefdc | 0x0cffd57f93190892ac2dB8A01596304268Bc2014 |
@@ -35,11 +35,11 @@
 | BrokerInterestLockBuffer (U vault) | | | | | 0x8c51220e29684BbAE2bF4412952C47d090BC6B3E |
 | BrokerInterestLockBuffer (USDT vault) | | | | | 0x23c3E7f13C97011b84dAB247587425F55ffeD137 |
 | BrokerInterestLockBuffer (WBNB vault) | | | | | 0xCa5D2d07243a3E9ab58A2b6C924a67F060EC6371 |
-| LendingBroker (asUSDF/U) |  |  |  |  | 0x34dd80f8cAdF200e239c054E3D9fC53528A9Ed9a |
+| LendingBroker (asUSDF/U) | asUSDF/U | 94.50% | 3M | 0x2a89ccbb362848532f189cf2b51e794a16db53d2a06ec863827cf2eea48c2da4 | 0x34dd80f8cAdF200e239c054E3D9fC53528A9Ed9a |
 
-## 经纪商辅助合约
+## 经纪人辅助合约
 
-| 合约                           | 地址                                      |
+| 合约                       | 地址                                    |
 | ------------------------------ | ------------------------------------------ |
 | BrokerInterestRelayer (lisUSD) | 0xcb2590F10728e3ffc725d7ECf88EcFd0d92c9d6a |
 | BrokerInterestRelayer (USD1)   | 0x35720fcA79F33E3817479E0c6abFaD38ea1a9DaC |
