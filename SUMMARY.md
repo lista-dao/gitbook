@@ -41,7 +41,7 @@
 * [RWA 市场](introduction/rwa-markets/README.md)
   * [Pre-IPO](introduction/rwa-markets/pre-ipo.md)
   * [slisXAUE](introduction/rwa-markets/slisxaue.md)
-* [Lista 信用](introduction/lista-credit.md)
+* [Lista 信贷](introduction/lista-credit.md)
 * [币安 Launchpool: slisBNBx](introduction/binance-launchpool-clisbnb/README.md)
   * [使用 slisBNB 铸造 slisBNBx](introduction/binance-launchpool-clisbnb/minting-clisbnb-with-slisbnb.md)
   * [在 Lista Lending 上铸造 slisBNBx](introduction/binance-launchpool-clisbnb/mint-clisbnb-on-lista-lending.md)
@@ -56,7 +56,7 @@
 
 * [LISTA](governance/lista/README.md)
   * [LISTA 分配](governance/lista/lista-distribution.md)
-  * [LISTA 持有者福利](governance/lista/lista-holder-benefits/README.md)
+  * [LISTA 持有者权益](governance/lista/lista-holder-benefits/README.md)
     * [LISTA 持有者 VIP](governance/lista/lista-holder-benefits/lista-holder-vip.md)
   * [治理](governance/lista/governance/README.md)
     * [治理提案模板](governance/lista/governance/governance-proposal-template.md)
@@ -79,7 +79,7 @@
   * [如何交换 slisBNB](user-guide/liquid-staking-slisbnb/how-to-swap-for-slisbnb.md)
   * [铸造 slisBNB](user-guide/liquid-staking-slisbnb/mint-slisbnb.md)
   * [从 slisBNB 赎回 BNB](user-guide/liquid-staking-slisbnb/redeem-bnb-from-slisbnb.md)
-  * [将 slisBNB 桥接到 Ethereum](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
+  * [将 slisBNB 桥接到以太坊](user-guide/liquid-staking-slisbnb/bridging-slisbnb-to-ethereum.md)
 * [智能借贷](user-guide/smart-lending.md)
 * [Lista Lending](user-guide/lista-lending/README.md)
   * [借款和还款](user-guide/lista-lending/borrowing-and-repaying.md)
@@ -98,7 +98,7 @@
 * [漏洞赏金 (Immunefi)](security/bug-bounty-immunefi.md)
 * [Lista Lending 风险基金](security/lista-lending-risk-fund.md)
 
-## 开发者专区
+## 开发者专用
 
 * [概述](for-developer/overview.md)
 * [多 Oracle](for-developer/multi-oracle.md)
@@ -138,11 +138,12 @@
     * [BSC 借贷经纪人](for-developer/lista-lending/smart-contract-bsc-brokers.md)
     * [BSC 智能借贷](for-developer/lista-lending/smart-contract-bsc-smart-lending.md)
     * [BSC Oracles](for-developer/lista-lending/smart-contract-bsc-oracles.md)
-    * [BSC 信用](for-developer/lista-lending/smart-contract-bsc-credit.md)
-    * [Ethereum](for-developer/lista-lending/smart-contract-ethereum.md)
+    * [BSC 信贷](for-developer/lista-lending/smart-contract-bsc-credit.md)
+    * [以太坊](for-developer/lista-lending/smart-contract-ethereum.md)
 * [V3 Dex](for-developer/dex/README.md)
   * [架构与机制](for-developer/dex/mechanics.md)
-  * [智能合约](for-developer/dex/smart-contract.md)
+  * [智能合约 (BSC)](for-developer/dex/smart-contract.md)
+  * [智能合约 (以太坊)](for-developer/dex/smart-contract-ethereum.md)
 * [Lista 平台服务](for-developer/services/README.md)
   * [清算 (服务)](for-developer/services/liquidation-logic.md)
   * [订阅模块](for-developer/services/subscription-module.md)
@@ -164,7 +165,7 @@
 * [lisAster](for-developer/lisaster/README.md)
   * [智能合约](for-developer/lisaster/smart-contract.md)
 
-## 合作伙伴关系
+## 合作伙伴
 
 * [品牌工具包](partnerships/brand-kit.md)
 * [我们的渠道](partnerships/our-channels.md)
