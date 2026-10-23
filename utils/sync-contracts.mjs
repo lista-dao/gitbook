@@ -93,6 +93,7 @@ const SOURCES = {
   // Note: several "ListaV3Pool" rows share a name (different pools) — fine on insert (keyed by
   // address), and the Pair / Fee column is what disambiguates them for a later address CHANGE.
   'v3-dex-bsc':      { notionPageId: '3871d713729f803da800f505ae8c78dc', targets: ['dex-bsc'],      default: 'dex-bsc', fullRow: true, syncCols: true },
+  'v3-dex-eth':      { notionPageId: '4021d713729f80518579df364e28d14c', targets: ['dex-eth'],      default: 'dex-eth', fullRow: true, syncCols: true }, // same layout as v3-dex-bsc
   // clisbnb/slisBNBx page is OUT OF SCOPE: those contracts live in the frozen CDP section of
   // Lista Mainnet Contracts and will not change. No Notion sync source is configured for that page.
 };

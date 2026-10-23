@@ -27,6 +27,7 @@ const TARGETS = {
   'rwa':               'for-developer/rwa/smart-contract.md',
   'lisaster':          'for-developer/lisaster/smart-contract.md',
   'dex-bsc':           'for-developer/dex/smart-contract.md',
+  'dex-eth':           'for-developer/dex/smart-contract-ethereum.md',
 };
 
 // Addresses from external/frozen tables that are present in GitBook but have no Notion source.
