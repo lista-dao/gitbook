@@ -172,6 +172,30 @@
         "cols": []
       },
       {
+        "section": "",
+        "name": "StableV3DexAdapter (USDT & USDC-V3SmartLP)",
+        "address": "0x463Df4e44218539645F7C4Ec1B1404127bD7F32b",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3Provider (USDT & USDC-V3SmartLP)",
+        "address": "0xb8D02E032afD395310DB52A18F16f562DaE24A8C",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "V3ProviderOracle (USDT & USDC-V3SmartLP)",
+        "address": "0x2Bc97712752537438743657157894cBfcf6eCa0f",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "V3Liquidator",
+        "address": "0x670004c8c63ab6A4F38e29b6876e8fE2aCf9FD71",
+        "cols": []
+      },
+      {
         "section": "Vaults",
         "name": "MoolahVault(WBNB)",
         "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
@@ -1778,6 +1802,38 @@
         "cols": [
           "-"
         ]
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0x3B6ED4E0CA494002398169b7A5D1a83323541526",
+        "cols": [
+          "USDT/USDC 0.5bp"
+        ]
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0xd2BD33Be34d8Eb1123AAeA23CA0aFD68bcC14Da1",
+        "cols": [
+          "USDT / U 0.5bp"
+        ]
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0x6a7e6Dd58BB719819f285aEab8EE9079D0948f2f",
+        "cols": [
+          "USDT / USD1 0.5bp"
+        ]
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0xb20c03c6422408398f7b9E5C613f324ab6c601bE",
+        "cols": [
+          "lisUSD / USDC 0.5bp"
+        ]
       }
     ]
   },
@@ -1789,19 +1845,25 @@
         "section": "",
         "name": "ProxyAdmin",
         "address": "0xcF8c35Ffb8D388201C604dfC88091140eD81dbca",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "ListaV3Factory",
         "address": "0x956920F97690Bdd76a6a10C7ba931DEC14f61169",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "NonfungibleTokenPositionDescriptor",
         "address": "0xc6EAe5d661354AA274604ea3882397f63897B64C",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
@@ -1815,31 +1877,41 @@
         "section": "",
         "name": "NonfungiblePositionManager",
         "address": "0xfd0524a86976DE0e8A51f892F3f6283e127d8980",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "NpmImplDeployer",
         "address": "0xdd0f25413473f33c8a62f6b7e2ff6eaf70d0e14b",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "SwapRouter",
         "address": "0x667939BEf1812A58D65db51011A26332628b63e5",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "QuoterV2",
         "address": "0xE043af034c0c920994f8e3eE9aFa1173Fe8403DB",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
         "name": "ListaV3FactoryOwner",
         "address": "0x08Bd226913b95f405A27079A0B3314AFa6E376aA",
-        "cols": []
+        "cols": [
+          "-"
+        ]
       },
       {
         "section": "",
