@@ -10,6 +10,7 @@ All of Lista’s core smart contracts have been rigorously audited by reputable 
 | ------- | ------ |
 | Lista Dao Revenue Collector ss Factory Provenance | [2026-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/ListaDao-RevenueCollector-ssFactoryProvenance-AuditReport-20261009.pdf) |
 | Lista V3 Factory Owner | [HashDit · 2026-10](https://github.com/lista-dao/lista-v3/blob/master/audits/261006-HashDit-Lista-V3-FactoryOwner-Report.pdf) |
+| Market Factory V3 Market Creation | [HashDit · 2026-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-MarketFactory-V3-Market-Creation-20261020.pdf) |
 | Position Migrator Batch Force Migration | [HashDit · 2026-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/HashDit-PositionMigrator-BatchForceMigration-AuditReport-20261015.pdf) |
 | V3 Collateral | [Bailsec · 2026-10](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-V3-Collateral-20261018.pdf) · [Bailsec · 2026-07](https://github.com/lista-dao/moolah/blob/master/docs/audits/Bailsec-V3-Collateral-20260726.pdf) |
 | Atlas Multi Feed Adaptor | [HashDit · 2026-09](https://github.com/lista-dao/lista-new-contracts/blob/master/docs/audits/HashDit-AtlasMultiFeedAdaptor-20260916.pdf) |
