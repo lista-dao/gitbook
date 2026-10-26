@@ -34,43 +34,47 @@
 | MoolahVaultAccount | 0xA0b8b78208Cfe45dDC7AC7B51B108B2742B32652 |
 | YieldAccount | 0xFD4057Cd72A31A080A0f6CF234a922F2f647C608 |
 | SubStaker | 0x571a25497A28A3424ad652f665e63219070195E1 |
+| StableV3DexAdapter (USDT & USDC-V3SmartLP) | 0x463Df4e44218539645F7C4Ec1B1404127bD7F32b |
+| StableV3Provider (USDT & USDC-V3SmartLP) | 0xb8D02E032afD395310DB52A18F16f562DaE24A8C |
+| V3ProviderOracle (USDT & USDC-V3SmartLP) | 0x2Bc97712752537438743657157894cBfcf6eCa0f |
+| V3Liquidator | 0x670004c8c63ab6A4F38e29b6876e8fE2aCf9FD71 |
 
 ### Vaults
 
-| 合约                | 地址                                      |
-| ------------------- | ------------------------------------------ |
-| MoolahVault(WBNB)   | 0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0 |
-| MoolahVault(USD1)   | 0xfa27f172e0b6ebcEF9c51ABf817E2cb142FbE627 |
-| MoolahVault(U)      | 0x9A17Fd5Cb8EFc25d11567e713aE795A89775a759 |
-| MoolahVault (BTCB) | 0xE46b8E65006e6450bdd8cb7D3274AB4F76f4C705 |
-| MoolahVault (USDT) | 0x6d6783C146F2B0B2774C1725297f1845dc502525 |
-| MoolahVault (MEV WBNB) | 0xd5cfc0f894bA77e95E3325Aa53Eb3e6CBBb5A81E |
-| MoolahVault (MEV USDT) | 0x6402d64F035E18F9834591d3B994dFe41a0f162D |
-| MoolahVault (Re7 USDT) | 0x02A5ca3a749855d1002A78813E679584a96646d0 |
-| MoolahVault (Loop WBNB) | 0xaB251dc87dc313649D024bd69b34c8E7690Ce1fc |
-| MoolahVault (Puffer) | 0x2Fa11Fc42e7fdFF98e1D043992Db5e10123A41B0 |
-| MoolahVault(Pangolins USDT) | 0xEB4F6FFB1038E1cCa701e7d53083B37ec5b6Ba33 |
-| MoolahVault(AB) | 0x60eeD309f259050b40B234D105329A4Fd2F91163 |
-| MoolahVault(B) | 0xE27433EE40CFc59B4881b3C37B8e908EA0550aA7 |
-| MoolahVault(B2) | 0xEE161d34F7a12EA3edeA853AA849783d4b51b5b5 |
-| MoolahVault(Solv WBNB) | 0xb798BB56898a86b6fD49FC1eCA4150efdc3Ee6Ea |
-| MoolahVault(Solv USD1) | 0xD61DD125016728Dd284Cf5dbA8a3B7C27c5058f2 |
-| MoolahVault(SPA) | 0x8703d3ABeA5CCf31c6E13B9C05558b1f4666F183 |
-| MoolahVault(OIK) | 0x34a436478d34cEE558DB242e7A0F1676bD84Ca45 |
-| MoolahVault(EGL1) | 0x52844A906C9A5103ee99C293a2EE181Ce16a6743 |
-| MoolahVault(Aster) | 0xf21308b903F96592B6d6988c646dC2A3028F39fd |
-| MoolahVault(CDL) | 0x384729E442b7636709896e9a3bEf63EF70C22FB0 |
-| MoolahVault(Take) | 0x68e83cA4c2869fC6E92774E549FF9d547EAE24Ab |
-| MoolahVault(APRO) | 0x2CB60a0E6c2a5fF4249eB890E267B660C6676Cc6 |
-| MoolahVault (XAUt) | 0x4109415de2271097fb5fa16af8a753aab8c46d6f |
-| MoolahVault(Fourmeme U Vault) | 0xaDa9dab14Ddd115F02a044cD61fFeb5c5E82653D |
+| 合约                           | 地址                                      |
+| ------------------------------ | ------------------------------------------ |
+| MoolahVault(WBNB)              | 0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0 |
+| MoolahVault(USD1)              | 0xfa27f172e0b6ebcEF9c51ABf817E2cb142FbE627 |
+| MoolahVault(U)                 | 0x9A17Fd5Cb8EFc25d11567e713aE795A89775a759 |
+| MoolahVault (BTCB)             | 0xE46b8E65006e6450bdd8cb7D3274AB4F76f4C705 |
+| MoolahVault (USDT)             | 0x6d6783C146F2B0B2774C1725297f1845dc502525 |
+| MoolahVault (MEV WBNB)         | 0xd5cfc0f894bA77e95E3325Aa53Eb3e6CBBb5A81E |
+| MoolahVault (MEV USDT)         | 0x6402d64F035E18F9834591d3B994dFe41a0f162D |
+| MoolahVault (Re7 USDT)         | 0x02A5ca3a749855d1002A78813E679584a96646d0 |
+| MoolahVault (Loop WBNB)        | 0xaB251dc87dc313649D024bd69b34c8E7690Ce1fc |
+| MoolahVault (Puffer)           | 0x2Fa11Fc42e7fdFF98e1D043992Db5e10123A41B0 |
+| MoolahVault(Pangolins USDT)    | 0xEB4F6FFB1038E1cCa701e7d53083B37ec5b6Ba33 |
+| MoolahVault(AB)                | 0x60eeD309f259050b40B234D105329A4Fd2F91163 |
+| MoolahVault(B)                 | 0xE27433EE40CFc59B4881b3C37B8e908EA0550aA7 |
+| MoolahVault(B2)                | 0xEE161d34F7a12EA3edeA853AA849783d4b51b5b5 |
+| MoolahVault(Solv WBNB)         | 0xb798BB56898a86b6fD49FC1eCA4150efdc3Ee6Ea |
+| MoolahVault(Solv USD1)         | 0xD61DD125016728Dd284Cf5dbA8a3B7C27c5058f2 |
+| MoolahVault(SPA)               | 0x8703d3ABeA5CCf31c6E13B9C05558b1f4666F183 |
+| MoolahVault(OIK)               | 0x34a436478d34cEE558DB242e7A0F1676bD84Ca45 |
+| MoolahVault(EGL1)              | 0x52844A906C9A5103ee99C293a2EE181Ce16a6743 |
+| MoolahVault(Aster)             | 0xf21308b903F96592B6d6988c646dC2A3028F39fd |
+| MoolahVault(CDL)               | 0x384729E442b7636709896e9a3bEf63EF70C22FB0 |
+| MoolahVault(Take)              | 0x68e83cA4c2869fC6E92774E549FF9d547EAE24Ab |
+| MoolahVault(APRO)              | 0x2CB60a0E6c2a5fF4249eB890E267B660C6676Cc6 |
+| MoolahVault (XAUt)             | 0x4109415de2271097fb5fa16af8a753aab8c46d6f |
+| MoolahVault(Fourmeme U Vault)  | 0xaDa9dab14Ddd115F02a044cD61fFeb5c5E82653D |
 
 ### Providers
 
-| 合约                          | 地址                                      |
-| ----------------------------- | ------------------------------------------ |
-| SlisBNBProvider               | 0x33f7A980a246f9B8FEA2254E3065576E127D4D5f |
-| SlisBNBxMinter                | 0x2959c423bfe5Cc6E41516599D982A29C0773F11a |
-| BNBProvider (MEV WBNB Vault)  | 0x501bE17CcA1d8a009753Da271D6714C18c1A35c9 |
-| BNBProvider (Lista WBNB Vault)| 0x367384C54756a25340c63057D87eA22d47Fd5701 |
-| BNBProvider (Loop WBNB Vault) | 0x7901Cb0db0db005c44ee5957Fa22D478258ef64E |
+| 合约                           | 地址                                      |
+| ------------------------------ | ------------------------------------------ |
+| SlisBNBProvider                | 0x33f7A980a246f9B8FEA2254E3065576E127D4D5f |
+| SlisBNBxMinter                 | 0x2959c423bfe5Cc6E41516599D982A29C0773F11a |
+| BNBProvider (MEV WBNB Vault)   | 0x501bE17CcA1d8a009753Da271D6714C18c1A35c9 |
+| BNBProvider (Lista WBNB Vault) | 0x367384C54756a25340c63057D87eA22d47Fd5701 |
+| BNBProvider (Loop WBNB Vault)  | 0x7901Cb0db0db005c44ee5957Fa22D478258ef64E |

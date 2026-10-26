@@ -4,7 +4,7 @@
 
 | 合约 | 地址 | 配对 / 费用 / 备注 |
 | -------- | ------- | ------------------ |
-| ProxyAdmin | 0x97458aE48Fc8362077c30930bc6C004B46a9312f | NPM 代理管理员 |
+| ProxyAdmin | 0x97458aE48Fc8362077c30930bc6C004B46a9312f | NPM proxy admin |
 | ListaV3Factory | 0xcb010ed373523942706F730b89792aA1C1597b20 | - |
 | ListaV3FactoryOwner | 0x2BBa5BdED4DD4A597f7BAdC256005C9Aa662Df06 | - |
 | NonfungibleTokenPositionDescriptor | 0xfa9f54098C64e7Dc48B9B6402F26441159bA83c7 | - |
@@ -17,3 +17,7 @@
 | ListaV3Pool | 0x8b94363fbBbBcdae25832807BE39e8e2c60a6e15 | lisUSD/USDT 费用= 1BP |
 | ListaV2Factory | 0x28F5E6C71C7541b1C6523351AE331CcAfC443626 | - |
 | ListaV2Router02 | 0x3CcbB50C93ffCdA64e58Cc9E299791Fd85A41941 | - |
+| ListaV3Pool | 0x3B6ED4E0CA494002398169b7A5D1a83323541526 | USDT/USDC 0.5bp |
+| ListaV3Pool | 0xd2BD33Be34d8Eb1123AAeA23CA0aFD68bcC14Da1 | USDT / U 0.5bp |
+| ListaV3Pool | 0x6a7e6Dd58BB719819f285aEab8EE9079D0948f2f | USDT / USD1 0.5bp |
+| ListaV3Pool | 0xb20c03c6422408398f7b9E5C613f324ab6c601bE | lisUSD / USDC 0.5bp |
