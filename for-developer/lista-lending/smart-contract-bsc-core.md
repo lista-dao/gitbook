@@ -1,4 +1,4 @@
-# BNB Smart Chain - 核心合约
+# BNB智能链 - 核心合约
 
 | 合约                           | 地址                                      |
 | ------------------------------ | ------------------------------------------ |
@@ -25,19 +25,31 @@
 | PositionMigrator               | 0x2b3e5b695722756130a553e9bb5a45e16d21d0a4 |
 | StableArbExecutor              | 0x05A8d0B51A2543184a18Af3Ada75F8C981143a54 |
 | BatchManagementUtils           | 0x458437d173A7d5b8E92b0DC5aF513584cAB4bf3D |
-| CollateralYieldVault | 0x4837fB5c9C84524CC0c93f066c1Ac708a758E5FD |
-| RewardHarvester | 0xA3363084BD341e6092b941052A399eDB7fCb684E |
+| CollateralYieldVault           | 0x4837fB5c9C84524CC0c93f066c1Ac708a758E5FD |
+| RewardHarvester                | 0xA3363084BD341e6092b941052A399eDB7fCb684E |
 | RewardsRouter (bStock emission) | 0xC3e73f8e7010E5FBD083AB4C5b29476A3fdF5eC5 |
-| BuyBack (USDT → SPCXB) | 0x3C5Fe2e3EC0CD37e4AC86e08AEba5A90bBd742b5 |
-| LiquidationVault | 0xEe3aa1AF4Ee231f2e1277A48fc4A2f29A3D7C028 |
-| PreIPODistributor | 0x9f7526EDAa18278D4bC1fA6b63B749A649Cb1844 |
-| MoolahVaultAccount | 0xA0b8b78208Cfe45dDC7AC7B51B108B2742B32652 |
-| YieldAccount | 0xFD4057Cd72A31A080A0f6CF234a922F2f647C608 |
-| SubStaker | 0x571a25497A28A3424ad652f665e63219070195E1 |
+| BuyBack (USDT → SPCXB)         | 0x3C5Fe2e3EC0CD37e4AC86e08AEba5A90bBd742b5 |
+| LiquidationVault               | 0xEe3aa1AF4Ee231f2e1277A48fc4A2f29A3D7C028 |
+| PreIPODistributor              | 0x9f7526EDAa18278D4bC1fA6b63B749A649Cb1844 |
+| MoolahVaultAccount             | 0xA0b8b78208Cfe45dDC7AC7B51B108B2742B32652 |
+| YieldAccount                   | 0xFD4057Cd72A31A080A0f6CF234a922F2f647C608 |
+| SubStaker                      | 0x571a25497A28A3424ad652f665e63219070195E1 |
 | StableV3DexAdapter (USDT & USDC-V3SmartLP) | 0x463Df4e44218539645F7C4Ec1B1404127bD7F32b |
 | StableV3Provider (USDT & USDC-V3SmartLP) | 0xb8D02E032afD395310DB52A18F16f562DaE24A8C |
 | V3ProviderOracle (USDT & USDC-V3SmartLP) | 0x2Bc97712752537438743657157894cBfcf6eCa0f |
-| V3Liquidator | 0x670004c8c63ab6A4F38e29b6876e8fE2aCf9FD71 |
+| V3Liquidator                   | 0x670004c8c63ab6A4F38e29b6876e8fE2aCf9FD71 |
+| StableV3DexAdapter (USDT/U 0.15bp) | 0x87005D49E6704D09B3AdeF3Af6b2cCb340261479 |
+| StableV3Provider (USDT/U 0.15bp) | 0x7A725FDF906017Ca9eC5b6A91402747D615317D6 |
+| V3ProviderOracle (USDT/U 0.15bp) | 0x21a1709a345710Dd1eBF589E60b4B0e1ccA1f0F8 |
+| StableV3DexAdapter (USDT/USD1 0.1bp) | 0x556708B11647816696e7694c1D6eC7599c68d518 |
+| StableV3Provider (USDT/USD1 0.1bp) | 0xfc359b9fd305BF664b772F1e75E64dD7cB983b92 |
+| V3ProviderOracle (USDT/USD1 0.1bp) | 0x21aE73c81305c503DE7936D6E9F8F63cFe02Ac7E |
+| StableV3DexAdapter (lisUSD/USDC 0.5bp) | 0xaff58A2104a8295ead388D78897BbB46e35Fc0f7 |
+| StableV3Provider (lisUSD/USDC 0.5bp) | 0x9f3b376f8d43E0715272c7fa12B0bA9d24CCf6dA |
+| V3ProviderOracle (lisUSD/USDC 0.5bp) | 0x865DD078fC46C95A8626128283e52D5B461E8423 |
+| SlisBNBV3Provider (slisBNB/BNB 1bp) | 0x49621dF576bCfcf347E0935D430F46fE5078680b |
+| SlisBNBV3DexAdapter (slisBNB/BNB 1bp) | 0x1Aa04A59a3A6e1cf4fC3f8628b101d3Ef7b49112 |
+| SlisBNBV3ProviderOracle        | 0xdb9d8b8809101e67446C8476b3440F49cD4d62e4 |
 
 ### Vaults
 

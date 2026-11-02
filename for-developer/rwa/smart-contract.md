@@ -6,10 +6,13 @@
 | RWAAdapter(USDT.Treasury)  | 0xC1AeEBBfD8b1280e78D930C43700758F543F5Fc6 |
 | RWAEarnPool(USDT.AAA)      | 0x82664f43676FfD81BE2b472c5A2E2808952ecd56 |
 | RWAAdapter(USDT.AAA)       | 0x69D15B7a232244EB0FDDED2a3E038589E5C50105 |
+| BpnEarnPool | 0x85811cA91E57aD3dcD0E4c9d931687B66F0A36e6 |
+| SurfinAdapter (BPN vault) | 0x512f003B9F246aA8ccC727a3292A671c86E2Aa42 |
+| InterestDistributor (BPN vault) | 0xFEEdE7CC8bB13734cAF3516B68Bcc8d68C44a497 |
 
 ## slisXAUE (Staked Lista XAUE)
 
-以太坊主网上的RWA。基础资产：通过XAUE / CoboFundToken的Tether Gold (XAUt)。
+RWA 在以太坊主网。基础资产：Tether Gold (XAUt) 通过 XAUE / CoboFundToken。
 
 | 名称        | 合约地址                                   |
 | ----------- | ------------------------------------------ |

@@ -196,6 +196,78 @@
         "cols": []
       },
       {
+        "section": "",
+        "name": "StableV3DexAdapter (USDT/U 0.15bp)",
+        "address": "0x87005D49E6704D09B3AdeF3Af6b2cCb340261479",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3Provider (USDT/U 0.15bp)",
+        "address": "0x7A725FDF906017Ca9eC5b6A91402747D615317D6",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "V3ProviderOracle (USDT/U 0.15bp)",
+        "address": "0x21a1709a345710Dd1eBF589E60b4B0e1ccA1f0F8",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3DexAdapter (USDT/USD1 0.1bp)",
+        "address": "0x556708B11647816696e7694c1D6eC7599c68d518",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3Provider (USDT/USD1 0.1bp)",
+        "address": "0xfc359b9fd305BF664b772F1e75E64dD7cB983b92",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "V3ProviderOracle (USDT/USD1 0.1bp)",
+        "address": "0x21aE73c81305c503DE7936D6E9F8F63cFe02Ac7E",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3DexAdapter (lisUSD/USDC 0.5bp)",
+        "address": "0xaff58A2104a8295ead388D78897BbB46e35Fc0f7",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3Provider (lisUSD/USDC 0.5bp)",
+        "address": "0x9f3b376f8d43E0715272c7fa12B0bA9d24CCf6dA",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "V3ProviderOracle (lisUSD/USDC 0.5bp)",
+        "address": "0x865DD078fC46C95A8626128283e52D5B461E8423",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SlisBNBV3Provider (slisBNB/BNB 1bp)",
+        "address": "0x49621dF576bCfcf347E0935D430F46fE5078680b",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SlisBNBV3DexAdapter (slisBNB/BNB 1bp)",
+        "address": "0x1Aa04A59a3A6e1cf4fC3f8628b101d3Ef7b49112",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SlisBNBV3ProviderOracle",
+        "address": "0xdb9d8b8809101e67446C8476b3440F49cD4d62e4",
+        "cols": []
+      },
+      {
         "section": "Vaults",
         "name": "MoolahVault(WBNB)",
         "address": "0x57134a64B7cD9F9eb72F8255A671F5Bf2fe3E2d0",
@@ -1608,6 +1680,66 @@
         "name": "PositionManager",
         "address": "0x6d9eD2A68c2759DA53A74D6a85Cd486737257A82",
         "cols": []
+      },
+      {
+        "section": "",
+        "name": "V3Liquidator",
+        "address": "0x2B4A0E205f17F32fA88d850Eb728bebCAEffcC2F",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3Provider (USDT/USDC 0.01bp)",
+        "address": "0x40279429Cc520d3f89e9ba5B9e36b4bD58b34E7A",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3DexAdapter (USDT/USDC 0.01bp)",
+        "address": "0x82eF27DDC709C9Bd273CcB0bfbdC8B2C08E816E5",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "V3ProviderOracle (USDT/USDC 0.01bp)",
+        "address": "0xb35276210c952A4DdC955ebFB2695F462D0fFb6C",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3Provider (USDS/USDT 0.01bp)",
+        "address": "0x7dA19207EB5194C51C422abf0E29fa792a145688",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3DexAdapter (USDS/USDT 0.01bp)",
+        "address": "0xA7A2ba3EB7ffA35FbF695B2C4cEB209815406372",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "V3ProviderOracle (USDS/USDT 0.01bp)",
+        "address": "0xa5788291d84fe3ef395360A780BCd274396B0432",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3Provider (USDT/USDe 0.01bp)",
+        "address": "0x8C7A157D2026215a8E6A97621D0db519194155Fd",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "StableV3DexAdapter (USDT/USDe 0.01bp)",
+        "address": "0xE80C0E1c2340bcaa6a152B2f803cbA4b8DBFE848",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "V3ProviderOracle (USDT/USDe 0.01bp)",
+        "address": "0x589Ec6Ab058D40c36459590d553843308c535A57",
+        "cols": []
       }
     ]
   },
@@ -1637,6 +1769,24 @@
         "section": "",
         "name": "RWAAdapter(USDT.AAA)",
         "address": "0x69D15B7a232244EB0FDDED2a3E038589E5C50105",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "BpnEarnPool",
+        "address": "0x85811cA91E57aD3dcD0E4c9d931687B66F0A36e6",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "SurfinAdapter (BPN vault)",
+        "address": "0x512f003B9F246aA8ccC727a3292A671c86E2Aa42",
+        "cols": []
+      },
+      {
+        "section": "",
+        "name": "InterestDistributor (BPN vault)",
+        "address": "0xFEEdE7CC8bB13734cAF3516B68Bcc8d68C44a497",
         "cols": []
       },
       {
@@ -1833,6 +1983,22 @@
         "address": "0xb20c03c6422408398f7b9E5C613f324ab6c601bE",
         "cols": [
           "lisUSD / USDC 0.5bp"
+        ]
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0xBb00856c24737CEb65A51873cb95aF254Bfc8457",
+        "cols": [
+          "USDT/U 0.15bp"
+        ]
+      },
+      {
+        "section": "",
+        "name": "ListaV3Pool",
+        "address": "0xd1E6877e0d9862BA11297EdFf766Ae01b7DB7F10",
+        "cols": [
+          "USDT/USD1 0.1bp"
         ]
       }
     ]
