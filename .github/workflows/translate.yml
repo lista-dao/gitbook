@@ -26,6 +26,15 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Require BOT_TOKEN
+        # The translation now opens a PR, and "Allow GitHub Actions to create
+        # and approve pull requests" is off on this repo, so GITHUB_TOKEN
+        # cannot do it. Checked first, before any OpenAI call is paid for.
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          [ -n "$GH_TOKEN" ] || { echo "::error::BOT_TOKEN is required: the translation opens a PR against the language branch."; exit 1; }
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -52,6 +61,7 @@ jobs:
           node utils/sync-and-translate.js
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Full push range, so a push of N commits translates all N.
           GITHUB_EVENT_BEFORE: ${{ github.event.before }}

@@ -12,6 +12,21 @@ function git(args, opts = {}) {
   return execFileSync("git", args, { encoding: "utf8", ...opts });
 }
 
+// Same contract as git(): throws on a non-zero exit, so a gh outage fails the
+// run instead of being read as "no open PR" and silently resetting the branch.
+function gh(args) {
+  return execFileSync("gh", args, { encoding: "utf8" });
+}
+
+// The number of the open PR from `head` into `base`, or null.
+function openPrNumber(head, base) {
+  const out = gh([
+    "pr", "list", "--head", head, "--base", base, "--state", "open",
+    "--json", "number", "--jq", '.[0].number // ""',
+  ]).trim();
+  return out || null;
+}
+
 /**
  * Files changed by the push that triggered this run.
  *
@@ -133,11 +148,14 @@ async function syncAndTranslate() {
   console.log(`Changed files: ${JSON.stringify(changedFiles, null, 2)}`);
 
   for (const branch of languageBranches) {
-    git(["checkout", branch]);
-    // The GitBook space pushes to the language branches too, so the local
-    // ref can be behind. Rebase before writing, or the push at the end is
-    // rejected and the whole translation is silently thrown away.
-    git(["pull", "--rebase", "origin", branch]);
+    // A run translates the delta of one push, not a recomputed tree, so when an
+    // earlier delta is still sitting in an open PR this run has to build on that
+    // PR's branch. Starting from the language branch would silently drop it.
+    const botBranch = `bot/${branch}-sync`;
+    const openPr = openPrNumber(botBranch, branch);
+    const base = openPr ? botBranch : branch;
+    git(["fetch", "origin", base]);
+    git(["checkout", "-B", branch, "FETCH_HEAD"]);
 
     for (const { status, file, oldFile } of changedFiles) {
       const targetFile = path.join(process.cwd(), file);
@@ -172,8 +190,26 @@ async function syncAndTranslate() {
     }
 
     git(["commit", "-m", `Sync and translate ${changedFiles.length} files to ${branch}`]);
-    git(["push", "origin", branch]);
-    console.log(`Pushed changes to branch: ${branch}`);
+
+    // Stacked on the open PR's branch, so this fast-forwards. With no open PR we
+    // started from the language branch, so a leftover bot branch is reset.
+    const pushArgs = ["push", "origin", `HEAD:${botBranch}`];
+    if (!openPr) pushArgs.splice(1, 0, "--force");
+    git(pushArgs);
+
+    if (openPr) {
+      console.log(`Updated PR #${openPr} with ${changedFiles.length} more files`);
+    } else {
+      gh([
+        "pr", "create", "--base", branch, "--head", botBranch,
+        "--title", `Sync and translate to ${branch}`,
+        "--body",
+        "Opened by the translate workflow: machine translation of the English " +
+          "pages that just landed on `en`. Later pushes stack onto this PR " +
+          "until it is merged.",
+      ]);
+      console.log(`Opened a PR from ${botBranch} into ${branch}`);
+    }
   }
 }
 
