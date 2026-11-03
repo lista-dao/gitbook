@@ -73,7 +73,17 @@ jobs:
           branch="bot/audit-sync"
           # The branch is bot-owned and rewritten every run. Refuse to force-push
           # over a commit this workflow did not make, instead of discarding it.
-          if [ -n "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" ]; then
+          # `--exit-code` distinguishes absent (2) from failed (anything else), and
+          # the status is captured off the assignment rather than inside a test, where
+          # `bash -e` would not see it and a flaky remote would skip the check.
+          rc=0
+          lsr=$(git ls-remote --exit-code origin "refs/heads/$branch") || rc=$?
+          case "$rc" in
+            0) tip=$(printf '%s\n' "$lsr" | cut -f1) ;;
+            2) tip="" ;;
+            *) echo "::error::could not read refs/heads/$branch (git exit $rc)"; exit 1 ;;
+          esac
+          if [ -n "$tip" ]; then
             git fetch --quiet origin "$branch"
             if [ "$(git log -1 --format='%ae' FETCH_HEAD)" != "41898282+github-actions[bot]@users.noreply.github.com" ]; then
               echo "::error::$branch carries a commit this workflow did not make. Merge or close its PR first."
@@ -88,7 +98,7 @@ jobs:
           if [ "$open" = "0" ]; then
             gh pr create --repo "$GITHUB_REPOSITORY" --base en --head "$branch" \
               --title "chore(audits): add new audit report(s)" \
-              --body "Opened by the ${{ github.workflow }} workflow. Details in the [run summary](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
+              --body "Opened by the ${{ github.workflow }} workflow. Details in the [run summary](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}). This PR is only refreshed on runs that find a change, so check the table against the Notion source before merging an old one."
           else
             echo "PR for $branch is already open; force-pushed the latest sync onto it."
           fi
