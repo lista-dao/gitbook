@@ -12,12 +12,6 @@ function git(args, opts = {}) {
   return execFileSync("git", args, { encoding: "utf8", ...opts });
 }
 
-// Same contract as git(): throws on a non-zero exit, so a gh outage fails the
-// run instead of being read as "no open PR" and silently resetting the branch.
-function gh(args) {
-  return execFileSync("gh", args, { encoding: "utf8" });
-}
-
 // `--exit-code` exits 2 when the ref is absent. Anything else is a transport or
 // auth failure: throw, rather than guessing "absent" and starting from scratch.
 function remoteHasBranch(name) {
@@ -37,14 +31,14 @@ function remoteHasBranch(name) {
 // pushed but failed to open its PR recovers.
 function openPrIfMissing(head, base) {
   try {
-    gh([
+    execFileSync("gh", [
       "pr", "create", "--head", head, "--base", base,
       "--title", `Sync and translate to ${base}`,
       "--body",
       "Opened by the translate workflow: machine translation of the English " +
         "pages that landed on `en`. Later pushes stack onto this PR until it " +
         "is merged.",
-    ]);
+    ], { encoding: "utf8" });
     console.log(`Opened a PR from ${head} into ${base}`);
   } catch (error) {
     const output = `${error.stdout || ""}${error.stderr || ""}`;
@@ -211,15 +205,18 @@ async function syncAndTranslate() {
     const staged = git(["diff", "--staged", "--name-only"]).trim();
     if (!staged) {
       console.log(`No changes to commit on ${branch}`);
-      continue;
+      // Nothing to push, but an earlier round may have pushed and then failed to
+      // open its PR. Fall through to recover it; with no bot branch at all there
+      // is nothing to recover.
+      if (base !== botBranch) continue;
+    } else {
+      git(["commit", "-m", `Sync and translate ${changedFiles.length} files to ${branch}`]);
+      // Always a fast-forward: the run built on top of whatever the bot branch
+      // already held. Never forced, so nothing on it can be erased, and a push
+      // that is not a fast-forward means someone else wrote to the branch and
+      // should fail the run.
+      git(["push", "origin", `HEAD:${botBranch}`]);
     }
-
-    git(["commit", "-m", `Sync and translate ${changedFiles.length} files to ${branch}`]);
-
-    // Always a fast-forward: the run built on top of whatever the bot branch
-    // already held. Never forced, so nothing on it can be erased, and a push
-    // that is not a fast-forward is a real surprise and should fail the run.
-    git(["push", "origin", `HEAD:${botBranch}`]);
     openPrIfMissing(botBranch, branch);
   }
 }
