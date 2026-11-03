@@ -2,8 +2,8 @@ name: Audit Reports Watch
 
 # Weekly check for new third-party audit PDFs in Lista's contract repos.
 # When new reports are found, they are appended to security/audit-reports.md and
-# committed directly to the `en` branch (fully automatic — the Feature column is
-# auto-guessed from the filename).
+# proposed to the `en` branch as a PR (the Feature column is auto-guessed from
+# the filename, so a reviewer checks it before it publishes).
 #
 # NOTE: scheduled (cron) workflows only run from the repository's DEFAULT branch
 # (main), which is why this file lives on main even though the docs live on en.
@@ -16,9 +16,6 @@ on:
 concurrency:
   group: audit-watch
   cancel-in-progress: false
-
-permissions:
-  contents: write
 
 jobs:
   check-audits:
@@ -66,35 +63,13 @@ jobs:
           git commit -m "chore(audits): add ${{ steps.scan.outputs.count }} new audit report(s)
 
           Auto-detected by the Audit Reports Watch workflow."
-          # One stable branch per watcher. A re-run force-pushes the fresh
-          # commit instead of colliding with its own earlier attempt, and an
-          # unmerged PR gets updated rather than duplicated. Only this
-          # workflow ever writes this ref.
+          # One stable branch per watcher: a re-run overwrites its own earlier
+          # attempt instead of colliding with it, and an unmerged PR is updated
+          # rather than duplicated. The branch is rebuilt from `en` every run and
+          # only this workflow writes it, so the push is unconditional. Nothing
+          # committed onto it by hand survives the next sync.
           branch="bot/audit-sync"
-          # The branch is bot-owned and rewritten every run. Refuse to force-push
-          # over a commit this workflow did not make, instead of discarding it.
-          # `--exit-code` distinguishes absent (2) from failed (anything else), and
-          # the status is captured off the assignment rather than inside a test, where
-          # `bash -e` would not see it and a flaky remote would skip the check.
-          rc=0
-          lsr=$(git ls-remote --exit-code origin "refs/heads/$branch") || rc=$?
-          case "$rc" in
-            0) tip=$(printf '%s\n' "$lsr" | cut -f1) ;;
-            2) tip="" ;;
-            *) echo "::error::could not read refs/heads/$branch (git exit $rc)"; exit 1 ;;
-          esac
-          if [ -n "$tip" ]; then
-            git fetch --quiet origin "$branch"
-            if [ "$(git log -1 --format='%ae' FETCH_HEAD)" != "41898282+github-actions[bot]@users.noreply.github.com" ]; then
-              echo "::error::$branch carries a commit this workflow did not make. Merge or close its PR first."
-              exit 1
-            fi
-            # Lease on the tip the check above looked at, so a push that lands
-            # between the two is rejected rather than overwritten.
-            git push --force-with-lease="refs/heads/$branch:$tip" origin "HEAD:$branch"
-          else
-            git push origin "HEAD:$branch"
-          fi
+          git push --force origin "HEAD:$branch"
           # Assigned on its own line so `bash -e` aborts when the lookup fails.
           # Inside `if [ "$(...)" = "0" ]` a gh outage reads as "a PR is already
           # open" and the run goes green having published nothing.

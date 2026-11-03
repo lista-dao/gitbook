@@ -2,7 +2,7 @@ name: Multi-Oracle Watch
 
 # Weekly sync of the Resilient Oracle config tables against the canonical Notion
 # source ("Multi-Oracle For GitBook"). When the oracle config changes, the tables
-# are refreshed and committed directly to the `en` branch (auto-commit).
+# are refreshed and proposed to the `en` branch as a PR.
 #
 # The script writes more than one page (the BNB table is partitioned into
 # for-developer/multi-oracle.md and for-developer/multi-oracle-bstock.md), so the
@@ -15,7 +15,7 @@ name: Multi-Oracle Watch
 # two-section script (nothing extra to stage) and with the new one (bStock page
 # staged too). Keying it to changed_files would mean that whichever branch landed
 # first silently broke the sync: docs-first would discard the bStock page from
-# the auto-commit, workflow-first would fail on an empty pathspec.
+# the commit, workflow-first would fail on an empty pathspec.
 # The scope stays for-developer/ so oracle-sync-summary.md is never committed.
 #
 # NOTE: scheduled (cron) workflows only run from the repository's DEFAULT branch
@@ -45,9 +45,6 @@ on:
 concurrency:
   group: oracle-watch
   cancel-in-progress: false
-
-permissions:
-  contents: write
 
 jobs:
   sync-oracle:
@@ -130,35 +127,13 @@ jobs:
 
           ${VALUE_CHANGES} oracle address change(s), ${ADDED} new collateral(s).
           Auto-detected by the Multi-Oracle Watch workflow."
-          # One stable branch per watcher. A re-run force-pushes the fresh
-          # commit instead of colliding with its own earlier attempt, and an
-          # unmerged PR gets updated rather than duplicated. Only this
-          # workflow ever writes this ref.
+          # One stable branch per watcher: a re-run overwrites its own earlier
+          # attempt instead of colliding with it, and an unmerged PR is updated
+          # rather than duplicated. The branch is rebuilt from `en` every run and
+          # only this workflow writes it, so the push is unconditional. Nothing
+          # committed onto it by hand survives the next sync.
           branch="bot/oracle-sync"
-          # The branch is bot-owned and rewritten every run. Refuse to force-push
-          # over a commit this workflow did not make, instead of discarding it.
-          # `--exit-code` distinguishes absent (2) from failed (anything else), and
-          # the status is captured off the assignment rather than inside a test, where
-          # `bash -e` would not see it and a flaky remote would skip the check.
-          rc=0
-          lsr=$(git ls-remote --exit-code origin "refs/heads/$branch") || rc=$?
-          case "$rc" in
-            0) tip=$(printf '%s\n' "$lsr" | cut -f1) ;;
-            2) tip="" ;;
-            *) echo "::error::could not read refs/heads/$branch (git exit $rc)"; exit 1 ;;
-          esac
-          if [ -n "$tip" ]; then
-            git fetch --quiet origin "$branch"
-            if [ "$(git log -1 --format='%ae' FETCH_HEAD)" != "41898282+github-actions[bot]@users.noreply.github.com" ]; then
-              echo "::error::$branch carries a commit this workflow did not make. Merge or close its PR first."
-              exit 1
-            fi
-            # Lease on the tip the check above looked at, so a push that lands
-            # between the two is rejected rather than overwritten.
-            git push --force-with-lease="refs/heads/$branch:$tip" origin "HEAD:$branch"
-          else
-            git push origin "HEAD:$branch"
-          fi
+          git push --force origin "HEAD:$branch"
           # Assigned on its own line so `bash -e` aborts when the lookup fails.
           # Inside `if [ "$(...)" = "0" ]` a gh outage reads as "a PR is already
           # open" and the run goes green having published nothing.
