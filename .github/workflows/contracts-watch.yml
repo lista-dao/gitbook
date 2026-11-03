@@ -81,8 +81,21 @@ jobs:
           # unmerged PR gets updated rather than duplicated. Only this
           # workflow ever writes this ref.
           branch="bot/contract-sync"
+          # The branch is bot-owned and rewritten every run. Refuse to force-push
+          # over a commit this workflow did not make, instead of discarding it.
+          if [ -n "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" ]; then
+            git fetch --quiet origin "$branch"
+            if [ "$(git log -1 --format='%ae' FETCH_HEAD)" != "41898282+github-actions[bot]@users.noreply.github.com" ]; then
+              echo "::error::$branch carries a commit this workflow did not make. Merge or close its PR first."
+              exit 1
+            fi
+          fi
           git push --force origin "HEAD:$branch"
-          if [ "$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --state open --json number --jq 'length')" = "0" ]; then
+          # Assigned on its own line so `bash -e` aborts when the lookup fails.
+          # Inside `if [ "$(...)" = "0" ]` a gh outage reads as "a PR is already
+          # open" and the run goes green having published nothing.
+          open=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --base en --state open --json number --jq 'length')
+          if [ "$open" = "0" ]; then
             gh pr create --repo "$GITHUB_REPOSITORY" --base en --head "$branch" \
               --title "chore(contracts): sync contract addresses from Notion" \
               --body "Opened by the ${{ github.workflow }} workflow. Details in the [run summary](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
