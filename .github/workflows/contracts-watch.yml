@@ -99,8 +99,12 @@ jobs:
               echo "::error::$branch carries a commit this workflow did not make. Merge or close its PR first."
               exit 1
             fi
+            # Lease on the tip the check above looked at, so a push that lands
+            # between the two is rejected rather than overwritten.
+            git push --force-with-lease="refs/heads/$branch:$tip" origin "HEAD:$branch"
+          else
+            git push origin "HEAD:$branch"
           fi
-          git push --force origin "HEAD:$branch"
           # Assigned on its own line so `bash -e` aborts when the lookup fails.
           # Inside `if [ "$(...)" = "0" ]` a gh outage reads as "a PR is already
           # open" and the run goes green having published nothing.
