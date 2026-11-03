@@ -18,13 +18,39 @@ function gh(args) {
   return execFileSync("gh", args, { encoding: "utf8" });
 }
 
-// The number of the open PR from `head` into `base`, or null.
-function openPrNumber(head, base) {
-  const out = gh([
-    "pr", "list", "--head", head, "--base", base, "--state", "open",
-    "--json", "number", "--jq", '.[0].number // ""',
-  ]).trim();
-  return out || null;
+// `--exit-code` exits 2 when the ref is absent. Anything else is a transport or
+// auth failure: throw, rather than guessing "absent" and starting from scratch.
+function remoteHasBranch(name) {
+  try {
+    git(["ls-remote", "--exit-code", "origin", `refs/heads/${name}`], {
+      stdio: "pipe",
+    });
+    return true;
+  } catch (error) {
+    if (error.status === 2) return false;
+    throw error;
+  }
+}
+
+// Idempotent: gh exits non-zero when a PR for this head already exists, which is
+// the normal case on every run after the first. Re-running is how a round that
+// pushed but failed to open its PR recovers.
+function openPrIfMissing(head, base) {
+  try {
+    gh([
+      "pr", "create", "--head", head, "--base", base,
+      "--title", `Sync and translate to ${base}`,
+      "--body",
+      "Opened by the translate workflow: machine translation of the English " +
+        "pages that landed on `en`. Later pushes stack onto this PR until it " +
+        "is merged.",
+    ]);
+    console.log(`Opened a PR from ${head} into ${base}`);
+  } catch (error) {
+    const output = `${error.stdout || ""}${error.stderr || ""}`;
+    if (!/already exists/i.test(output)) throw error;
+    console.log(`PR from ${head} into ${base} is already open; updated it`);
+  }
 }
 
 /**
@@ -148,12 +174,11 @@ async function syncAndTranslate() {
   console.log(`Changed files: ${JSON.stringify(changedFiles, null, 2)}`);
 
   for (const branch of languageBranches) {
-    // A run translates the delta of one push, not a recomputed tree, so when an
-    // earlier delta is still sitting in an open PR this run has to build on that
-    // PR's branch. Starting from the language branch would silently drop it.
+    // A run translates the delta of one push, not a recomputed tree, so it
+    // always builds on the bot branch when one exists. Starting from the
+    // language branch would drop every delta that is not merged yet.
     const botBranch = `bot/${branch}-sync`;
-    const openPr = openPrNumber(botBranch, branch);
-    const base = openPr ? botBranch : branch;
+    const base = remoteHasBranch(botBranch) ? botBranch : branch;
     git(["fetch", "origin", base]);
     git(["checkout", "-B", branch, "FETCH_HEAD"]);
 
@@ -191,25 +216,11 @@ async function syncAndTranslate() {
 
     git(["commit", "-m", `Sync and translate ${changedFiles.length} files to ${branch}`]);
 
-    // Stacked on the open PR's branch, so this fast-forwards. With no open PR we
-    // started from the language branch, so a leftover bot branch is reset.
-    const pushArgs = ["push", "origin", `HEAD:${botBranch}`];
-    if (!openPr) pushArgs.splice(1, 0, "--force");
-    git(pushArgs);
-
-    if (openPr) {
-      console.log(`Updated PR #${openPr} with ${changedFiles.length} more files`);
-    } else {
-      gh([
-        "pr", "create", "--base", branch, "--head", botBranch,
-        "--title", `Sync and translate to ${branch}`,
-        "--body",
-        "Opened by the translate workflow: machine translation of the English " +
-          "pages that just landed on `en`. Later pushes stack onto this PR " +
-          "until it is merged.",
-      ]);
-      console.log(`Opened a PR from ${botBranch} into ${branch}`);
-    }
+    // Always a fast-forward: the run built on top of whatever the bot branch
+    // already held. Never forced, so nothing on it can be erased, and a push
+    // that is not a fast-forward is a real surprise and should fail the run.
+    git(["push", "origin", `HEAD:${botBranch}`]);
+    openPrIfMissing(botBranch, branch);
   }
 }
 
