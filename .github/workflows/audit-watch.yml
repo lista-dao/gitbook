@@ -19,22 +19,29 @@ concurrency:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   check-audits:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Require BOT_TOKEN
+        # Checked before anything else: the old guard sat inside the commit step,
+        # so a week with no changes stayed green and hid the misconfiguration.
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          [ -n "$GH_TOKEN" ] || { echo "::error::BOT_TOKEN is required: this workflow opens a PR against en."; exit 1; }
+
       - name: Checkout en branch
         uses: actions/checkout@v4
         with:
           ref: en
           fetch-depth: 0
-          # A PAT here lets the push to `en` trigger the downstream sync workflow
-          # (en -> RAG). With the default GITHUB_TOKEN, en is still updated but the
-          # RAG sync only runs on the next manual/other push to en.
-          token: ${{ secrets.BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          # BOT_TOKEN, not GITHUB_TOKEN: the same token pushes the bot branch
+          # and opens the PR, and "Allow GitHub Actions to create and approve
+          # pull requests" is off on this repo.
+          token: ${{ secrets.BOT_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -59,14 +66,19 @@ jobs:
           git commit -m "chore(audits): add ${{ steps.scan.outputs.count }} new audit report(s)
 
           Auto-detected by the Audit Reports Watch workflow."
-          # GITHUB_TOKEN cannot open PRs on this repo ("Allow GitHub Actions to
-          # create and approve pull requests" is off), so BOT_TOKEN is required.
-          [ -n "$GH_TOKEN" ] || { echo "::error::BOT_TOKEN is required to open the PR."; exit 1; }
-          branch="bot/audit-sync-${{ github.run_id }}"
-          git push origin "HEAD:$branch"
-          gh pr create --base en --head "$branch" \
-            --title "chore(audits): add new audit report(s)" \
-            --body "Opened by the ${{ github.workflow }} workflow. Details in the [run summary](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
+          # One stable branch per watcher. A re-run force-pushes the fresh
+          # commit instead of colliding with its own earlier attempt, and an
+          # unmerged PR gets updated rather than duplicated. Only this
+          # workflow ever writes this ref.
+          branch="bot/audit-sync"
+          git push --force origin "HEAD:$branch"
+          if [ "$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --state open --json number --jq 'length')" = "0" ]; then
+            gh pr create --repo "$GITHUB_REPOSITORY" --base en --head "$branch" \
+              --title "chore(audits): add new audit report(s)" \
+              --body "Opened by the ${{ github.workflow }} workflow. Details in the [run summary](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
+          else
+            echo "PR for $branch is already open; force-pushed the latest sync onto it."
+          fi
 
       - name: Job summary
         if: always()
