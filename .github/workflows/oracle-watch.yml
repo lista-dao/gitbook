@@ -48,6 +48,7 @@ concurrency:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sync-oracle:
@@ -80,11 +81,12 @@ jobs:
           ORACLE_ALLOW_RECLASSIFY: ${{ inputs.allow_reclassify && '1' || '0' }}
         run: node utils/sync-multi-oracle.mjs
 
-      - name: Commit changes to en
+      - name: Open PR against en
         # has_changes is emitted even under DRY_RUN (docs are computed but not written),
         # so also skip the commit when this is a dry run.
         if: steps.sync.outputs.has_changes == 'true' && inputs.dry_run != true
         env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHANGED_FILES: ${{ steps.sync.outputs.changed_files }}
           VALUE_CHANGES: ${{ steps.sync.outputs.value_changes }}
           ADDED: ${{ steps.sync.outputs.added }}
@@ -121,7 +123,14 @@ jobs:
 
           ${VALUE_CHANGES} oracle address change(s), ${ADDED} new collateral(s).
           Auto-detected by the Multi-Oracle Watch workflow."
-          git push origin HEAD:en
+          # GITHUB_TOKEN cannot open PRs on this repo ("Allow GitHub Actions to
+          # create and approve pull requests" is off), so BOT_TOKEN is required.
+          [ -n "$GH_TOKEN" ] || { echo "::error::BOT_TOKEN is required to open the PR."; exit 1; }
+          branch="bot/oracle-sync-${{ github.run_id }}"
+          git push origin "HEAD:$branch"
+          gh pr create --base en --head "$branch" \
+            --title "chore(oracle): sync Multi-Oracle table from Notion" \
+            --body "Opened by the ${{ github.workflow }} workflow. Details in the [run summary](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
 
       - name: Job summary
         if: always()

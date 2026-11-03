@@ -26,6 +26,7 @@ concurrency:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sync-contracts:
@@ -53,8 +54,10 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: node utils/sync-contracts.mjs
 
-      - name: Commit changes to en
+      - name: Open PR against en
         if: steps.sync.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -66,7 +69,14 @@ jobs:
 
           ${{ steps.sync.outputs.changed }} address change(s), ${{ steps.sync.outputs.added }} new contract(s).
           Auto-detected by the Contract Address Watch workflow."
-          git push origin HEAD:en
+          # GITHUB_TOKEN cannot open PRs on this repo ("Allow GitHub Actions to
+          # create and approve pull requests" is off), so BOT_TOKEN is required.
+          [ -n "$GH_TOKEN" ] || { echo "::error::BOT_TOKEN is required to open the PR."; exit 1; }
+          branch="bot/contract-sync-${{ github.run_id }}"
+          git push origin "HEAD:$branch"
+          gh pr create --base en --head "$branch" \
+            --title "chore(contracts): sync contract addresses from Notion" \
+            --body "Opened by the ${{ github.workflow }} workflow. Details in the [run summary](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
 
       - name: Job summary
         if: always()

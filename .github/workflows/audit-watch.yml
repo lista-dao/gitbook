@@ -19,6 +19,7 @@ concurrency:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   check-audits:
@@ -47,8 +48,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN || secrets.GITHUB_TOKEN }}
         run: node utils/check-audit-updates.mjs
 
-      - name: Commit new reports to en
+      - name: Open PR against en
         if: steps.scan.outputs.has_new == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -56,7 +59,14 @@ jobs:
           git commit -m "chore(audits): add ${{ steps.scan.outputs.count }} new audit report(s)
 
           Auto-detected by the Audit Reports Watch workflow."
-          git push origin HEAD:en
+          # GITHUB_TOKEN cannot open PRs on this repo ("Allow GitHub Actions to
+          # create and approve pull requests" is off), so BOT_TOKEN is required.
+          [ -n "$GH_TOKEN" ] || { echo "::error::BOT_TOKEN is required to open the PR."; exit 1; }
+          branch="bot/audit-sync-${{ github.run_id }}"
+          git push origin "HEAD:$branch"
+          gh pr create --base en --head "$branch" \
+            --title "chore(audits): add new audit report(s)" \
+            --body "Opened by the ${{ github.workflow }} workflow. Details in the [run summary](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
 
       - name: Job summary
         if: always()
