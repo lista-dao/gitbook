@@ -174,14 +174,31 @@ function mergeLanguageBranch(branch, langRef) {
   try {
     git(["merge", "--no-edit", langRef]);
     return;
-  } catch {
-    const conflicted = git(["diff", "--name-only", "--diff-filter=U"]).trim();
-    git(["merge", "--abort"]);
-    git(["merge", "--no-edit", "-X", "theirs", langRef]);
+  } catch (error) {
+    const unmerged = git(["diff", "--name-only", "--diff-filter=U"])
+      .split("\n")
+      .filter(Boolean);
+    // No unmerged path means the merge failed for some other reason -- a bad
+    // ref, an index lock, a full disk. Do not swallow it.
+    if (!unmerged.length) {
+      git(["merge", "--abort"]);
+      throw error;
+    }
+    // Resolve inside the conflicted merge rather than retrying with
+    // `-X theirs`, which only settles conflicting hunks inside a file: a page
+    // GitBook deleted or renamed stays unmerged and the retry fails too.
+    for (const file of unmerged) {
+      try {
+        git(["checkout", langRef, "--", file]);
+      } catch {
+        git(["rm", "-q", "-f", "--", file]);
+      }
+    }
+    git(["commit", "--no-edit"]);
     console.log(
       `::warning::${branch} and the pending translation both changed: ` +
-        `${conflicted.split("\n").join(", ")}. Kept the ${branch} version; ` +
-        `the unmerged translation of those pages was dropped.`
+        `${unmerged.join(", ")}. Kept the ${branch} version; the unmerged ` +
+        `translation of those pages was dropped.`
     );
   }
 }
