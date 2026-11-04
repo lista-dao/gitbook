@@ -21,7 +21,8 @@ jobs:
   sync-and-translate:
     runs-on: ubuntu-latest
 
-    # Nothing uses GITHUB_TOKEN: checkout, push and `gh` all use BOT_TOKEN.
+    # Only actions/checkout uses GITHUB_TOKEN, to authenticate its fetch.
+    # The push and `gh` use BOT_TOKEN.
     permissions:
       contents: read
 
@@ -63,13 +64,18 @@ jobs:
 
       - name: Sync and Translate
         run: |
-          # Authenticate here rather than at checkout, so the PAT is never on
-          # disk while npm install and npm test run. BOT_TOKEN, not
-          # GITHUB_TOKEN: a push made with GITHUB_TOKEN triggers no workflow,
-          # so a required status check on the language branch would never run
-          # and the PR could not merge.
-          git remote set-url origin \
-            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          # Authenticate for this command only. `git remote set-url` would
+          # leave the PAT in .git/config with nothing to remove it, which is
+          # what actions/checkout has a post-job step for; the env form writes
+          # nothing to disk and keeps the token out of argv.
+          #
+          # BOT_TOKEN rather than GITHUB_TOKEN: GITHUB_TOKEN cannot open the
+          # PR ("Allow GitHub Actions to create and approve pull requests" is
+          # off), and a push it makes triggers no workflow, so a status check
+          # added on the language branch later would never run.
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')"
           node utils/sync-and-translate.js
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

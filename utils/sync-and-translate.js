@@ -28,7 +28,9 @@ function remoteHasBranch(name) {
 
 // Idempotent: gh exits non-zero when a PR for this head already exists, which is
 // the normal case on every run after the first. Re-running is how a round that
-// pushed but failed to open its PR recovers.
+// pushed but failed to open its PR recovers. "No commits between" means the
+// branch has nothing to propose -- the refs were read before the translation
+// loop, so a PR merged during those minutes lands here. Neither is an error.
 function openPrIfMissing(head, base) {
   try {
     execFileSync("gh", [
@@ -42,8 +44,8 @@ function openPrIfMissing(head, base) {
     console.log(`Opened a PR from ${head} into ${base}`);
   } catch (error) {
     const output = `${error.stdout || ""}${error.stderr || ""}`;
-    if (!/already exists/i.test(output)) throw error;
-    console.log(`PR from ${head} into ${base} is already open; updated it`);
+    if (!/already exists|No commits between/i.test(output)) throw error;
+    console.log(`No PR opened from ${head} into ${base}: ${output.trim()}`);
   }
 }
 
@@ -157,6 +159,33 @@ function warn(message) {
   console.log(`::warning::${message}`);
 }
 
+/**
+ * Fold commits GitBook pushed straight to the language branch into the bot
+ * branch.
+ *
+ * A conflict must not fail the run: nothing clears a conflicted bot branch by
+ * itself, so every later push to `en` would hit the same conflict and all
+ * translation would stop until someone intervened. On conflict the live
+ * language-branch version wins -- it is published and human-written, while the
+ * bot's side is machine translation nobody has approved yet, and the next time
+ * `en` touches that page the bot translates it again anyway.
+ */
+function mergeLanguageBranch(branch, langRef) {
+  try {
+    git(["merge", "--no-edit", langRef]);
+    return;
+  } catch {
+    const conflicted = git(["diff", "--name-only", "--diff-filter=U"]).trim();
+    git(["merge", "--abort"]);
+    git(["merge", "--no-edit", "-X", "theirs", langRef]);
+    console.log(
+      `::warning::${branch} and the pending translation both changed: ` +
+        `${conflicted.split("\n").join(", ")}. Kept the ${branch} version; ` +
+        `the unmerged translation of those pages was dropped.`
+    );
+  }
+}
+
 async function syncAndTranslate() {
   const sourceSha = process.env.GITHUB_SHA || "origin/en";
   const range = resolveRange();
@@ -177,16 +206,13 @@ async function syncAndTranslate() {
     // conflict. A conflict here fails the run instead.
     const botBranch = `bot/${branch}-sync`;
     const hasBot = remoteHasBranch(botBranch);
-    const refspecs = [`+refs/heads/${branch}:refs/remotes/origin/${branch}`];
-    if (hasBot) {
-      refspecs.push(`+refs/heads/${botBranch}:refs/remotes/origin/${botBranch}`);
-    }
+    const langRef = `refs/remotes/origin/${branch}`;
+    const botRef = `refs/remotes/origin/${botBranch}`;
+    const refspecs = [`+refs/heads/${branch}:${langRef}`];
+    if (hasBot) refspecs.push(`+refs/heads/${botBranch}:${botRef}`);
     git(["fetch", "origin", ...refspecs]);
-    git([
-      "checkout", "-B", branch,
-      `refs/remotes/origin/${hasBot ? botBranch : branch}`,
-    ]);
-    if (hasBot) git(["merge", "--no-edit", `refs/remotes/origin/${branch}`]);
+    git(["checkout", "--detach", hasBot ? botRef : langRef]);
+    if (hasBot) mergeLanguageBranch(branch, langRef);
 
     for (const { status, file, oldFile } of changedFiles) {
       const targetFile = path.join(process.cwd(), file);
@@ -220,22 +246,26 @@ async function syncAndTranslate() {
       console.log(`No changes to commit on ${branch}`);
     }
 
-    const aheadOf = (ref) =>
-      git(["rev-list", "--count", `refs/remotes/origin/${ref}..HEAD`]).trim();
+    const treeOf = (ref) => git(["rev-parse", `${ref}^{tree}`]).trim();
 
-    // Level with the language branch: this push had nothing to translate, or
-    // the last PR merged and its branch was simply not deleted. `gh pr create`
-    // would fail with "No commits between ...", so there is nothing to do.
-    if (aheadOf(branch) === "0") {
-      console.log(`${botBranch} is level with ${branch}; nothing to propose`);
+    // Compare trees, not commit counts. A squash or rebase merge never puts
+    // the bot branch's commits into the language branch's history, so a count
+    // stays above zero forever and keeps opening PRs with no file changes.
+    // Equal trees mean the branch has nothing left to say: delete it, so the
+    // next round starts from a clean merge base whatever the merge method was.
+    if (treeOf("HEAD") === treeOf(langRef)) {
+      console.log(`${botBranch} matches ${branch}; nothing to propose`);
+      if (hasBot) git(["push", "origin", "--delete", botBranch]);
       continue;
     }
 
-    // A new translation commit, or just the merge that pulled GitBook's direct
-    // edits in. Never forced: a non-fast-forward means someone else wrote to
-    // the branch and the run should fail.
-    if (!hasBot || aheadOf(botBranch) !== "0") {
-      git(["push", "origin", `HEAD:${botBranch}`]);
+    // A translation commit, or just the merge that pulled GitBook's direct
+    // edits in. Never forced: this run built on the bot branch, so anything
+    // else is someone else writing to it and the run should fail.
+    if (!hasBot || git(["rev-parse", "HEAD"]).trim() !== git(["rev-parse", botRef]).trim()) {
+      // Fully qualified: from a detached HEAD git cannot infer head vs tag
+      // when the destination branch does not exist yet.
+      git(["push", "origin", `HEAD:refs/heads/${botBranch}`]);
     }
     openPrIfMissing(botBranch, branch);
   }
