@@ -39,10 +39,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # BOT_TOKEN, not the default GITHUB_TOKEN: a push made with
-          # GITHUB_TOKEN triggers no workflow, so any required status check on
-          # the language branch would never run and the PR could not merge.
-          token: ${{ secrets.BOT_TOKEN }}
+          # Leave no credential in .git/config. `npm install` below runs the
+          # postinstall scripts of the whole dependency tree, and anything in
+          # the job can read that file. The push step authenticates itself,
+          # after npm has run. Fetching needs no token: the repo is public.
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -62,6 +63,13 @@ jobs:
 
       - name: Sync and Translate
         run: |
+          # Authenticate here rather than at checkout, so the PAT is never on
+          # disk while npm install and npm test run. BOT_TOKEN, not
+          # GITHUB_TOKEN: a push made with GITHUB_TOKEN triggers no workflow,
+          # so a required status check on the language branch would never run
+          # and the PR could not merge.
+          git remote set-url origin \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           node utils/sync-and-translate.js
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
