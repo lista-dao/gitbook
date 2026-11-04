@@ -21,15 +21,30 @@ jobs:
   sync-and-translate:
     runs-on: ubuntu-latest
 
+    # Only actions/checkout uses GITHUB_TOKEN, to authenticate its fetch.
+    # The push and `gh` use BOT_TOKEN.
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
 
     steps:
+      - name: Require BOT_TOKEN
+        # The translation now opens a PR, and "Allow GitHub Actions to create
+        # and approve pull requests" is off on this repo, so GITHUB_TOKEN
+        # cannot do it. Checked first, before any OpenAI call is paid for.
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          [ -n "$GH_TOKEN" ] || { echo "::error::BOT_TOKEN is required: the translation opens a PR against the language branch."; exit 1; }
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Leave no credential in .git/config. `npm install` below runs the
+          # postinstall scripts of the whole dependency tree, and anything in
+          # the job can read that file. The push step authenticates itself,
+          # after npm has run. Fetching needs no token: the repo is public.
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -49,10 +64,22 @@ jobs:
 
       - name: Sync and Translate
         run: |
+          # Authenticate for this command only. `git remote set-url` would
+          # leave the PAT in .git/config with nothing to remove it, which is
+          # what actions/checkout has a post-job step for; the env form writes
+          # nothing to disk and keeps the token out of argv.
+          #
+          # BOT_TOKEN rather than GITHUB_TOKEN: GITHUB_TOKEN cannot open the
+          # PR ("Allow GitHub Actions to create and approve pull requests" is
+          # off), and a push it makes triggers no workflow, so a status check
+          # added on the language branch later would never run.
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')"
           node utils/sync-and-translate.js
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
           # Full push range, so a push of N commits translates all N.
           GITHUB_EVENT_BEFORE: ${{ github.event.before }}
           GITHUB_SHA: ${{ github.sha }}

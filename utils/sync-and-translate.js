@@ -12,6 +12,43 @@ function git(args, opts = {}) {
   return execFileSync("git", args, { encoding: "utf8", ...opts });
 }
 
+// `--exit-code` exits 2 when the ref is absent. Anything else is a transport or
+// auth failure: throw, rather than guessing "absent" and starting from scratch.
+function remoteHasBranch(name) {
+  try {
+    git(["ls-remote", "--exit-code", "origin", `refs/heads/${name}`], {
+      stdio: "pipe",
+    });
+    return true;
+  } catch (error) {
+    if (error.status === 2) return false;
+    throw error;
+  }
+}
+
+// Idempotent: gh exits non-zero when a PR for this head already exists, which is
+// the normal case on every run after the first. Re-running is how a round that
+// pushed but failed to open its PR recovers. "No commits between" means the
+// branch has nothing to propose -- the refs were read before the translation
+// loop, so a PR merged during those minutes lands here. Neither is an error.
+function openPrIfMissing(head, base) {
+  try {
+    execFileSync("gh", [
+      "pr", "create", "--head", head, "--base", base,
+      "--title", `Sync and translate to ${base}`,
+      "--body",
+      "Opened by the translate workflow: machine translation of the English " +
+        "pages that landed on `en`. Later pushes stack onto this PR until it " +
+        "is merged.",
+    ], { encoding: "utf8" });
+    console.log(`Opened a PR from ${head} into ${base}`);
+  } catch (error) {
+    const output = `${error.stdout || ""}${error.stderr || ""}`;
+    if (!/already exists|No commits between/i.test(output)) throw error;
+    console.log(`No PR opened from ${head} into ${base}: ${output.trim()}`);
+  }
+}
+
 /**
  * Files changed by the push that triggered this run.
  *
@@ -122,6 +159,33 @@ function warn(message) {
   console.log(`::warning::${message}`);
 }
 
+/**
+ * Fold commits GitBook pushed straight to the language branch into the bot
+ * branch.
+ *
+ * A conflict must not fail the run: nothing clears a conflicted bot branch by
+ * itself, so every later push to `en` would hit the same conflict and all
+ * translation would stop until someone intervened. On conflict the live
+ * language-branch version wins -- it is published and human-written, while the
+ * bot's side is machine translation nobody has approved yet, and the next time
+ * `en` touches that page the bot translates it again anyway.
+ */
+function mergeLanguageBranch(branch, langRef) {
+  try {
+    git(["merge", "--no-edit", langRef]);
+    return;
+  } catch {
+    const conflicted = git(["diff", "--name-only", "--diff-filter=U"]).trim();
+    git(["merge", "--abort"]);
+    git(["merge", "--no-edit", "-X", "theirs", langRef]);
+    console.log(
+      `::warning::${branch} and the pending translation both changed: ` +
+        `${conflicted.split("\n").join(", ")}. Kept the ${branch} version; ` +
+        `the unmerged translation of those pages was dropped.`
+    );
+  }
+}
+
 async function syncAndTranslate() {
   const sourceSha = process.env.GITHUB_SHA || "origin/en";
   const range = resolveRange();
@@ -133,11 +197,22 @@ async function syncAndTranslate() {
   console.log(`Changed files: ${JSON.stringify(changedFiles, null, 2)}`);
 
   for (const branch of languageBranches) {
-    git(["checkout", branch]);
-    // The GitBook space pushes to the language branches too, so the local
-    // ref can be behind. Rebase before writing, or the push at the end is
-    // rejected and the whole translation is silently thrown away.
-    git(["pull", "--rebase", "origin", branch]);
+    // A run translates the delta of one push, not a recomputed tree, so it
+    // builds on the bot branch when one exists -- starting from the language
+    // branch would drop every delta that is not merged yet. The language
+    // branch is then merged in, because GitBook pushes straight to zh-CN
+    // (it bypasses the ruleset) and a bot branch that never picks those up
+    // drifts until its PR conflicts and every later run piles onto the
+    // conflict. A conflict here fails the run instead.
+    const botBranch = `bot/${branch}-sync`;
+    const hasBot = remoteHasBranch(botBranch);
+    const langRef = `refs/remotes/origin/${branch}`;
+    const botRef = `refs/remotes/origin/${botBranch}`;
+    const refspecs = [`+refs/heads/${branch}:${langRef}`];
+    if (hasBot) refspecs.push(`+refs/heads/${botBranch}:${botRef}`);
+    git(["fetch", "origin", ...refspecs]);
+    git(["checkout", "--detach", hasBot ? botRef : langRef]);
+    if (hasBot) mergeLanguageBranch(branch, langRef);
 
     for (const { status, file, oldFile } of changedFiles) {
       const targetFile = path.join(process.cwd(), file);
@@ -165,15 +240,34 @@ async function syncAndTranslate() {
     assertSummaryResolves(branch);
 
     git(["add", "-A"]);
-    const staged = git(["diff", "--staged", "--name-only"]).trim();
-    if (!staged) {
+    if (git(["diff", "--staged", "--name-only"]).trim()) {
+      git(["commit", "-m", `Sync and translate ${changedFiles.length} files to ${branch}`]);
+    } else {
       console.log(`No changes to commit on ${branch}`);
+    }
+
+    const treeOf = (ref) => git(["rev-parse", `${ref}^{tree}`]).trim();
+
+    // Compare trees, not commit counts. A squash or rebase merge never puts
+    // the bot branch's commits into the language branch's history, so a count
+    // stays above zero forever and keeps opening PRs with no file changes.
+    // Equal trees mean the branch has nothing left to say: delete it, so the
+    // next round starts from a clean merge base whatever the merge method was.
+    if (treeOf("HEAD") === treeOf(langRef)) {
+      console.log(`${botBranch} matches ${branch}; nothing to propose`);
+      if (hasBot) git(["push", "origin", "--delete", botBranch]);
       continue;
     }
 
-    git(["commit", "-m", `Sync and translate ${changedFiles.length} files to ${branch}`]);
-    git(["push", "origin", branch]);
-    console.log(`Pushed changes to branch: ${branch}`);
+    // A translation commit, or just the merge that pulled GitBook's direct
+    // edits in. Never forced: this run built on the bot branch, so anything
+    // else is someone else writing to it and the run should fail.
+    if (!hasBot || git(["rev-parse", "HEAD"]).trim() !== git(["rev-parse", botRef]).trim()) {
+      // Fully qualified: from a detached HEAD git cannot infer head vs tag
+      // when the destination branch does not exist yet.
+      git(["push", "origin", `HEAD:refs/heads/${botBranch}`]);
+    }
+    openPrIfMissing(botBranch, branch);
   }
 }
 
