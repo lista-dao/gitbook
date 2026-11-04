@@ -167,21 +167,32 @@ function warn(message) {
  * itself, so every later push to `en` would hit the same conflict and all
  * translation would stop until someone intervened. On conflict the live
  * language-branch version wins -- it is published and human-written, while the
- * bot's side is machine translation nobody has approved yet, and the next time
- * `en` touches that page the bot translates it again anyway.
+ * bot's side is machine translation nobody has approved yet. That page then
+ * keeps the language branch's wording until `en` changes it again, which may
+ * never happen, so the warning names every file it did this to.
  */
 function mergeLanguageBranch(branch, langRef) {
   try {
     git(["merge", "--no-edit", langRef]);
     return;
   } catch (error) {
-    const unmerged = git(["diff", "--name-only", "--diff-filter=U"])
-      .split("\n")
+    // `-z`, for the reason getChangedFiles uses it: without it git escapes
+    // every non-ASCII path, and on a Chinese docs branch the escaped name
+    // matches nothing, so each checkout below fails and the merge is left
+    // half resolved.
+    const unmerged = git(["diff", "--name-only", "--diff-filter=U", "-z"])
+      .split("\0")
       .filter(Boolean);
-    // No unmerged path means the merge failed for some other reason -- a bad
-    // ref, an index lock, a full disk. Do not swallow it.
+    // No unmerged path means the merge failed before it started -- a bad ref,
+    // an index lock, unrelated histories. There is nothing to abort then, and
+    // letting `merge --abort` throw "MERGE_HEAD missing" would bury the real
+    // error.
     if (!unmerged.length) {
-      git(["merge", "--abort"]);
+      try {
+        git(["merge", "--abort"]);
+      } catch {
+        // no merge in progress
+      }
       throw error;
     }
     // Resolve inside the conflicted merge rather than retrying with
@@ -220,7 +231,8 @@ async function syncAndTranslate() {
     // branch is then merged in, because GitBook pushes straight to zh-CN
     // (it bypasses the ruleset) and a bot branch that never picks those up
     // drifts until its PR conflicts and every later run piles onto the
-    // conflict. A conflict here fails the run instead.
+    // conflict. A conflict here resolves in favour of the language branch
+    // rather than failing the run.
     const botBranch = `bot/${branch}-sync`;
     const hasBot = remoteHasBranch(botBranch);
     const langRef = `refs/remotes/origin/${branch}`;
@@ -331,6 +343,7 @@ function assertSummaryResolves(branch) {
 
 module.exports = {
   getChangedFiles,
+  mergeLanguageBranch,
   parseNameStatus,
   resolveRange,
   assertSummaryResolves,
