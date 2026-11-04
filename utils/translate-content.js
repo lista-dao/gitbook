@@ -19,9 +19,13 @@ const MODEL = process.env.TRANSLATE_MODEL || "gpt-4o";
 
 async function translateContent(content, language, label = "content") {
   const prompt = `
-      You are an expert in Web3 and blockchain technology. Translate the following technical documentation from English to ${language}, preserving all technical terms, code snippets, and specialized terminology related to decentralized applications (dApps), blockchain, smart contracts, and related concepts. Do not translate the technical terms and keep the translation accurate for developers.
+      You are an expert in Web3 and blockchain technology. Translate the following technical documentation from English to ${language}, keeping it accurate for developers.
 
-      Translate the document in full. Never truncate, summarise, or omit sections, tables, or table rows. Reproduce every contract address, URL, and HTML tag exactly as given:
+      Translate everything a reader sees, including headings, table headers, table cells, list items, and the text of every link -- the part inside the square brackets. "See the [Smart Contract](x.md) page" must come out with that label in ${language}, not left in English.
+
+      Leave unchanged, exactly as given: link targets and URLs, contract addresses, HTML tags, anything inside backticks or a fenced code block, contract / function / parameter / event names, token symbols, and product names (Lista Lending, Moolah, slisBNB, lisUSD and the like). Everything else is prose and must be translated, including ordinary words that happen to appear in a technical document -- Ethereum, Treasury, Governance, Mechanics, Delegation, Integration Patterns.
+
+      Translate the document in full. Never truncate, summarise, or omit sections, tables, or table rows:
 
       ${content}
     `;
