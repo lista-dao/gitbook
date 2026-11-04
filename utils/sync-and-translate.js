@@ -272,7 +272,16 @@ async function syncAndTranslate() {
     // next round starts from a clean merge base whatever the merge method was.
     if (treeOf("HEAD") === treeOf(langRef)) {
       console.log(`${botBranch} matches ${branch}; nothing to propose`);
-      if (hasBot) git(["push", "origin", "--delete", botBranch]);
+      // `hasBot` was read before the translation loop, so the branch may
+      // already be gone -- someone merged the PR with "delete branch" while
+      // this run was in the OpenAI calls. Nothing is lost either way.
+      if (hasBot) {
+        try {
+          git(["push", "origin", "--delete", botBranch]);
+        } catch {
+          console.log(`${botBranch} was already gone`);
+        }
+      }
       continue;
     }
 
