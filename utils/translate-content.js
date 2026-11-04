@@ -23,7 +23,9 @@ async function translateContent(content, language, label = "content") {
 
       Translate everything a reader sees, including headings, table headers, table cells, list items, and the text of every link -- the part inside the square brackets. "See the [Smart Contract](x.md) page" must come out with that label in ${language}, not left in English.
 
-      Leave unchanged, exactly as given: link targets and URLs, contract addresses, HTML tags, anything inside backticks or a fenced code block, contract / function / parameter / event names, token symbols, and product names (Lista Lending, Moolah, slisBNB, lisUSD and the like). Everything else is prose and must be translated, including ordinary words that happen to appear in a technical document -- Ethereum, Treasury, Governance, Mechanics, Delegation, Integration Patterns.
+      Leave unchanged, exactly as given: link targets and URLs, contract addresses, HTML tags, YAML front matter, GitBook block syntax and its attributes ({% hint %}, {% content-ref %} and the slug label inside a content-ref block), anything inside backticks or a fenced code block, contract / function / parameter / event names, token symbols, pool and fund identifiers, chain names where they stand as identifiers rather than prose, and product names (Lista Lending, Moolah, slisBNB, lisUSD and the like).
+
+      Everything else is prose and must be translated, including words that look technical but are only describing something -- Mechanics, Delegation, Integration Patterns, Loan Lifecycle, Audit Reports.
 
       Translate the document in full. Never truncate, summarise, or omit sections, tables, or table rows:
 
