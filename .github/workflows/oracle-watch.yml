@@ -2,7 +2,7 @@ name: Multi-Oracle Watch
 
 # Weekly sync of the Resilient Oracle config tables against the canonical Notion
 # source ("Multi-Oracle For GitBook"). When the oracle config changes, the tables
-# are refreshed and committed directly to the `en` branch (auto-commit).
+# are refreshed and proposed to the `en` branch as a PR.
 #
 # The script writes more than one page (the BNB table is partitioned into
 # for-developer/multi-oracle.md and for-developer/multi-oracle-bstock.md), so the
@@ -15,7 +15,7 @@ name: Multi-Oracle Watch
 # two-section script (nothing extra to stage) and with the new one (bStock page
 # staged too). Keying it to changed_files would mean that whichever branch landed
 # first silently broke the sync: docs-first would discard the bStock page from
-# the auto-commit, workflow-first would fail on an empty pathspec.
+# the commit, workflow-first would fail on an empty pathspec.
 # The scope stays for-developer/ so oracle-sync-summary.md is never committed.
 #
 # NOTE: scheduled (cron) workflows only run from the repository's DEFAULT branch
@@ -46,23 +46,33 @@ concurrency:
   group: oracle-watch
   cancel-in-progress: false
 
+# Nothing here uses GITHUB_TOKEN: checkout and push use BOT_TOKEN, `gh` uses
+# GH_TOKEN. Declared anyway so the job never inherits a wider repo/org default.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   sync-oracle:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Require BOT_TOKEN
+        # Checked before anything else: the old guard sat inside the commit step,
+        # so a week with no changes stayed green and hid the misconfiguration.
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          [ -n "$GH_TOKEN" ] || { echo "::error::BOT_TOKEN is required: this workflow opens a PR against en."; exit 1; }
+
       - name: Checkout en branch
         uses: actions/checkout@v4
         with:
           ref: en
           fetch-depth: 0
-          # A PAT here lets the push to `en` trigger the downstream sync workflow
-          # (en -> RAG). With the default GITHUB_TOKEN, en is still updated but the
-          # RAG sync only runs on the next manual/other push to en.
-          token: ${{ secrets.BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          # BOT_TOKEN, not GITHUB_TOKEN: the same token pushes the bot branch
+          # and opens the PR, and "Allow GitHub Actions to create and approve
+          # pull requests" is off on this repo.
+          token: ${{ secrets.BOT_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -80,11 +90,12 @@ jobs:
           ORACLE_ALLOW_RECLASSIFY: ${{ inputs.allow_reclassify && '1' || '0' }}
         run: node utils/sync-multi-oracle.mjs
 
-      - name: Commit changes to en
+      - name: Open PR against en
         # has_changes is emitted even under DRY_RUN (docs are computed but not written),
         # so also skip the commit when this is a dry run.
         if: steps.sync.outputs.has_changes == 'true' && inputs.dry_run != true
         env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHANGED_FILES: ${{ steps.sync.outputs.changed_files }}
           VALUE_CHANGES: ${{ steps.sync.outputs.value_changes }}
           ADDED: ${{ steps.sync.outputs.added }}
@@ -121,7 +132,33 @@ jobs:
 
           ${VALUE_CHANGES} oracle address change(s), ${ADDED} new collateral(s).
           Auto-detected by the Multi-Oracle Watch workflow."
-          git push origin HEAD:en
+          # One stable branch per watcher: a re-run overwrites its own earlier
+          # attempt instead of colliding with it, and an unmerged PR is updated
+          # rather than duplicated. The branch is rebuilt from `en` every run and
+          # only this workflow writes it. Nothing committed onto it by hand
+          # survives the next sync.
+          branch="bot/oracle-sync"
+          # The run recomputes against `en`, and an open PR's changes are not on
+          # `en` yet, so every week rebuilds the same tree. Re-pushing it would
+          # dismiss the PR's approvals (dismiss_stale_reviews_on_push) and erase
+          # a reviewer's fixups while adding nothing.
+          if git fetch --quiet origin "$branch" 2>/dev/null &&
+             [ "$(git rev-parse HEAD^{tree})" = "$(git rev-parse FETCH_HEAD^{tree})" ]; then
+            echo "$branch already holds this exact tree; leaving the open PR alone."
+          else
+            git push --force origin "HEAD:$branch"
+          fi
+          # Assigned on its own line so `bash -e` aborts when the lookup fails.
+          # Inside `if [ "$(...)" = "0" ]` a gh outage reads as "a PR is already
+          # open" and the run goes green having published nothing.
+          open=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --base en --state open --json number --jq 'length')
+          if [ "$open" = "0" ]; then
+            gh pr create --repo "$GITHUB_REPOSITORY" --base en --head "$branch" \
+              --title "chore(oracle): sync Multi-Oracle table from Notion" \
+              --body "Opened by the ${{ github.workflow }} workflow. Details in the [run summary](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}). This PR is only refreshed on runs that find a change, so check the table against the Notion source before merging an old one."
+          else
+            echo "PR for $branch is already open; force-pushed the latest sync onto it."
+          fi
 
       - name: Job summary
         if: always()
