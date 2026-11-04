@@ -17,6 +17,11 @@ concurrency:
   group: audit-watch
   cancel-in-progress: false
 
+# Nothing here uses GITHUB_TOKEN: checkout and push use BOT_TOKEN, `gh` uses
+# GH_TOKEN. Declared anyway so the job never inherits a wider repo/org default.
+permissions:
+  contents: read
+
 jobs:
   check-audits:
     runs-on: ubuntu-latest
@@ -66,10 +71,19 @@ jobs:
           # One stable branch per watcher: a re-run overwrites its own earlier
           # attempt instead of colliding with it, and an unmerged PR is updated
           # rather than duplicated. The branch is rebuilt from `en` every run and
-          # only this workflow writes it, so the push is unconditional. Nothing
-          # committed onto it by hand survives the next sync.
+          # only this workflow writes it. Nothing committed onto it by hand
+          # survives the next sync.
           branch="bot/audit-sync"
-          git push --force origin "HEAD:$branch"
+          # The run recomputes against `en`, and an open PR's changes are not on
+          # `en` yet, so every week rebuilds the same tree. Re-pushing it would
+          # dismiss the PR's approvals (dismiss_stale_reviews_on_push) and erase
+          # a reviewer's fixups while adding nothing.
+          if git fetch --quiet origin "$branch" 2>/dev/null &&
+             [ "$(git rev-parse HEAD^{tree})" = "$(git rev-parse FETCH_HEAD^{tree})" ]; then
+            echo "$branch already holds this exact tree; leaving the open PR alone."
+          else
+            git push --force origin "HEAD:$branch"
+          fi
           # Assigned on its own line so `bash -e` aborts when the lookup fails.
           # Inside `if [ "$(...)" = "0" ]` a gh outage reads as "a PR is already
           # open" and the run goes green having published nothing.
