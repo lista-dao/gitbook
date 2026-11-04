@@ -169,12 +169,24 @@ async function syncAndTranslate() {
 
   for (const branch of languageBranches) {
     // A run translates the delta of one push, not a recomputed tree, so it
-    // always builds on the bot branch when one exists. Starting from the
-    // language branch would drop every delta that is not merged yet.
+    // builds on the bot branch when one exists -- starting from the language
+    // branch would drop every delta that is not merged yet. The language
+    // branch is then merged in, because GitBook pushes straight to zh-CN
+    // (it bypasses the ruleset) and a bot branch that never picks those up
+    // drifts until its PR conflicts and every later run piles onto the
+    // conflict. A conflict here fails the run instead.
     const botBranch = `bot/${branch}-sync`;
-    const base = remoteHasBranch(botBranch) ? botBranch : branch;
-    git(["fetch", "origin", base]);
-    git(["checkout", "-B", branch, "FETCH_HEAD"]);
+    const hasBot = remoteHasBranch(botBranch);
+    const refspecs = [`+refs/heads/${branch}:refs/remotes/origin/${branch}`];
+    if (hasBot) {
+      refspecs.push(`+refs/heads/${botBranch}:refs/remotes/origin/${botBranch}`);
+    }
+    git(["fetch", "origin", ...refspecs]);
+    git([
+      "checkout", "-B", branch,
+      `refs/remotes/origin/${hasBot ? botBranch : branch}`,
+    ]);
+    if (hasBot) git(["merge", "--no-edit", `refs/remotes/origin/${branch}`]);
 
     for (const { status, file, oldFile } of changedFiles) {
       const targetFile = path.join(process.cwd(), file);
@@ -202,19 +214,27 @@ async function syncAndTranslate() {
     assertSummaryResolves(branch);
 
     git(["add", "-A"]);
-    const staged = git(["diff", "--staged", "--name-only"]).trim();
-    if (!staged) {
-      console.log(`No changes to commit on ${branch}`);
-      // Nothing to push, but an earlier round may have pushed and then failed to
-      // open its PR. Fall through to recover it; with no bot branch at all there
-      // is nothing to recover.
-      if (base !== botBranch) continue;
-    } else {
+    if (git(["diff", "--staged", "--name-only"]).trim()) {
       git(["commit", "-m", `Sync and translate ${changedFiles.length} files to ${branch}`]);
-      // Always a fast-forward: the run built on top of whatever the bot branch
-      // already held. Never forced, so nothing on it can be erased, and a push
-      // that is not a fast-forward means someone else wrote to the branch and
-      // should fail the run.
+    } else {
+      console.log(`No changes to commit on ${branch}`);
+    }
+
+    const aheadOf = (ref) =>
+      git(["rev-list", "--count", `refs/remotes/origin/${ref}..HEAD`]).trim();
+
+    // Level with the language branch: this push had nothing to translate, or
+    // the last PR merged and its branch was simply not deleted. `gh pr create`
+    // would fail with "No commits between ...", so there is nothing to do.
+    if (aheadOf(branch) === "0") {
+      console.log(`${botBranch} is level with ${branch}; nothing to propose`);
+      continue;
+    }
+
+    // A new translation commit, or just the merge that pulled GitBook's direct
+    // edits in. Never forced: a non-fast-forward means someone else wrote to
+    // the branch and the run should fail.
+    if (!hasBot || aheadOf(botBranch) !== "0") {
       git(["push", "origin", `HEAD:${botBranch}`]);
     }
     openPrIfMissing(botBranch, branch);
