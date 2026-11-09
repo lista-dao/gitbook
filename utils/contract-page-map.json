@@ -1214,6 +1214,24 @@
         ]
       },
       {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker (wBETH/USD1)",
+        "address": "0x8133e03f075FA1a725AfeD827216772B4f059983",
+        "cols": [
+          "wBETH/USD1",
+          "80%"
+        ]
+      },
+      {
+        "section": "LendingBroker Markets",
+        "name": "LendingBroker (wBETH/U)",
+        "address": "0x793dd0D3B8a0B50D8C933d176691DE14e194B342",
+        "cols": [
+          "wBETH/U",
+          "80%"
+        ]
+      },
+      {
         "section": "Broker Auxiliary Contracts",
         "name": "BrokerInterestRelayer (lisUSD)",
         "address": "0xcb2590F10728e3ffc725d7ECf88EcFd0d92c9d6a",
